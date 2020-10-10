@@ -7,7 +7,7 @@ namespace ESchool.ClassRegister.Domain.Entities.Messaging
     {
         public Guid Id { get; set; }
 
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
         public virtual UserBase User { get; set; }
 
         public Guid MessageId { get; set; }

@@ -1,8 +1,8 @@
 ﻿namespace ESchool.HomeAssignments.Domain.Enums
 {
-    public enum HomeWorkSolutionState
+    public enum HomeworkReviewOutcome
     {
-        WaitingForReview,
+        NotReviewed,
         Accepted,
         Rejected
     }

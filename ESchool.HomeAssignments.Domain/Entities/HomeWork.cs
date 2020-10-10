@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using ESchool.HomeAssignments.Domain.Entities.ClassRegisterData;
 
 namespace ESchool.HomeAssignments.Domain.Entities
 {
@@ -12,5 +14,8 @@ namespace ESchool.HomeAssignments.Domain.Entities
         public bool Optional { get; set; }
 
         public Guid LessonId { get; set; }
+        public virtual Lesson Lesson { get; set; }
+
+        public virtual ICollection<HomeWorkSolution> Solutions { get; set; }
     }
 }

@@ -7,6 +7,10 @@ namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
     {
         public Guid Id { get; set; }
 
+        public int LessonNumber { get; set; }
+        public bool Canceled { get; set; }
+        public string Title { get; set; }
+
         public DateTime StartsAt { get; set; }
         public DateTime EndsAt { get; set; }
 

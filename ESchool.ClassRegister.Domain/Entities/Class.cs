@@ -8,6 +8,8 @@ namespace ESchool.ClassRegister.Domain.Entities
 {
     public class Class : IMultiTenantEntity
     {
+        public Guid Id { get; set; }
+        
         public Guid TenantId { get; set; }
 
         public virtual ICollection<Student> Students { get; set; }
