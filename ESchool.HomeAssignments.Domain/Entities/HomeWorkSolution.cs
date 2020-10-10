@@ -1,7 +1,5 @@
 ﻿using ESchool.HomeAssignments.Domain.Enums;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ESchool.HomeAssignments.Domain.Entities
 {

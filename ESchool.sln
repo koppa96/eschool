@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29521.150
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.IdentityProvider", "ESchool.IdentityProvider\ESchool.IdentityProvider.csproj", "{EC37685C-16E1-4149-A22D-BD5CF82DE978}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.IdentityProvider", "ESchool.IdentityProvider\ESchool.IdentityProvider.csproj", "{EC37685C-16E1-4149-A22D-BD5CF82DE978}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityProvider", "IdentityProvider", "{031C7FC5-97DD-4F34-8FF1-AE98E529D946}"
 EndProject
@@ -11,33 +11,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClassRegister", "ClassRegis
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{735BAEC4-588E-4F9B-8B24-0B38417474FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.IdentityProvider.Domain", "ESchool.IdentityProvider.Domain\ESchool.IdentityProvider.Domain.csproj", "{DD8CE1AD-A40B-4D0B-9B5D-2BEFD0D5DA3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.IdentityProvider.Domain", "ESchool.IdentityProvider.Domain\ESchool.IdentityProvider.Domain.csproj", "{DD8CE1AD-A40B-4D0B-9B5D-2BEFD0D5DA3B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HomeAssignments", "HomeAssignments", "{7CACF9E6-8A45-4203-8A92-12656463F11C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TenantManagement", "TenantManagement", "{429EE893-7A0B-4D89-A034-604638322BCF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.TenantManagement.Api", "ESchool.TenantManagement.Api\ESchool.TenantManagement.Api.csproj", "{B0F842EE-8BCF-4D8E-8B78-5C3328D9A070}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.TenantManagement.Domain", "ESchool.TenantManagement.Domain\ESchool.TenantManagement.Domain.csproj", "{C3FDDFE1-83AF-43E4-B2E0-AC0D595F5DDA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{056B6DD4-71E1-413B-826A-BA246E239256}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{F3D93C43-BA77-49E3-9797-74ABAADCBA8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.Libs.Domain", "ESchool.Libs.Domain\ESchool.Libs.Domain.csproj", "{4F9B6893-0CA6-47FC-87CE-3E679C934421}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.Libs.Domain", "ESchool.Libs.Domain\ESchool.Libs.Domain.csproj", "{4F9B6893-0CA6-47FC-87CE-3E679C934421}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.Testing.Api", "ESchool.Testing.Api\ESchool.Testing.Api.csproj", "{0F53CFD1-B99E-4C16-BDDC-65C1A15766AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.Testing.Api", "ESchool.Testing.Api\ESchool.Testing.Api.csproj", "{0F53CFD1-B99E-4C16-BDDC-65C1A15766AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.Testing.Domain", "ESchool.Testing.Domain\ESchool.Testing.Domain.csproj", "{361EC384-63D4-49DB-9914-B7039B4BB020}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.Testing.Domain", "ESchool.Testing.Domain\ESchool.Testing.Domain.csproj", "{361EC384-63D4-49DB-9914-B7039B4BB020}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.ClassRegister.Api", "ESchool.ClassRegister.Api\ESchool.ClassRegister.Api.csproj", "{BF063422-7CDC-48C2-BE19-9DF1F8C9A6D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.ClassRegister.Api", "ESchool.ClassRegister.Api\ESchool.ClassRegister.Api.csproj", "{BF063422-7CDC-48C2-BE19-9DF1F8C9A6D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.ClassRegister.Domain", "ESchool.ClassRegister.Domain\ESchool.ClassRegister.Domain.csproj", "{CE05BAB2-B90F-4309-8BC2-E8E226169199}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.ClassRegister.Domain", "ESchool.ClassRegister.Domain\ESchool.ClassRegister.Domain.csproj", "{CE05BAB2-B90F-4309-8BC2-E8E226169199}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.HomeAssignments.Api", "ESchool.HomeAssignments.Api\ESchool.HomeAssignments.Api.csproj", "{D4728ECE-3783-4398-82D1-D71B710948F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.HomeAssignments.Api", "ESchool.HomeAssignments.Api\ESchool.HomeAssignments.Api.csproj", "{D4728ECE-3783-4398-82D1-D71B710948F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.HomeAssignments.Domain", "ESchool.HomeAssignments.Domain\ESchool.HomeAssignments.Domain.csproj", "{093E84F3-BF24-4986-AD49-7414FA257618}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.HomeAssignments.Domain", "ESchool.HomeAssignments.Domain\ESchool.HomeAssignments.Domain.csproj", "{093E84F3-BF24-4986-AD49-7414FA257618}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,14 +47,6 @@ Global
 		{DD8CE1AD-A40B-4D0B-9B5D-2BEFD0D5DA3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD8CE1AD-A40B-4D0B-9B5D-2BEFD0D5DA3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD8CE1AD-A40B-4D0B-9B5D-2BEFD0D5DA3B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0F842EE-8BCF-4D8E-8B78-5C3328D9A070}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0F842EE-8BCF-4D8E-8B78-5C3328D9A070}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0F842EE-8BCF-4D8E-8B78-5C3328D9A070}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0F842EE-8BCF-4D8E-8B78-5C3328D9A070}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C3FDDFE1-83AF-43E4-B2E0-AC0D595F5DDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C3FDDFE1-83AF-43E4-B2E0-AC0D595F5DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C3FDDFE1-83AF-43E4-B2E0-AC0D595F5DDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C3FDDFE1-83AF-43E4-B2E0-AC0D595F5DDA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F9B6893-0CA6-47FC-87CE-3E679C934421}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4F9B6893-0CA6-47FC-87CE-3E679C934421}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F9B6893-0CA6-47FC-87CE-3E679C934421}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -100,9 +86,6 @@ Global
 		{735BAEC4-588E-4F9B-8B24-0B38417474FA} = {F3D93C43-BA77-49E3-9797-74ABAADCBA8F}
 		{DD8CE1AD-A40B-4D0B-9B5D-2BEFD0D5DA3B} = {031C7FC5-97DD-4F34-8FF1-AE98E529D946}
 		{7CACF9E6-8A45-4203-8A92-12656463F11C} = {F3D93C43-BA77-49E3-9797-74ABAADCBA8F}
-		{429EE893-7A0B-4D89-A034-604638322BCF} = {F3D93C43-BA77-49E3-9797-74ABAADCBA8F}
-		{B0F842EE-8BCF-4D8E-8B78-5C3328D9A070} = {429EE893-7A0B-4D89-A034-604638322BCF}
-		{C3FDDFE1-83AF-43E4-B2E0-AC0D595F5DDA} = {429EE893-7A0B-4D89-A034-604638322BCF}
 		{4F9B6893-0CA6-47FC-87CE-3E679C934421} = {056B6DD4-71E1-413B-826A-BA246E239256}
 		{0F53CFD1-B99E-4C16-BDDC-65C1A15766AC} = {735BAEC4-588E-4F9B-8B24-0B38417474FA}
 		{361EC384-63D4-49DB-9914-B7039B4BB020} = {735BAEC4-588E-4F9B-8B24-0B38417474FA}

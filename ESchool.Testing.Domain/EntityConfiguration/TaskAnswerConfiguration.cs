@@ -2,7 +2,6 @@
 using ESchool.Testing.Domain.Entities.Answers.FreeText;
 using ESchool.Testing.Domain.Entities.Answers.MultipleChoice;
 using ESchool.Testing.Domain.Entities.Answers.TrueOrFalse;
-using ESchool.Testing.Domain.Entities.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

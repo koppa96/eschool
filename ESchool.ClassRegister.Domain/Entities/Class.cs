@@ -1,12 +1,16 @@
 ﻿using ESchool.Libs.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.Domain.Entities.Users;
 
 namespace ESchool.ClassRegister.Domain.Entities
 {
     public class Class : IMultiTenantEntity
     {
         public Guid TenantId { get; set; }
+
+        public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<ClassSubject> ClassSubjects { get; set; }
     }
 }

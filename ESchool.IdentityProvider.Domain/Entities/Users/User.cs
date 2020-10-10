@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ESchool.IdentityProvider.Domain.Users
+namespace ESchool.IdentityProvider.Domain.Entities.Users
 {
     public class User : IdentityUser<Guid>
     {

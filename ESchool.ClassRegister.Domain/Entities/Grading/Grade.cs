@@ -9,8 +9,10 @@ namespace ESchool.ClassRegister.Domain.Entities.Grading
     {
         public Guid Id { get; set; }
 
-        public GradeValues Value { get; set; }
+        public GradeValue Value { get; set; }
         public string Description { get; set; }
+
+        public DateTime WrittenIn { get; set; }
 
         public Guid KindId { get; set; }
         public virtual GradeKind Kind { get; set; }

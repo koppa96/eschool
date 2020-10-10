@@ -1,5 +1,4 @@
 ﻿using ESchool.Testing.Domain.Entities;
-using ESchool.Testing.Domain.Entities.Answers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

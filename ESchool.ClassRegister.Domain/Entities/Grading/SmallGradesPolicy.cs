@@ -1,7 +1,5 @@
 ﻿using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ESchool.ClassRegister.Domain.Entities.Grading
 {

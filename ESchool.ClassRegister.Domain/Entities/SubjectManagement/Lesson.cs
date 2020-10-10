@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
 {
@@ -15,6 +14,8 @@ namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
         public virtual Group Group { get; set; }
 
         public Guid RoomId { get; set; }
+        
+        public Guid ClassRoomId { get; set; }
         public virtual ClassRoom ClassRoom { get; set; }
 
         public virtual ICollection<HomeWork> HomeWorks { get; set; }

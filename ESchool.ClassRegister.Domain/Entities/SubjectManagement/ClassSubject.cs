@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using ESchool.ClassRegister.Domain.Entities.Grading;
 
 namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
 {

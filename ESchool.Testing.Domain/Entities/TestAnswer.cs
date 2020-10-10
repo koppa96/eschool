@@ -1,7 +1,6 @@
 ﻿using ESchool.Testing.Domain.Entities.Answers;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using ESchool.Testing.Domain.Entities.ClassRegisterData;
 
 namespace ESchool.Testing.Domain.Entities

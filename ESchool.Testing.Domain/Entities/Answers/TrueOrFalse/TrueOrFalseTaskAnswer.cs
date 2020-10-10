@@ -1,7 +1,4 @@
 ﻿using ESchool.Testing.Domain.Entities.Tasks.TrueOrFalse;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ESchool.Testing.Domain.Entities.Answers.TrueOrFalse
 {

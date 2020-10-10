@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ESchool.Libs.Domain
+﻿namespace ESchool.Libs.Domain
 {
     // A Role-ok ne legyenek kizáróak
     public enum RoleTypes

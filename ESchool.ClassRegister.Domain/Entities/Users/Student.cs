@@ -3,7 +3,6 @@ using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.Libs.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ESchool.ClassRegister.Domain.Entities.Users
 {
@@ -15,8 +14,10 @@ namespace ESchool.ClassRegister.Domain.Entities.Users
         public virtual Class Class { get; set; }
 
         public virtual ICollection<Grade> Grades { get; set; }
+        public virtual ICollection<SmallGrade> SmallGrades { get; set; }
         public virtual ICollection<Absence> Absences { get; set; }
         public virtual ICollection<StudentParent> StudentParents { get; set; }
+        public virtual ICollection<GroupStudent> GroupStudents { get; set; }
 
         public Guid TenantId { get; set; }
     }

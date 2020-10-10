@@ -9,7 +9,7 @@ namespace ESchool.ClassRegister.Domain.Entities.Grading
     {
         public Guid Id { get; set; }
 
-        public GradeValues Value { get; set; }
+        public GradeValue Value { get; set; }
         public string Description { get; set; }
 
         public Guid StudentId { get; set; }

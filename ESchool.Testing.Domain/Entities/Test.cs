@@ -1,8 +1,6 @@
 ﻿using ESchool.Testing.Domain.Entities.Tasks;
-using ESchool.Testing.Domain.Enums;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ESchool.Testing.Domain.Entities
 {

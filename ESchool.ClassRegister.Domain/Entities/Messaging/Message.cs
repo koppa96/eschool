@@ -1,7 +1,6 @@
 ﻿using ESchool.ClassRegister.Domain.Entities.Users;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ESchool.ClassRegister.Domain.Entities.Messaging
 {

@@ -1,13 +1,15 @@
 ﻿using ESchool.Libs.Domain;
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ESchool.IdentityProvider.Domain.Roles
+namespace ESchool.IdentityProvider.Domain.Entities.Roles
 {
     public class Role : IdentityRole<Guid>
     {
+        private Role()
+        {
+        }
+        
         public Role(RoleTypes roleType)
         {
             Name = roleType.ToString();

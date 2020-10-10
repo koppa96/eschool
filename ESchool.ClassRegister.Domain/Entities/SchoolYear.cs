@@ -1,7 +1,5 @@
 ﻿using ESchool.Libs.Domain.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ESchool.ClassRegister.Domain.Entities
 {
@@ -12,6 +10,7 @@ namespace ESchool.ClassRegister.Domain.Entities
         public string DisplayName { get; set; }
 
         public DateTime StartsAt { get; set; }
+        public DateTime EndOfFirstHalf { get; set; }
         public DateTime EndsAt { get; set; }
 
         public Guid TenantId { get; set; }
