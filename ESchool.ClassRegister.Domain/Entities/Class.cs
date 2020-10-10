@@ -12,6 +12,9 @@ namespace ESchool.ClassRegister.Domain.Entities
         
         public Guid TenantId { get; set; }
 
+        public Guid? HeadTeacherId { get; set; }
+        public virtual Teacher HeadTeacher { get; set; }
+
         public virtual ICollection<Student> Students { get; set; }
         public virtual ICollection<ClassSubject> ClassSubjects { get; set; }
     }

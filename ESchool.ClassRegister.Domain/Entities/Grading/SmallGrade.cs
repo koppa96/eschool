@@ -12,6 +12,8 @@ namespace ESchool.ClassRegister.Domain.Entities.Grading
         public GradeValue Value { get; set; }
         public string Description { get; set; }
 
+        public DateTime WrittenIn { get; set; }
+
         public Guid? StudentId { get; set; }
         public virtual Student Student { get; set; }
 

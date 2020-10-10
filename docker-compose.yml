@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  eschool.classregister.api:
+    image: ${DOCKER_REGISTRY-}eschoolclassregisterapi
+    build:
+      context: .
+      dockerfile: ESchool.ClassRegister.Api/Dockerfile
+
+  eschool.homeassignments.api:
+    image: ${DOCKER_REGISTRY-}eschoolhomeassignmentsapi
+    build:
+      context: .
+      dockerfile: ESchool.HomeAssignments.Api/Dockerfile
+
+
+  eschool.identityprovider:
+    image: ${DOCKER_REGISTRY-}eschoolidentityprovider
+    build:
+      context: .
+      dockerfile: ESchool.IdentityProvider/Dockerfile
+
+
+  eschool.testing.api:
+    image: ${DOCKER_REGISTRY-}eschooltestingapi
+    build:
+      context: .
+      dockerfile: ESchool.Testing.Api/Dockerfile
+

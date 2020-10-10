@@ -2,7 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>4c0b3a27-4259-43a6-b97e-ead3d0948a4c</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.3" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ESchool.HomeAssignments.Domain\ESchool.HomeAssignments.Domain.csproj" />

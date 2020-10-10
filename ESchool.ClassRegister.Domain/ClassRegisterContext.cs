@@ -1,4 +1,5 @@
-﻿using ESchool.ClassRegister.Domain.Entities;
+﻿using System.Reflection;
+using ESchool.ClassRegister.Domain.Entities;
 using ESchool.ClassRegister.Domain.Entities.Grading;
 using ESchool.ClassRegister.Domain.Entities.Messaging;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
@@ -29,6 +30,11 @@ namespace ESchool.ClassRegister.Domain
 
         public ClassRegisterContext(DbContextOptions<ClassRegisterContext> options) : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

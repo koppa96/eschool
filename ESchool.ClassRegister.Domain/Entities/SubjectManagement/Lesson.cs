@@ -10,6 +10,7 @@ namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
         public int LessonNumber { get; set; }
         public bool Canceled { get; set; }
         public string Title { get; set; }
+        public string Description { get; set; }
 
         public DateTime StartsAt { get; set; }
         public DateTime EndsAt { get; set; }
@@ -17,8 +18,6 @@ namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
         public Guid GroupId { get; set; }
         public virtual Group Group { get; set; }
 
-        public Guid RoomId { get; set; }
-        
         public Guid ClassRoomId { get; set; }
         public virtual ClassRoom ClassRoom { get; set; }
 

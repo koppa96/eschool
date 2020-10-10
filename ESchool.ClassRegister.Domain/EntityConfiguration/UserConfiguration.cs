@@ -1,4 +1,5 @@
-﻿using ESchool.ClassRegister.Domain.Entities.Users;
+﻿using ESchool.ClassRegister.Domain.Entities;
+using ESchool.ClassRegister.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,6 +17,14 @@ namespace ESchool.ClassRegister.Domain.EntityConfiguration
             builder.HasMany(x => x.GroupTeachers)
                 .WithOne(x => x.Teacher)
                 .HasForeignKey(x => x.TeacherId);
+
+            builder.HasMany(x => x.PreviousClasses)
+                .WithOne(x => x.HeadTeacher)
+                .HasForeignKey(x => x.HeadTeacherId);
+
+            builder.HasOne(x => x.CurrentClass)
+                .WithOne()
+                .HasForeignKey<Teacher>(x => x.CurrentClassId);
         }
 
         public void Configure(EntityTypeBuilder<Parent> builder)
