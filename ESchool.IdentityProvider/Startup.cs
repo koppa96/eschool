@@ -1,4 +1,8 @@
+using System.Reflection;
+using AutoMapper;
 using ESchool.IdentityProvider.Domain;
+using ESchool.Libs.Application.Mapping;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -22,8 +26,15 @@ namespace ESchool.IdentityProvider
         {
             services.AddDbContext<IdentityProviderContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            
+
+            services.AddAutoMapper(config =>
+            {
+                config.AddProfile(new AutoMapperProfile(Assembly.Load("ESchool.IdentityProvider.Application")));
+            });
+
             services.AddControllers();
+
+            services.AddMediatR(Assembly.Load("ESchool.IdentityProvider.Application"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
