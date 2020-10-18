@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ESchool.IdentityProvider.Domain\ESchool.IdentityProvider.Domain.csproj" />
+    <ProjectReference Include="..\ESchool.Libs.Application\ESchool.Libs.Application.csproj" />
+  </ItemGroup>
+
+</Project>

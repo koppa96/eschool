@@ -10,6 +10,8 @@ WORKDIR /src
 COPY ["ESchool.IdentityProvider/ESchool.IdentityProvider.csproj", "ESchool.IdentityProvider/"]
 COPY ["ESchool.IdentityProvider.Domain/ESchool.IdentityProvider.Domain.csproj", "ESchool.IdentityProvider.Domain/"]
 COPY ["ESchool.Libs.Domain/ESchool.Libs.Domain.csproj", "ESchool.Libs.Domain/"]
+COPY ["ESchool.IdentityProvider.Application/ESchool.IdentityProvider.Application.csproj", "ESchool.IdentityProvider.Application/"]
+COPY ["ESchool.Libs.Application/ESchool.Libs.Application.csproj", "ESchool.Libs.Application/"]
 RUN dotnet restore "ESchool.IdentityProvider/ESchool.IdentityProvider.csproj"
 COPY . .
 WORKDIR "/src/ESchool.IdentityProvider"

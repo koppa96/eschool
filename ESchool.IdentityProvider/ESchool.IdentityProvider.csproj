@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ESchool.IdentityProvider.Application\ESchool.IdentityProvider.Application.csproj" />
+    <ProjectReference Include="..\ESchool.IdentityProvider.Application\ESchool.IdentityProvider.Application.csproj" />
     <ProjectReference Include="..\ESchool.IdentityProvider.Domain\ESchool.IdentityProvider.Domain.csproj" />
   </ItemGroup>
 
