@@ -27,3 +27,10 @@ services:
       context: .
       dockerfile: ESchool.Testing.Api/Dockerfile
 
+  eschool.mssql:
+    container_name: eschool.mssql
+    image: mcr.microsoft.com/mssql/server:2017-CU21-ubuntu-16.04
+
+  eschool.rabbitmq:
+    container_name: eschool.rabbitmq
+    image: rabbitmq:3.8.9-management

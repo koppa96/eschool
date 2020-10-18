@@ -5,37 +5,85 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=eschool.mssql;Database=ClassRegisterDb;User Id=SA;Password=Password123;
     ports:
       - "5000:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    networks:
+      - eschool_network
+    depends_on:
+      - eschool.mssql
+
   eschool.homeassignments.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=eschool.mssql;Database=HomeAssignmentsDb;User Id=SA;Password=Password123;
     ports:
       - "5100:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    networks:
+      - eschool_network
+    depends_on:
+      - eschool.mssql
 
   eschool.identityprovider:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=eschool.mssql;Database=IdentityProviderDb;User Id=SA;Password=Password123;
     ports:
       - "5200:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    networks:
+      - eschool_network
+    depends_on:
+      - eschool.mssql
 
   eschool.testing.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=eschool.mssql;Database=TestingDb;User Id=SA;Password=Password123;
     ports:
       - "5300:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    networks:
+      - eschool_network
+    depends_on:
+      - eschool.mssql
+
+  eschool.mssql:
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123
+    ports:
+      - "3500:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    networks:
+      - eschool_network
+
+  eschool.rabbitmq:
+    ports:
+      - "5672:5672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - eschool_network
+
+
+networks:
+  eschool_network:
+
+volumes:
+  mssql_data:
+  rabbitmq_data:
