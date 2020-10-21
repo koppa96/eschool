@@ -9,7 +9,6 @@ using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities;
 using ESchool.Libs.Application.Cqrs.Query;
 using ESchool.Libs.Application.Cqrs.Response;
-using ESchool.Libs.Application.Mapping;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +18,7 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
     {
     }
 
-    public class TenantListResponse : IMappable<Tenant, TenantDetailsResponse>
+    public class TenantListResponse
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.IdentityProvider.Application.Features.Tenants.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities;
-using ESchool.Libs.Application.Mapping;
 using MediatR;
 
 namespace ESchool.IdentityProvider.Application.Features.Tenants
 {
-    public class CreateTenantCommand : IRequest<TenantDetailsResponse>,
-        IMappable<CreateTenantCommand, Tenant>
+    public class CreateTenantCommand : IRequest<TenantDetailsResponse>
     {
         public string Name { get; set; }
         public string Address { get; set; }

@@ -1,10 +1,13 @@
+using System;
 using System.Reflection;
 using AutoMapper;
 using ESchool.IdentityProvider.Domain;
-using ESchool.Libs.Application.Mapping;
+using ESchool.IdentityProvider.Domain.Entities.Users;
+using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,14 +30,24 @@ namespace ESchool.IdentityProvider
             services.AddDbContext<IdentityProviderContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddAutoMapper(config =>
-            {
-                config.AddProfile(new AutoMapperProfile(Assembly.Load("ESchool.IdentityProvider.Application")));
-            });
+            services.AddIdentity<User, IdentityRole<Guid>>()
+                .AddEntityFrameworkStores<IdentityProviderContext>();
+
+            services.AddAutoMapper(Assembly.Load("ESchool.IdentityProvider.Application"));
 
             services.AddControllers();
 
             services.AddMediatR(Assembly.Load("ESchool.IdentityProvider.Application"));
+
+            services.AddSwaggerDocument();
+
+            services.AddMassTransit(configure =>
+            {
+                configure.UsingRabbitMq((context, configurator) =>
+                {
+                    configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +58,8 @@ namespace ESchool.IdentityProvider
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             app.UseRouting();
 

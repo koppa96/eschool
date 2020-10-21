@@ -1,4 +1,7 @@
+using System.Reflection;
 using ESchool.ClassRegister.Domain;
+using MassTransit;
+using MassTransit.MultiBus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +27,20 @@ namespace ESchool.ClassRegister.Api
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
             services.AddControllers();
+
+            services.AddMassTransit(config =>
+            {
+                config.AddConsumers(Assembly.GetExecutingAssembly());
+                config.UsingRabbitMq((context, configurator) =>
+                {
+                    configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
+                    configurator.ReceiveEndpoint("class-register", endpoint =>
+                    {
+                        endpoint.ConfigureConsumers(context);
+                    });
+                });
+            });
+            services.AddMassTransitHostedService();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

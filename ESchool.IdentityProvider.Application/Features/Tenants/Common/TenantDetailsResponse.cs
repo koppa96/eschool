@@ -1,10 +1,8 @@
 ﻿using System;
-using ESchool.IdentityProvider.Domain.Entities;
-using ESchool.Libs.Application.Mapping;
 
 namespace ESchool.IdentityProvider.Application.Features.Tenants.Common
 {
-    public class TenantDetailsResponse : IMappable<Tenant, TenantDetailsResponse>
+    public class TenantDetailsResponse
     {
         public Guid Id { get; set; }
 

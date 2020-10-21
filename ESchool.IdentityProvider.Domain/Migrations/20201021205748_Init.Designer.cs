@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ESchool.IdentityProvider.Domain.Migrations
 {
     [DbContext(typeof(IdentityProviderContext))]
-    [Migration("20201009230001_Init")]
+    [Migration("20201021205748_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,34 +20,6 @@ namespace ESchool.IdentityProvider.Domain.Migrations
                 .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Roles.Role", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-                });
 
             modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Tenant", b =>
                 {
@@ -75,6 +47,46 @@ namespace ESchool.IdentityProvider.Domain.Migrations
                     b.ToTable("Tenants");
                 });
 
+            modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Users.TenantUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TenantUsers");
+                });
+
+            modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Users.TenantUserRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("TenantRole")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TenantUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantUserId");
+
+                    b.ToTable("TenantUserRole");
+                });
+
             modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -88,16 +100,15 @@ namespace ESchool.IdentityProvider.Domain.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<int>("GlobalRole")
+                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -143,8 +154,34 @@ namespace ESchool.IdentityProvider.Domain.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -250,19 +287,31 @@ namespace ESchool.IdentityProvider.Domain.Migrations
 
             modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Users.TenantUser", b =>
                 {
-                    b.HasBaseType("ESchool.IdentityProvider.Domain.Entities.Users.User");
+                    b.HasOne("ESchool.IdentityProvider.Domain.Entities.Tenant", "Tenant")
+                        .WithMany("TenantUsers")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasOne("ESchool.IdentityProvider.Domain.Entities.Users.User", "User")
+                        .WithMany("TenantUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.HasIndex("TenantId");
-
-                    b.HasDiscriminator().HasValue("TenantUser");
+            modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Users.TenantUserRole", b =>
+                {
+                    b.HasOne("ESchool.IdentityProvider.Domain.Entities.Users.TenantUser", "TenantUser")
+                        .WithMany("TenantUserRoles")
+                        .HasForeignKey("TenantUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("ESchool.IdentityProvider.Domain.Entities.Roles.Role", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -289,7 +338,7 @@ namespace ESchool.IdentityProvider.Domain.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("ESchool.IdentityProvider.Domain.Entities.Roles.Role", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -307,15 +356,6 @@ namespace ESchool.IdentityProvider.Domain.Migrations
                     b.HasOne("ESchool.IdentityProvider.Domain.Entities.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Users.TenantUser", b =>
-                {
-                    b.HasOne("ESchool.IdentityProvider.Domain.Entities.Tenant", "Tenant")
-                        .WithMany()
-                        .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

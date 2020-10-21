@@ -5,13 +5,11 @@ using AutoMapper;
 using ESchool.IdentityProvider.Application.Features.Tenants.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities;
-using ESchool.Libs.Application.Mapping;
 using MediatR;
 
 namespace ESchool.IdentityProvider.Application.Features.Tenants
 {
-    public class EditTenantCommand : IRequest<TenantDetailsResponse>,
-        IMappable<EditTenantCommand, Tenant>
+    public class EditTenantCommand : IRequest<TenantDetailsResponse>
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

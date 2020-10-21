@@ -66,7 +66,7 @@ services:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Password123
     ports:
-      - "3500:1433"
+      - "5500:1433"
     volumes:
       - mssql_data:/var/opt/mssql
     networks:
@@ -74,7 +74,7 @@ services:
 
   eschool.rabbitmq:
     ports:
-      - "5672:5672"
+      - "5600:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:

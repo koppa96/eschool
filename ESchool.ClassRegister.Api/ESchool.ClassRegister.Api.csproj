@@ -8,11 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.0.4" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.0.4" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ESchool.ClassRegister.Application\ESchool.ClassRegister.Application.csproj" />
     <ProjectReference Include="..\ESchool.ClassRegister.Domain\ESchool.ClassRegister.Domain.csproj" />
+    <ProjectReference Include="..\ESchool.Libs.Application\ESchool.Libs.Application.csproj" />
   </ItemGroup>
 
 
