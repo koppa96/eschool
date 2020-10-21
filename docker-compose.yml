@@ -1,13 +1,22 @@
 version: '3.4'
 
 services:
+  eschool.apigateway:
+    container_name: eschool.apigateway
+    image: ${DOCKER_REGISTRY-}eschoolapigateway
+    build:
+      context: .
+      dockerfile: ESchool.ApiGateway/Dockerfile
+  
   eschool.classregister.api:
+    container_name: eschool.classregister.api
     image: ${DOCKER_REGISTRY-}eschoolclassregisterapi
     build:
       context: .
       dockerfile: ESchool.ClassRegister.Api/Dockerfile
 
   eschool.homeassignments.api:
+    container_name: eschool.homeassignments.api
     image: ${DOCKER_REGISTRY-}eschoolhomeassignmentsapi
     build:
       context: .
@@ -15,6 +24,7 @@ services:
 
 
   eschool.identityprovider:
+    container_name: eschool.identityprovider
     image: ${DOCKER_REGISTRY-}eschoolidentityprovider
     build:
       context: .
@@ -22,6 +32,7 @@ services:
 
 
   eschool.testing.api:
+    container_name: eschool.testing.api
     image: ${DOCKER_REGISTRY-}eschooltestingapi
     build:
       context: .

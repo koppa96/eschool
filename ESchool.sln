@@ -39,7 +39,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.Libs.Application", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.IdentityProvider.Application", "ESchool.IdentityProvider.Application\ESchool.IdentityProvider.Application.csproj", "{0EBA806F-111F-4F3E-8480-ADE5863FEC83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.ClassRegister.Application", "ESchool.ClassRegister.Application\ESchool.ClassRegister.Application.csproj", "{5A989BDD-D08A-4701-BEA4-94E62F67E71E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.ClassRegister.Application", "ESchool.ClassRegister.Application\ESchool.ClassRegister.Application.csproj", "{5A989BDD-D08A-4701-BEA4-94E62F67E71E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", "{FD207514-C572-4910-A26B-DE1DE3C258AB}"
+	ProjectSection(FolderGlobals) = preProject
+		C_5_4Users_4Peti_4source_4repos_4eschool_4ocelot_1json__JsonSchema = 
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.ApiGateway", "ESchool.ApiGateway\ESchool.ApiGateway.csproj", "{3AE4B390-9022-40EF-8A51-DDB6C36B7427}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +106,10 @@ Global
 		{5A989BDD-D08A-4701-BEA4-94E62F67E71E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A989BDD-D08A-4701-BEA4-94E62F67E71E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A989BDD-D08A-4701-BEA4-94E62F67E71E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AE4B390-9022-40EF-8A51-DDB6C36B7427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AE4B390-9022-40EF-8A51-DDB6C36B7427}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AE4B390-9022-40EF-8A51-DDB6C36B7427}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AE4B390-9022-40EF-8A51-DDB6C36B7427}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -120,6 +131,8 @@ Global
 		{DF877F65-965D-47CB-A2EC-78C304055A5E} = {056B6DD4-71E1-413B-826A-BA246E239256}
 		{0EBA806F-111F-4F3E-8480-ADE5863FEC83} = {031C7FC5-97DD-4F34-8FF1-AE98E529D946}
 		{5A989BDD-D08A-4701-BEA4-94E62F67E71E} = {A74713AA-A270-4EE8-8DF2-3F1307FDA682}
+		{FD207514-C572-4910-A26B-DE1DE3C258AB} = {F3D93C43-BA77-49E3-9797-74ABAADCBA8F}
+		{3AE4B390-9022-40EF-8A51-DDB6C36B7427} = {FD207514-C572-4910-A26B-DE1DE3C258AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9875CB6A-B99A-41ED-94CC-54EC83726253}
