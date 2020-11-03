@@ -1,0 +1,64 @@
+﻿@page
+@model ESchool.IdentityProvider.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Regisztráció";
+    Layout = "_Layout";
+}
+
+<main class="container vh-100">
+    <div class="row h-100 justify-content-center align-items-center">
+        <div class="col-12 col-md-9 col-lg-7 p-4 mdl-card mdl-shadow--8dp card-round">
+            <h3>Regisztráció</h3>
+
+            <form method="post" class="w-100">
+                <input type="hidden" asp-for="ReturnUrl" />
+
+                <div class="row">
+                    <div class="col-12">
+                        <label class="pure-material-textfield-outlined w-100">
+                            <input placeholder=" " asp-for="Username" />
+                            <span>Felhasználónév</span>
+                        </label>
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <label class="pure-material-textfield-outlined w-100">
+                            <input placeholder=" " asp-for="Email" />
+                            <span>E-mail cím</span>
+                        </label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <label class="pure-material-textfield-outlined w-100">
+                            <input type="password" placeholder=" " asp-for="Password" />
+                            <span>Jelszó</span>
+                        </label>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <label class="pure-material-textfield-outlined w-100">
+                            <input type="password" placeholder=" " asp-for="ConfirmPassword" />
+                            <span>Jelszó megerősítése</span>
+                        </label>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-row-reverse justify-content-between mt-4">
+                    <button name="action" value="register" class="poppins mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">Regisztráció</button>
+                    <button name="action" value="login" class="poppins mdl-button mdl-js-button mdl-button--primary mdl-js-ripple-effect">Vissza a bejelentkezéshez</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+

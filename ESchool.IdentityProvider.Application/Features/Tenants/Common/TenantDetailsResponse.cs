@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ESchool.IdentityProvider.Domain.Entities;
+using System;
 
 namespace ESchool.IdentityProvider.Application.Features.Tenants.Common
 {

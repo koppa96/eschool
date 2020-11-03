@@ -10,6 +10,7 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ./cert:/usr/local/share/ca-certificates
     networks:
       - eschool_network
   
@@ -46,13 +47,17 @@ services:
   eschool.identityprovider:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_URLS=https://+:443;http://+:80
       - ConnectionStrings__DefaultConnection=Server=eschool.mssql;Database=IdentityProviderDb;User Id=SA;Password=Password123;
+      - KESTREL__Certificates__Default__Path=/app/cert/idp.pfx
+      - KESTREL__Certificates__Default__Password=Password123
     ports:
       - "5300:80"
+      - "5301:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ./cert:/app/cert
     networks:
       - eschool_network
     depends_on:

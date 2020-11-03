@@ -24,6 +24,14 @@ namespace ESchool.Testing.Api
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllers();
+            
+            services.AddAuthentication()
+                .AddJwtBearer(config =>
+                {
+                    config.Authority = Configuration.GetValue<string>("Authentication:Authority");
+                    config.Audience = Configuration.GetValue<string>("Authentication:Audience");
+                    config.RequireHttpsMetadata = false;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

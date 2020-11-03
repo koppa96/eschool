@@ -33,9 +33,22 @@ namespace ESchool.IdentityProvider
             services.AddIdentity<User, IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<IdentityProviderContext>();
 
+            services.AddIdentityServer(config =>
+                    {
+                        config.IssuerUri = Configuration.GetValue<string>("IdentityServer:IssuerUri");
+                    })
+                .AddDeveloperSigningCredential()
+                .AddInMemoryPersistedGrants()
+                .AddInMemoryIdentityResources(Configuration.GetSection("IdentityServer:IdentityResources"))
+                .AddInMemoryApiResources(Configuration.GetSection("IdentityServer:ApiResources"))
+                .AddInMemoryApiScopes(Configuration.GetSection("IdentityServer:ApiScopes"))
+                .AddInMemoryClients(Configuration.GetSection("IdentityServer:Clients"))
+                .AddAspNetIdentity<User>();
+
             services.AddAutoMapper(Assembly.Load("ESchool.IdentityProvider.Application"));
 
             services.AddControllers();
+            services.AddRazorPages();
 
             services.AddMediatR(Assembly.Load("ESchool.IdentityProvider.Application"));
 
@@ -61,6 +74,8 @@ namespace ESchool.IdentityProvider
             app.UseOpenApi();
             app.UseSwaggerUi3();
 
+            app.UseIdentityServer();
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -68,6 +83,7 @@ namespace ESchool.IdentityProvider
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
         }
     }
