@@ -4,13 +4,16 @@ services:
   eschool.apigateway:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_URLS=https://+443;http://+:80
+      - KESTREL__Certificates__Default__Path=/app/cert/idp.pfx
+      - KESTREL__Certificates__Default__Password=Password123
     ports:
       - "5000:80"
+      - "5001:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-      - ./cert:/usr/local/share/ca-certificates
+      - ./cert:/app/cert
     networks:
       - eschool_network
   
