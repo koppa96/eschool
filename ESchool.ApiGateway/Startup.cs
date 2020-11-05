@@ -39,6 +39,8 @@ namespace ESchool.ApiGateway
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
+
             app.UseOcelot().Wait();
 
             app.UseRouting();

@@ -4,14 +4,16 @@ using ESchool.ClassRegister.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ESchool.ClassRegister.Domain.Migrations
 {
     [DbContext(typeof(ClassRegisterContext))]
-    partial class ClassRegisterContextModelSnapshot : ModelSnapshot
+    [Migration("20201105150822_UserTenantId")]
+    partial class UserTenantId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -3,6 +3,7 @@ using ESchool.ClassRegister.Domain.Entities;
 using ESchool.ClassRegister.Domain.Entities.Grading;
 using ESchool.ClassRegister.Domain.Entities.Messaging;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Domain
@@ -27,6 +28,10 @@ namespace ESchool.ClassRegister.Domain
         public DbSet<GroupTeacher> GroupTeachers { get; set; }
         public DbSet<HomeWork> HomeWorks { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Administrator> Administrators { get; set; }
+        public DbSet<UserBase> UserBases { get; set; }
 
         public ClassRegisterContext(DbContextOptions<ClassRegisterContext> options) : base(options)
         {

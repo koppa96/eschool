@@ -9,4 +9,8 @@
       <ProjectReference Include="..\ESchool.Libs.Application\ESchool.Libs.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="9.0.0" />
+    </ItemGroup>
+
 </Project>

@@ -3,6 +3,7 @@ using System.Reflection;
 using ESchool.ClassRegister.Domain;
 using MassTransit;
 using MassTransit.MultiBus;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +33,8 @@ namespace ESchool.ClassRegister.Api
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
             services.AddControllers();
+
+            services.AddMediatR(Assembly.Load("ESchool.ClassRegister.Application"));
 
             services.AddAuthentication()
                 .AddJwtBearer(config =>

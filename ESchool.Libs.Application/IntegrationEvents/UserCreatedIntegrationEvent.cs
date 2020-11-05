@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ESchool.Libs.Domain.Model;
+using MediatR;
 
 namespace ESchool.Libs.Application.IntegrationEvents
 {
-    public class UserCreatedIntegrationEvent
+    public class UserCreatedIntegrationEvent : IRequest
     {
         public Guid Id { get; set; }
         public string UserName { get; set; }

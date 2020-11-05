@@ -1,23 +1,23 @@
 ﻿using System.Threading.Tasks;
 using ESchool.Libs.Application.IntegrationEvents;
 using MassTransit;
+using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace ESchool.ClassRegister.Api.Consumers
 {
     public class UserCreatedEventConsumer : IConsumer<UserCreatedIntegrationEvent>
     {
-        private readonly ILogger<UserCreatedEventConsumer> logger;
+        private readonly IMediator mediator;
 
-        public UserCreatedEventConsumer(ILogger<UserCreatedEventConsumer> logger)
+        public UserCreatedEventConsumer(IMediator mediator)
         {
-            this.logger = logger;
+            this.mediator = mediator;
         }
         
         public Task Consume(ConsumeContext<UserCreatedIntegrationEvent> context)
         {
-            logger.LogInformation("User creation event received.");
-            return Task.CompletedTask;
+            return mediator.Send(context.Message);
         }
     }
 }

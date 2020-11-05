@@ -1,4 +1,5 @@
 using ESchool.Testing.Domain;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,15 @@ namespace ESchool.Testing.Api
                     config.Audience = Configuration.GetValue<string>("Authentication:Audience");
                     config.RequireHttpsMetadata = false;
                 });
+            
+            services.AddAuthorization(config =>
+            {
+                config.AddPolicy("Default", builder => builder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    .RequireClaim("scope", "testingapi.readwrite"));
+
+                config.DefaultPolicy = config.GetPolicy("Default");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,10 +52,9 @@ namespace ESchool.Testing.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
