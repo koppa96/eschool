@@ -8,8 +8,7 @@ namespace ESchool.Testing.Domain.Entities.ClassRegisterData
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public Guid GroupId { get; set; }
-        public virtual Group Group { get; set; }
+        public virtual ICollection<GroupStudent> GroupStudents { get; set; }
 
         public virtual ICollection<TestAnswer> TestAnswers { get; set; }
     }

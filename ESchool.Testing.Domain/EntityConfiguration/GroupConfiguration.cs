@@ -12,7 +12,7 @@ namespace ESchool.Testing.Domain.EntityConfiguration
                 .WithOne(x => x.Group)
                 .HasForeignKey(x => x.GroupId);
 
-            builder.HasMany(x => x.Students)
+            builder.HasMany(x => x.GroupStudents)
                 .WithOne(x => x.Group)
                 .HasForeignKey(x => x.GroupId);
         }

@@ -10,6 +10,7 @@ namespace ESchool.Testing.Domain.Entities.ClassRegisterData
         public string SubjectName { get; set; }
 
         public virtual ICollection<TestGroup> TestGroups { get; set; }
-        public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<GroupStudent> GroupStudents { get; set; }
+        public virtual ICollection<GroupTeacher> GroupTeachers { get; set; }
     }
 }
