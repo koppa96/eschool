@@ -9,6 +9,8 @@ namespace ESchool.Testing.Domain
 {
     public class TestingContext : DbContext
     {
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<TestGroup> TestGroups { get; set; }
         public DbSet<Test> Tests { get; set; }

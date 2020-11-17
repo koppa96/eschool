@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.ApiGateway", "EScho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.HomeAssignments.Application", "ESchool.HomeAssignments.Application\ESchool.HomeAssignments.Application.csproj", "{F3448325-C56B-4ED8-85D6-180302EC9362}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.Testing.Application", "ESchool.Testing.Application\ESchool.Testing.Application.csproj", "{B203C6EE-30BE-4353-A8A5-003FEDA0ED01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +118,10 @@ Global
 		{F3448325-C56B-4ED8-85D6-180302EC9362}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3448325-C56B-4ED8-85D6-180302EC9362}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3448325-C56B-4ED8-85D6-180302EC9362}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B203C6EE-30BE-4353-A8A5-003FEDA0ED01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B203C6EE-30BE-4353-A8A5-003FEDA0ED01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B203C6EE-30BE-4353-A8A5-003FEDA0ED01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B203C6EE-30BE-4353-A8A5-003FEDA0ED01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +146,7 @@ Global
 		{FD207514-C572-4910-A26B-DE1DE3C258AB} = {F3D93C43-BA77-49E3-9797-74ABAADCBA8F}
 		{3AE4B390-9022-40EF-8A51-DDB6C36B7427} = {FD207514-C572-4910-A26B-DE1DE3C258AB}
 		{F3448325-C56B-4ED8-85D6-180302EC9362} = {7CACF9E6-8A45-4203-8A92-12656463F11C}
+		{B203C6EE-30BE-4353-A8A5-003FEDA0ED01} = {735BAEC4-588E-4F9B-8B24-0B38417474FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9875CB6A-B99A-41ED-94CC-54EC83726253}
