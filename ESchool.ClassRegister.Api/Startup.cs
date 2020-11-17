@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 using ESchool.ClassRegister.Domain;
+using ESchool.Libs.Application.IntegrationEvents;
+using ESchool.Libs.Application.IntegrationEvents.Core;
 using MassTransit;
 using MassTransit.MultiBus;
 using MediatR;
@@ -84,7 +86,7 @@ namespace ESchool.ClassRegister.Api
 
             services.AddMassTransit(config =>
             {
-                config.AddConsumers(Assembly.GetExecutingAssembly());
+                config.AddConsumer<MediatREventConsumer<UserCreatedIntegrationEvent>>();
                 config.UsingRabbitMq((context, configurator) =>
                 {
                     configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));

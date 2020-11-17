@@ -8,11 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.0.6" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.0.6" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.9" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ESchool.HomeAssignments.Application\ESchool.HomeAssignments.Application.csproj" />
     <ProjectReference Include="..\ESchool.HomeAssignments.Domain\ESchool.HomeAssignments.Domain.csproj" />
   </ItemGroup>
 

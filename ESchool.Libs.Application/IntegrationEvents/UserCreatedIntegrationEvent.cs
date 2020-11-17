@@ -1,8 +1,6 @@
-﻿using ESchool.Libs.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using ESchool.Libs.Domain.Model;
+using ESchool.Libs.Application.Dtos;
 using MediatR;
 
 namespace ESchool.Libs.Application.IntegrationEvents
@@ -12,6 +10,6 @@ namespace ESchool.Libs.Application.IntegrationEvents
         public Guid Id { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
-        public IEnumerable<TenantRole> TenantRoles { get; set; }
+        public IEnumerable<TenantRoleDto> TenantRoles { get; set; }
     }
 }

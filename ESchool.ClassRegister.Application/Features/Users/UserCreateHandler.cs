@@ -7,7 +7,6 @@ using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Attributes;
 using ESchool.ClassRegister.Domain.Entities.Users;
 using ESchool.Libs.Application.IntegrationEvents;
-using ESchool.Libs.Domain.Model;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.Users
@@ -33,11 +32,11 @@ namespace ESchool.ClassRegister.Application.Features.Users
                 foreach (var role in tenantRole.Roles)
                 {
                     var userTypeForRole = tenantUserTypes.Single(x =>
-                        x.GetCustomAttribute<TenantUserAttribute>().TenantRoleType == role);
+                        x.GetCustomAttribute<TenantUserAttribute>().TenantRoleType == role.TenantRoleType);
                     
                     var instance = (UserBase)Activator.CreateInstance(userTypeForRole);
+                    instance.Id = role.Id;
                     instance.Email = request.Email;
-                    instance.UserId = request.Id;
                     instance.TenantId = tenantRole.TenantId;
                     context.UserBases.Add(instance);
                 }

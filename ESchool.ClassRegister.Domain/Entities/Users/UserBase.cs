@@ -12,8 +12,6 @@ namespace ESchool.ClassRegister.Domain.Entities.Users
         public string Address { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        
-        public Guid UserId { get; set; }
 
         public virtual ICollection<UserMessage> ReceivedMessages { get; set; }
         public virtual ICollection<Message> SentMessages { get; set; }

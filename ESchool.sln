@@ -48,6 +48,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.ApiGateway", "ESchool.ApiGateway\ESchool.ApiGateway.csproj", "{3AE4B390-9022-40EF-8A51-DDB6C36B7427}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.HomeAssignments.Application", "ESchool.HomeAssignments.Application\ESchool.HomeAssignments.Application.csproj", "{F3448325-C56B-4ED8-85D6-180302EC9362}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +112,10 @@ Global
 		{3AE4B390-9022-40EF-8A51-DDB6C36B7427}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AE4B390-9022-40EF-8A51-DDB6C36B7427}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AE4B390-9022-40EF-8A51-DDB6C36B7427}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3448325-C56B-4ED8-85D6-180302EC9362}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3448325-C56B-4ED8-85D6-180302EC9362}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3448325-C56B-4ED8-85D6-180302EC9362}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3448325-C56B-4ED8-85D6-180302EC9362}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -133,6 +139,7 @@ Global
 		{5A989BDD-D08A-4701-BEA4-94E62F67E71E} = {A74713AA-A270-4EE8-8DF2-3F1307FDA682}
 		{FD207514-C572-4910-A26B-DE1DE3C258AB} = {F3D93C43-BA77-49E3-9797-74ABAADCBA8F}
 		{3AE4B390-9022-40EF-8A51-DDB6C36B7427} = {FD207514-C572-4910-A26B-DE1DE3C258AB}
+		{F3448325-C56B-4ED8-85D6-180302EC9362} = {7CACF9E6-8A45-4203-8A92-12656463F11C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9875CB6A-B99A-41ED-94CC-54EC83726253}

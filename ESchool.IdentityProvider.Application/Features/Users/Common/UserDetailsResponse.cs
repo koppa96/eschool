@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using ESchool.Libs.Application.Dtos;
 using ESchool.Libs.Domain.Enums;
-using ESchool.Libs.Domain.Model;
 
 namespace ESchool.IdentityProvider.Application.Features.Users.Common
 {
@@ -11,6 +11,6 @@ namespace ESchool.IdentityProvider.Application.Features.Users.Common
         public string UserName { get; set; }
         public string Email { get; set; }
         public GlobalRoleType GlobalRoleType { get; set; }
-        public IEnumerable<TenantRole> TenantRoles { get; set; }
+        public IEnumerable<TenantRoleDto> TenantRoles { get; set; }
     }
 }

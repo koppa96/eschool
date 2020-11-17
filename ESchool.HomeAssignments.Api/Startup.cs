@@ -1,4 +1,9 @@
+using System.Reflection;
 using ESchool.HomeAssignments.Domain;
+using ESchool.Libs.Application.IntegrationEvents;
+using ESchool.Libs.Application.IntegrationEvents.Core;
+using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,6 +47,23 @@ namespace ESchool.HomeAssignments.Api
 
                 config.DefaultPolicy = config.GetPolicy("Default");
             });
+
+            services.AddMediatR(Assembly.Load("ESchool.HomeAssignments.Application"));
+            
+            services.AddMassTransit(config =>
+            {
+                config.AddConsumer<MediatREventConsumer<StudentCreatedIntegrationEvent>>();
+                config.AddConsumer<MediatREventConsumer<TeacherCreatedIntegrationEvent>>();
+                config.UsingRabbitMq((context, configurator) =>
+                {
+                    configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
+                    configurator.ReceiveEndpoint("home-assignments", endpoint =>
+                    {
+                        endpoint.ConfigureConsumers(context);
+                    });
+                });
+            });
+            services.AddMassTransitHostedService();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
