@@ -9,7 +9,7 @@ using ESchool.Libs.Domain.Enums;
 namespace ESchool.ClassRegister.Domain.Entities.Users
 {
     [TenantUser(TenantRoleType.Student)]
-    public class Student : UserBase, IMultiTenantEntity
+    public class Student : UserBase
     {
         public string StudentIdentificationNumber { get; set; }
 
@@ -21,7 +21,5 @@ namespace ESchool.ClassRegister.Domain.Entities.Users
         public virtual ICollection<Absence> Absences { get; set; }
         public virtual ICollection<StudentParent> StudentParents { get; set; }
         public virtual ICollection<GroupStudent> GroupStudents { get; set; }
-
-        public Guid TenantId { get; set; }
     }
 }

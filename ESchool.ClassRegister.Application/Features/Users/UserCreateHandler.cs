@@ -56,7 +56,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
                             Name = request.UserName
                         });
                     }
-                    else
+                    else if (role.TenantRoleType == TenantRoleType.Teacher)
                     {
                         events.Add(new TeacherCreatedIntegrationEvent
                         {

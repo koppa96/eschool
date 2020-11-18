@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ESchool.Testing.Domain.Migrations
 {
     [DbContext(typeof(TestingContext))]
-    [Migration("20201009215042_Init")]
+    [Migration("20201118013249_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,7 +66,7 @@ namespace ESchool.Testing.Domain.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.Student", b =>
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.GroupStudent", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -75,14 +75,65 @@ namespace ESchool.Testing.Domain.Migrations
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Student");
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("GroupStudent");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.GroupTeacher", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("GroupTeacher");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.Student", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.Teacher", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Tasks.MultipleChoice.MultipleChoiceTestTaskOption", b =>
@@ -303,11 +354,32 @@ namespace ESchool.Testing.Domain.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.Student", b =>
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.GroupStudent", b =>
                 {
                     b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.Group", "Group")
-                        .WithMany("Students")
+                        .WithMany("GroupStudents")
                         .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.Student", "Student")
+                        .WithMany("GroupStudents")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.GroupTeacher", b =>
+                {
+                    b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.Group", "Group")
+                        .WithMany("GroupTeachers")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.Teacher", "Teacher")
+                        .WithMany("GroupTeachers")
+                        .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

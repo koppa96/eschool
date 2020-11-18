@@ -117,7 +117,7 @@ namespace ESchool.Testing.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Student");
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.Teacher", b =>
@@ -131,7 +131,7 @@ namespace ESchool.Testing.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teacher");
+                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Tasks.MultipleChoice.MultipleChoiceTestTaskOption", b =>

@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MassTransit;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ESchool.Libs.Application.IntegrationEvents.Core
 {
@@ -8,15 +10,25 @@ namespace ESchool.Libs.Application.IntegrationEvents.Core
         where TEvent : class, IRequest
     {
         private readonly IMediator mediator;
+        private readonly ILogger<MediatREventConsumer<TEvent>> logger;
 
-        public MediatREventConsumer(IMediator mediator)
+        public MediatREventConsumer(IMediator mediator, ILogger<MediatREventConsumer<TEvent>> logger)
         {
             this.mediator = mediator;
+            this.logger = logger;
         }
         
-        public Task Consume(ConsumeContext<TEvent> context)
+        public async Task Consume(ConsumeContext<TEvent> context)
         {
-            return mediator.Send(context.Message);
+            try
+            {
+                await mediator.Send(context.Message);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                throw;
+            }
         }
     }
 }

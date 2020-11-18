@@ -21,6 +21,30 @@ namespace ESchool.Testing.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Teachers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teachers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tests",
                 columns: table => new
                 {
@@ -36,20 +60,86 @@ namespace ESchool.Testing.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Student",
+                name: "GroupStudent",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    GroupId = table.Column<Guid>(nullable: false)
+                    GroupId = table.Column<Guid>(nullable: false),
+                    StudentId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Student", x => x.Id);
+                    table.PrimaryKey("PK_GroupStudent", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Student_Groups_GroupId",
+                        name: "FK_GroupStudent_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GroupStudent_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GroupTeacher",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    GroupId = table.Column<Guid>(nullable: false),
+                    TeacherId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GroupTeacher", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GroupTeacher_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GroupTeacher_Teachers_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "Teachers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Answers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Started = table.Column<DateTime>(nullable: false),
+                    Closed = table.Column<DateTime>(nullable: true),
+                    ClosedByTeacher = table.Column<bool>(nullable: true),
+                    TestId = table.Column<Guid>(nullable: false),
+                    StudentId = table.Column<Guid>(nullable: false),
+                    StudentId1 = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Answers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Answers_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Answers_Students_StudentId1",
+                        column: x => x.StudentId1,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Answers_Tests_TestId",
+                        column: x => x.TestId,
+                        principalTable: "Tests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -73,41 +163,6 @@ namespace ESchool.Testing.Domain.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TestGroups_Tests_TestId",
-                        column: x => x.TestId,
-                        principalTable: "Tests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Answers",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Started = table.Column<DateTime>(nullable: false),
-                    Closed = table.Column<DateTime>(nullable: true),
-                    ClosedByTeacher = table.Column<bool>(nullable: true),
-                    TestId = table.Column<Guid>(nullable: false),
-                    StudentId = table.Column<Guid>(nullable: false),
-                    StudentId1 = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Answers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Answers_Student_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Student",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Answers_Student_StudentId1",
-                        column: x => x.StudentId1,
-                        principalTable: "Student",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Answers_Tests_TestId",
                         column: x => x.TestId,
                         principalTable: "Tests",
                         principalColumn: "Id",
@@ -200,14 +255,29 @@ namespace ESchool.Testing.Domain.Migrations
                 column: "TestId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GroupStudent_GroupId",
+                table: "GroupStudent",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GroupStudent_StudentId",
+                table: "GroupStudent",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GroupTeacher_GroupId",
+                table: "GroupTeacher",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GroupTeacher_TeacherId",
+                table: "GroupTeacher",
+                column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MultipleChoiceTestTaskOption_TestTaskId",
                 table: "MultipleChoiceTestTaskOption",
                 column: "TestTaskId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Student_GroupId",
-                table: "Student",
-                column: "GroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TaskAnswers_TestTaskId",
@@ -308,19 +378,28 @@ namespace ESchool.Testing.Domain.Migrations
                 table: "MultipleChoiceTestTaskOption");
 
             migrationBuilder.DropTable(
+                name: "GroupStudent");
+
+            migrationBuilder.DropTable(
+                name: "GroupTeacher");
+
+            migrationBuilder.DropTable(
                 name: "TaskAnswers");
 
             migrationBuilder.DropTable(
                 name: "TestGroups");
 
             migrationBuilder.DropTable(
+                name: "Teachers");
+
+            migrationBuilder.DropTable(
                 name: "Answers");
 
             migrationBuilder.DropTable(
-                name: "Student");
+                name: "Groups");
 
             migrationBuilder.DropTable(
-                name: "Groups");
+                name: "Students");
 
             migrationBuilder.DropTable(
                 name: "Tests");
