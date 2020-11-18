@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ESchool.Libs.Application.Dtos;
 using MediatR;
 
-namespace ESchool.Libs.Application.IntegrationEvents
+namespace ESchool.Libs.Application.IntegrationEvents.UserCreation
 {
     public class UserCreatedIntegrationEvent : IRequest
     {

@@ -4,6 +4,7 @@ using ESchool.IdentityProvider.Application.Features.Users.Common;
 using ESchool.IdentityProvider.Domain.Entities.Users;
 using ESchool.Libs.Application.Dtos;
 using ESchool.Libs.Application.IntegrationEvents;
+using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 
 namespace ESchool.IdentityProvider.Application.Mappings
 {

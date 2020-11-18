@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Entities.Users;
 using ESchool.Libs.Application.IntegrationEvents;
+using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using MediatR;
 
 namespace ESchool.HomeAssignments.Application.Features.Users

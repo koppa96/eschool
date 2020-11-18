@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Libs.Application.IntegrationEvents;
+using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Testing.Domain;
 using ESchool.Testing.Domain.Entities.ClassRegisterData;
 using MediatR;

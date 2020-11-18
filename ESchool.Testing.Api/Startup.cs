@@ -1,6 +1,7 @@
 using System.Reflection;
 using ESchool.Libs.Application.IntegrationEvents;
 using ESchool.Libs.Application.IntegrationEvents.Core;
+using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Testing.Domain;
 using MassTransit;
 using MediatR;
@@ -56,7 +57,7 @@ namespace ESchool.Testing.Api
                 config.UsingRabbitMq((context, configurator) =>
                 {
                     configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
-                    configurator.ReceiveEndpoint("home-assignments", endpoint =>
+                    configurator.ReceiveEndpoint("testing", endpoint =>
                     {
                         endpoint.ConfigureConsumers(context);
                     });
