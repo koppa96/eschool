@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using ESchool.IdentityProvider.Domain.Entities.Users;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Hosting;
 
 namespace ESchool.IdentityProvider.Pages.Account
 {
@@ -17,6 +19,7 @@ namespace ESchool.IdentityProvider.Pages.Account
         private readonly IIdentityServerInteractionService interactionService;
         private readonly IUserClaimsPrincipalFactory<User> claimsPrincipalFactory;
         private readonly UserManager<User> userManager;
+        private readonly IWebHostEnvironment environment;
 
         [Required(ErrorMessage = "Kötelező")]
         [BindProperty]
@@ -37,11 +40,13 @@ namespace ESchool.IdentityProvider.Pages.Account
         public LoginModel(
             IIdentityServerInteractionService interactionService,
             IUserClaimsPrincipalFactory<User> claimsPrincipalFactory,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IWebHostEnvironment environment)
         {
             this.interactionService = interactionService;
             this.claimsPrincipalFactory = claimsPrincipalFactory;
             this.userManager = userManager;
+            this.environment = environment;
         }
 
         public void OnGet(string returnUrl)
@@ -59,7 +64,7 @@ namespace ESchool.IdentityProvider.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = await userManager.FindByNameAsync(Username);
-                if (user != null && await userManager.CheckPasswordAsync(user, Password))
+                if (user != null && (environment.IsDevelopment() || await userManager.CheckPasswordAsync(user, Password)))
                 {
                     var signInProperties = new AuthenticationProperties
                     {

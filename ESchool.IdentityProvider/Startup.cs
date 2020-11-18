@@ -3,6 +3,8 @@ using System.Reflection;
 using AutoMapper;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
+using ESchool.IdentityProvider.Infrastructure;
+using IdentityServer4.Services;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -44,6 +46,7 @@ namespace ESchool.IdentityProvider
                 .AddInMemoryApiScopes(Configuration.GetSection("IdentityServer:ApiScopes"))
                 .AddInMemoryClients(Configuration.GetSection("IdentityServer:Clients"))
                 .AddAspNetIdentity<User>();
+            services.AddTransient<IProfileService, ProfileService>();
 
             services.AddAutoMapper(Assembly.Load("ESchool.IdentityProvider.Application"));
 
@@ -53,7 +56,7 @@ namespace ESchool.IdentityProvider
             services.AddMediatR(Assembly.Load("ESchool.IdentityProvider.Application"));
 
             services.AddSwaggerDocument();
-
+            
             services.AddMassTransit(configure =>
             {
                 configure.UsingRabbitMq((context, configurator) =>
