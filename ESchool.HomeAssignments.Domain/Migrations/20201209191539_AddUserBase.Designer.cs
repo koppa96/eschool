@@ -4,14 +4,16 @@ using ESchool.HomeAssignments.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ESchool.HomeAssignments.Domain.Migrations
 {
     [DbContext(typeof(HomeAssignmentsContext))]
-    partial class HomeAssignmentsContextModelSnapshot : ModelSnapshot
+    [Migration("20201209191539_AddUserBase")]
+    partial class AddUserBase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

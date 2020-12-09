@@ -65,6 +65,7 @@ namespace ESchool.IdentityProvider.Application.Features.Users
                     }).ToList()
                 }).ToList()
             };
+            user.DefaultTenantId = user.TenantUsers.FirstOrDefault()?.TenantId;
 
             var result = await userManager.CreateAsync(user);
             if (result.Succeeded)

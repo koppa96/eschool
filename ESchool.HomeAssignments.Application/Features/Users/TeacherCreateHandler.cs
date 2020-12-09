@@ -1,10 +1,9 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using ESchool.HomeAssignments.Domain;
+﻿using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Entities.Users;
-using ESchool.Libs.Application.IntegrationEvents;
 using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ESchool.HomeAssignments.Application.Features.Users
 {
@@ -22,7 +21,9 @@ namespace ESchool.HomeAssignments.Application.Features.Users
             context.Teachers.Add(new Teacher
             {
                 Id = request.Id,
-                Name = request.Name
+                Name = request.Name,
+                UserId = request.UserId,
+                TenantId = request.TenantId
             });
 
             await context.SaveChangesAsync(cancellationToken);

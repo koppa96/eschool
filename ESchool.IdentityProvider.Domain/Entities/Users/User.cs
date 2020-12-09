@@ -9,5 +9,8 @@ namespace ESchool.IdentityProvider.Domain.Entities.Users
     {
         public GlobalRoleType GlobalRole { get; set; }
         public virtual ICollection<TenantUser> TenantUsers { get; set; }
+
+        public Guid? DefaultTenantId { get; set; }
+        public virtual Tenant DefaultTenant { get; set; }
     }
 }

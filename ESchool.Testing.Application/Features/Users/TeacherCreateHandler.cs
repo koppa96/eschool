@@ -22,7 +22,9 @@ namespace ESchool.Testing.Application.Features.Users
             context.Teachers.Add(new Teacher
             {
                 Id = request.Id,
-                Name = request.Name
+                Name = request.Name,
+                UserId = request.UserId,
+                TenantId = request.TenantId
             });
 
             await context.SaveChangesAsync(cancellationToken);

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using ESchool.Libs.Domain.Interfaces;
+using System;
 
-namespace ESchool.Libs.Application.IntegrationEvents.UserCreation
+namespace ESchool.Testing.Domain.Entities.ClassRegisterData
 {
-    public class TenantUserCreatedIntegrationEventBase
+    public class UserBase : IMultiTenantEntity
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

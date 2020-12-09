@@ -3,11 +3,8 @@ using System.Collections.Generic;
 
 namespace ESchool.Testing.Domain.Entities.ClassRegisterData
 {
-    public class Teacher
+    public class Teacher : UserBase
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-
         public virtual ICollection<GroupTeacher> GroupTeachers { get; set; }
     }
 }

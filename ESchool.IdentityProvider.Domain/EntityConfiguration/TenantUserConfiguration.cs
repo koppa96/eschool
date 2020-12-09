@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ESchool.IdentityProvider.Domain.EntityConfiguration
 {
-    public class TenantUserConfiguration : IEntityTypeConfiguration<TenantUser>
+    public class TenantUserConfiguration : IEntityTypeConfiguration<TenantUser>, IEntityTypeConfiguration<User>
     {
         public void Configure(EntityTypeBuilder<TenantUser> builder)
         {
@@ -19,6 +19,13 @@ namespace ESchool.IdentityProvider.Domain.EntityConfiguration
             builder.HasMany(x => x.TenantUserRoles)
                 .WithOne(x => x.TenantUser)
                 .HasForeignKey(x => x.TenantUserId);
+        }
+
+        public void Configure(EntityTypeBuilder<User> builder)
+        {
+            builder.HasOne(x => x.DefaultTenant)
+                .WithMany()
+                .HasForeignKey(x => x.DefaultTenantId);
         }
     }
 }

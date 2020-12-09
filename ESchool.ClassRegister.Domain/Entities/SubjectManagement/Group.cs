@@ -1,7 +1,6 @@
-﻿using ESchool.ClassRegister.Domain.Entities.Users;
+﻿using ESchool.ClassRegister.Domain.Entities.Grading;
 using System;
 using System.Collections.Generic;
-using ESchool.ClassRegister.Domain.Entities.Grading;
 
 namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
 {

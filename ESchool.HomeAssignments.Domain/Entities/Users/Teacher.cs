@@ -4,11 +4,8 @@ using ESchool.HomeAssignments.Domain.Entities.ClassRegisterData;
 
 namespace ESchool.HomeAssignments.Domain.Entities.Users
 {
-    public class Teacher
+    public class Teacher : UserBase
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-
         public virtual ICollection<GroupTeacher> GroupTeachers { get; set; }
     }
 }

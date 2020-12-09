@@ -1,10 +1,9 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using ESchool.Libs.Application.IntegrationEvents;
-using ESchool.Libs.Application.IntegrationEvents.UserCreation;
+﻿using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Testing.Domain;
 using ESchool.Testing.Domain.Entities.ClassRegisterData;
 using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ESchool.Testing.Application.Features.Users
 {
@@ -22,7 +21,9 @@ namespace ESchool.Testing.Application.Features.Users
             context.Students.Add(new Student
             {
                 Id = request.Id,
-                Name = request.Name
+                Name = request.Name,
+                UserId = request.UserId,
+                TenantId = request.TenantId
             });
 
             await context.SaveChangesAsync(cancellationToken);
