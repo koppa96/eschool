@@ -17,6 +17,7 @@ namespace ESchool.IdentityProvider.Domain
 
         public DbSet<Tenant> Tenants { get; set; }
         public DbSet<TenantUser> TenantUsers { get; set; }
+        public DbSet<TenantUserRole> TenantUserRoles { get; set; }
         
         public IdentityProviderContext(DbContextOptions<IdentityProviderContext> options) : base(options)
         {
