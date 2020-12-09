@@ -4,6 +4,7 @@ using AutoMapper;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
 using ESchool.IdentityProvider.Infrastructure;
+using ESchool.Libs.AspNetCore.Extensions;
 using IdentityServer4.Services;
 using MassTransit;
 using MediatR;
@@ -64,6 +65,8 @@ namespace ESchool.IdentityProvider
                     configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
                 });
             });
+
+            services.AddCommonServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
