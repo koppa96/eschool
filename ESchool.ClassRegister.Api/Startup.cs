@@ -4,6 +4,7 @@ using ESchool.ClassRegister.Domain;
 using ESchool.Libs.Application.IntegrationEvents;
 using ESchool.Libs.Application.IntegrationEvents.Core;
 using ESchool.Libs.Application.IntegrationEvents.UserCreation;
+using ESchool.Libs.AspNetCore.Extensions;
 using MassTransit;
 using MassTransit.MultiBus;
 using MediatR;
@@ -98,6 +99,8 @@ namespace ESchool.ClassRegister.Api
                 });
             });
             services.AddMassTransitHostedService();
+
+            services.AddCommonServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

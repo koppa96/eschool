@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="IdentityModel" Version="4.5.0" />
+    
+    <ProjectReference Include="..\ESchool.Libs.Application\ESchool.Libs.Application.csproj" />
+  </ItemGroup>
+
+</Project>

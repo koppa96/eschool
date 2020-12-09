@@ -19,7 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ESchool.ClassRegister.Application\ESchool.ClassRegister.Application.csproj" />
     <ProjectReference Include="..\ESchool.ClassRegister.Domain\ESchool.ClassRegister.Domain.csproj" />
-    <ProjectReference Include="..\ESchool.Libs.Application\ESchool.Libs.Application.csproj" />
+    <ProjectReference Include="..\ESchool.Libs.AspNetCore\ESchool.Libs.AspNetCore.csproj" />
   </ItemGroup>
 
 
