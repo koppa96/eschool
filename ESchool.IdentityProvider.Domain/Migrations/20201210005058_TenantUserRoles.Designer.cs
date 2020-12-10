@@ -4,14 +4,16 @@ using ESchool.IdentityProvider.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ESchool.IdentityProvider.Domain.Migrations
 {
     [DbContext(typeof(IdentityProviderContext))]
-    partial class IdentityProviderContextModelSnapshot : ModelSnapshot
+    [Migration("20201210005058_TenantUserRoles")]
+    partial class TenantUserRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Attributes;
 using ESchool.ClassRegister.Domain.Entities.Users;
-using ESchool.Libs.Application.IntegrationEvents;
 using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Libs.Domain.Enums;
 using MassTransit;

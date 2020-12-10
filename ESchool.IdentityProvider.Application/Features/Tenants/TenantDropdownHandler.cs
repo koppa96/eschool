@@ -1,12 +1,9 @@
 ﻿using MediatR;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.IdentityProvider.Domain;
-using ESchool.Libs.Application.Cqrs;
 using ESchool.Libs.Application.Cqrs.Response;
 using Microsoft.EntityFrameworkCore;
 

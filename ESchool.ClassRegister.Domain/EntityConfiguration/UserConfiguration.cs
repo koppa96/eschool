@@ -1,5 +1,4 @@
-﻿using ESchool.ClassRegister.Domain.Entities;
-using ESchool.ClassRegister.Domain.Entities.Users;
+﻿using ESchool.ClassRegister.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

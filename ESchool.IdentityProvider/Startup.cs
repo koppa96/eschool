@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using AutoMapper;
 using ESchool.IdentityProvider.Domain;
@@ -8,6 +9,7 @@ using ESchool.Libs.AspNetCore.Extensions;
 using IdentityServer4.Services;
 using MassTransit;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +17,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NSwag;
+using NSwag.AspNetCore;
+using NSwag.Generation.Processors.Security;
 
 namespace ESchool.IdentityProvider
 {
@@ -37,9 +42,9 @@ namespace ESchool.IdentityProvider
                 .AddEntityFrameworkStores<IdentityProviderContext>();
 
             services.AddIdentityServer(config =>
-                    {
-                        config.IssuerUri = Configuration.GetValue<string>("IdentityServer:IssuerUri");
-                    })
+                {
+                    config.IssuerUri = Configuration.GetValue<string>("IdentityServer:IssuerUri");
+                })
                 .AddDeveloperSigningCredential()
                 .AddInMemoryPersistedGrants()
                 .AddInMemoryIdentityResources(Configuration.GetSection("IdentityServer:IdentityResources"))
@@ -48,6 +53,27 @@ namespace ESchool.IdentityProvider
                 .AddInMemoryClients(Configuration.GetSection("IdentityServer:Clients"))
                 .AddAspNetIdentity<User>();
             services.AddTransient<IProfileService, ProfileService>();
+            
+            services.AddAuthentication(config =>
+            {
+                config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(config =>
+                {
+                    config.Authority = Configuration.GetValue<string>("Authentication:Authority");
+                    config.Audience = Configuration.GetValue<string>("Authentication:Audience");
+                    config.RequireHttpsMetadata = false;
+                });
+
+            services.AddAuthorization(config =>
+            {
+                config.AddPolicy("Default", builder => builder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    .RequireClaim("scope", "identityproviderapi.readwrite"));
+
+                config.InvokeHandlersAfterFailure = false;
+                config.DefaultPolicy = config.GetPolicy("Default");
+            });
 
             services.AddAutoMapper(Assembly.Load("ESchool.IdentityProvider.Application"));
 
@@ -56,7 +82,34 @@ namespace ESchool.IdentityProvider
 
             services.AddMediatR(Assembly.Load("ESchool.IdentityProvider.Application"));
 
-            services.AddSwaggerDocument();
+            services.AddOpenApiDocument(config =>
+            {
+                config.Title = "ESchool Identity Provider API";
+                config.Description = "The REST API documentation of the Identity Provider microservice.";
+
+                config.AddSecurity("OAuth2", new OpenApiSecurityScheme
+                {
+                    OpenIdConnectUrl = $"{Configuration.GetValue<string>("Authentication:IdentityProviderUri")}/.well-known/openid-configuration",
+                    Scheme = "Bearer",
+                    Type = OpenApiSecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = $"{Configuration.GetValue<string>("Authentication:IdentityProviderUri")}/connect/authorize",
+                            TokenUrl = $"{Configuration.GetValue<string>("Authentication:IdentityProviderUri")}/connect/token",
+                            Scopes = new Dictionary<string, string>
+                            {
+                                { "identityproviderapi.readwrite", "identityproviderapi.readwrite" },
+                                { "openid", "openid" },
+                                { "profile", "profile" }
+                            }
+                        }
+                    }
+                });
+                
+                config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("OAuth2"));
+            });
             
             services.AddMassTransit(configure =>
             {
@@ -78,7 +131,15 @@ namespace ESchool.IdentityProvider
             }
 
             app.UseOpenApi();
-            app.UseSwaggerUi3();
+            app.UseSwaggerUi3(config =>
+            {
+                config.OAuth2Client = new OAuth2ClientSettings
+                {
+                    ClientId = "test",
+                    UsePkceWithAuthorizationCodeGrant = true,
+                    ScopeSeparator = " "
+                };
+            });
 
             app.UseIdentityServer();
 

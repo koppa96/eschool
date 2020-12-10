@@ -1,21 +1,16 @@
 ﻿using AutoMapper;
 using ESchool.IdentityProvider.Application.Features.Users.Common;
-using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
-using ESchool.Libs.Domain;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.Libs.Application.IntegrationEvents;
 using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Libs.Domain.Enums;
-using ESchool.Libs.Domain.Services;
 
 namespace ESchool.IdentityProvider.Application.Features.Users
 {

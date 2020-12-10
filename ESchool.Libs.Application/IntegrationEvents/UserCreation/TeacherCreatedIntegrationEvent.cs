@@ -1,5 +1,4 @@
-﻿using System;
-using MediatR;
+﻿using MediatR;
 
 namespace ESchool.Libs.Application.IntegrationEvents.UserCreation
 {

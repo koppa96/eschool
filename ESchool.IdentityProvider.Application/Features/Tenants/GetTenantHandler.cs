@@ -3,8 +3,6 @@ using ESchool.IdentityProvider.Application.Features.Tenants.Common;
 using ESchool.IdentityProvider.Domain;
 using MediatR;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

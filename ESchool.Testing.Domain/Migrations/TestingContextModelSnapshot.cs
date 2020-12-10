@@ -106,15 +106,11 @@ namespace ESchool.Testing.Domain.Migrations
                     b.ToTable("GroupTeacher");
                 });
 
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.UserBase", b =>
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.Student", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -127,9 +123,27 @@ namespace ESchool.Testing.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserBase");
+                    b.ToTable("Students");
+                });
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("UserBase");
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.Teacher", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Tasks.MultipleChoice.MultipleChoiceTestTaskOption", b =>
@@ -308,20 +322,6 @@ namespace ESchool.Testing.Domain.Migrations
                     b.HasIndex("TestTaskId");
 
                     b.HasDiscriminator().HasValue("TrueOrFalseTaskAnswer");
-                });
-
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.Student", b =>
-                {
-                    b.HasBaseType("ESchool.Testing.Domain.Entities.ClassRegisterData.UserBase");
-
-                    b.HasDiscriminator().HasValue("Student");
-                });
-
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.Teacher", b =>
-                {
-                    b.HasBaseType("ESchool.Testing.Domain.Entities.ClassRegisterData.UserBase");
-
-                    b.HasDiscriminator().HasValue("Teacher");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Tasks.FreeText.FreeTextTestTask", b =>

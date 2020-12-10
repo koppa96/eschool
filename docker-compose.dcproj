@@ -4,7 +4,7 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>bcdc48f8-a500-4994-989b-f4be8855c6fc</ProjectGuid>
-    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
+    <DockerLaunchAction>None</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/weatherforecast</DockerServiceUrl>
     <DockerServiceName>eschool.classregister.api</DockerServiceName>
     <UserSecretsId>f562acb3-b514-4bc6-a01c-0e737c4b7f37</UserSecretsId>

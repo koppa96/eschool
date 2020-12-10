@@ -6,9 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.Libs.AspNetCore.Filters.GlobalRole;
+using ESchool.Libs.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ESchool.IdentityProvider.Controllers
 {
+    [Authorize("Default")]
+    [GlobalRoleFilter(GlobalRoleType.TenantAdministrator)]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase

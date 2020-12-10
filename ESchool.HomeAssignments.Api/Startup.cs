@@ -1,6 +1,5 @@
 using System.Reflection;
 using ESchool.HomeAssignments.Domain;
-using ESchool.Libs.Application.IntegrationEvents;
 using ESchool.Libs.Application.IntegrationEvents.Core;
 using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using MassTransit;

@@ -8,6 +8,7 @@ namespace ESchool.Libs.AspNetCore.Extensions
     {
         public static IServiceCollection AddCommonServices(this IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
             services.AddTransient<IIdentityService, IdentityService>();
 
             return services;

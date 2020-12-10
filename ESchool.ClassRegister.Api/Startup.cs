@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using System.Reflection;
 using ESchool.ClassRegister.Domain;
-using ESchool.Libs.Application.IntegrationEvents;
 using ESchool.Libs.Application.IntegrationEvents.Core;
 using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Libs.AspNetCore.Extensions;
 using MassTransit;
-using MassTransit.MultiBus;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;

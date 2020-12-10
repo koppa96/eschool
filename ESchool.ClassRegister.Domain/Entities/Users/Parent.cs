@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ESchool.ClassRegister.Domain.Attributes;
 using ESchool.Libs.Domain.Enums;
 

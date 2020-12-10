@@ -1,5 +1,4 @@
 ﻿using System;
-using ESchool.Libs.Domain;
 using ESchool.Libs.Domain.Enums;
 
 namespace ESchool.IdentityProvider.Domain.Entities.Users

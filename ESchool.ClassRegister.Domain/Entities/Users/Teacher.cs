@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ESchool.ClassRegister.Domain.Attributes;
-using ESchool.ClassRegister.Domain.Entities.Grading;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.Libs.Domain.Enums;
 

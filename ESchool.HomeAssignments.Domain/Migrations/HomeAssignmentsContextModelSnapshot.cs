@@ -199,15 +199,11 @@ namespace ESchool.HomeAssignments.Domain.Migrations
                     b.ToTable("HomeWorkSolutions");
                 });
 
-            modelBuilder.Entity("ESchool.HomeAssignments.Domain.Entities.Users.UserBase", b =>
+            modelBuilder.Entity("ESchool.HomeAssignments.Domain.Entities.Users.Student", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -220,23 +216,27 @@ namespace ESchool.HomeAssignments.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserBase");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("UserBase");
-                });
-
-            modelBuilder.Entity("ESchool.HomeAssignments.Domain.Entities.Users.Student", b =>
-                {
-                    b.HasBaseType("ESchool.HomeAssignments.Domain.Entities.Users.UserBase");
-
-                    b.HasDiscriminator().HasValue("Student");
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("ESchool.HomeAssignments.Domain.Entities.Users.Teacher", b =>
                 {
-                    b.HasBaseType("ESchool.HomeAssignments.Domain.Entities.Users.UserBase");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasDiscriminator().HasValue("Teacher");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("ESchool.HomeAssignments.Domain.Entities.ClassRegisterData.GroupStudent", b =>

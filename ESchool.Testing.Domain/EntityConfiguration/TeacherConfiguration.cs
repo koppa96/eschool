@@ -8,8 +8,6 @@ namespace ESchool.Testing.Domain.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<Teacher> builder)
         {
-            builder.HasBaseType<UserBase>();
-
             builder.HasMany(x => x.GroupTeachers)
                 .WithOne(x => x.Teacher)
                 .HasForeignKey(x => x.TeacherId);
