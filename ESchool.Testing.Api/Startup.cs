@@ -1,6 +1,8 @@
 using System.Reflection;
 using ESchool.Libs.Application.IntegrationEvents.Core;
 using ESchool.Libs.Application.IntegrationEvents.UserCreation;
+using ESchool.Libs.AspNetCore.Configuration;
+using ESchool.Libs.AspNetCore.Extensions;
 using ESchool.Testing.Domain;
 using MassTransit;
 using MediatR;
@@ -30,23 +32,11 @@ namespace ESchool.Testing.Api
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllers();
-            
-            services.AddAuthentication()
-                .AddJwtBearer(config =>
-                {
-                    config.Authority = Configuration.GetValue<string>("Authentication:Authority");
-                    config.Audience = Configuration.GetValue<string>("Authentication:Audience");
-                    config.RequireHttpsMetadata = false;
-                });
-            
-            services.AddAuthorization(config =>
-            {
-                config.AddPolicy("Default", builder => builder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireAuthenticatedUser()
-                    .RequireClaim("scope", "testingapi.readwrite"));
 
-                config.DefaultPolicy = config.GetPolicy("Default");
-            });
+            var authConfig = new AuthConfiguration();
+            Configuration.GetSection("Authentication").Bind(authConfig);
+            services.AddCommonAuthentication(authConfig);
+            services.AddCommonAuthorization();
 
             services.AddMediatR(Assembly.Load("ESchool.Testing.Application"));
             services.AddMassTransit(config =>

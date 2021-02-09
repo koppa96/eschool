@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ESchool.Libs.AspNetCore\ESchool.Libs.AspNetCore.csproj" />
     <ProjectReference Include="..\ESchool.Testing.Application\ESchool.Testing.Application.csproj" />
     <ProjectReference Include="..\ESchool.Testing.Domain\ESchool.Testing.Domain.csproj" />
   </ItemGroup>

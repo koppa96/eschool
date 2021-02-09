@@ -2,6 +2,8 @@ using System.Reflection;
 using ESchool.HomeAssignments.Domain;
 using ESchool.Libs.Application.IntegrationEvents.Core;
 using ESchool.Libs.Application.IntegrationEvents.UserCreation;
+using ESchool.Libs.AspNetCore.Configuration;
+using ESchool.Libs.AspNetCore.Extensions;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,7 +32,12 @@ namespace ESchool.HomeAssignments.Api
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
             services.AddControllers();
-            
+
+            var authConfig = new AuthConfiguration();
+            Configuration.GetSection("Authentication").Bind(authConfig);
+            services.AddCommonAuthentication(authConfig);
+            services.AddCommonAuthorization();
+
             services.AddAuthentication()
                 .AddJwtBearer(config =>
                 {

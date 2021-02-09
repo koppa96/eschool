@@ -5,6 +5,7 @@ using AutoMapper;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
 using ESchool.IdentityProvider.Infrastructure;
+using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
 using IdentityServer4.Services;
 using MassTransit;
@@ -53,27 +54,11 @@ namespace ESchool.IdentityProvider
                 .AddInMemoryClients(Configuration.GetSection("IdentityServer:Clients"))
                 .AddAspNetIdentity<User>();
             services.AddTransient<IProfileService, ProfileService>();
-            
-            services.AddAuthentication(config =>
-            {
-                config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(config =>
-                {
-                    config.Authority = Configuration.GetValue<string>("Authentication:Authority");
-                    config.Audience = Configuration.GetValue<string>("Authentication:Audience");
-                    config.RequireHttpsMetadata = false;
-                });
 
-            services.AddAuthorization(config =>
-            {
-                config.AddPolicy("Default", builder => builder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireAuthenticatedUser()
-                    .RequireClaim("scope", "identityproviderapi.readwrite"));
-
-                config.InvokeHandlersAfterFailure = false;
-                config.DefaultPolicy = config.GetPolicy("Default");
-            });
+            var authConfig = new AuthConfiguration();
+            Configuration.GetSection("Authentication").Bind(authConfig);
+            services.AddCommonAuthentication(authConfig);
+            services.AddCommonAuthorization();
 
             services.AddAutoMapper(Assembly.Load("ESchool.IdentityProvider.Application"));
 

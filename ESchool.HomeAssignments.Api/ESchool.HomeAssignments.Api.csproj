@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ESchool.HomeAssignments.Application\ESchool.HomeAssignments.Application.csproj" />
     <ProjectReference Include="..\ESchool.HomeAssignments.Domain\ESchool.HomeAssignments.Domain.csproj" />
+    <ProjectReference Include="..\ESchool.Libs.AspNetCore\ESchool.Libs.AspNetCore.csproj" />
   </ItemGroup>
 
 
