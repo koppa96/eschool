@@ -3,6 +3,7 @@ using System.Reflection;
 using ESchool.ClassRegister.Domain;
 using ESchool.Libs.Application.IntegrationEvents.Core;
 using ESchool.Libs.Application.IntegrationEvents.UserCreation;
+using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
 using MassTransit;
 using MediatR;
@@ -38,22 +39,10 @@ namespace ESchool.ClassRegister.Api
 
             services.AddMediatR(Assembly.Load("ESchool.ClassRegister.Application"));
 
-            services.AddAuthentication()
-                .AddJwtBearer(config =>
-                {
-                    config.Authority = Configuration.GetValue<string>("Authentication:Authority");
-                    config.Audience = Configuration.GetValue<string>("Authentication:Audience");
-                    config.RequireHttpsMetadata = false;
-                });
-
-            services.AddAuthorization(config =>
-            {
-                config.AddPolicy("Default", builder => builder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireAuthenticatedUser()
-                    .RequireClaim("scope", "classregisterapi.readwrite"));
-
-                config.DefaultPolicy = config.GetPolicy("Default");
-            });
+            var authConfig = new AuthConfiguration();
+            Configuration.GetSection("Authentication").Bind(authConfig);
+            services.AddCommonAuthentication(authConfig);
+            services.AddCommonAuthorization();
 
             services.AddOpenApiDocument(config =>
             {
