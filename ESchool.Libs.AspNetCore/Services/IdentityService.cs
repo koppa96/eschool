@@ -22,9 +22,10 @@ namespace ESchool.Libs.AspNetCore.Services
             return Guid.Parse(httpContext.User.Claims.Single(x => x.Type == JwtClaimTypes.Subject).Value);
         }
 
-        public Guid GetTenantId()
+        public Guid? GetTenantId()
         {
-            return Guid.Parse(httpContext.User.Claims.Single(x => x.Type == Constants.ClaimTypes.TenantId).Value);
+            var claim = httpContext.User.Claims.SingleOrDefault(x => x.Type == Constants.ClaimTypes.TenantId);
+            return claim != null ? Guid.Parse(claim.Value) : null;
         }
 
         public bool IsInGlobalRole(GlobalRoleType globalRoleType)

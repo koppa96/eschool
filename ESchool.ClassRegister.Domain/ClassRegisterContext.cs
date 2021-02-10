@@ -1,17 +1,27 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain.Entities;
 using ESchool.ClassRegister.Domain.Entities.Grading;
 using ESchool.ClassRegister.Domain.Entities.Messaging;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.ClassRegister.Domain.Entities.Users;
+using ESchool.Libs.Domain.Extensions;
+using ESchool.Libs.Domain.Interfaces;
+using ESchool.Libs.Domain.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Domain
 {
     public class ClassRegisterContext : DbContext
     {
+        private readonly Guid? tenantId; 
+        
         public DbSet<Class> Classes { get; set; }
         public DbSet<ClassRoom> ClassRooms { get; set; }
+        public DbSet<ClassType> ClassTypes { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<SchoolYear> SchoolYears { get; set; }
         public DbSet<Grade> Grades { get; set; }
@@ -33,13 +43,43 @@ namespace ESchool.ClassRegister.Domain
         public DbSet<Administrator> Administrators { get; set; }
         public DbSet<UserBase> UserBases { get; set; }
 
-        public ClassRegisterContext(DbContextOptions<ClassRegisterContext> options) : base(options)
+        public ClassRegisterContext(IIdentityService identityService, DbContextOptions<ClassRegisterContext> options) : base(options)
         {
+            tenantId = identityService.GetTenantId();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            modelBuilder.Entity<ClassRoom>()
+                .HasQueryFilter(x => x.TenantId == tenantId);
+
+            modelBuilder.Entity<SchoolYear>()
+                .HasQueryFilter(x => x.TenantId == tenantId);
+
+            modelBuilder.Entity<Subject>()
+                .HasQueryFilter(x => x.TenantId == tenantId);
+        }
+
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            if (tenantId.HasValue)
+            {
+                this.SetTenantId(tenantId.Value);
+            }
+            
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        {
+            if (tenantId.HasValue)
+            {
+                this.SetTenantId(tenantId.Value);
+            }
+            
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
     }
 }

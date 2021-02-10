@@ -30,7 +30,7 @@ namespace ESchool.IdentityProvider.Controllers
         [HttpGet]
         public Task<TenantDetailsResponse> GetTenant(CancellationToken cancellationToken)
         {
-            return mediator.Send(new GetTenantQuery { TenantId = identityService.GetTenantId() });
+            return mediator.Send(new GetTenantQuery { TenantId = identityService.GetTenantId()!.Value });
         }
         
         [HttpPut]
