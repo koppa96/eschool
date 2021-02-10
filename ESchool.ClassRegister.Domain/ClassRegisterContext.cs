@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +8,6 @@ using ESchool.ClassRegister.Domain.Entities.Messaging;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.ClassRegister.Domain.Entities.Users;
 using ESchool.Libs.Domain.Extensions;
-using ESchool.Libs.Domain.Interfaces;
 using ESchool.Libs.Domain.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -72,7 +70,7 @@ namespace ESchool.ClassRegister.Domain
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             if (tenantId.HasValue)
             {

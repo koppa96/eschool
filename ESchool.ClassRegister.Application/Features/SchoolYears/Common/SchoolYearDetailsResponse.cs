@@ -8,6 +8,11 @@ namespace ESchool.ClassRegister.Application.Features.SchoolYears.Common
     {
         public Guid Id { get; set; }
         public string DisplayName { get; set; }
+        
+        public DateTime StartsAt { get; set; }
+        public DateTime EndOfFirstHalf { get; set; }
+        public DateTime EndsAt { get; set; }
+        
         public List<ClassListResponse> Classes { get; set; }
     }
 }
