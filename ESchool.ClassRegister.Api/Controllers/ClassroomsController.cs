@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Classrooms;
 using ESchool.ClassRegister.Application.Features.Classrooms.Common;
+using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Application.Cqrs.Response;
 using ESchool.Libs.Domain.Enums;
 using MediatR;
@@ -42,10 +43,14 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public Task<ClassroomDetailsResponse> EditClassroom([FromBody] ClassroomEditCommand command,
+        public Task<ClassroomDetailsResponse> EditClassroom(Guid id, [FromBody] ClassroomEditCommand command,
             CancellationToken cancellationToken)
         {
-            return mediator.Send(command, cancellationToken);
+            return mediator.Send(new EditCommand<ClassroomEditCommand, ClassroomDetailsResponse>
+            {
+                Id = id,
+                InnerCommand = command
+            }, cancellationToken);
         }
 
         [HttpDelete("{id}")]

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.SchoolYears;
 using ESchool.ClassRegister.Application.Features.SchoolYears.Common;
+using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Application.Cqrs.Response;
 using ESchool.Libs.Domain.Enums;
 using MediatR;
@@ -45,7 +46,11 @@ namespace ESchool.ClassRegister.Api.Controllers
         public Task<SchoolYearDetailsResponse> EditSchoolYear(Guid id, [FromBody] SchoolYearEditCommand command,
             CancellationToken cancellationToken)
         {
-            return mediator.Send(command, cancellationToken);
+            return mediator.Send(new EditCommand<SchoolYearEditCommand, SchoolYearDetailsResponse>
+            {
+                Id = id,
+                InnerCommand = command
+            }, cancellationToken);
         }
 
         [HttpDelete("{id}")]

@@ -3,17 +3,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Classrooms.Common;
 using ESchool.ClassRegister.Domain;
+using ESchool.Libs.Application.Cqrs.Commands;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.Classrooms
 {
-    public class ClassroomEditCommand : IRequest<ClassroomDetailsResponse>
+    public class ClassroomEditCommand
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
     }
     
-    public class ClassroomEditHandler : IRequestHandler<ClassroomEditCommand, ClassroomDetailsResponse>
+    public class ClassroomEditHandler : IRequestHandler<EditCommand<ClassroomEditCommand, ClassroomDetailsResponse>, ClassroomDetailsResponse>
     {
         private readonly ClassRegisterContext context;
 
@@ -22,10 +22,11 @@ namespace ESchool.ClassRegister.Application.Features.Classrooms
             this.context = context;
         }
         
-        public async Task<ClassroomDetailsResponse> Handle(ClassroomEditCommand request, CancellationToken cancellationToken)
+        public async Task<ClassroomDetailsResponse> Handle(EditCommand<ClassroomEditCommand, ClassroomDetailsResponse> request,
+            CancellationToken cancellationToken)
         {
             var classroom = await context.ClassRooms.FindAsync(request.Id, cancellationToken);
-            classroom.Name = request.Name;
+            classroom.Name = request.InnerCommand.Name;
 
             await context.SaveChangesAsync(cancellationToken);
             return new ClassroomDetailsResponse

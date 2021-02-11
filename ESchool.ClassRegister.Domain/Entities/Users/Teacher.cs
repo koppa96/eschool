@@ -9,11 +9,11 @@ namespace ESchool.ClassRegister.Domain.Entities.Users
     [TenantUser(TenantRoleType.Teacher)]
     public class Teacher : UserBase
     {
-        public virtual ICollection<GroupTeacher> GroupTeachers { get; set; }
-
         public Guid? CurrentClassId { get; set; }
         public virtual Class CurrentClass { get; set; }
 
         public virtual ICollection<Class> PreviousClasses { get; set; }
+        public virtual ICollection<GroupTeacher> GroupTeachers { get; set; }
+        public virtual ICollection<SubjectTeacher> SubjectTeachers { get; set; }
     }
 }

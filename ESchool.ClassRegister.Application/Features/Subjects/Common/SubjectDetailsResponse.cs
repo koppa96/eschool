@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using ESchool.ClassRegister.Application.Features.Users.Common;
 
 namespace ESchool.ClassRegister.Application.Features.Subjects.Common
 {
@@ -6,5 +8,6 @@ namespace ESchool.ClassRegister.Application.Features.Subjects.Common
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public List<UserListResponse> Teachers { get; set; }
     }
 }

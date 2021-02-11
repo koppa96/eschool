@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.ClassRegister.Application.Features.SubjectManagement.SubjectTeachers;
 using ESchool.ClassRegister.Application.Features.Subjects;
 using ESchool.ClassRegister.Application.Features.Subjects.Common;
+using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Application.Cqrs.Response;
 using ESchool.Libs.Domain.Enums;
 using MediatR;
@@ -28,10 +30,10 @@ namespace ESchool.ClassRegister.Api.Controllers
             return mediator.Send(new SubjectListQuery(), cancellationToken);
         }
 
-        [HttpGet("{id}")]
-        public Task<SubjectDetailsResponse> GetSubject(Guid id, CancellationToken cancellationToken)
+        [HttpGet("{subjectId}")]
+        public Task<SubjectDetailsResponse> GetSubject(Guid subjectId, CancellationToken cancellationToken)
         {
-            return mediator.Send(new SubjectGetQuery { Id = id }, cancellationToken);
+            return mediator.Send(new SubjectGetQuery { Id = subjectId }, cancellationToken);
         }
 
         [HttpPost]
@@ -41,17 +43,41 @@ namespace ESchool.ClassRegister.Api.Controllers
             return mediator.Send(command, cancellationToken);
         }
 
-        [HttpPut("{id}")]
-        public Task<SubjectDetailsResponse> EditSubject(Guid id, [FromBody] SubjectEditCommand command,
+        [HttpPost("{subjectId}/teachers/{teacherId}")]
+        public Task AssignTeacherToSubject(Guid subjectId, Guid teacherId, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new SubjectTeacherCreateCommand
+            {
+                SubjectId = subjectId,
+                TeacherId = teacherId
+            }, cancellationToken);
+        }
+
+        [HttpPut("{subjectId}")]
+        public Task<SubjectDetailsResponse> EditSubject(Guid subjectId, [FromBody] SubjectEditCommand command,
             CancellationToken cancellationToken)
         {
-            return mediator.Send(command, cancellationToken);
+            return mediator.Send(new EditCommand<SubjectEditCommand, SubjectDetailsResponse>
+            {
+                Id = subjectId,
+                InnerCommand = command
+            }, cancellationToken);
         }
 
         [HttpDelete("{id}")]
         public Task DeleteSubject(Guid id, CancellationToken cancellationToken)
         {
             return mediator.Send(new SubjectDeleteCommand { Id = id }, cancellationToken);
+        }
+
+        [HttpDelete("{subjectId}/teachers/{teacherId}")]
+        public Task UnassignTeacherFromSubject(Guid subjectId, Guid teacherId, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new SubjectTeacherDeleteCommand
+            {
+                SubjectId = subjectId,
+                TeacherId = teacherId
+            }, cancellationToken);
         }
     }
 }
