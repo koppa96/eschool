@@ -1,18 +1,19 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Classrooms;
 using ESchool.ClassRegister.Application.Features.Classrooms.Common;
 using ESchool.Libs.Application.Cqrs.Response;
-using ESchool.Libs.AspNetCore.Controllers;
+using ESchool.Libs.Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ESchool.ClassRegister.Api.Controllers.Admin
+namespace ESchool.ClassRegister.Api.Controllers
 {
-    [Route("api/admin/classrooms")]
-    public class ClassroomsController : AdministratorControllerBase
+    [Authorize(nameof(TenantRoleType.Administrator))]
+    [Route("api/classrooms")]
+    public class ClassroomsController : ControllerBase
     {
         private readonly IMediator mediator;
 

@@ -4,14 +4,16 @@ using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.SchoolYears;
 using ESchool.ClassRegister.Application.Features.SchoolYears.Common;
 using ESchool.Libs.Application.Cqrs.Response;
-using ESchool.Libs.AspNetCore.Controllers;
+using ESchool.Libs.Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ESchool.ClassRegister.Api.Controllers.Admin
+namespace ESchool.ClassRegister.Api.Controllers
 {
-    [Route("api/admin/school-years")]
-    public class SchoolYearsController : AdministratorControllerBase
+    [Authorize(nameof(TenantRoleType.Administrator))]
+    [Route("api/school-years")]
+    public class SchoolYearsController : ControllerBase
     {
         private readonly IMediator mediator;
 

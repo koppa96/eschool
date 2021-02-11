@@ -22,10 +22,5 @@
     <ProjectReference Include="..\ESchool.Libs.AspNetCore\ESchool.Libs.AspNetCore.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\Student" />
-    <Folder Include="Controllers\Teacher" />
-  </ItemGroup>
-
 
 </Project>
