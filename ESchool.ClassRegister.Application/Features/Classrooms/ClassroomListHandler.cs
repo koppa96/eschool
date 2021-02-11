@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Domain.Entities;
+using ESchool.Libs.Application.Cqrs.Handlers;
+using ESchool.Libs.Application.Cqrs.Query;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Classrooms
 {
-    public class ClassroomListQuery : IRequest<List<ClassroomListResponse>>
+    public class ClassroomListQuery : PagedListQuery<ClassroomListResponse>
     {
     }
 
@@ -19,22 +23,18 @@ namespace ESchool.ClassRegister.Application.Features.Classrooms
         public string Name { get; set; }
     }
     
-    public class ClassroomListHandler : IRequestHandler<ClassroomListQuery, List<ClassroomListResponse>>
+    public class ClassroomListHandler : PagedListHandler<ClassroomListQuery, ClassRoom, string, ClassroomListResponse>
     {
-        private readonly ClassRegisterContext context;
+        public ClassroomListHandler(ClassRegisterContext context) : base(context)
+        {
+        }
 
-        public ClassroomListHandler(ClassRegisterContext context)
+        protected override Expression<Func<ClassRoom, string>> OrderBy => x => x.Name;
+
+        protected override Expression<Func<ClassRoom, ClassroomListResponse>> Select => x => new ClassroomListResponse
         {
-            this.context = context;
-        }
-        
-        public Task<List<ClassroomListResponse>> Handle(ClassroomListQuery request, CancellationToken cancellationToken)
-        {
-            return context.ClassRooms.Select(x => new ClassroomListResponse
-            {
-                Id = x.Id,
-                Name = x.Name
-            }).ToListAsync(cancellationToken);
-        }
+            Id = x.Id,
+            Name = x.Name
+        };
     }
 }

@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+using System.Linq.Expressions;
+using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Domain.Entities;
+using ESchool.Libs.Application.Cqrs.Handlers;
+using ESchool.Libs.Application.Cqrs.Query;
+using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Subjects
 {
-    public class SubjectListQuery : IRequest<List<SubjectListResponse>>
+    public class SubjectListQuery : PagedListQuery<SubjectListResponse>
     {
     }
 
@@ -16,16 +18,15 @@ namespace ESchool.ClassRegister.Application.Features.Subjects
         public string Name { get; set; }
     }
 
-    public class SubjectListHandler : IRequestHandler<SubjectListQuery, List<SubjectListResponse>>
+    public class SubjectListHandler : PagedListHandler<SubjectListQuery, Subject, string, SubjectListResponse>
     {
-        public SubjectListHandler()
+        public SubjectListHandler(ClassRegisterContext context) : base(context)
         {
-            
         }
-        
-        public Task<List<SubjectListResponse>> Handle(SubjectListQuery request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+
+        protected override Expression<Func<Subject, string>> OrderBy => x => x.Name;
+
+        protected override Expression<Func<Subject, SubjectListResponse>> Select =>
+            x => new SubjectListResponse { Id = x.Id, Name = x.Name };
     }
 }
