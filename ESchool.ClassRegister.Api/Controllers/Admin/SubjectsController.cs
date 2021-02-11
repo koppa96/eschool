@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Subjects;
 using ESchool.ClassRegister.Application.Features.Subjects.Common;
+using ESchool.Libs.Application.Cqrs.Response;
 using ESchool.Libs.AspNetCore.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ namespace ESchool.ClassRegister.Api.Controllers.Admin
         }
 
         [HttpGet]
-        public Task<List<SubjectListResponse>> ListSubjects(CancellationToken cancellationToken)
+        public Task<PagedListResponse<SubjectListResponse>> ListSubjects(CancellationToken cancellationToken)
         {
             return mediator.Send(new SubjectListQuery(), cancellationToken);
         }

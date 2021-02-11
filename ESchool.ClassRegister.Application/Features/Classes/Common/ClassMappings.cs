@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using ESchool.ClassRegister.Application.Features.Classes.Common;
 using ESchool.ClassRegister.Domain.Entities;
 
-namespace ESchool.ClassRegister.Application.Features.Classes.Mapping
+namespace ESchool.ClassRegister.Application.Features.Classes.Common
 {
     public class ClassMappings : Profile
     {

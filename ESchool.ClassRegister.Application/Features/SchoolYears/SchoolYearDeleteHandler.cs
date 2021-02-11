@@ -1,34 +1,18 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
-using ESchool.ClassRegister.Domain;
-using MediatR;
+﻿using ESchool.ClassRegister.Domain.Entities;
+using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.Libs.Application.Cqrs.Handlers;
+using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SchoolYears
 {
-    public class SchoolYearDeleteCommand : IRequest
+    public class SchoolYearDeleteCommand : DeleteCommand
     {
-        public Guid Id { get; set; }
     }
     
-    public class SchoolYearDeleteHandler : IRequestHandler<SchoolYearDeleteCommand>
+    public class SchoolYearDeleteHandler : DeleteHandler<SchoolYearDeleteCommand, SchoolYear>
     {
-        private readonly ClassRegisterContext context;
-        private readonly IMapper mapper;
-
-        public SchoolYearDeleteHandler(ClassRegisterContext context, IMapper mapper)
+        public SchoolYearDeleteHandler(DbContext context) : base(context)
         {
-            this.context = context;
-            this.mapper = mapper;
-        }
-        
-        public async Task<Unit> Handle(SchoolYearDeleteCommand request, CancellationToken cancellationToken)
-        {
-            var schoolYear = await context.SchoolYears.FindAsync(request.Id, cancellationToken);
-            context.SchoolYears.Remove(schoolYear);
-            await context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
         }
     }
 }

@@ -1,31 +1,20 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using ESchool.ClassRegister.Domain;
-using MediatR;
+using ESchool.ClassRegister.Domain.Entities;
+using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.Libs.Application.Cqrs.Handlers;
+using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Classrooms
 {
-    public class ClassroomDeleteCommand : IRequest
+    public class ClassroomDeleteCommand : DeleteCommand
     {
         public Guid Id { get; set; }
     }
 
-    public class ClassroomDeleteHandler : IRequestHandler<ClassroomDeleteCommand>
+    public class ClassroomDeleteHandler : DeleteHandler<ClassroomDeleteCommand, ClassRoom>
     {
-        private readonly ClassRegisterContext context;
-
-        public ClassroomDeleteHandler(ClassRegisterContext context)
+        public ClassroomDeleteHandler(DbContext context) : base(context)
         {
-            this.context = context;
-        }
-        
-        public async Task<Unit> Handle(ClassroomDeleteCommand request, CancellationToken cancellationToken)
-        {
-            var classroom = await context.ClassRooms.FindAsync(request.Id, cancellationToken);
-            context.ClassRooms.Remove(classroom);
-            await context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
         }
     }
 }
