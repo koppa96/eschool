@@ -19,6 +19,16 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
         
         protected abstract Expression<Func<TEntity, TOrderBy>> OrderBy { get; }
         protected abstract Expression<Func<TEntity, TResponse>> Select { get; }
+
+        protected virtual IQueryable<TEntity> Include(IQueryable<TEntity> entities)
+        {
+            return entities;
+        }
+
+        protected virtual IQueryable<TEntity> Filter(IQueryable<TEntity> entities, TQuery query)
+        {
+            return entities;
+        }
         
         public PagedListHandler(DbContext context)
         {
@@ -33,7 +43,8 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
             var responses = new List<TResponse>();
             if (totalCount > request.PageIndex * request.PageSize)
             {
-                responses = await dbSet.OrderByDescending(OrderBy)
+                responses = await Filter(Include(dbSet), request)
+                    .OrderByDescending(OrderBy)
                     .Skip(request.PageIndex * request.PageSize)
                     .Take(request.PageSize)
                     .Select(Select)

@@ -1,42 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 using ESchool.IdentityProvider.Application.Features.Users.Common;
 using ESchool.IdentityProvider.Domain;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using ESchool.IdentityProvider.Domain.Entities.Users;
+using ESchool.Libs.Application.Cqrs.Handlers;
+using ESchool.Libs.Application.Cqrs.Query;
 
 namespace ESchool.IdentityProvider.Application.Features.TenantUsers
 {
-    public class TenantUserListQuery : IRequest<List<UserListResponse>>
+    public class TenantUserListQuery : PagedListQuery<UserListResponse>
     {
         public Guid TenantId { get; set; }
     }
 
-    public class TenantUserListHandler : IRequestHandler<TenantUserListQuery, List<UserListResponse>>
+    public class TenantUserListHandler : PagedListHandler<TenantUserListQuery, User, string, UserListResponse>
     {
-        private readonly IdentityProviderContext context;
-
-        public TenantUserListHandler(IdentityProviderContext context)
+        public TenantUserListHandler(IdentityProviderContext context) : base(context)
         {
-            this.context = context;
         }
-        
-        public async Task<List<UserListResponse>> Handle(TenantUserListQuery request, CancellationToken cancellationToken)
-        {
-            var tenant = await context.Tenants.Include(x => x.TenantUsers)
-                    .ThenInclude(x => x.User)
-                .SingleAsync(x => x.Id == request.TenantId, cancellationToken);
 
-            return tenant.TenantUsers.Select(x => new UserListResponse
-            {
-                Id = x.UserId,
-                Email = x.User.Email,
-                UserName = x.User.UserName,
-                GlobalRoleType = x.User.GlobalRole
-            }).ToList();
+        protected override Expression<Func<User, string>> OrderBy => x => x.Email;
+
+        protected override Expression<Func<User, UserListResponse>> Select => x => new UserListResponse
+        {
+            Id = x.Id,
+            Email = x.Email,
+            GlobalRoleType = x.GlobalRole
+        };
+
+        protected override IQueryable<User> Filter(IQueryable<User> entities, TenantUserListQuery query)
+        {
+            return entities.Where(x => x.TenantUsers.Any(u => u.TenantId == query.TenantId));
         }
     }
 }

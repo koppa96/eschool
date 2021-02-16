@@ -15,14 +15,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.IdentityProvider.Application.Features.TenantUsers
 {
-    public class TenantUserEditCommand : IRequest<TenantUserDetailsResponse>
+    public class TenantUserEditCommand
     {
-        [JsonIgnore]
-        public Guid Id { get; set; }
         public IEnumerable<TenantRoleType> TenantRoleTypes { get; set; }
     }
     
-    public class TenantUserEditHandler : IRequestHandler<TenantUserEditCommand, TenantUserDetailsResponse>
+    public class TenantUserEditHandler : IRequestHandler<EditCommand<TenantUserEditCommand, TenantUserDetailsResponse>, TenantUserDetailsResponse>
     {
         private readonly IdentityProviderContext context;
         private readonly IIdentityService identityService;
@@ -33,17 +31,16 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             this.identityService = identityService;
         }
         
-        public async Task<TenantUserDetailsResponse> Handle(TenantUserEditCommand request,
+        public async Task<TenantUserDetailsResponse> Handle(EditCommand<TenantUserEditCommand, TenantUserDetailsResponse> request,
             CancellationToken cancellationToken)
         {
-            var tenantId = identityService.GetTenantId() ??
-                           throw new InvalidOperationException("TenantId can not be null.");
+            var tenantId = identityService.GetTenantId();
             var tenantUser = await context.TenantUsers.Include(x => x.TenantUserRoles)
                 .Include(x => x.User)
                 .SingleAsync(x => x.UserId == request.Id && x.TenantId == tenantId, cancellationToken);
             
             context.TenantUserRoles.RemoveRange(tenantUser.TenantUserRoles);
-            context.TenantUserRoles.AddRange(request.TenantRoleTypes.Select(x => new TenantUserRole
+            context.TenantUserRoles.AddRange(request.InnerCommand.TenantRoleTypes.Select(x => new TenantUserRole
             {
                 TenantUserId = tenantUser.Id,
                 TenantRole = x

@@ -3,6 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.IdentityProvider.Application.Features.Tenants;
 using ESchool.IdentityProvider.Application.Features.Tenants.Common;
+using ESchool.IdentityProvider.Application.Features.TenantUsers;
+using ESchool.IdentityProvider.Application.Features.TenantUsers.Common;
+using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.AspNetCore.Filters.TenantRole;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
@@ -30,13 +33,30 @@ namespace ESchool.IdentityProvider.Controllers
         [HttpGet]
         public Task<TenantDetailsResponse> GetTenant(CancellationToken cancellationToken)
         {
-            return mediator.Send(new GetTenantQuery { TenantId = identityService.GetTenantId()!.Value });
+            return mediator.Send(new GetTenantQuery { TenantId = identityService.TryGetTenantId()!.Value });
+        }
+
+        [HttpPost("users")]
+        public Task<TenantUserDetailsResponse> CreateTenantUser([FromBody] TenantUserCreateCommand command, CancellationToken cancellation)
+        {
+            return mediator.Send(command, cancellation);
+        }
+
+        [HttpPut("users/{userId}")]
+        public Task<TenantUserDetailsResponse> EditTenantUser(Guid userId, [FromBody] TenantUserEditCommand command,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(new EditCommand<TenantUserEditCommand, TenantUserDetailsResponse>
+            {
+                Id = userId,
+                InnerCommand = command
+            });
         }
         
         [HttpPut]
         public Task<TenantDetailsResponse> UpdateTenant([FromBody] EditTenantCommand command, CancellationToken cancellationToken)
         {
-            if (identityService.GetTenantId() != command.Id)
+            if (identityService.TryGetTenantId() != command.Id)
             {
                 throw new InvalidOperationException("You can not edit the identifier of your tenant.");
             }
@@ -44,5 +64,14 @@ namespace ESchool.IdentityProvider.Controllers
             return mediator.Send(command, cancellationToken);
         }
 
+        [HttpDelete("users/{userId}")]
+        public Task DeleteTenantUser(Guid userId, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new TenantUserDeleteCommand
+            {
+                UserId = userId,
+                TenantId = identityService.GetTenantId()
+            }, cancellationToken);
+        }
     }
 }

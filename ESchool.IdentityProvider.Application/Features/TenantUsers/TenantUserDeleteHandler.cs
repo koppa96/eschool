@@ -25,7 +25,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
         public async Task<Unit> Handle(TenantUserDeleteCommand request, CancellationToken cancellationToken)
         {
             var tenantUser = await context.TenantUsers.SingleOrDefaultAsync(
-                x => x.TenantId == request.UserId && x.TenantId == request.TenantId, cancellationToken);
+                x => x.UserId == request.UserId && x.TenantId == request.TenantId, cancellationToken);
 
             if (tenantUser != null)
             {

@@ -8,6 +8,7 @@ namespace ESchool.Libs.Domain.Services
         Guid GetCurrentUserId();
         bool IsInGlobalRole(GlobalRoleType globalRoleType);
         bool IsInRole(TenantRoleType tenantRoleType);
-        Guid? GetTenantId();
+        Guid? TryGetTenantId();
+        Guid GetTenantId();
     }
 }

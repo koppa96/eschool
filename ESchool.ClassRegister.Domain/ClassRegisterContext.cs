@@ -44,7 +44,7 @@ namespace ESchool.ClassRegister.Domain
 
         public ClassRegisterContext(IIdentityService identityService, DbContextOptions<ClassRegisterContext> options) : base(options)
         {
-            tenantId = identityService.GetTenantId();
+            tenantId = identityService.TryGetTenantId();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

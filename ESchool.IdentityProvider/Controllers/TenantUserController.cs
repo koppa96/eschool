@@ -4,6 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.IdentityProvider.Application.Features.TenantUsers;
 using ESchool.IdentityProvider.Application.Features.Users.Common;
+using ESchool.Libs.Application.Cqrs.Query;
+using ESchool.Libs.Application.Cqrs.Response;
 using ESchool.Libs.AspNetCore.Filters.GlobalRole;
 using ESchool.Libs.Domain.Enums;
 using MediatR;
@@ -26,9 +28,14 @@ namespace ESchool.IdentityProvider.Controllers
         }
         
         [HttpGet]
-        public Task<List<UserListResponse>> GetTenantUsers(Guid tenantId, CancellationToken cancellationToken)
+        public Task<PagedListResponse<UserListResponse>> GetTenantUsers(Guid tenantId, [FromQuery] int pageSize, [FromQuery] int pageIndex, CancellationToken cancellationToken)
         {
-            return mediator.Send(new TenantUserListQuery { TenantId = tenantId }, cancellationToken);
+            return mediator.Send(new TenantUserListQuery
+            {
+                TenantId = tenantId,
+                PageIndex = pageIndex,
+                PageSize = pageSize == 0 ? 25 : pageSize
+            }, cancellationToken);
         }
 
         [HttpPut("{userId}/roles")]
@@ -42,7 +49,7 @@ namespace ESchool.IdentityProvider.Controllers
             }, cancellationToken);
         }
 
-        [HttpDelete]
+        [HttpDelete("{userId}")]
         public Task DeleteTenantUser(Guid tenantId, Guid userId, CancellationToken cancellationToken)
         {
             return mediator.Send(new TenantUserDeleteCommand

@@ -35,8 +35,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
         
         public async Task<TenantUserDetailsResponse> Handle(TenantUserCreateCommand request, CancellationToken cancellationToken)
         {
-            var tenantId = identityService.GetTenantId() ??
-                           throw new InvalidOperationException("TenantId can not be null.");
+            var tenantId = identityService.GetTenantId();
             var user = await userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {

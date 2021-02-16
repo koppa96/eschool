@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ESchool.Libs.Domain.Interfaces;
 
 namespace ESchool.IdentityProvider.Domain.Entities.Users
 {
-    public class TenantUser
+    public class TenantUser : IMultiTenantEntity
     {
         public Guid Id { get; set; }
 
