@@ -7,6 +7,7 @@ using AutoMapper;
 using ESchool.IdentityProvider.Application.Features.TenantUsers.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
+using ESchool.Libs.Application.IntegrationEvents.TenantUsers;
 using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
@@ -83,7 +84,16 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             }
 
             await context.SaveChangesAsync(cancellationToken);
-            await publishEndpoint.Publish(mapper.Map<UserCreatedIntegrationEvent>(user), cancellationToken);
+            await publishEndpoint.Publish(new TenantUserCreatedIntegrationEvent
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                TenantId = tenantId,
+                TenantRoleTypes = user.TenantUsers.Single(x => x.TenantId == tenantId).TenantUserRoles
+                    .Select(x => x.TenantRole)
+                    .ToList()
+            }, CancellationToken.None);
+            
             return new TenantUserDetailsResponse
             {
                 Id = user.Id,

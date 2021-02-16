@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using ESchool.IdentityProvider.Application.Features.Tenants;
 using ESchool.IdentityProvider.Application.Features.Tenants.Common;
 using ESchool.Libs.Application.Cqrs.Response;
-using ESchool.Libs.AspNetCore.Filters.GlobalRole;
 using ESchool.Libs.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -12,8 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.IdentityProvider.Controllers
 {
-    [Authorize("Default")]
-    [GlobalRoleFilter(GlobalRoleType.TenantAdministrator)]
+    [Authorize(nameof(GlobalRoleType.TenantAdministrator))]
     [Route("api/[controller]")]
     [ApiController]
     public class TenantsController : ControllerBase

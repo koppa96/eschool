@@ -6,7 +6,6 @@ using ESchool.IdentityProvider.Application.Features.Tenants.Common;
 using ESchool.IdentityProvider.Application.Features.TenantUsers;
 using ESchool.IdentityProvider.Application.Features.TenantUsers.Common;
 using ESchool.Libs.Application.Cqrs.Commands;
-using ESchool.Libs.AspNetCore.Filters.TenantRole;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
 using MediatR;
@@ -15,8 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.IdentityProvider.Controllers
 {
-    [Authorize("Default")]
-    [TenantRoleFilter(TenantRoleType.Administrator)]
+    [Authorize(nameof(TenantRoleType.Administrator))]
     [Route("api/tenants/mine")]
     [ApiController]
     public class MyTenantController : ControllerBase

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.IdentityProvider.Domain;
+using ESchool.Libs.Application.IntegrationEvents.TenantUsers;
 using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using MassTransit;
 using MediatR;
@@ -40,8 +41,11 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             {
                 context.TenantUsers.Remove(tenantUser);
                 await context.SaveChangesAsync(cancellationToken);
-                await publishEndpoint.Publish(mapper.Map<UserCreatedIntegrationEvent>(tenantUser.User),
-                    cancellationToken);
+                await publishEndpoint.Publish(new TenantUserDeletedIntegrationEvent
+                {
+                    UserId = tenantUser.UserId,
+                    TenantId = tenantUser.TenantId
+                }, CancellationToken.None);
             }
             
             return Unit.Value;

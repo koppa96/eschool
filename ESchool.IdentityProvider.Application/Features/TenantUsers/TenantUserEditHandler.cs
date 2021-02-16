@@ -9,6 +9,7 @@ using ESchool.IdentityProvider.Application.Features.TenantUsers.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
 using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.Libs.Application.IntegrationEvents.TenantUsers;
 using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
@@ -55,8 +56,15 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
                 TenantRole = x
             }));
             await context.SaveChangesAsync(cancellationToken);
-            await publishEndpoint.Publish(mapper.Map<UserCreatedIntegrationEvent>(tenantUser.User),
-                cancellationToken);
+            await publishEndpoint.Publish(new TenantUserEditedIntegrationEvent
+            {
+                UserId = tenantUser.UserId,
+                Email = tenantUser.User.Email,
+                TenantId = tenantId,
+                TenantRoleTypes = tenantUser.TenantUserRoles.Select(x => x.TenantRole)
+                    .ToList()
+            });
+            
             return new TenantUserDetailsResponse
             {
                 Id = tenantUser.UserId,
