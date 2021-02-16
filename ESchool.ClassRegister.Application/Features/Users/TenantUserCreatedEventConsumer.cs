@@ -1,39 +1,37 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Attributes;
 using ESchool.ClassRegister.Domain.Entities.Users;
 using ESchool.Libs.Application.IntegrationEvents.TenantUsers;
-using ESchool.Libs.Domain.Enums;
-using MediatR;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Users
 {
-    public class TenantUserCreatedHandler : IRequestHandler<TenantUserCreatedIntegrationEvent>
+    public class TenantUserCreatedEventConsumer : IConsumer<TenantUserCreatedIntegrationEvent>
     {
-        private readonly ClassRegisterContext context;
+        private readonly ClassRegisterContext dbContext;
 
-        public TenantUserCreatedHandler(ClassRegisterContext context)
+        public TenantUserCreatedEventConsumer(ClassRegisterContext dbContext)
         {
-            this.context = context;
+            this.dbContext = dbContext;
         }
-        
-        public async Task<Unit> Handle(TenantUserCreatedIntegrationEvent request, CancellationToken cancellationToken)
+
+        public async Task Consume(ConsumeContext<TenantUserCreatedIntegrationEvent> context)
         {
             var tenantUserTypes = Assembly.GetExecutingAssembly()
                 .GetTypes()
                 .Where(x => x.BaseType == typeof(UserBase) && x.GetCustomAttribute<TenantUserAttribute>() != null)
                 .ToList();
             
-            var existingUserBases = await context.UserBases.IgnoreQueryFilters()
-                .Where(x => x.UserId == request.UserId && x.TenantId == request.TenantId)
-                .ToListAsync(cancellationToken);
+            var existingUserBases = await dbContext.UserBases.IgnoreQueryFilters()
+                .Where(x => x.UserId == context.Message.UserId && x.TenantId == context.Message.TenantId)
+                .ToListAsync();
 
-            foreach (var roleType in request.TenantRoleTypes)
+            foreach (var roleType in context.Message.TenantRoleTypes)
             {
                 var existingUserBase = existingUserBases.SingleOrDefault(x =>
                     x.GetType().GetCustomAttribute<TenantUserAttribute>()?.TenantRoleType == roleType);
@@ -44,14 +42,17 @@ namespace ESchool.ClassRegister.Application.Features.Users
                         x.GetCustomAttribute<TenantUserAttribute>()!.TenantRoleType == roleType);
 
                     var user = (UserBase)Activator.CreateInstance(userType);
-                    user.Email = request.Email;
-                    user.TenantId = request.TenantId;
+                    user.Email = context.Message.Email;
+                    user.TenantId = context.Message.TenantId;
+                    dbContext.UserBases.Add(user);
                 }
                 else
                 {
                     existingUserBase.IsDeleted = false;
                 }
             }
+
+            await dbContext.SaveChangesAsync();
         }
     }
 }

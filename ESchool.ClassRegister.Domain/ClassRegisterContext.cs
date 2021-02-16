@@ -59,15 +59,21 @@ namespace ESchool.ClassRegister.Domain
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            this.SetTenantId(tenantId);
+            EntityAudit();
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
             CancellationToken cancellationToken = default)
         {
-            this.SetTenantId(tenantId);
+            EntityAudit();
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        private void EntityAudit()
+        {
+            this.SetTenantId(tenantId);
+            this.SoftDelete();
         }
     }
 }

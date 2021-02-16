@@ -75,7 +75,7 @@ namespace ESchool.ClassRegister.Api
 
             services.AddMassTransit(config =>
             {
-                config.AddConsumers(Assembly.Load("ESchool.ClassRegister."));
+                config.AddConsumers(Assembly.Load("ESchool.ClassRegister.Application"));
                 config.UsingRabbitMq((context, configurator) =>
                 {
                     configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));

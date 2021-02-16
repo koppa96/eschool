@@ -17,5 +17,17 @@ namespace ESchool.Libs.Domain.Extensions
                 entry.Entity.TenantId = tenantId;
             }
         }
+
+        public static void SoftDelete(this DbContext dbContext)
+        {
+            var entries = dbContext.ChangeTracker.Entries<ISoftDelete>()
+                .Where(x => x.State == EntityState.Deleted);
+
+            foreach (var entry in entries)
+            {
+                entry.Entity.IsDeleted = true;
+                entry.State = EntityState.Modified;
+            }
+        }
     }
 }
