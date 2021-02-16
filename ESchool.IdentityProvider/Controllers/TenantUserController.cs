@@ -35,10 +35,10 @@ namespace ESchool.IdentityProvider.Controllers
             }, cancellationToken);
         }
 
-        [HttpPut("{userId}/roles")]
+        [HttpPost("{userId}")]
         public Task CreateTenantUser(Guid tenantId, Guid userId, [FromBody] List<TenantRoleType> tenantRoleTypes, CancellationToken cancellationToken)
         {
-            return mediator.Send(new TenantUserCreateOrUpdateCommand
+            return mediator.Send(new TenantUserCreateByIdCommand
             {
                 TenantId = tenantId,
                 UserId = userId,

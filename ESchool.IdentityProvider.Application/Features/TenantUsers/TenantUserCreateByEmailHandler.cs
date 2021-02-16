@@ -8,7 +8,6 @@ using ESchool.IdentityProvider.Application.Features.TenantUsers.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
 using ESchool.Libs.Application.IntegrationEvents.TenantUsers;
-using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
 using MassTransit;
@@ -17,28 +16,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.IdentityProvider.Application.Features.TenantUsers
 {
-    public class TenantUserCreateCommand : IRequest<TenantUserDetailsResponse>
+    public class TenantUserCreateByEmailCommand : IRequest<TenantUserDetailsResponse>
     {
         public string Email { get; set; }
         public IEnumerable<TenantRoleType> Roles { get; set; }
     }
 
-    public class TenantUserCreateHandler : IRequestHandler<TenantUserCreateCommand, TenantUserDetailsResponse>
+    public class TenantUserCreateByEmailHandler : IRequestHandler<TenantUserCreateByEmailCommand, TenantUserDetailsResponse>
     {
         private readonly IdentityProviderContext context;
         private readonly IIdentityService identityService;
         private readonly IPublishEndpoint publishEndpoint;
-        private readonly IMapper mapper;
 
-        public TenantUserCreateHandler(IdentityProviderContext context, IIdentityService identityService, IPublishEndpoint publishEndpoint, IMapper mapper)
+        public TenantUserCreateByEmailHandler(IdentityProviderContext context, IIdentityService identityService, IPublishEndpoint publishEndpoint)
         {
             this.context = context;
             this.identityService = identityService;
             this.publishEndpoint = publishEndpoint;
-            this.mapper = mapper;
         }
         
-        public async Task<TenantUserDetailsResponse> Handle(TenantUserCreateCommand request, CancellationToken cancellationToken)
+        public async Task<TenantUserDetailsResponse> Handle(TenantUserCreateByEmailCommand request, CancellationToken cancellationToken)
         {
             var tenantId = identityService.GetTenantId();
             var user = await context.Users.Include(x => x.TenantUsers)

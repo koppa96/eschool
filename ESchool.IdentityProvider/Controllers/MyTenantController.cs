@@ -35,9 +35,9 @@ namespace ESchool.IdentityProvider.Controllers
         }
 
         [HttpPost("users")]
-        public Task<TenantUserDetailsResponse> CreateTenantUser([FromBody] TenantUserCreateCommand command, CancellationToken cancellation)
+        public Task<TenantUserDetailsResponse> CreateTenantUser([FromBody] TenantUserCreateByEmailCommand byEmailCommand, CancellationToken cancellation)
         {
-            return mediator.Send(command, cancellation);
+            return mediator.Send(byEmailCommand, cancellation);
         }
 
         [HttpPut("users/{userId}")]

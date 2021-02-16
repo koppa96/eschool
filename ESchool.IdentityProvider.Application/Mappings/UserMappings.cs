@@ -21,17 +21,6 @@ namespace ESchool.IdentityProvider.Application.Mappings
                         TenantRoleType = r.TenantRole
                     })
                 })));
-
-            CreateMap<User, UserCreatedIntegrationEvent>()
-                .ForMember(dest => dest.TenantRoles, opt => opt.MapFrom(src => src.TenantUsers.Select(x => new TenantRoleDto
-                {
-                    TenantId = x.Id,
-                    Roles = x.TenantUserRoles.Select(r => new TenantRoleDto.TenantUserRoleDto
-                    {
-                        Id = r.Id,
-                        TenantRoleType = r.TenantRole
-                    })
-                })));
         }
     }
 }
