@@ -22,6 +22,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=Server=eschool.mssql;Database=ClassRegisterDb;User Id=SA;Password=Password123;
+      - RabbitMQ__Host=amqp://eschool.rabbitmq
+      - Authentication__Authority=http://eschool.identityprovider
+      - Authentication__Audience=classregister-api
+      - Authentication__IdentityProviderUri=https://localhost:5301
     ports:
       - "5100:80"
     volumes:
@@ -37,6 +41,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=Server=eschool.mssql;Database=HomeAssignmentsDb;User Id=SA;Password=Password123;
+      - RabbitMQ__Host=amqp://eschool.rabbitmq
+      - Authentication__Authority=http://eschool.identityprovider
+      - Authentication__Audience=homeassignments-api
+      - Authentication__IdentityProviderUri=https://localhost:5301
     ports:
       - "5200:80"
     volumes:
@@ -54,6 +62,10 @@ services:
       - ConnectionStrings__DefaultConnection=Server=eschool.mssql;Database=IdentityProviderDb;User Id=SA;Password=Password123;
       - KESTREL__Certificates__Default__Path=/app/cert/idp.pfx
       - KESTREL__Certificates__Default__Password=Password123
+      - RabbitMQ__Host=amqp://eschool.rabbitmq
+      - Authentication__Authority=http://eschool.identityprovider
+      - Authentication__Audience=identityprovider-api
+      - Authentication__IdentityProviderUri=https://localhost:5301
     ports:
       - "5300:80"
       - "5301:443"
@@ -71,6 +83,9 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=Server=eschool.mssql;Database=TestingDb;User Id=SA;Password=Password123;
+      - Authentication__Authority=http://eschool.identityprovider
+      - Authentication__Audience=testing-api
+      - Authentication__IdentityProviderUri=https://localhost:5301
     ports:
       - "5400:80"
     volumes:

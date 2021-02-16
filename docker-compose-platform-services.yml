@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  eschool.mssql:
+    container_name: eschool.mssql
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123
+      ports:
+        - "5500:1433"
+      volumes:
+        - mssql_data:/var/opt/mssql
+      networks:
+        - eschool_network
+
+  eschool.rabbitmq:
+    container_name: eschool.rabbitmq
+    image: rabbitmq:3.8.9-management
+    ports:
+      - "5700:5672"
+      - "5600:15672"
+      volumes:
+        - rabbitmq_data:/var/lib/rabbitmq
+      networks:
+        - eschool_network
