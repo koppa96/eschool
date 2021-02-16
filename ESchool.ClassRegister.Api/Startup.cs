@@ -75,7 +75,7 @@ namespace ESchool.ClassRegister.Api
 
             services.AddMassTransit(config =>
             {
-                config.AddConsumer<MediatREventConsumer<UserCreatedIntegrationEvent>>();
+                config.AddConsumers(Assembly.Load("ESchool.ClassRegister."));
                 config.UsingRabbitMq((context, configurator) =>
                 {
                     configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
@@ -83,6 +83,8 @@ namespace ESchool.ClassRegister.Api
                     {
                         endpoint.ConfigureConsumers(context);
                     });
+
+                    configurator.UseCustomFilters(context);
                 });
             });
             services.AddMassTransitHostedService();

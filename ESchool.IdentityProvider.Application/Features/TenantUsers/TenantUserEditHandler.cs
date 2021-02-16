@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using ESchool.IdentityProvider.Application.Features.TenantUsers.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
 using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,11 +27,15 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
     {
         private readonly IdentityProviderContext context;
         private readonly IIdentityService identityService;
+        private readonly IPublishEndpoint publishEndpoint;
+        private readonly IMapper mapper;
 
-        public TenantUserEditHandler(IdentityProviderContext context, IIdentityService identityService)
+        public TenantUserEditHandler(IdentityProviderContext context, IIdentityService identityService, IPublishEndpoint publishEndpoint, IMapper mapper)
         {
             this.context = context;
             this.identityService = identityService;
+            this.publishEndpoint = publishEndpoint;
+            this.mapper = mapper;
         }
         
         public async Task<TenantUserDetailsResponse> Handle(EditCommand<TenantUserEditCommand, TenantUserDetailsResponse> request,
@@ -37,6 +44,8 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             var tenantId = identityService.GetTenantId();
             var tenantUser = await context.TenantUsers.Include(x => x.TenantUserRoles)
                 .Include(x => x.User)
+                    .ThenInclude(x => x.TenantUsers)
+                        .ThenInclude(x => x.TenantUserRoles)
                 .SingleAsync(x => x.UserId == request.Id && x.TenantId == tenantId, cancellationToken);
             
             context.TenantUserRoles.RemoveRange(tenantUser.TenantUserRoles);
@@ -46,6 +55,8 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
                 TenantRole = x
             }));
             await context.SaveChangesAsync(cancellationToken);
+            await publishEndpoint.Publish(mapper.Map<UserCreatedIntegrationEvent>(tenantUser.User),
+                cancellationToken);
             return new TenantUserDetailsResponse
             {
                 Id = tenantUser.UserId,

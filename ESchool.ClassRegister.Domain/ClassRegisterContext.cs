@@ -8,6 +8,7 @@ using ESchool.ClassRegister.Domain.Entities.Messaging;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.ClassRegister.Domain.Entities.Users;
 using ESchool.Libs.Domain.Extensions;
+using ESchool.Libs.Domain.Interfaces;
 using ESchool.Libs.Domain.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,8 +16,8 @@ namespace ESchool.ClassRegister.Domain
 {
     public class ClassRegisterContext : DbContext
     {
-        private readonly Guid? tenantId; 
-        
+        private readonly Guid tenantId;
+
         public DbSet<Class> Classes { get; set; }
         public DbSet<ClassRoom> ClassRooms { get; set; }
         public DbSet<ClassType> ClassTypes { get; set; }
@@ -42,42 +43,30 @@ namespace ESchool.ClassRegister.Domain
         public DbSet<Administrator> Administrators { get; set; }
         public DbSet<UserBase> UserBases { get; set; }
 
-        public ClassRegisterContext(IIdentityService identityService, DbContextOptions<ClassRegisterContext> options) : base(options)
+        public ClassRegisterContext(IIdentityService identityService, DbContextOptions<ClassRegisterContext> options) :
+            base(options)
         {
-            tenantId = identityService.TryGetTenantId();
+            tenantId = identityService.GetTenantId();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            modelBuilder.Entity<ClassRoom>()
-                .HasQueryFilter(x => x.TenantId == tenantId);
-
-            modelBuilder.Entity<SchoolYear>()
-                .HasQueryFilter(x => x.TenantId == tenantId);
-
-            modelBuilder.Entity<Subject>()
-                .HasQueryFilter(x => x.TenantId == tenantId);
+            modelBuilder.AddGlobalQueryFilter<IMultiTenantEntity>(x => x.TenantId == tenantId);
+            modelBuilder.AddGlobalQueryFilter<ISoftDelete>(x => x.IsDeleted);
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            if (tenantId.HasValue)
-            {
-                this.SetTenantId(tenantId.Value);
-            }
-            
+            this.SetTenantId(tenantId);
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
+            CancellationToken cancellationToken = default)
         {
-            if (tenantId.HasValue)
-            {
-                this.SetTenantId(tenantId.Value);
-            }
-            
+            this.SetTenantId(tenantId);
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
     }

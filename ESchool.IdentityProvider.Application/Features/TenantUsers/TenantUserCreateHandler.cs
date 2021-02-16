@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using ESchool.IdentityProvider.Application.Features.TenantUsers.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
-using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
+using MassTransit;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.IdentityProvider.Application.Features.TenantUsers
 {
@@ -23,20 +25,24 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
     public class TenantUserCreateHandler : IRequestHandler<TenantUserCreateCommand, TenantUserDetailsResponse>
     {
         private readonly IdentityProviderContext context;
-        private readonly UserManager<User> userManager;
         private readonly IIdentityService identityService;
+        private readonly IPublishEndpoint publishEndpoint;
+        private readonly IMapper mapper;
 
-        public TenantUserCreateHandler(IdentityProviderContext context, UserManager<User> userManager, IIdentityService identityService)
+        public TenantUserCreateHandler(IdentityProviderContext context, IIdentityService identityService, IPublishEndpoint publishEndpoint, IMapper mapper)
         {
             this.context = context;
-            this.userManager = userManager;
             this.identityService = identityService;
+            this.publishEndpoint = publishEndpoint;
+            this.mapper = mapper;
         }
         
         public async Task<TenantUserDetailsResponse> Handle(TenantUserCreateCommand request, CancellationToken cancellationToken)
         {
             var tenantId = identityService.GetTenantId();
-            var user = await userManager.FindByEmailAsync(request.Email);
+            var user = await context.Users.Include(x => x.TenantUsers)
+                    .ThenInclude(x => x.TenantUserRoles)
+                .SingleOrDefaultAsync(x => x.NormalizedEmail == request.Email.ToUpper(), cancellationToken);
             if (user == null)
             {
                 user = new User
@@ -60,6 +66,10 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             }
             else
             {
+                if (user.TenantUsers.Any(x => x.TenantId == tenantId))
+                {
+                    throw new InvalidOperationException("The user is already the member of this tenant.");
+                }
                 var tenantUser = new TenantUser
                 {
                     UserId = user.Id,
@@ -73,6 +83,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             }
 
             await context.SaveChangesAsync(cancellationToken);
+            await publishEndpoint.Publish(mapper.Map<UserCreatedIntegrationEvent>(user), cancellationToken);
             return new TenantUserDetailsResponse
             {
                 Id = user.Id,

@@ -5,32 +5,45 @@ using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
+using System.Security.Claims;
 
 namespace ESchool.Libs.AspNetCore.Services
 {
-    public class IdentityService : IIdentityService
+    internal class IdentityService : IIdentityService
     {
+        private readonly MessagingIdentityService messagingIdentityService;
         private readonly HttpContext httpContext;
 
-        public IdentityService(IHttpContextAccessor httpContextAccessor)
+        public IdentityService(IHttpContextAccessor httpContextAccessor, MessagingIdentityService messagingIdentityService)
         {
+            this.messagingIdentityService = messagingIdentityService;
             httpContext = httpContextAccessor.HttpContext;
         }
 
         public Guid GetCurrentUserId()
         {
-            return Guid.Parse(httpContext.User.Claims.Single(x => x.Type == JwtClaimTypes.Subject).Value);
+            if (httpContext != null)
+            {
+                return Guid.Parse(httpContext.User.Claims.Single(x => x.Type == JwtClaimTypes.Subject).Value);
+            }
+
+            return messagingIdentityService.UserId!.Value;
         }
 
         public Guid? TryGetTenantId()
         {
-            var claim = httpContext.User.Claims.SingleOrDefault(x => x.Type == Constants.ClaimTypes.TenantId);
-            return claim != null ? Guid.Parse(claim.Value) : null;
+            if (httpContext != null)
+            {
+                var claim = httpContext.User.Claims.SingleOrDefault(x => x.Type == Constants.ClaimTypes.TenantId);
+                return claim != null ? Guid.Parse(claim.Value) : null;
+            }
+
+            return messagingIdentityService.TenantId;
         }
 
         public Guid GetTenantId()
         {
-            return Guid.Parse(httpContext.User.Claims.Single(x => x.Type == Constants.ClaimTypes.TenantId).Value);
+            return TryGetTenantId()!.Value;
         }
 
         public bool IsInGlobalRole(GlobalRoleType globalRoleType)

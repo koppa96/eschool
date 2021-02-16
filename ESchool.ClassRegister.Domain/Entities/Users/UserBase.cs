@@ -5,7 +5,7 @@ using ESchool.Libs.Domain.Interfaces;
 
 namespace ESchool.ClassRegister.Domain.Entities.Users
 {
-    public class UserBase : IMultiTenantEntity
+    public class UserBase : IMultiTenantEntity, ISoftDelete
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -17,5 +17,7 @@ namespace ESchool.ClassRegister.Domain.Entities.Users
         public virtual ICollection<Message> SentMessages { get; set; }
         
         public Guid TenantId { get; set; }
+        public Guid UserId { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
