@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NSwag;
 using NSwag.AspNetCore;
+using NSwag.Generation.AspNetCore.Processors;
 using NSwag.Generation.Processors.Security;
 
 namespace ESchool.ClassRegister.Api
@@ -70,7 +71,16 @@ namespace ESchool.ClassRegister.Api
                     }
                 });
                 
+                config.AddSecurity("JWT", new OpenApiSecurityScheme
+                {
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    Name = "Authorization",
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Description = "Type into the textbox: Bearer {your JWT token}."
+                });
+                
                 config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("OAuth2"));
+                config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
             });
 
             services.AddMassTransit(config =>
