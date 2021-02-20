@@ -25,7 +25,14 @@ namespace ESchool.IdentityProvider.Domain
         
         public IdentityProviderContext(DbContextOptions<IdentityProviderContext> options, IIdentityService identityService) : base(options)
         {
-            isTenantAdmin = identityService.IsInGlobalRole(GlobalRoleType.TenantAdministrator);
+            try
+            {
+                isTenantAdmin = identityService.IsInGlobalRole(GlobalRoleType.TenantAdministrator);
+            }
+            catch
+            {
+                isTenantAdmin = false;
+            }
             tenantId = identityService.TryGetTenantId();
         }
 
@@ -33,7 +40,6 @@ namespace ESchool.IdentityProvider.Domain
         {
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            builder.AddGlobalQueryFilter<IMultiTenantEntity>(x => isTenantAdmin || x.TenantId == tenantId.Value);
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

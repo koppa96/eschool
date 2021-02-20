@@ -7,12 +7,12 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Password123
-      ports:
-        - "5500:1433"
-      volumes:
-        - mssql_data:/var/opt/mssql
-      networks:
-        - eschool_network
+    ports:
+      - "5500:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    networks:
+      - eschool_network
 
   eschool.rabbitmq:
     container_name: eschool.rabbitmq
@@ -20,7 +20,14 @@ services:
     ports:
       - "5700:5672"
       - "5600:15672"
-      volumes:
-        - rabbitmq_data:/var/lib/rabbitmq
-      networks:
-        - eschool_network
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - eschool_network
+        
+volumes:
+  mssql_data:
+  rabbitmq_data:
+
+networks:
+  eschool_network:
