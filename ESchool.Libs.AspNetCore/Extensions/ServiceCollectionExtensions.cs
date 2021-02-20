@@ -1,4 +1,5 @@
-﻿using ESchool.Libs.AspNetCore.Configuration;
+﻿using System.IdentityModel.Tokens.Jwt;
+using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Services;
 using ESchool.Libs.Domain;
 using ESchool.Libs.Domain.Enums;
@@ -21,6 +22,7 @@ namespace ESchool.Libs.AspNetCore.Extensions
 
         public static IServiceCollection AddCommonAuthentication(this IServiceCollection services, AuthConfiguration authConfiguration)
         {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.AddAuthentication(config =>
                 {
                     config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -46,6 +48,9 @@ namespace ESchool.Libs.AspNetCore.Extensions
                 options.AddTenantUserPolicy(TenantRoleType.Parent);
                 options.AddTenantUserPolicy(TenantRoleType.Teacher);
                 options.AddTenantUserPolicy(TenantRoleType.Student);
+                
+                options.AddPolicy("Default", policy => policy.RequireAuthenticatedUser()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
             });
             return services;
         }
