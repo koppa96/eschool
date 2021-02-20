@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="MassTransit" Version="7.1.4" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\libs\ESchool.Libs.Application\ESchool.Libs.Application.csproj" />
+    <ProjectReference Include="..\ESchool.IdentityProvider.Domain\ESchool.IdentityProvider.Domain.csproj" />
+    <ProjectReference Include="..\ESchool.IdentityProvider.Interface\ESchool.IdentityProvider.Interface.csproj" />
+  </ItemGroup>
+
+</Project>
