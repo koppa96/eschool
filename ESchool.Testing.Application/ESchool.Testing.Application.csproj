@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ESchool.ClassRegister.Interface\ESchool.ClassRegister.Interface.csproj" />
       <ProjectReference Include="..\ESchool.Libs.Application\ESchool.Libs.Application.csproj" />
       <ProjectReference Include="..\ESchool.Testing.Domain\ESchool.Testing.Domain.csproj" />
     </ItemGroup>

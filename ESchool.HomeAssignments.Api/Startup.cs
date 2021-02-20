@@ -1,7 +1,5 @@
 using System.Reflection;
 using ESchool.HomeAssignments.Domain;
-using ESchool.Libs.Application.IntegrationEvents.Core;
-using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
 using MassTransit;
@@ -59,8 +57,7 @@ namespace ESchool.HomeAssignments.Api
             
             services.AddMassTransit(config =>
             {
-                config.AddConsumer<MediatREventConsumer<StudentCreatedIntegrationEvent>>();
-                config.AddConsumer<MediatREventConsumer<TeacherCreatedIntegrationEvent>>();
+                config.AddConsumers(Assembly.Load("ESchool.HomeAssignments.Application"));
                 config.UsingRabbitMq((context, configurator) =>
                 {
                     configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));

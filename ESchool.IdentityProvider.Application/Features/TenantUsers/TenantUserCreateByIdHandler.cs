@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ESchool.IdentityProvider.Application.Features.TenantUsers.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
-using ESchool.Libs.Application.IntegrationEvents.TenantUsers;
+using ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers;
 using ESchool.Libs.Domain.Enums;
 using MassTransit;
 using MediatR;
@@ -20,7 +20,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
         public Guid TenantId { get; set; }
         public List<TenantRoleType> TenantRoleTypes { get; set; }
     }
-    
+
     public class TenantUserCreateByIdHandler : IRequestHandler<TenantUserCreateByIdCommand, TenantUserDetailsResponse>
     {
         private readonly IdentityProviderContext context;
@@ -31,17 +31,16 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             this.context = context;
             this.publishEndpoint = publishEndpoint;
         }
-        
-        public async Task<TenantUserDetailsResponse> Handle(TenantUserCreateByIdCommand request, CancellationToken cancellationToken)
+
+        public async Task<TenantUserDetailsResponse> Handle(TenantUserCreateByIdCommand request,
+            CancellationToken cancellationToken)
         {
             var user = await context.Users.Include(x => x.TenantUsers)
                 .ThenInclude(x => x.TenantUserRoles)
                 .SingleAsync(x => x.Id == request.UserId, cancellationToken);
 
             if (user.TenantUsers.Any(x => x.TenantId == request.TenantId))
-            {
                 throw new InvalidOperationException("The user is already the member of this tenant.");
-            }
 
             context.TenantUsers.Add(new TenantUser
             {
@@ -63,7 +62,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
                     .Select(x => x.TenantRole)
                     .ToList()
             }, CancellationToken.None);
-            
+
             return new TenantUserDetailsResponse
             {
                 Id = user.Id,

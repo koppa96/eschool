@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ESchool.Libs.Application.IntegrationEvents.UserCreation
+namespace ESchool.ClassRegister.Interface.IntegrationEvents.UserCreation
 {
     public class TenantUserCreatedIntegrationEventBase
     {

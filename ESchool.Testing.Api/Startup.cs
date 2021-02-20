@@ -1,12 +1,9 @@
 using System.Reflection;
-using ESchool.Libs.Application.IntegrationEvents.Core;
-using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
 using ESchool.Testing.Domain;
 using MassTransit;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -41,8 +38,7 @@ namespace ESchool.Testing.Api
             services.AddMediatR(Assembly.Load("ESchool.Testing.Application"));
             services.AddMassTransit(config =>
             {
-                config.AddConsumer<MediatREventConsumer<StudentCreatedIntegrationEvent>>();
-                config.AddConsumer<MediatREventConsumer<TeacherCreatedIntegrationEvent>>();
+                config.AddConsumers(Assembly.Load("ESchool.Testing.Application"));
                 config.UsingRabbitMq((context, configurator) =>
                 {
                     configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));

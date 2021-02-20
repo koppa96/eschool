@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ESchool.IdentityProvider.Domain\ESchool.IdentityProvider.Domain.csproj" />
+    <ProjectReference Include="..\ESchool.IdentityProvider.Interface\ESchool.IdentityProvider.Interface.csproj" />
     <ProjectReference Include="..\ESchool.Libs.Application\ESchool.Libs.Application.csproj" />
   </ItemGroup>
 

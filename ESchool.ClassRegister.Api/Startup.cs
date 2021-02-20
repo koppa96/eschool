@@ -1,13 +1,10 @@
 using System.Collections.Generic;
 using System.Reflection;
 using ESchool.ClassRegister.Domain;
-using ESchool.Libs.Application.IntegrationEvents.Core;
-using ESchool.Libs.Application.IntegrationEvents.UserCreation;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
 using MassTransit;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NSwag;
 using NSwag.AspNetCore;
-using NSwag.Generation.AspNetCore.Processors;
 using NSwag.Generation.Processors.Security;
 
 namespace ESchool.ClassRegister.Api

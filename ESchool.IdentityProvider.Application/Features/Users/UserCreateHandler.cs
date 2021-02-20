@@ -1,16 +1,12 @@
-﻿using AutoMapper;
-using ESchool.IdentityProvider.Application.Features.Users.Common;
-using ESchool.IdentityProvider.Domain.Entities.Users;
-using MassTransit;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.Libs.Application.IntegrationEvents.UserCreation;
+using AutoMapper;
+using ESchool.IdentityProvider.Application.Features.Users.Common;
+using ESchool.IdentityProvider.Domain.Entities.Users;
 using ESchool.Libs.Domain.Enums;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace ESchool.IdentityProvider.Application.Features.Users
 {
@@ -22,8 +18,8 @@ namespace ESchool.IdentityProvider.Application.Features.Users
 
     public class UserCreateHandler : IRequestHandler<UserCreateCommand, UserDetailsResponse>
     {
-        private readonly UserManager<User> userManager;
         private readonly IMapper mapper;
+        private readonly UserManager<User> userManager;
 
         public UserCreateHandler(
             UserManager<User> userManager,
@@ -43,10 +39,7 @@ namespace ESchool.IdentityProvider.Application.Features.Users
             };
 
             var result = await userManager.CreateAsync(user);
-            if (result.Succeeded)
-            {
-                return mapper.Map<UserDetailsResponse>(user);
-            }
+            if (result.Succeeded) return mapper.Map<UserDetailsResponse>(user);
 
             throw new InvalidOperationException("Could not create user. Email is already taken.");
         }

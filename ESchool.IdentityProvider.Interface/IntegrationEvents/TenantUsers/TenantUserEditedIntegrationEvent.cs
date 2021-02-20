@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using ESchool.Libs.Domain.Enums;
-using MediatR;
 
-namespace ESchool.Libs.Application.IntegrationEvents.TenantUsers
+namespace ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers
 {
-    public class TenantUserCreatedIntegrationEvent : IRequest
+    public class TenantUserEditedIntegrationEvent
     {
         public Guid UserId { get; set; }
         public string Email { get; set; }

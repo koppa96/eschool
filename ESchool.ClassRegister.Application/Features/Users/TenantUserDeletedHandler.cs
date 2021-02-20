@@ -1,10 +1,8 @@
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
-using ESchool.Libs.Application.IntegrationEvents.TenantUsers;
+using ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers;
 using MassTransit;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Users
