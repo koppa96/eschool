@@ -8,7 +8,6 @@ namespace ESchool.ClassRegister.Application.Features.Classrooms
 {
     public class ClassroomDeleteCommand : DeleteCommand
     {
-        public Guid Id { get; set; }
     }
 
     public class ClassroomDeleteHandler : DeleteHandler<ClassroomDeleteCommand, ClassRoom>

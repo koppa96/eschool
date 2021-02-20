@@ -7,6 +7,6 @@ namespace ESchool.IdentityProvider.Application.Features.Users.Common
     {
         public Guid Id { get; set; }
         public string Email { get; set; }
-        public GlobalRoleType GlobalRoleType { get; set; }
+        public GlobalRoleType GlobalRole { get; set; }
     }
 }

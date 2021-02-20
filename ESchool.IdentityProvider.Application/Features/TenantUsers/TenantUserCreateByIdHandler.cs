@@ -38,6 +38,11 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
                 .ThenInclude(x => x.TenantUserRoles)
                 .SingleAsync(x => x.Id == request.UserId, cancellationToken);
 
+            if (user.TenantUsers.Any(x => x.TenantId == request.TenantId))
+            {
+                throw new InvalidOperationException("The user is already the member of this tenant.");
+            }
+
             context.TenantUsers.Add(new TenantUser
             {
                 TenantId = request.TenantId,
@@ -63,7 +68,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             {
                 Id = user.Id,
                 Email = user.Email,
-                TenantRoleTypes = user.TenantUsers.Single(x => x.TenantId == request.TenantId).TenantUserRoles
+                TenantRoles = user.TenantUsers.Single(x => x.TenantId == request.TenantId).TenantUserRoles
                     .Select(x => x.TenantRole)
             };
         }

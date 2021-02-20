@@ -32,7 +32,10 @@ namespace ESchool.IdentityProvider.Controllers
         [HttpGet("{id}")]
         public Task<TenantDetailsResponse> GetTenant(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return mediator.Send(new GetTenantQuery
+            {
+                TenantId = id
+            }, cancellationToken);
         }
 
         [HttpPost]

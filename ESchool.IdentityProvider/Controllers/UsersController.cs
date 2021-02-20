@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.Libs.Application.Cqrs.Query;
+using ESchool.Libs.Application.Cqrs.Response;
 using ESchool.Libs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ESchool.IdentityProvider.Controllers
 {
-    [Authorize(nameof(GlobalRoleType.TenantAdministrator))]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -25,20 +26,28 @@ namespace ESchool.IdentityProvider.Controllers
             this.identityService = identityService;
         }
 
+        [HttpGet]
+        public Task<PagedListResponse<UserListResponse>> ListUsers([FromQuery] UserListQuery query,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(query, cancellationToken);
+        }
+        
+        [HttpGet("{id}")]
+        public Task<UserDetailsResponse> GetUser(Guid id, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new UserGetQuery { Id = id }, cancellationToken);
+        }
+
         [HttpPost]
         public Task<UserDetailsResponse> CreateUser([FromBody] UserCreateCommand command, CancellationToken cancellationToken)
         {
             return mediator.Send(command, cancellationToken);
         }
 
-        [HttpGet("{id}")]
-        public Task<UserGetResponse> GetUser(Guid id, CancellationToken cancellationToken)
-        {
-            return mediator.Send(new UserGetQuery { Id = id }, cancellationToken);
-        }
-
         [HttpGet("me")]
-        public Task<UserGetResponse> GetMe(CancellationToken cancellationToken)
+        [Authorize("Default")]
+        public Task<UserDetailsResponse> GetMe(CancellationToken cancellationToken)
         {
             return mediator.Send(new UserGetQuery { Id = identityService.GetCurrentUserId() }, cancellationToken);
         }

@@ -12,15 +12,7 @@ namespace ESchool.IdentityProvider.Application.Mappings
         public UserMappings()
         {
             CreateMap<User, UserDetailsResponse>()
-                .ForMember(dest => dest.TenantRoles, opt => opt.MapFrom(src => src.TenantUsers.Select(x => new TenantRoleDto
-                {
-                    TenantId = x.Id,
-                    Roles = x.TenantUserRoles.Select(r => new TenantRoleDto.TenantUserRoleDto
-                    {
-                        Id = r.Id,
-                        TenantRoleType = r.TenantRole
-                    })
-                })));
+                .ForMember(x => x.Tenants, o => o.MapFrom(x => x.TenantUsers.Select(u => u.Tenant)));
         }
     }
 }

@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Linq;
 using System.Linq.Expressions;
 using ESchool.IdentityProvider.Application.Features.Users.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
 using ESchool.Libs.Application.Cqrs.Handlers;
 using ESchool.Libs.Application.Cqrs.Query;
+using Microsoft.EntityFrameworkCore;
 
-namespace ESchool.IdentityProvider.Application.Features.TenantUsers
+namespace ESchool.IdentityProvider.Application.Features.Users
 {
-    public class TenantUserListQuery : PagedListQuery<UserListResponse>
+    public class UserListQuery : PagedListQuery<UserListResponse>
     {
-        public Guid TenantId { get; set; }
     }
 
-    public class TenantUserListHandler : PagedListHandler<TenantUserListQuery, User, string, UserListResponse>
+    public class UserListHandler : PagedListHandler<UserListQuery, User, string, UserListResponse>
     {
-        public TenantUserListHandler(IdentityProviderContext context) : base(context)
+        public UserListHandler(IdentityProviderContext context) : base(context)
         {
         }
 
@@ -28,10 +27,5 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             Email = x.Email,
             GlobalRole = x.GlobalRole
         };
-
-        protected override IQueryable<User> Filter(IQueryable<User> entities, TenantUserListQuery query)
-        {
-            return entities.Where(x => x.TenantUsers.Any(u => u.TenantId == query.TenantId));
-        }
     }
 }

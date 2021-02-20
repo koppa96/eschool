@@ -8,6 +8,6 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers.Common
     {
         public Guid Id { get; set; }
         public string Email { get; set; }
-        public IEnumerable<TenantRoleType> TenantRoleTypes { get; set; }
+        public IEnumerable<TenantRoleType> TenantRoles { get; set; }
     }
 }

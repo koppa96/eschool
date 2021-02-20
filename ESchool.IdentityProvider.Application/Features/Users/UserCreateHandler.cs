@@ -37,10 +37,10 @@ namespace ESchool.IdentityProvider.Application.Features.Users
         {
             var user = new User
             {
+                UserName = request.Email,
                 Email = request.Email,
                 GlobalRole = request.GlobalRole
             };
-            user.DefaultTenantId = user.TenantUsers.FirstOrDefault()?.TenantId;
 
             var result = await userManager.CreateAsync(user);
             if (result.Succeeded)

@@ -69,7 +69,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             {
                 Id = tenantUser.UserId,
                 Email = tenantUser.User.Email,
-                TenantRoleTypes = tenantUser.TenantUserRoles.Select(x => x.TenantRole)
+                TenantRoles = tenantUser.TenantUserRoles.Select(x => x.TenantRole)
             };
         }
     }
