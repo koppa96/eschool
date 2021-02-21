@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
 using ESchool.Libs.Application.Cqrs.Handlers;
@@ -24,19 +25,12 @@ namespace ESchool.ClassRegister.Application.Features.SchoolYears
         public string DisplayName { get; set; }
     }
     
-    public class SchoolYearListHandler : PagedListHandler<SchoolYearListQuery, SchoolYear, string, SchoolYearListResponse>
+    public class SchoolYearListHandler : AutoMapperPagedListHandler<SchoolYearListQuery, SchoolYear, string, SchoolYearListResponse>
     {
-        public SchoolYearListHandler(ClassRegisterContext context) : base(context)
+        public SchoolYearListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
         }
 
         protected override Expression<Func<SchoolYear, string>> OrderBy => x => x.DisplayName;
-
-        protected override Expression<Func<SchoolYear, SchoolYearListResponse>> Select => x =>
-            new SchoolYearListResponse
-            {
-                Id = x.Id,
-                DisplayName = x.DisplayName
-            };
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using AutoMapper;
 using ESchool.IdentityProvider.Application.Features.Users.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
@@ -14,20 +15,13 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
         public Guid TenantId { get; set; }
     }
 
-    public class TenantUserListHandler : PagedListHandler<TenantUserListQuery, User, string, UserListResponse>
+    public class TenantUserListHandler : AutoMapperPagedListHandler<TenantUserListQuery, User, string, UserListResponse>
     {
-        public TenantUserListHandler(IdentityProviderContext context) : base(context)
+        public TenantUserListHandler(IdentityProviderContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
         }
 
         protected override Expression<Func<User, string>> OrderBy => x => x.Email;
-
-        protected override Expression<Func<User, UserListResponse>> Select => x => new UserListResponse
-        {
-            Id = x.Id,
-            Email = x.Email,
-            GlobalRole = x.GlobalRole
-        };
 
         protected override IQueryable<User> Filter(IQueryable<User> entities, TenantUserListQuery query)
         {

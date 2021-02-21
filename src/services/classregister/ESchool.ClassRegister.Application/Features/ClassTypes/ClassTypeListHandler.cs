@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using AutoMapper;
 using ESchool.ClassRegister.Application.Features.ClassTypes.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
@@ -12,18 +13,12 @@ namespace ESchool.ClassRegister.Application.Features.ClassTypes
     {
     }
     
-    public class ClassTypeListHandler : PagedListHandler<ClassTypeListQuery, ClassType, string, ClassTypeListResponse>
+    public class ClassTypeListHandler : AutoMapperPagedListHandler<ClassTypeListQuery, ClassType, string, ClassTypeListResponse>
     {
-        public ClassTypeListHandler(ClassRegisterContext context) : base(context)
+        public ClassTypeListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
         }
 
         protected override Expression<Func<ClassType, string>> OrderBy => x => x.Name;
-
-        protected override Expression<Func<ClassType, ClassTypeListResponse>> Select => x => new ClassTypeListResponse
-        {
-            Id = x.Id,
-            Name = x.Name
-        };
     }
 }

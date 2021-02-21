@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using AutoMapper;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
 using ESchool.Libs.Application.Cqrs.Handlers;
@@ -17,18 +18,12 @@ namespace ESchool.ClassRegister.Application.Features.Classrooms
         public string Name { get; set; }
     }
     
-    public class ClassroomListHandler : PagedListHandler<ClassroomListQuery, ClassRoom, string, ClassroomListResponse>
+    public class ClassroomListHandler : AutoMapperPagedListHandler<ClassroomListQuery, ClassRoom, string, ClassroomListResponse>
     {
-        public ClassroomListHandler(ClassRegisterContext context) : base(context)
+        public ClassroomListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
         }
 
         protected override Expression<Func<ClassRoom, string>> OrderBy => x => x.Name;
-
-        protected override Expression<Func<ClassRoom, ClassroomListResponse>> Select => x => new ClassroomListResponse
-        {
-            Id = x.Id,
-            Name = x.Name
-        };
     }
 }

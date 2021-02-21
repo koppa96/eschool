@@ -18,7 +18,6 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
         private readonly DbContext context;
         
         protected abstract Expression<Func<TEntity, TOrderBy>> OrderBy { get; }
-        protected abstract Expression<Func<TEntity, TResponse>> Select { get; }
 
         protected virtual IQueryable<TEntity> Include(IQueryable<TEntity> entities)
         {
@@ -35,6 +34,8 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
             this.context = context;
         }
 
+        protected abstract IQueryable<TResponse> Map(IQueryable<TEntity> entities, TQuery query);
+
         public async Task<PagedListResponse<TResponse>> Handle(TQuery request, CancellationToken cancellationToken)
         {
             var dbSet = context.Set<TEntity>();
@@ -43,11 +44,10 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
             var responses = new List<TResponse>();
             if (totalCount > request.PageIndex * request.PageSize)
             {
-                responses = await Filter(Include(dbSet), request)
+                responses = await Map(Filter(Include(dbSet), request)
                     .OrderByDescending(OrderBy)
                     .Skip(request.PageIndex * request.PageSize)
-                    .Take(request.PageSize)
-                    .Select(Select)
+                    .Take(request.PageSize), request)
                     .ToListAsync(cancellationToken);
             }
 
