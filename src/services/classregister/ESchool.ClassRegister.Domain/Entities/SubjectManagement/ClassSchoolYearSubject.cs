@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
 {
-    public class ClassSubject
+    public class ClassSchoolYearSubject
     {
         public Guid Id { get; set; }
 
@@ -13,6 +13,6 @@ namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
         public Guid SubjectId { get; set; }
         public virtual Subject Subject { get; set; }
 
-        public virtual ICollection<ClassSubjectGroup> ClassSubjectGroups { get; set; }
+        public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }

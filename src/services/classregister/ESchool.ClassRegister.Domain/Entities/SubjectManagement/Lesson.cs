@@ -15,8 +15,8 @@ namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
         public DateTime StartsAt { get; set; }
         public DateTime EndsAt { get; set; }
 
-        public Guid GroupId { get; set; }
-        public virtual Group Group { get; set; }
+        public Guid ClassSchoolYearSubjectId { get; set; }
+        public virtual ClassSchoolYearSubject ClassSchoolYearSubject { get; set; }
 
         public Guid ClassRoomId { get; set; }
         public virtual ClassRoom ClassRoom { get; set; }

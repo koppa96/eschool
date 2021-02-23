@@ -4,14 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ESchool.ClassRegister.Domain.EntityConfiguration
 {
-    public class ClassSubjectConfiguration : IEntityTypeConfiguration<ClassSubject>
+    public class ClassSchoolYearSubjectConfiguration : IEntityTypeConfiguration<ClassSchoolYearSubject>
     {
-        public void Configure(EntityTypeBuilder<ClassSubject> builder)
+        public void Configure(EntityTypeBuilder<ClassSchoolYearSubject> builder)
         {
-            builder.HasMany(x => x.ClassSubjectGroups)
-                .WithOne(x => x.ClassSubject)
-                .HasForeignKey(x => x.ClassSubjectId);
-
             builder.HasOne(x => x.ClassSchoolYear)
                 .WithMany(x => x.ClassSubjects)
                 .HasForeignKey(x => x.ClassSchoolYearId);

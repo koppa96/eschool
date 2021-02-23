@@ -47,10 +47,6 @@ namespace ESchool.ClassRegister.Domain.EntityConfiguration
                 .WithOne(x => x.Student)
                 .HasForeignKey(x => x.StudentId);
 
-            builder.HasMany(x => x.SmallGrades)
-                .WithOne(x => x.Student)
-                .HasForeignKey(x => x.StudentId);
-
             builder.HasMany(x => x.Absences)
                 .WithOne(x => x.Student)
                 .HasForeignKey(x => x.StudentId);
@@ -58,10 +54,6 @@ namespace ESchool.ClassRegister.Domain.EntityConfiguration
             builder.HasOne(x => x.Class)
                 .WithMany(x => x.Students)
                 .HasForeignKey(x => x.ClassId);
-
-            builder.HasMany(x => x.GroupStudents)
-                .WithOne(x => x.Student)
-                .HasForeignKey(x => x.StudentId);
         }
 
         public void Configure(EntityTypeBuilder<UserBase> builder)

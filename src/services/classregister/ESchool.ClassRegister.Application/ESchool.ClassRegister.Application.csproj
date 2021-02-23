@@ -14,8 +14,4 @@
       <PackageReference Include="MediatR" Version="9.0.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Features\ClassSchoolYears" />
-    </ItemGroup>
-
 </Project>

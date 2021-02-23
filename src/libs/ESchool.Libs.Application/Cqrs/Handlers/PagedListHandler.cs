@@ -19,6 +19,11 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
         
         protected abstract Expression<Func<TEntity, TOrderBy>> OrderBy { get; }
 
+        protected PagedListHandler(DbContext context)
+        {
+            this.context = context;
+        }
+        
         protected virtual IQueryable<TEntity> Include(IQueryable<TEntity> entities)
         {
             return entities;
@@ -27,11 +32,6 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
         protected virtual IQueryable<TEntity> Filter(IQueryable<TEntity> entities, TQuery query)
         {
             return entities;
-        }
-
-        protected PagedListHandler(DbContext context)
-        {
-            this.context = context;
         }
 
         protected abstract IQueryable<TResponse> Map(IQueryable<TEntity> entities, TQuery query);

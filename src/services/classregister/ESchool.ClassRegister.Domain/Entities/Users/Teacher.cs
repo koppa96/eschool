@@ -13,7 +13,7 @@ namespace ESchool.ClassRegister.Domain.Entities.Users
         public virtual Class CurrentClass { get; set; }
 
         public virtual ICollection<Class> PreviousClasses { get; set; }
-        public virtual ICollection<GroupTeacher> GroupTeachers { get; set; }
+        public virtual ICollection<ClassSchoolYearSubjectTeacher> GroupTeachers { get; set; }
         public virtual ICollection<SubjectTeacher> SubjectTeachers { get; set; }
     }
 }
