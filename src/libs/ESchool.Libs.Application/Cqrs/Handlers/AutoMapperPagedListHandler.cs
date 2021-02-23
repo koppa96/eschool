@@ -12,7 +12,7 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
     {
         private readonly IConfigurationProvider configurationProvider;
 
-        public AutoMapperPagedListHandler(DbContext context, IConfigurationProvider configurationProvider) : base(context)
+        protected AutoMapperPagedListHandler(DbContext context, IConfigurationProvider configurationProvider) : base(context)
         {
             this.configurationProvider = configurationProvider;
         }
