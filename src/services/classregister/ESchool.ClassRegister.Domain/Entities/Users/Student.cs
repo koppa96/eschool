@@ -12,7 +12,7 @@ namespace ESchool.ClassRegister.Domain.Entities.Users
     {
         public string StudentIdentificationNumber { get; set; }
 
-        public Guid ClassId { get; set; }
+        public Guid? ClassId { get; set; }
         public virtual Class Class { get; set; }
 
         public virtual ICollection<Grade> Grades { get; set; }

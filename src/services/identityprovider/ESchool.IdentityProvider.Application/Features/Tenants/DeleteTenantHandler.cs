@@ -3,6 +3,7 @@ using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.Libs.Domain.Extensions;
 
 namespace ESchool.IdentityProvider.Application.Features.Tenants
 {
@@ -22,7 +23,7 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
 
         public async Task<Unit> Handle(DeleteTenantCommand request, CancellationToken cancellationToken)
         {
-            var tenant = await context.Tenants.FindAsync(request.TenantId);
+            var tenant = await context.Tenants.FindOrThrowAsync(request.TenantId, cancellationToken);
             if (tenant != null)
             {
                 context.Tenants.Remove(tenant);

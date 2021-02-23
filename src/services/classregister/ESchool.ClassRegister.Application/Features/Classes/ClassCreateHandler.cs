@@ -42,7 +42,7 @@ namespace ESchool.ClassRegister.Application.Features.Classes
                 HeadTeacher = headTeacher,
                 ClassSchoolYears = new List<ClassSchoolYear>
                 {
-                    new ()
+                    new ClassSchoolYear
                     {
                         SchoolYear = startingSchoolYear
                     }

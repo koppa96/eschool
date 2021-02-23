@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Libs.Application.Cqrs.Commands;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Libs.Application.Cqrs.Handlers
 {
-    public class DeleteHandler<TCommand, TEntity, TKey> : IRequestHandler<TCommand>
+    public abstract class DeleteHandler<TCommand, TEntity, TKey> : IRequestHandler<TCommand>
         where TCommand : DeleteCommand<TKey>
         where TEntity : class
     {
@@ -17,18 +18,31 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
         {
             this.context = context;
         }
+
+        public virtual IQueryable<TEntity> Include(IQueryable<TEntity> entities)
+        {
+            return entities;
+        }
+
+        public virtual void ThrowIfCannotDelete(TEntity entity)
+        {
+        }
         
         public async Task<Unit> Handle(TCommand request, CancellationToken cancellationToken)
         {
             var dbSet = context.Set<TEntity>();
-            var entity = await dbSet.FindAsync(request.Id);
-            dbSet.Remove(entity);
-            await context.SaveChangesAsync(cancellationToken);
+            var entity = await dbSet.FindAsync(new object[] { request.Id }, cancellationToken);
+            if (entity != null)
+            {
+                ThrowIfCannotDelete(entity);
+                dbSet.Remove(entity);
+                await context.SaveChangesAsync(cancellationToken);
+            }
             return Unit.Value;
         }
     }
 
-    public class DeleteHandler<TCommand, TEntity> : DeleteHandler<TCommand, TEntity, Guid>
+    public abstract class DeleteHandler<TCommand, TEntity> : DeleteHandler<TCommand, TEntity, Guid>
         where TCommand : DeleteCommand<Guid>
         where TEntity : class
     {

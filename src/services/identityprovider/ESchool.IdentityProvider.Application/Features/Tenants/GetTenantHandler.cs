@@ -5,6 +5,7 @@ using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.Libs.Domain.Extensions;
 
 namespace ESchool.IdentityProvider.Application.Features.Tenants
 {
@@ -26,11 +27,7 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
 
         public async Task<TenantDetailsResponse> Handle(GetTenantQuery request, CancellationToken cancellationToken)
         {
-            var tenant = await context.Tenants.FindAsync(request.TenantId);
-            if (tenant == null)
-            {
-                // Kivételt dobunk
-            }
+            var tenant = await context.Tenants.FindOrThrowAsync(request.TenantId, cancellationToken);
             return mapper.Map<TenantDetailsResponse>(tenant);
         }
     }

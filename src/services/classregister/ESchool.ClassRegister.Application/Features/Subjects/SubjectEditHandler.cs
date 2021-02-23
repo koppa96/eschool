@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Subjects.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.Libs.Domain.Extensions;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.Subjects
@@ -25,7 +26,7 @@ namespace ESchool.ClassRegister.Application.Features.Subjects
         public async Task<SubjectDetailsResponse> Handle(EditCommand<SubjectEditCommand, SubjectDetailsResponse> request,
             CancellationToken cancellationToken)
         {
-            var subject = await context.Subjects.FindAsync(request.Id, cancellationToken);
+            var subject = await context.Subjects.FindOrThrowAsync(request.Id, cancellationToken);
             subject.Name = request.InnerCommand.Name;
 
             await context.SaveChangesAsync(cancellationToken);

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.ClassRegister.Application.Features.ClassTypes.Common;
 using ESchool.ClassRegister.Domain;
+using ESchool.Libs.Domain.Extensions;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.ClassTypes
@@ -26,7 +27,7 @@ namespace ESchool.ClassRegister.Application.Features.ClassTypes
         
         public async Task<ClassTypeDetailsResponse> Handle(ClassTypeGetQuery request, CancellationToken cancellationToken)
         {
-            var classType = await context.ClassTypes.FindAsync(request.Id, cancellationToken);
+            var classType = await context.ClassTypes.FindOrThrowAsync(request.Id, cancellationToken);
             return mapper.Map<ClassTypeDetailsResponse>(classType);
         }
     }

@@ -10,7 +10,6 @@ namespace ESchool.ClassRegister.Domain.Entities
         public Guid Id { get; set; }
 
         public bool DidFinish { get; set; }
-        public int Grade => ClassType.StartingGrade + ClassSchoolYears.Count - 1;
 
         public Guid? HeadTeacherId { get; set; }
         public virtual Teacher HeadTeacher { get; set; }

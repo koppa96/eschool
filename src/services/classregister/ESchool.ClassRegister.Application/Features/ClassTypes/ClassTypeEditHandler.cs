@@ -5,6 +5,7 @@ using AutoMapper;
 using ESchool.ClassRegister.Application.Features.ClassTypes.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.Libs.Domain.Extensions;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.ClassTypes
@@ -30,7 +31,7 @@ namespace ESchool.ClassRegister.Application.Features.ClassTypes
         public async Task<ClassTypeDetailsResponse> Handle(EditCommand<ClassTypeEditCommand, ClassTypeDetailsResponse> request,
             CancellationToken cancellationToken)
         {
-            var classType = await context.ClassTypes.FindAsync(request.Id, cancellationToken);
+            var classType = await context.ClassTypes.FindOrThrowAsync(request.Id, cancellationToken);
 
             classType.Name = request.InnerCommand.Name;
             classType.Description = request.InnerCommand.Description;

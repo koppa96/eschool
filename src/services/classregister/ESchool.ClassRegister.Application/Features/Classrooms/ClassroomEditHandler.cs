@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Classrooms.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.Libs.Domain.Extensions;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.Classrooms
@@ -25,7 +26,7 @@ namespace ESchool.ClassRegister.Application.Features.Classrooms
         public async Task<ClassroomDetailsResponse> Handle(EditCommand<ClassroomEditCommand, ClassroomDetailsResponse> request,
             CancellationToken cancellationToken)
         {
-            var classroom = await context.ClassRooms.FindAsync(request.Id, cancellationToken);
+            var classroom = await context.ClassRooms.FindOrThrowAsync(request.Id, cancellationToken);
             classroom.Name = request.InnerCommand.Name;
 
             await context.SaveChangesAsync(cancellationToken);

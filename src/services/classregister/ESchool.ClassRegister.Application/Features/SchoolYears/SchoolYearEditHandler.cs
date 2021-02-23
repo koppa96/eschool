@@ -5,6 +5,7 @@ using AutoMapper;
 using ESchool.ClassRegister.Application.Features.SchoolYears.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.Libs.Domain.Extensions;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.SchoolYears
@@ -31,7 +32,7 @@ namespace ESchool.ClassRegister.Application.Features.SchoolYears
         public async Task<SchoolYearDetailsResponse> Handle(EditCommand<SchoolYearEditCommand, SchoolYearDetailsResponse> request,
             CancellationToken cancellationToken)
         {
-            var schoolYear = await context.SchoolYears.FindAsync(request.Id, cancellationToken);
+            var schoolYear = await context.SchoolYears.FindOrThrowAsync(request.Id, cancellationToken);
             schoolYear.DisplayName = request.InnerCommand.DisplayName;
             schoolYear.StartsAt = request.InnerCommand.StartsAt;
             schoolYear.EndOfFirstHalf = request.InnerCommand.EndOfFirstHalf;

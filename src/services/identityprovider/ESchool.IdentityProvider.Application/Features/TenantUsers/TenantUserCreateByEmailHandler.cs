@@ -51,7 +51,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
                     GlobalRole = GlobalRoleType.TenantUser,
                     TenantUsers = new List<TenantUser>
                     {
-                        new()
+                        new TenantUser
                         {
                             TenantId = tenantId,
                             TenantUserRoles = request.Roles.Select(x => new TenantUserRole
