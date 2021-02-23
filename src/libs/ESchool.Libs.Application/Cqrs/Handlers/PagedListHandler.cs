@@ -28,8 +28,8 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
         {
             return entities;
         }
-        
-        public PagedListHandler(DbContext context)
+
+        protected PagedListHandler(DbContext context)
         {
             this.context = context;
         }
