@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+service TenantService {
+  rpc GetTenantDetails(TenantDetailsRequest) returns (TenantDetailsResponse);
+}
+
+message TenantDetailsRequest {
+  string tenantId = 1;
+}
+
+message TenantDetailsResponse {
+  string tenantId = 1;
+  string name = 2;
+  string omIdentifier = 3;
+}
