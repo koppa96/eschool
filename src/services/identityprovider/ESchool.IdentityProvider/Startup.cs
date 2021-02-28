@@ -22,6 +22,7 @@ using Microsoft.Extensions.Hosting;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
+using ESchool.IdentityProvider.Grpc;
 
 namespace ESchool.IdentityProvider
 {
@@ -65,6 +66,7 @@ namespace ESchool.IdentityProvider
 
             services.AddControllers();
             services.AddRazorPages();
+            services.AddGrpc();
 
             services.AddMediatR(Assembly.Load("ESchool.IdentityProvider.Application"));
 
@@ -146,6 +148,7 @@ namespace ESchool.IdentityProvider
             {
                 endpoints.MapControllers();
                 endpoints.MapRazorPages();
+                endpoints.MapGrpcService<TenantServiceImpl>();
             });
         }
     }
