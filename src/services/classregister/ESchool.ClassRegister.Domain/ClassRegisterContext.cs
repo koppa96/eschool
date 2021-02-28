@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain.Entities;
 using ESchool.ClassRegister.Domain.Entities.Grading;
 using ESchool.ClassRegister.Domain.Entities.Messaging;
+using ESchool.ClassRegister.Domain.Entities.MultiTenancy;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.ClassRegister.Domain.Entities.Users;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Domain.Interfaces;
-using ESchool.Libs.Domain.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Domain
 {
     public class ClassRegisterContext : DbContext
     {
-        private readonly Guid tenantId;
+        private readonly Tenant tenant;
 
         public DbSet<Class> Classes { get; set; }
         public DbSet<ClassRoom> ClassRooms { get; set; }
@@ -39,17 +39,21 @@ namespace ESchool.ClassRegister.Domain
         public DbSet<Administrator> Administrators { get; set; }
         public DbSet<UserBase> UserBases { get; set; }
 
-        public ClassRegisterContext(IIdentityService identityService, DbContextOptions<ClassRegisterContext> options) :
-            base(options)
+        public ClassRegisterContext(DbContextOptions<ClassRegisterContext> options, Tenant tenant) : base(options)
         {
-            tenantId = identityService.GetTenantId();
+            this.tenant = tenant;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseSqlServer(tenant.DbConnectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            modelBuilder.AddGlobalQueryFilter<IMultiTenantEntity>(x => x.TenantId == tenantId);
             modelBuilder.AddGlobalQueryFilter<ISoftDelete>(x => x.IsDeleted);
         }
 
@@ -68,7 +72,6 @@ namespace ESchool.ClassRegister.Domain
 
         private void EntityAudit()
         {
-            this.SetTenantId(tenantId);
             this.SoftDelete();
         }
     }

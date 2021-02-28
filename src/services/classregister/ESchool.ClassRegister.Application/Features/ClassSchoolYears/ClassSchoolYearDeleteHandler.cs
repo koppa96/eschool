@@ -28,13 +28,10 @@ namespace ESchool.ClassRegister.Application.Features.ClassSchoolYears
         
         public async Task<Unit> Handle(ClassSchoolYearDeleteCommand request, CancellationToken cancellationToken)
         {
-            // Itt le kell szintén ellenőrizni a tenantId-kat, mert nincs rá query filter
-            // Lehetne másképp? TenantId-t azért csak nem kéne mindenre tenni...
-            var tenantId = identityService.GetTenantId();
+            
             var classSchoolYear = await context.ClassSchoolYears.Include(x => x.ClassSubjects)
                 .SingleAsync(
-                    x => x.ClassId == request.ClassId && x.SchoolYearId == request.SchoolYearId &&
-                         x.Class.TenantId == tenantId, cancellationToken);
+                    x => x.ClassId == request.ClassId && x.SchoolYearId == request.SchoolYearId, cancellationToken);
 
             if (classSchoolYear != null)
             {

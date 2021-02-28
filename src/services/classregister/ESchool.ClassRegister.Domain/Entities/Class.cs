@@ -5,7 +5,7 @@ using ESchool.ClassRegister.Domain.Entities.Users;
 
 namespace ESchool.ClassRegister.Domain.Entities
 {
-    public class Class : IMultiTenantEntity
+    public class Class : IEntity
     {
         public Guid Id { get; set; }
 
@@ -16,8 +16,7 @@ namespace ESchool.ClassRegister.Domain.Entities
 
         public Guid ClassTypeId { get; set; }
         public virtual ClassType ClassType { get; set; }
-
-        public Guid TenantId { get; set; }
+        
         public virtual ICollection<Student> Students { get; set; }
         public virtual ICollection<ClassSchoolYear> ClassSchoolYears { get; set; }
     }

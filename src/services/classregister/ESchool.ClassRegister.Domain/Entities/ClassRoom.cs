@@ -5,12 +5,10 @@ using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 
 namespace ESchool.ClassRegister.Domain.Entities
 {
-    public class ClassRoom : IMultiTenantEntity
+    public class ClassRoom : IEntity
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-
-        public Guid TenantId { get; set; }
 
         public virtual ICollection<Lesson> Lessons { get; set; }
     }

@@ -5,7 +5,7 @@ using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 
 namespace ESchool.ClassRegister.Domain.Entities
 {
-    public class SchoolYear : IMultiTenantEntity
+    public class SchoolYear : IEntity
     {
         public Guid Id { get; set; }
 
@@ -15,8 +15,6 @@ namespace ESchool.ClassRegister.Domain.Entities
         public DateTime EndOfFirstHalf { get; set; }
         public DateTime EndsAt { get; set; }
 
-        public Guid TenantId { get; set; }
-        
         public virtual ICollection<ClassSchoolYear> ClassSchoolYears { get; set; }
     }
 }

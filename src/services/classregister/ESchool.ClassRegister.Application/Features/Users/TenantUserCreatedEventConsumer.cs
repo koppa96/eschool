@@ -28,7 +28,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
                 .ToList();
             
             var existingUserBases = await dbContext.UserBases.IgnoreQueryFilters()
-                .Where(x => x.UserId == context.Message.UserId && x.TenantId == context.Message.TenantId)
+                .Where(x => x.UserId == context.Message.UserId)
                 .ToListAsync();
 
             foreach (var roleType in context.Message.TenantRoleTypes)
@@ -43,7 +43,6 @@ namespace ESchool.ClassRegister.Application.Features.Users
 
                     var user = (UserBase)Activator.CreateInstance(userType);
                     user.Email = context.Message.Email;
-                    user.TenantId = context.Message.TenantId;
                     dbContext.UserBases.Add(user);
                 }
                 else

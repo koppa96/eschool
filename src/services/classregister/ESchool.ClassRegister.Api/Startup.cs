@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Domain.Entities.MultiTenancy;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
+using ESchool.Libs.Domain.Services;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -96,6 +99,12 @@ namespace ESchool.ClassRegister.Api
             services.AddMassTransitHostedService();
 
             services.AddCommonServices();
+            services.AddScoped(provider =>
+            {
+                var identityService = provider.GetRequiredService<IIdentityService>();
+                var masterDbContext = provider.GetRequiredService<MasterDbContext>();
+                return masterDbContext.Tenants.Find(identityService.TryGetTenantId());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
