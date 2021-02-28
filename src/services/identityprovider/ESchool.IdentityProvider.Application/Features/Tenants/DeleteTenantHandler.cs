@@ -3,7 +3,9 @@ using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.IdentityProvider.Interface.IntegrationEvents.Tenants;
 using ESchool.Libs.Domain.Extensions;
+using MassTransit;
 
 namespace ESchool.IdentityProvider.Application.Features.Tenants
 {
@@ -15,10 +17,12 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
     public class DeleteTenantHandler : IRequestHandler<DeleteTenantCommand>
     {
         private readonly IdentityProviderContext context;
+        private readonly IPublishEndpoint publishEndpoint;
 
-        public DeleteTenantHandler(IdentityProviderContext context)
+        public DeleteTenantHandler(IdentityProviderContext context, IPublishEndpoint publishEndpoint)
         {
             this.context = context;
+            this.publishEndpoint = publishEndpoint;
         }
 
         public async Task<Unit> Handle(DeleteTenantCommand request, CancellationToken cancellationToken)
@@ -27,9 +31,14 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
             if (tenant != null)
             {
                 context.Tenants.Remove(tenant);
+                
+                await context.SaveChangesAsync(cancellationToken);
+                await publishEndpoint.Publish(new TenantDeletedEvent
+                {
+                    TenantId = tenant.Id
+                }, cancellationToken);
             }
 
-            await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
     }

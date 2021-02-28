@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ESchool.ClassRegister.Domain;
+using ESchool.IdentityProvider.Grpc;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
 using ESchool.Libs.Domain.MultiTenancy;
@@ -55,15 +57,15 @@ namespace ESchool.ClassRegister.Api
 
                 config.AddSecurity("OAuth2", new OpenApiSecurityScheme
                 {
-                    OpenIdConnectUrl = $"{Configuration.GetValue<string>("Authentication:IdentityProviderUri")}/.well-known/openid-configuration",
+                    OpenIdConnectUrl = $"{authConfig.IdentityProviderUri}/.well-known/openid-configuration",
                     Scheme = "Bearer",
                     Type = OpenApiSecuritySchemeType.OAuth2,
                     Flows = new OpenApiOAuthFlows
                     {
                         AuthorizationCode = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = $"{Configuration.GetValue<string>("Authentication:IdentityProviderUri")}/connect/authorize",
-                            TokenUrl = $"{Configuration.GetValue<string>("Authentication:IdentityProviderUri")}/connect/token",
+                            AuthorizationUrl = $"{authConfig.IdentityProviderUri}/connect/authorize",
+                            TokenUrl = $"{authConfig.IdentityProviderUri}/connect/token",
                             Scopes = new Dictionary<string, string>
                             {
                                 { "classregisterapi.readwrite", "classregisterapi.readwrite" },
@@ -108,6 +110,11 @@ namespace ESchool.ClassRegister.Api
                 var identityService = provider.GetRequiredService<IIdentityService>();
                 var masterDbContext = provider.GetRequiredService<MasterDbContext>();
                 return masterDbContext.Tenants.Find(identityService.TryGetTenantId());
+            });
+
+            services.AddGrpcClient<TenantService.TenantServiceClient>(options =>
+            {
+                options.Address = new Uri(authConfig.IdentityProviderUri);
             });
         }
 

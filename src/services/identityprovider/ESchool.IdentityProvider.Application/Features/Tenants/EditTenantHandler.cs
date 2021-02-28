@@ -5,6 +5,8 @@ using AutoMapper;
 using ESchool.IdentityProvider.Application.Features.Tenants.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities;
+using ESchool.IdentityProvider.Interface.IntegrationEvents.Tenants;
+using MassTransit;
 using MediatR;
 
 namespace ESchool.IdentityProvider.Application.Features.Tenants
@@ -23,11 +25,13 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
     {
         private readonly IdentityProviderContext context;
         private readonly IMapper mapper;
+        private readonly IPublishEndpoint publishEndpoint;
 
-        public EditTenantHandler(IdentityProviderContext context, IMapper mapper)
+        public EditTenantHandler(IdentityProviderContext context, IMapper mapper, IPublishEndpoint publishEndpoint)
         {
             this.context = context;
             this.mapper = mapper;
+            this.publishEndpoint = publishEndpoint;
         }
         
         public async Task<TenantDetailsResponse> Handle(EditTenantCommand request, CancellationToken cancellationToken)
@@ -35,6 +39,11 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
             var tenant = mapper.Map<Tenant>(request);
             context.Tenants.Update(tenant);
             await context.SaveChangesAsync(cancellationToken);
+            await publishEndpoint.Publish(new TenantCreatedOrUpdatedEvent
+            {
+                TenantId = tenant.Id
+            }, CancellationToken.None);
+            
             return mapper.Map<TenantDetailsResponse>(tenant);
         }
     }

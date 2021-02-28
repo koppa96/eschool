@@ -4,5 +4,6 @@ namespace ESchool.Libs.AspNetCore.Configuration
     {
         public string Authority { get; set; }
         public string Audience { get; set; }
+        public string IdentityProviderUri { get; set; }
     }
 }
