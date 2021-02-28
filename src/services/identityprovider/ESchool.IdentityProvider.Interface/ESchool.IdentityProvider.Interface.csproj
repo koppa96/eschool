@@ -5,10 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="IntegrationEvents" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\..\libs\ESchool.Libs.Domain\ESchool.Libs.Domain.csproj" />
     </ItemGroup>
 

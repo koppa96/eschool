@@ -1,4 +1,5 @@
 ﻿using System;
+using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
 using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Application.Cqrs.Handlers;
@@ -12,7 +13,7 @@ namespace ESchool.ClassRegister.Application.Features.Classrooms
 
     public class ClassroomDeleteHandler : DeleteHandler<ClassroomDeleteCommand, ClassRoom>
     {
-        public ClassroomDeleteHandler(DbContext context) : base(context)
+        public ClassroomDeleteHandler(ClassRegisterContext context) : base(context)
         {
         }
     }

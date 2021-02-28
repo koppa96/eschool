@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ESchool.ClassRegister.Domain;
-using ESchool.ClassRegister.Domain.Entities.MultiTenancy;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
+using ESchool.Libs.Domain.MultiTenancy;
 using ESchool.Libs.Domain.Services;
 using MassTransit;
 using MediatR;
@@ -34,10 +34,14 @@ namespace ESchool.ClassRegister.Api
         {
             services.AddDbContext<ClassRegisterContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<MasterDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection")));
             
             services.AddControllers();
 
             services.AddMediatR(Assembly.Load("ESchool.ClassRegister.Application"));
+            services.AddAutoMapper(Assembly.Load("ESchool.ClassRegister.Application"));
 
             var authConfig = new AuthConfiguration();
             Configuration.GetSection("Authentication").Bind(authConfig);

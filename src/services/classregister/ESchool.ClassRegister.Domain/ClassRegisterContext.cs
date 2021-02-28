@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain.Entities;
 using ESchool.ClassRegister.Domain.Entities.Grading;
 using ESchool.ClassRegister.Domain.Entities.Messaging;
-using ESchool.ClassRegister.Domain.Entities.MultiTenancy;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.ClassRegister.Domain.Entities.Users;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Domain.Interfaces;
+using ESchool.Libs.Domain.MultiTenancy.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Domain
@@ -47,7 +47,10 @@ namespace ESchool.ClassRegister.Domain
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(tenant.DbConnectionString);
+            if (tenant != null)
+            {
+                optionsBuilder.UseSqlServer(tenant.DbConnectionString);
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

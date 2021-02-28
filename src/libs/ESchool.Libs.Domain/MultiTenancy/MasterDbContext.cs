@@ -1,7 +1,7 @@
-﻿using ESchool.ClassRegister.Domain.Entities.MultiTenancy;
+using ESchool.Libs.Domain.MultiTenancy.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ESchool.ClassRegister.Domain
+namespace ESchool.Libs.Domain.MultiTenancy
 {
     public class MasterDbContext : DbContext
     {
