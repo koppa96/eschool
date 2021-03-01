@@ -17,7 +17,7 @@ namespace ESchool.Libs.AspNetCore.Filters
             this.messagingIdentityService = messagingIdentityService;
         }
         
-        public Task Send(ConsumeContext<T> context, IPipe<ConsumeContext<T>> next)
+        public async Task Send(ConsumeContext<T> context, IPipe<ConsumeContext<T>> next)
         {
             messagingIdentityService.UserId = Guid.Parse(context.Headers.Get<string>(MessagingConstants.UserId));
             if (context.Headers.Any(x => x.Key == MessagingConstants.TenantId))
@@ -25,7 +25,7 @@ namespace ESchool.Libs.AspNetCore.Filters
                 messagingIdentityService.TenantId = Guid.Parse(context.Headers.Get<string>(MessagingConstants.TenantId));
             }
 
-            return Task.CompletedTask;
+            await next.Send(context);
         }
 
         public void Probe(ProbeContext context)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using ESchool.IdentityProvider.Application.Features.Users.Common;
@@ -16,12 +17,13 @@ namespace ESchool.Tools.TenantLogin
     {
         static async Task Main(string[] args)
         {
+            Console.OutputEncoding = Encoding.UTF8;
             var options = new OidcClientOptions
             {
                 Authority = "https://localhost:5301",
                 ClientId = "test",
                 RedirectUri = "http://localhost:4000/oauth",
-                Scope = "openid profile user_role identityproviderapi.readwrite classregisterapi.readwrite homeassignmentsapi.readwrite testingapi.readwrite",
+                Scope = "openid profile user_role classregisterapi.readwrite identityproviderapi.readwrite homeassignmentsapi.readwrite testingapi.readwrite",
                 Flow = OidcClientOptions.AuthenticationFlow.AuthorizationCode,
                 Browser = new NativeBrowser(),
                 RefreshDiscoveryDocumentForLogin = true,
@@ -99,6 +101,10 @@ namespace ESchool.Tools.TenantLogin
                     Console.WriteLine("Sikeres belejentkezés!");
                     Console.WriteLine("Access token:");
                     Console.WriteLine(result.AccessToken);
+
+                    response = await "https://localhost:5301/api/users/me"
+                        .WithOAuthBearerToken(result.AccessToken)
+                        .GetJsonAsync<UserDetailsResponse>();
                     return;
                 }
 

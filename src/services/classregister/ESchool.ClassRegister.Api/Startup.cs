@@ -38,7 +38,8 @@ namespace ESchool.ClassRegister.Api
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<MasterDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection"), config =>
+                    config.MigrationsAssembly(typeof(ClassRegisterContext).Assembly.GetName().Name)));
             
             services.AddControllers();
 
@@ -68,7 +69,9 @@ namespace ESchool.ClassRegister.Api
                             TokenUrl = $"{authConfig.IdentityProviderUri}/connect/token",
                             Scopes = new Dictionary<string, string>
                             {
+                                { "testingapi.readwrite", "testingapi.readwrite" },
                                 { "classregisterapi.readwrite", "classregisterapi.readwrite" },
+                                { "identityproviderapi.readwrite", "identityproviderapi.readwrite" },
                                 { "openid", "openid" },
                                 { "profile", "profile" }
                             }
@@ -138,7 +141,7 @@ namespace ESchool.ClassRegister.Api
             });
 
             app.UseRouting();
-
+            
             app.UseAuthentication();
             app.UseAuthorization();
 

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
+using ESchool.Libs.Domain.MultiTenancy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,8 +15,17 @@ namespace ESchool.ClassRegister.Api
             var host = CreateHostBuilder(args).Build();
             using (var scope = host.Services.CreateScope())
             {
-                var context = scope.ServiceProvider.GetRequiredService<ClassRegisterContext>();
-                await context.Database.MigrateAsync();
+                var masterDbContext = scope.ServiceProvider.GetRequiredService<MasterDbContext>();
+                await masterDbContext.Database.MigrateAsync();
+
+                var tenants = await masterDbContext.Tenants.ToListAsync();
+                var dbContextOptions =
+                    scope.ServiceProvider.GetRequiredService<DbContextOptions<ClassRegisterContext>>();
+                foreach (var tenant in tenants)
+                {
+                    await using var tenantDbContext = new ClassRegisterContext(dbContextOptions, tenant);
+                    await tenantDbContext.Database.MigrateAsync();
+                }
             }
             
             await host.RunAsync();

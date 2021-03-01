@@ -113,6 +113,8 @@ namespace ESchool.IdentityProvider
                 configure.UsingRabbitMq((context, configurator) =>
                 {
                     configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
+
+                    configurator.UseCustomFilters(context);
                 });
             });
 
