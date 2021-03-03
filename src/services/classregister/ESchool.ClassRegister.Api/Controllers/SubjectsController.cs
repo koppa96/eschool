@@ -25,9 +25,9 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpGet]
-        public Task<PagedListResponse<SubjectListResponse>> ListSubjects(CancellationToken cancellationToken)
+        public Task<PagedListResponse<SubjectListResponse>> ListSubjects([FromQuery] SubjectListQuery query, CancellationToken cancellationToken)
         {
-            return mediator.Send(new SubjectListQuery(), cancellationToken);
+            return mediator.Send(query, cancellationToken);
         }
 
         [HttpGet("{subjectId}")]

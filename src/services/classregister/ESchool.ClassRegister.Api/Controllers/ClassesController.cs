@@ -26,7 +26,7 @@ namespace ESchool.ClassRegister.Api.Controllers
 
         [HttpGet]
         public Task<PagedListResponse<ClassListResponse>> ListClasses(
-            [FromQuery] PagedListQuery<ClassListResponse> query, CancellationToken cancellationToken)
+            [FromQuery] ClassListQuery query, CancellationToken cancellationToken)
         {
             return mediator.Send(query, cancellationToken);
         }
