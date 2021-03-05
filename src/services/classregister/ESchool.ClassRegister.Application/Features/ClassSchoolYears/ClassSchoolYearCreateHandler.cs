@@ -26,16 +26,10 @@ namespace ESchool.ClassRegister.Application.Features.ClassSchoolYears
         
         public async Task<Unit> Handle(ClassSchoolYearCreateCommand request, CancellationToken cancellationToken)
         {
-            // Azért kell felhúzni, hogy ne állíthassa egyik tenant adminisztrátora a másik tenantét
-            // A query filter miatt csak a saját tenantja osztályai és tanévei jönnek fel
-            // Meg lehetne ezt valahogy enélkül is?
-            var @class = await context.Classes.FindOrThrowAsync(request.ClassId, cancellationToken);
-            var schoolYear = await context.SchoolYears.FindOrThrowAsync(request.SchoolYearId, cancellationToken);
-
             context.ClassSchoolYears.Add(new ClassSchoolYear
             {
-                Class = @class,
-                SchoolYear = schoolYear
+                ClassId = request.ClassId,
+                SchoolYearId = request.SchoolYearId
             });
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;

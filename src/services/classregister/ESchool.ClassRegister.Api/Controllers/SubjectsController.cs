@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ESchool.ClassRegister.Api.Controllers
 {
     [Authorize(nameof(TenantRoleType.Administrator))]
+    [ApiController]
     [Route("api/subjects")]
     public class SubjectsController : ControllerBase
     {

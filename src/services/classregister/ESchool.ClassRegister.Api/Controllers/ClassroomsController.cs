@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ESchool.ClassRegister.Api.Controllers
 {
     [Authorize(nameof(TenantRoleType.Administrator))]
+    [ApiController]
     [Route("api/classrooms")]
     public class ClassroomsController : ControllerBase
     {
