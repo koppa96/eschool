@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Users
 {
-    public class TenantUserDeletedHandler : IConsumer<TenantUserDeletedIntegrationEvent>
+    public class TenantUserDeletedHandler : IConsumer<TenantUserDeletedEvent>
     {
         private readonly ClassRegisterContext dbContext;
 
@@ -16,7 +16,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
             this.dbContext = dbContext;
         }
 
-        public async Task Consume(ConsumeContext<TenantUserDeletedIntegrationEvent> context)
+        public async Task Consume(ConsumeContext<TenantUserDeletedEvent> context)
         {
             var userBases = await dbContext.UserBases.IgnoreQueryFilters()
                 .Where(x => x.UserId == context.Message.UserId)

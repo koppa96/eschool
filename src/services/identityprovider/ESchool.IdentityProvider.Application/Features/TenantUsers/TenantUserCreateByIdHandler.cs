@@ -53,14 +53,10 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             });
 
             await context.SaveChangesAsync(cancellationToken);
-            await publishEndpoint.Publish(new TenantUserCreatedIntegrationEvent
+            await publishEndpoint.Publish(new TenantUserCreatedOrEditedEvent
             {
                 UserId = user.Id,
-                Email = user.Email,
-                TenantId = request.TenantId,
-                TenantRoleTypes = user.TenantUsers.Single(x => x.TenantId == request.TenantId).TenantUserRoles
-                    .Select(x => x.TenantRole)
-                    .ToList()
+                TenantId = request.TenantId
             }, CancellationToken.None);
 
             return new TenantUserDetailsResponse

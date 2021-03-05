@@ -6,6 +6,10 @@ service TenantService {
   rpc GetTenantDetails(TenantDetailsRequest) returns (TenantDetailsResponse);
 }
 
+service TenantUserService {
+  rpc GetTenantUserDetails(TenantUserDetailsRequest) returns (TenantUserDetailsResponse);
+}
+
 message TenantDetailsRequest {
   string tenantId = 1;
 }
@@ -14,4 +18,16 @@ message TenantDetailsResponse {
   string tenantId = 1;
   string name = 2;
   string omIdentifier = 3;
+}
+
+message TenantUserDetailsRequest {
+  string userId = 1;
+  string tenantId = 2;
+}
+
+message TenantUserDetailsResponse {
+  string userId = 1;
+  string email = 2;
+  string tenantId = 3;
+  repeated int32 tenantRoleTypes = 4;
 }

@@ -42,7 +42,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             {
                 context.TenantUsers.Remove(tenantUser);
                 await context.SaveChangesAsync(cancellationToken);
-                await publishEndpoint.Publish(new TenantUserDeletedIntegrationEvent
+                await publishEndpoint.Publish(new TenantUserDeletedEvent
                 {
                     UserId = tenantUser.UserId,
                     TenantId = tenantUser.TenantId

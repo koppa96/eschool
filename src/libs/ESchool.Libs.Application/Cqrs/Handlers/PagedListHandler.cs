@@ -45,7 +45,7 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
             if (totalCount > request.PageIndex * request.PageSize)
             {
                 responses = await Map(Filter(Include(dbSet), request)
-                    .OrderByDescending(OrderBy)
+                    .OrderBy(OrderBy)
                     .Skip(request.PageIndex * request.PageSize)
                     .Take(request.PageSize), request)
                     .ToListAsync(cancellationToken);

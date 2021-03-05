@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 
 namespace ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers
 {
-    public class TenantUserDeletedIntegrationEvent
+    public class TenantUserCreatedOrEditedEvent
     {
-        public Guid UserId { get; set; }
         public Guid TenantId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

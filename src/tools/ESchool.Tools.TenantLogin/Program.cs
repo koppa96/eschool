@@ -51,6 +51,7 @@ namespace ESchool.Tools.TenantLogin
                 {
                     Console.WriteLine("Access token:");
                     Console.WriteLine(loginResult.AccessToken);
+                    Console.ReadLine();
                     return;
                 }
 
@@ -101,10 +102,7 @@ namespace ESchool.Tools.TenantLogin
                     Console.WriteLine("Sikeres belejentkezés!");
                     Console.WriteLine("Access token:");
                     Console.WriteLine(result.AccessToken);
-
-                    response = await "https://localhost:5301/api/users/me"
-                        .WithOAuthBearerToken(result.AccessToken)
-                        .GetJsonAsync<UserDetailsResponse>();
+                    Console.ReadLine();
                     return;
                 }
 
@@ -112,6 +110,8 @@ namespace ESchool.Tools.TenantLogin
                 Console.WriteLine("Ismeretlen lehetőség.");
                 Console.ResetColor();
             }
+
+            
         }
     }
 }
