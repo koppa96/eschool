@@ -11,7 +11,7 @@ namespace ESchool.ClassRegister.Application.Features.Classrooms
     {
     }
 
-    public class ClassroomDeleteHandler : DeleteHandler<ClassroomDeleteCommand, ClassRoom>
+    public class ClassroomDeleteHandler : DeleteHandler<ClassroomDeleteCommand, Classroom>
     {
         public ClassroomDeleteHandler(ClassRegisterContext context) : base(context)
         {

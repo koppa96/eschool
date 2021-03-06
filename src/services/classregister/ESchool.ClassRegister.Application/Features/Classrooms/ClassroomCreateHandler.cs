@@ -25,12 +25,12 @@ namespace ESchool.ClassRegister.Application.Features.Classrooms
         
         public async Task<ClassroomDetailsResponse> Handle(ClassroomCreateCommand request, CancellationToken cancellationToken)
         {
-            var classroom = new ClassRoom
+            var classroom = new Classroom
             {
                 Name = request.Name
             };
             
-            context.ClassRooms.Add(classroom);
+            context.Classrooms.Add(classroom);
             await context.SaveChangesAsync(cancellationToken);
             
             return new ClassroomDetailsResponse

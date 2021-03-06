@@ -19,7 +19,7 @@ namespace ESchool.ClassRegister.Domain
         private readonly Tenant tenant;
 
         public DbSet<Class> Classes { get; set; }
-        public DbSet<ClassRoom> ClassRooms { get; set; }
+        public DbSet<Classroom> Classrooms { get; set; }
         public DbSet<ClassType> ClassTypes { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<SchoolYear> SchoolYears { get; set; }

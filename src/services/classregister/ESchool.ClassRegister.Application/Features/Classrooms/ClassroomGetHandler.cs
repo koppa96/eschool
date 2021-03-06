@@ -24,7 +24,7 @@ namespace ESchool.ClassRegister.Application.Features.Classrooms
         
         public async Task<ClassroomDetailsResponse> Handle(ClassroomGetQuery request, CancellationToken cancellationToken)
         {
-            var classroom = await context.ClassRooms.FindOrThrowAsync(request.Id, cancellationToken);
+            var classroom = await context.Classrooms.FindOrThrowAsync(request.Id, cancellationToken);
             return new ClassroomDetailsResponse
             {
                 Id = classroom.Id,

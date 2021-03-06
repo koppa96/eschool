@@ -26,7 +26,7 @@ namespace ESchool.ClassRegister.Application.Features.Classrooms
         public async Task<ClassroomDetailsResponse> Handle(EditCommand<ClassroomEditCommand, ClassroomDetailsResponse> request,
             CancellationToken cancellationToken)
         {
-            var classroom = await context.ClassRooms.FindOrThrowAsync(request.Id, cancellationToken);
+            var classroom = await context.Classrooms.FindOrThrowAsync(request.Id, cancellationToken);
             classroom.Name = request.InnerCommand.Name;
 
             await context.SaveChangesAsync(cancellationToken);

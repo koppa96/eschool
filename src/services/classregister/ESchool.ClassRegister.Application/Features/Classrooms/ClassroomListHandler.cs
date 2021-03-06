@@ -18,12 +18,12 @@ namespace ESchool.ClassRegister.Application.Features.Classrooms
         public string Name { get; set; }
     }
     
-    public class ClassroomListHandler : AutoMapperPagedListHandler<ClassroomListQuery, ClassRoom, string, ClassroomListResponse>
+    public class ClassroomListHandler : AutoMapperPagedListHandler<ClassroomListQuery, Classroom, string, ClassroomListResponse>
     {
         public ClassroomListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
         }
 
-        protected override Expression<Func<ClassRoom, string>> OrderBy => x => x.Name;
+        protected override Expression<Func<Classroom, string>> OrderBy => x => x.Name;
     }
 }
