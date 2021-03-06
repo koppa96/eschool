@@ -38,6 +38,7 @@ namespace ESchool.ClassRegister.Domain
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Administrator> Administrators { get; set; }
         public DbSet<UserBase> UserBases { get; set; }
+        public DbSet<ClassSchoolYearSubjectTeacher> ClassSchoolYearSubjectTeachers { get; set; }
 
         public ClassRegisterContext(DbContextOptions<ClassRegisterContext> options, Tenant tenant) : base(options)
         {
