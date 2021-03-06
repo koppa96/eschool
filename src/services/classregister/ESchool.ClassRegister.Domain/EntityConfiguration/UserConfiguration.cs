@@ -13,7 +13,7 @@ namespace ESchool.ClassRegister.Domain.EntityConfiguration
         {
             builder.HasBaseType<UserBase>();
 
-            builder.HasMany(x => x.GroupTeachers)
+            builder.HasMany(x => x.ClassSchoolYearSubjectTeachers)
                 .WithOne(x => x.Teacher)
                 .HasForeignKey(x => x.TeacherId);
 

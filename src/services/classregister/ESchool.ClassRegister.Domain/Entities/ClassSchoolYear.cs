@@ -14,6 +14,6 @@ namespace ESchool.ClassRegister.Domain.Entities
         public Guid ClassId { get; set; }
         public virtual Class Class { get; set; }
 
-        public virtual ICollection<ClassSchoolYearSubject> ClassSubjects { get; set; }
+        public virtual ICollection<ClassSchoolYearSubject> ClassSchoolYearSubjects { get; set; }
     }
 }

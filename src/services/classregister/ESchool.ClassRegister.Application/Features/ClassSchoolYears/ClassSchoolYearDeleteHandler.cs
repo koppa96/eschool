@@ -29,13 +29,13 @@ namespace ESchool.ClassRegister.Application.Features.ClassSchoolYears
         public async Task<Unit> Handle(ClassSchoolYearDeleteCommand request, CancellationToken cancellationToken)
         {
             
-            var classSchoolYear = await context.ClassSchoolYears.Include(x => x.ClassSubjects)
+            var classSchoolYear = await context.ClassSchoolYears.Include(x => x.ClassSchoolYearSubjects)
                 .SingleAsync(
                     x => x.ClassId == request.ClassId && x.SchoolYearId == request.SchoolYearId, cancellationToken);
 
             if (classSchoolYear != null)
             {
-                if (classSchoolYear.ClassSubjects.Count > 0)
+                if (classSchoolYear.ClassSchoolYearSubjects.Count > 0)
                 {
                     throw new InvalidOperationException(
                         "Can not remove a class from a school year when subject are already assigned to it.");

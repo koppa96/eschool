@@ -12,7 +12,8 @@ namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
         
         public Guid SubjectId { get; set; }
         public virtual Subject Subject { get; set; }
-
+        
+        public virtual ICollection<ClassSchoolYearSubjectTeacher> ClassSchoolYearSubjectTeachers { get; set; }
         public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }

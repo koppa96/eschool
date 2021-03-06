@@ -9,7 +9,7 @@ namespace ESchool.ClassRegister.Domain.EntityConfiguration
         public void Configure(EntityTypeBuilder<ClassSchoolYearSubject> builder)
         {
             builder.HasOne(x => x.ClassSchoolYear)
-                .WithMany(x => x.ClassSubjects)
+                .WithMany(x => x.ClassSchoolYearSubjects)
                 .HasForeignKey(x => x.ClassSchoolYearId);
 
             builder.HasOne(x => x.Subject)
