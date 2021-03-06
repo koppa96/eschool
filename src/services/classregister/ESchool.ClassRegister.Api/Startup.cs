@@ -7,12 +7,14 @@ using ESchool.IdentityProvider.Grpc;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
 using ESchool.Libs.Domain.MultiTenancy;
+using ESchool.Libs.Domain.MultiTenancy.Entities;
 using ESchool.Libs.Domain.Services;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -112,7 +114,15 @@ namespace ESchool.ClassRegister.Api
             {
                 var identityService = provider.GetRequiredService<IIdentityService>();
                 var masterDbContext = provider.GetRequiredService<MasterDbContext>();
-                return masterDbContext.Tenants.Find(identityService.TryGetTenantId());
+                var memoryCache = provider.GetRequiredService<IMemoryCache>();
+
+                var tenantId = identityService.TryGetTenantId();
+                if (tenantId == null)
+                {
+                    return null;
+                }
+
+                return memoryCache.GetOrCreate(tenantId.Value, entry => masterDbContext.Tenants.Find(tenantId.Value));
             });
 
             services.AddGrpcClient<TenantService.TenantServiceClient>(options =>
