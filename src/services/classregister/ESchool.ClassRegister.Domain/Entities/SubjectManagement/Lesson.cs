@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using ESchool.Libs.Domain.Interfaces;
 
 namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
 {
-    public class Lesson
+    public class Lesson : IEntity
     {
         public Guid Id { get; set; }
-
-        public int LessonNumber { get; set; }
+        
         public bool Canceled { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -18,8 +18,8 @@ namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
         public Guid ClassSchoolYearSubjectId { get; set; }
         public virtual ClassSchoolYearSubject ClassSchoolYearSubject { get; set; }
 
-        public Guid ClassRoomId { get; set; }
-        public virtual ClassRoom ClassRoom { get; set; }
+        public Guid ClassroomId { get; set; }
+        public virtual Classroom Classroom { get; set; }
 
         public virtual ICollection<HomeWork> HomeWorks { get; set; }
         public virtual ICollection<Absence> Absences { get; set; }
