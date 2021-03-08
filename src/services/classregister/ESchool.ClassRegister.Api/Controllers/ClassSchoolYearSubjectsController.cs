@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.ClassSchoolYearSubjects;
+using ESchool.ClassRegister.Application.Features.SubjectManagement.ClassSchoolYearSubjects;
 using ESchool.ClassRegister.Application.Features.Subjects;
 using ESchool.Libs.Application.Cqrs.Query;
 using ESchool.Libs.Application.Cqrs.Response;

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 
-namespace ESchool.ClassRegister.Application.Features.Lessons.Common
+namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common
 {
     public class LessonMappings : Profile
     {

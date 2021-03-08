@@ -11,7 +11,7 @@ using ESchool.ClassRegister.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace ESchool.ClassRegister.Application.Features.Lessons
+namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
 {
     public class LessonListQuery : IRequest<List<LessonListResponse>>
     {

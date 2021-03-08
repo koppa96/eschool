@@ -3,35 +3,40 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.ClassRegister.Application.Features.Lessons.Common;
+using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace ESchool.ClassRegister.Application.Features.Lessons
+namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
 {
     public class LessonCreateCommand : IRequest<LessonDetailsResponse>
     {
-        public string Title { get; set; }
-        public string Description { get; set; }
-
-        public DateTime StartsAt { get; set; }
-        public DateTime EndsAt { get; set; }
-
+        public LessonCreateCommandBody Body { get; set; }
         public Guid SchoolYearId { get; set; }
         public Guid ClassId { get; set; }
         public Guid SubjectId { get; set; }
-        public Guid ClassroomId { get; set; }
+        
+
+        public class LessonCreateCommandBody
+        {
+            public string Title { get; set; }
+            public string Description { get; set; }
+
+            public DateTime StartsAt { get; set; }
+            public DateTime EndsAt { get; set; }
+            public Guid ClassroomId { get; set; }
+        }
     }
 
     public class LessonCreateValidator : AbstractValidator<LessonCreateCommand>
     {
         public LessonCreateValidator()
         {
-            RuleFor(x => x.EndsAt)
-                .Must((command, time) => time > command.StartsAt)
+            RuleFor(x => x.Body.EndsAt)
+                .Must((command, time) => time > command.Body.StartsAt)
                 .WithMessage("Az óra befejezésének időpontja a kezdete után kell, hogy essen.");
         }
     }
@@ -59,25 +64,25 @@ namespace ESchool.ClassRegister.Application.Features.Lessons
             var classSchoolYear = @class.ClassSchoolYears.Single(x => x.SchoolYearId == request.SchoolYearId);
             if (classSchoolYear.ClassSchoolYearSubjects
                 .SelectMany(x => x.Lessons)
-                .Any(x => !(x.StartsAt > request.EndsAt || x.EndsAt < request.StartsAt)))
+                .Any(x => !(x.StartsAt > request.Body.EndsAt || x.EndsAt < request.Body.StartsAt)))
             {
                 throw new InvalidOperationException("Ebben az időpontban már nem vehető fel óra ennek az osztálynak.");
             }
 
-            if (request.StartsAt < classSchoolYear.SchoolYear.StartsAt ||
-                request.EndsAt > classSchoolYear.SchoolYear.EndsAt)
+            if (request.Body.StartsAt < classSchoolYear.SchoolYear.StartsAt ||
+                request.Body.EndsAt > classSchoolYear.SchoolYear.EndsAt)
             {
                 throw new InvalidOperationException("Az órának a megadott tanév tanítási idején belül kell lennie.");
             }
 
             var lesson = new Lesson
             {
-                Title = request.Title,
-                Description = request.Description,
-                StartsAt = request.StartsAt,
-                EndsAt = request.EndsAt,
+                Title = request.Body.Title,
+                Description = request.Body.Description,
+                StartsAt = request.Body.StartsAt,
+                EndsAt = request.Body.EndsAt,
                 ClassSchoolYearSubject = classSchoolYear.ClassSchoolYearSubjects.Single(x => x.SubjectId == request.SubjectId),
-                ClassroomId = request.ClassroomId
+                ClassroomId = request.Body.ClassroomId
             };
 
             context.Lessons.Add(lesson);

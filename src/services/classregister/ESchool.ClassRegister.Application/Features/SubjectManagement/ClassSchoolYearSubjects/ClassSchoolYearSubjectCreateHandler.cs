@@ -8,7 +8,7 @@ using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace ESchool.ClassRegister.Application.Features.ClassSchoolYearSubjects
+namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassSchoolYearSubjects
 {
     public class ClassSchoolYearSubjectCreateCommand : IRequest
     {

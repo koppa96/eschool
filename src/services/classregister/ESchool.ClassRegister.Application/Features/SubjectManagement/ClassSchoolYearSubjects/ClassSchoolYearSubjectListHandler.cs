@@ -6,7 +6,7 @@ using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.Libs.Application.Cqrs.Handlers;
 using ESchool.Libs.Application.Cqrs.Query;
 
-namespace ESchool.ClassRegister.Application.Features.ClassSchoolYearSubjects
+namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassSchoolYearSubjects
 {
     public class ClassSchoolYearSubjectListQuery : PagedListQuery<SubjectListResponse>
     {

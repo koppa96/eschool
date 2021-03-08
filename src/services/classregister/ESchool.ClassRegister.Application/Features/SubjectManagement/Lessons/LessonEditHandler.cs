@@ -3,14 +3,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.ClassRegister.Application.Features.Lessons.Common;
+using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.Libs.Application.Cqrs.Commands;
-using ESchool.Libs.Domain.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace ESchool.ClassRegister.Application.Features.Lessons
+namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
 {
     public class LessonEditCommand
     {
@@ -19,6 +18,7 @@ namespace ESchool.ClassRegister.Application.Features.Lessons
 
         public DateTime StartsAt { get; set; }
         public DateTime EndsAt { get; set; }
+        public bool Canceled { get; set; }
     }
     
     public class LessonEditHandler : IRequestHandler<EditCommand<LessonEditCommand, LessonDetailsResponse>, LessonDetailsResponse>
@@ -51,6 +51,7 @@ namespace ESchool.ClassRegister.Application.Features.Lessons
             }
 
             lesson.Title = request.InnerCommand.Title;
+            lesson.Canceled = request.InnerCommand.Canceled;
             lesson.Description = request.InnerCommand.Description;
             lesson.StartsAt = request.InnerCommand.StartsAt;
             lesson.EndsAt = request.InnerCommand.EndsAt;

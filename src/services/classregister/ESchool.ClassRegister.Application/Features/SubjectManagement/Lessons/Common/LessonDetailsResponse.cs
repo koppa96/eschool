@@ -2,7 +2,7 @@
 using ESchool.ClassRegister.Application.Features.Classrooms;
 using ESchool.ClassRegister.Application.Features.Subjects;
 
-namespace ESchool.ClassRegister.Application.Features.Lessons.Common
+namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common
 {
     public class LessonDetailsResponse
     {

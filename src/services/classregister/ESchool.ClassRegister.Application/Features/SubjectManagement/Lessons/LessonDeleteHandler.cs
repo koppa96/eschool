@@ -3,7 +3,7 @@ using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Application.Cqrs.Handlers;
 
-namespace ESchool.ClassRegister.Application.Features.Lessons
+namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
 {
     public class LessonDeleteCommand : DeleteCommand
     {

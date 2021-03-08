@@ -6,7 +6,7 @@ using ESchool.ClassRegister.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace ESchool.ClassRegister.Application.Features.ClassSchoolYearSubjects
+namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassSchoolYearSubjects
 {
     public class ClassSchoolYearSubjectDeleteCommand : IRequest
     {
