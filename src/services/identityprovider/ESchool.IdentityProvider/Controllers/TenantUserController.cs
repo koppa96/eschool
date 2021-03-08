@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.IdentityProvider.Application.Features.TenantUsers;
 using ESchool.IdentityProvider.Application.Features.Users.Common;
+using ESchool.Libs.Application.Cqrs.Query;
 using ESchool.Libs.Application.Cqrs.Response;
 using ESchool.Libs.Domain.Enums;
 using MediatR;
@@ -31,7 +32,7 @@ namespace ESchool.IdentityProvider.Controllers
             {
                 TenantId = tenantId,
                 PageIndex = pageIndex,
-                PageSize = pageSize == 0 ? 25 : pageSize
+                PageSize = pageSize == 0 ? PagedListQuery.DefaultPageSize : pageSize
             }, cancellationToken);
         }
 

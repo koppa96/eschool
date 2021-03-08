@@ -26,12 +26,15 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
         public string OmIdentifier { get; set; }
     }
     
-    public class TenantListHandler : AutoMapperPagedListHandler<TenantListQuery, Tenant, string, TenantListResponse>
+    public class TenantListHandler : AutoMapperPagedListHandler<TenantListQuery, Tenant, TenantListResponse>
     {
         public TenantListHandler(IdentityProviderContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
         }
-
-        protected override Expression<Func<Tenant, string>> OrderBy => x => x.Name;
+        
+        protected override IOrderedQueryable<Tenant> Order(IQueryable<Tenant> entities)
+        {
+            return entities.OrderBy(x => x.Name);
+        }
     }
 }

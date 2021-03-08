@@ -3,14 +3,21 @@ using MediatR;
 
 namespace ESchool.Libs.Application.Cqrs.Query
 {
-    public class PagedListQuery<TResponse> : IRequest<PagedListResponse<TResponse>>
+    public class PagedListQuery
     {
+        public const int DefaultPageSize = 25;
+        
         public int PageSize { get; set; }
         public int PageIndex { get; set; }
-
+        
         public PagedListQuery()
         {
-            PageSize = 25;
+            PageSize = DefaultPageSize;
         }
+    }
+    
+    public class PagedListQuery<TResponse> : PagedListQuery, IRequest<PagedListResponse<TResponse>>
+    {
+        
     }
 }

@@ -11,7 +11,7 @@ namespace ESchool.ClassRegister.Api.Controllers
 {
     [Authorize(nameof(TenantRoleType.Administrator))]
     [ApiController]
-    [Route("api/school-years/{schoolYearId}/classes}")]
+    [Route("api/school-years/{schoolYearId}/classes")]
     public class ClassSchoolYearsController : ControllerBase
     {
         private readonly IMediator mediator;

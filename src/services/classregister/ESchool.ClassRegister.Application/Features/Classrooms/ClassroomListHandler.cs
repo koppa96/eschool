@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq.Expressions;
+using System.Linq;
 using AutoMapper;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
@@ -18,12 +18,15 @@ namespace ESchool.ClassRegister.Application.Features.Classrooms
         public string Name { get; set; }
     }
     
-    public class ClassroomListHandler : AutoMapperPagedListHandler<ClassroomListQuery, Classroom, string, ClassroomListResponse>
+    public class ClassroomListHandler : AutoMapperPagedListHandler<ClassroomListQuery, Classroom, ClassroomListResponse>
     {
         public ClassroomListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
         }
-
-        protected override Expression<Func<Classroom, string>> OrderBy => x => x.Name;
+        
+        protected override IOrderedQueryable<Classroom> Order(IQueryable<Classroom> entities)
+        {
+            return entities.OrderBy(x => x.Name);
+        }
     }
 }

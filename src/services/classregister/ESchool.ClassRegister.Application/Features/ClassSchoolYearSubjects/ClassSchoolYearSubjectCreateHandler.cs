@@ -36,7 +36,7 @@ namespace ESchool.ClassRegister.Application.Features.ClassSchoolYearSubjects
                 x.SubjectId == request.SubjectId && x.ClassSchoolYearId == classSchoolYear.Id, cancellationToken))
             {
                 throw new InvalidOperationException(
-                    "Ez a tárgy már hozzá lett rendelve az adott osztályhoz az adott félévre.");
+                    "Ez a tárgy már hozzá lett rendelve az adott osztályhoz az adott tanévre.");
             }
 
             context.ClassSchoolYearSubjects.Add(new ClassSchoolYearSubject

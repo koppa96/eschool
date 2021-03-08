@@ -25,12 +25,15 @@ namespace ESchool.ClassRegister.Application.Features.SchoolYears
         public string DisplayName { get; set; }
     }
     
-    public class SchoolYearListHandler : AutoMapperPagedListHandler<SchoolYearListQuery, SchoolYear, string, SchoolYearListResponse>
+    public class SchoolYearListHandler : AutoMapperPagedListHandler<SchoolYearListQuery, SchoolYear, SchoolYearListResponse>
     {
         public SchoolYearListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
         }
-
-        protected override Expression<Func<SchoolYear, string>> OrderBy => x => x.DisplayName;
+        
+        protected override IOrderedQueryable<SchoolYear> Order(IQueryable<SchoolYear> entities)
+        {
+            return entities.OrderBy(x => x.DisplayName);
+        }
     }
 }

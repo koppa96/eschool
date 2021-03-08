@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.ClassSchoolYearSubjects
 {
-    public class ClassSubjectSchoolYearEditCommand : IRequest
+    public class ClassSchoolYearSubjectEditCommand : IRequest
     {
         public Guid ClassId { get; set; }
         public Guid SubjectId { get; set; }
@@ -18,16 +18,16 @@ namespace ESchool.ClassRegister.Application.Features.ClassSchoolYearSubjects
         public List<Guid> TeacherIds { get; set; }
     }
 
-    public class ClassSubjectSchoolYearEditHandler : IRequestHandler<ClassSubjectSchoolYearEditCommand>
+    public class ClassSchoolYearSubjectEditHandler : IRequestHandler<ClassSchoolYearSubjectEditCommand>
     {
         private readonly ClassRegisterContext context;
 
-        public ClassSubjectSchoolYearEditHandler(ClassRegisterContext context)
+        public ClassSchoolYearSubjectEditHandler(ClassRegisterContext context)
         {
             this.context = context;
         }
 
-        public async Task<Unit> Handle(ClassSubjectSchoolYearEditCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(ClassSchoolYearSubjectEditCommand request, CancellationToken cancellationToken)
         {
             var classSchoolYearSubject = await context.ClassSchoolYearSubjects
                 .Include(x => x.ClassSchoolYearSubjectTeachers)

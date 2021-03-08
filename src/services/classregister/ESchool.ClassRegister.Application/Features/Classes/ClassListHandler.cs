@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq;
 using AutoMapper;
 using ESchool.ClassRegister.Application.Features.Classes.Common;
 using ESchool.ClassRegister.Domain;
@@ -15,7 +13,7 @@ namespace ESchool.ClassRegister.Application.Features.Classes
         public bool IncludeFinishedClasses { get; set; }
     }
     
-    public class ClassListHandler : AutoMapperPagedListHandler<ClassListQuery, Class, int, ClassListResponse>
+    public class ClassListHandler : AutoMapperPagedListHandler<ClassListQuery, Class, ClassListResponse>
     {
         public ClassListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
@@ -26,7 +24,9 @@ namespace ESchool.ClassRegister.Application.Features.Classes
             return entities.Where(x => query.IncludeFinishedClasses || x.DidFinish);
         }
 
-        protected override Expression<Func<Class, int>> OrderBy =>
-            x => x.ClassSchoolYears.Count + x.ClassType.StartingGrade - 1;
+        protected override IOrderedQueryable<Class> Order(IQueryable<Class> entities)
+        {
+            return entities.OrderBy(x => x.ClassSchoolYears.Count + x.ClassType.StartingGrade - 1);
+        }
     }
 }

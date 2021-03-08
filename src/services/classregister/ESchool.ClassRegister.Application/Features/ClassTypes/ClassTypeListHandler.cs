@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
 using ESchool.ClassRegister.Application.Features.ClassTypes.Common;
@@ -13,12 +14,15 @@ namespace ESchool.ClassRegister.Application.Features.ClassTypes
     {
     }
     
-    public class ClassTypeListHandler : AutoMapperPagedListHandler<ClassTypeListQuery, ClassType, string, ClassTypeListResponse>
+    public class ClassTypeListHandler : AutoMapperPagedListHandler<ClassTypeListQuery, ClassType, ClassTypeListResponse>
     {
         public ClassTypeListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
         }
-
-        protected override Expression<Func<ClassType, string>> OrderBy => x => x.Name;
+        
+        protected override IOrderedQueryable<ClassType> Order(IQueryable<ClassType> entities)
+        {
+            return entities.OrderBy(x => x.Name);
+        }
     }
 }

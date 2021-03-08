@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Libs.Application.Cqrs.Handlers
 {
-    public abstract class AutoMapperPagedListHandler<TQuery, TEntity, TOrderBy, TResponse> : PagedListHandler<TQuery, TEntity, TOrderBy, TResponse>
+    public abstract class AutoMapperPagedListHandler<TQuery, TEntity, TResponse> : PagedListHandler<TQuery, TEntity, TResponse>
         where TQuery : PagedListQuery<TResponse>
         where TEntity : class
     {

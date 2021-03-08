@@ -11,13 +11,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Libs.Application.Cqrs.Handlers
 {
-    public abstract class PagedListHandler<TQuery, TEntity, TOrderBy, TResponse> : IRequestHandler<TQuery, PagedListResponse<TResponse>>
+    public abstract class PagedListHandler<TQuery, TEntity, TResponse> : IRequestHandler<TQuery, PagedListResponse<TResponse>>
         where TQuery : PagedListQuery<TResponse>
         where TEntity : class
     {
         private readonly DbContext context;
-        
-        protected abstract Expression<Func<TEntity, TOrderBy>> OrderBy { get; }
 
         protected PagedListHandler(DbContext context)
         {
@@ -36,6 +34,8 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
 
         protected abstract IQueryable<TResponse> Map(IQueryable<TEntity> entities, TQuery query);
 
+        protected abstract IOrderedQueryable<TEntity> Order(IQueryable<TEntity> entities);
+
         public async Task<PagedListResponse<TResponse>> Handle(TQuery request, CancellationToken cancellationToken)
         {
             var dbSet = context.Set<TEntity>();
@@ -44,9 +44,8 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
             var responses = new List<TResponse>();
             if (totalCount > request.PageIndex * request.PageSize)
             {
-                responses = await Map(Filter(Include(dbSet), request)
-                    .OrderBy(OrderBy)
-                    .Skip(request.PageIndex * request.PageSize)
+                responses = await Map(Order(Filter(Include(dbSet), request))
+                        .Skip(request.PageIndex * request.PageSize)
                     .Take(request.PageSize), request)
                     .ToListAsync(cancellationToken);
             }

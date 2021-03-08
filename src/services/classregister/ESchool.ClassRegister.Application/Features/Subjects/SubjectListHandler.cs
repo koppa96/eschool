@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
 using ESchool.ClassRegister.Domain;
@@ -19,12 +20,15 @@ namespace ESchool.ClassRegister.Application.Features.Subjects
         public string Name { get; set; }
     }
 
-    public class SubjectListHandler : AutoMapperPagedListHandler<SubjectListQuery, Subject, string, SubjectListResponse>
+    public class SubjectListHandler : AutoMapperPagedListHandler<SubjectListQuery, Subject, SubjectListResponse>
     {
         public SubjectListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
         }
-
-        protected override Expression<Func<Subject, string>> OrderBy => x => x.Name;
+        
+        protected override IOrderedQueryable<Subject> Order(IQueryable<Subject> entities)
+        {
+            return entities.OrderBy(x => x.Name);
+        }
     }
 }
