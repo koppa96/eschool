@@ -36,7 +36,8 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
             CancellationToken cancellationToken)
         {
             var lesson = await context.Lessons.Include(x => x.ClassSchoolYearSubject)
-                .ThenInclude(x => x.ClassSchoolYear)
+                    .ThenInclude(x => x.ClassSchoolYear)
+                .Include(x => x.Classroom)
                 .SingleAsync(x => x.Id == request.Id, cancellationToken);
 
             var otherLessonsInSchoolYear = await context.Lessons.Where(x =>
