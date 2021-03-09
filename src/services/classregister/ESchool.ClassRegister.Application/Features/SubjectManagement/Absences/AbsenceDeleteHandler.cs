@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.Libs.Application.Cqrs.Commands;
@@ -31,7 +32,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Absences
                 .Include(x => x.Lesson);
         }
 
-        protected override void ThrowIfCannotDelete(Absence entity)
+        protected override Task ThrowIfCannotDeleteAsync(Absence entity)
         {
             var currentUserId = identityService.GetCurrentUserId();
             if (!identityService.IsInRole(TenantRoleType.Administrator) && 
@@ -40,6 +41,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Absences
                 throw new UnauthorizedAccessException(
                     "A hiányzást csak a tárgy oktatói vagy az adminisztrátorok törölhetik.");
             }
+            return Task.CompletedTask;
         }
     }
 }

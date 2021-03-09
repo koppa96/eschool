@@ -11,6 +11,6 @@ namespace ESchool.HomeAssignments.Domain.Entities.ClassRegisterData
         public virtual Teacher Teacher { get; set; }
 
         public Guid GroupId { get; set; }
-        public virtual Group Group { get; set; }
+        public virtual HomeWorkGroup HomeWorkGroup { get; set; }
     }
 }

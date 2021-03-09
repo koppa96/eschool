@@ -8,7 +8,7 @@ using MassTransit;
 
 namespace ESchool.HomeAssignments.Application.Features.Users
 {
-    public class TeacherCreatedConsumer : IConsumer<TeacherCreatedIntegrationEvent>
+    public class TeacherCreatedConsumer : IConsumer<TeacherCreatedEvent>
     {
         private readonly HomeAssignmentsContext dbContext;
 
@@ -17,7 +17,7 @@ namespace ESchool.HomeAssignments.Application.Features.Users
             this.dbContext = dbContext;
         }
 
-        public async Task Consume(ConsumeContext<TeacherCreatedIntegrationEvent> context)
+        public async Task Consume(ConsumeContext<TeacherCreatedEvent> context)
         {
             dbContext.Teachers.Add(new Teacher
             {

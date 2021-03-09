@@ -4,20 +4,20 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ESchool.HomeAssignments.Domain.EntityConfiguration
 {
-    public class GroupConfiguration : IEntityTypeConfiguration<Group>
+    public class GroupConfiguration : IEntityTypeConfiguration<HomeWorkGroup>
     {
-        public void Configure(EntityTypeBuilder<Group> builder)
+        public void Configure(EntityTypeBuilder<HomeWorkGroup> builder)
         {
             builder.HasMany(x => x.GroupStudents)
-                .WithOne(x => x.Group)
+                .WithOne(x => x.HomeWorkGroup)
                 .HasForeignKey(x => x.GroupId);
 
             builder.HasMany(x => x.GroupTeachers)
-                .WithOne(x => x.Group)
+                .WithOne(x => x.HomeWorkGroup)
                 .HasForeignKey(x => x.GroupId);
 
             builder.HasMany(x => x.Lessons)
-                .WithOne(x => x.Group)
+                .WithOne(x => x.HomeWorkGroup)
                 .HasForeignKey(x => x.GroupId);
         }
     }

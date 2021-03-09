@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
 using ESchool.Libs.Application.Cqrs.Commands;
@@ -23,12 +24,13 @@ namespace ESchool.ClassRegister.Application.Features.Classes
             return entities.Include(x => x.Students);
         }
 
-        protected override void ThrowIfCannotDelete(Class entity)
+        protected override Task ThrowIfCannotDeleteAsync(Class entity)
         {
             if (entity.Students.Any())
             {
                 throw new InvalidOperationException("Can not delete a class that has students assigned.");
             }
+            return Task.CompletedTask;
         }
     }
 }

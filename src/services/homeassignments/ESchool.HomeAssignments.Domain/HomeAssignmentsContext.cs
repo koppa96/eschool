@@ -8,7 +8,7 @@ namespace ESchool.HomeAssignments.Domain
 {
     public class HomeAssignmentsContext : DbContext
     {
-        public DbSet<Group> Groups { get; set; }
+        public DbSet<HomeWorkGroup> Groups { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<GroupStudent> GroupStudents { get; set; }

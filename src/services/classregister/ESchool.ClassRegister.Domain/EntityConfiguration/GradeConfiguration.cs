@@ -18,7 +18,7 @@ namespace ESchool.ClassRegister.Domain.EntityConfiguration
 
             builder.HasOne(x => x.ClassSchoolYearSubject)
                 .WithMany()
-                .HasForeignKey(x => x.ClassSubjectId);
+                .HasForeignKey(x => x.ClassSchoolYearSubjectId);
         }
     }
 }

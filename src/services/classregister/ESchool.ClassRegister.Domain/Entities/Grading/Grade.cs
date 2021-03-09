@@ -20,7 +20,7 @@ namespace ESchool.ClassRegister.Domain.Entities.Grading
         public Guid? StudentId { get; set; }
         public virtual Student Student { get; set; }
 
-        public Guid ClassSubjectId { get; set; }
+        public Guid ClassSchoolYearSubjectId { get; set; }
         public virtual ClassSchoolYearSubject ClassSchoolYearSubject { get; set; }
 
         public Guid? TeacherId { get; set; }

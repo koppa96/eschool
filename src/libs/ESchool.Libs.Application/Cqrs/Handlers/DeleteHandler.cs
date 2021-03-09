@@ -25,8 +25,9 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
             return entities;
         }
 
-        protected virtual void ThrowIfCannotDelete(TEntity entity)
+        protected virtual Task ThrowIfCannotDeleteAsync(TEntity entity)
         {
+            return Task.CompletedTask;
         }
         
         public async Task<Unit> Handle(TCommand request, CancellationToken cancellationToken)
@@ -35,7 +36,7 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
             var entity = await Include(dbSet).SingleAsync(x => x.Id == request.Id, cancellationToken);
             if (entity != null)
             {
-                ThrowIfCannotDelete(entity);
+                await ThrowIfCannotDeleteAsync(entity);
                 dbSet.Remove(entity);
                 await context.SaveChangesAsync(cancellationToken);
             }

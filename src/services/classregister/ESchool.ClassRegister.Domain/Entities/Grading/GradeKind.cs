@@ -3,7 +3,7 @@ using System;
 
 namespace ESchool.ClassRegister.Domain.Entities.Grading
 {
-    public class GradeKind
+    public class GradeKind : IEntity
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
