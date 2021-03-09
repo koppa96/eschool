@@ -6,6 +6,7 @@ using ESchool.ClassRegister.Application.Features.Classes.Common;
 using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Application.Cqrs.Query;
 using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.ClassRegister.Api.Controllers
 {
-    [Authorize(nameof(TenantRoleType.Administrator))]
+    [Authorize(PolicyNames.Administrator)]
     [ApiController]
     [Route("api/classes")]
     public class ClassesController : ControllerBase

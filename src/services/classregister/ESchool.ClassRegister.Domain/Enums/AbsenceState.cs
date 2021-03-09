@@ -2,6 +2,6 @@
 {
     public enum AbsenceState
     {
-        Unjustified, Justified        
+        Unverified, Verified        
     }
 }

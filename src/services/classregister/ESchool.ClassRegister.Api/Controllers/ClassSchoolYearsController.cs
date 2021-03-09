@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.ClassSchoolYears;
+using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.ClassRegister.Api.Controllers
 {
-    [Authorize(nameof(TenantRoleType.Administrator))]
+    [Authorize(PolicyNames.Administrator)]
     [ApiController]
     [Route("api/school-years/{schoolYearId}/classes")]
     public class ClassSchoolYearsController : ControllerBase

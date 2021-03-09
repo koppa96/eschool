@@ -8,4 +8,8 @@ namespace ESchool.Libs.Application.Cqrs.Commands
         public Guid Id { get; set; }
         public TInnerCommand InnerCommand { get; set; }
     }
+
+    public class EditCommand<TInnerCommand> : EditCommand<TInnerCommand, Unit>
+    {
+    }
 }

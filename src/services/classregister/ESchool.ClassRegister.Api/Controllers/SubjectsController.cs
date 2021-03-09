@@ -6,6 +6,7 @@ using ESchool.ClassRegister.Application.Features.Subjects;
 using ESchool.ClassRegister.Application.Features.Subjects.Common;
 using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.ClassRegister.Api.Controllers
 {
-    [Authorize(nameof(TenantRoleType.Administrator))]
+    [Authorize(PolicyNames.Administrator)]
     [ApiController]
     [Route("api/subjects")]
     public class SubjectsController : ControllerBase

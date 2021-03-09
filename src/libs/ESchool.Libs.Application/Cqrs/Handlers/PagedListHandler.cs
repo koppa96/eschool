@@ -32,12 +32,19 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
             return entities;
         }
 
+        protected virtual Task ThrowIfCannotListAsync(TQuery query, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
         protected abstract IQueryable<TResponse> Map(IQueryable<TEntity> entities, TQuery query);
 
         protected abstract IOrderedQueryable<TEntity> Order(IQueryable<TEntity> entities);
 
         public async Task<PagedListResponse<TResponse>> Handle(TQuery request, CancellationToken cancellationToken)
         {
+            await ThrowIfCannotListAsync(request, cancellationToken);
+            
             var dbSet = context.Set<TEntity>();
             var totalCount = await dbSet.CountAsync(cancellationToken);
             

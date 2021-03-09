@@ -5,6 +5,7 @@ using ESchool.ClassRegister.Application.Features.SchoolYears;
 using ESchool.ClassRegister.Application.Features.SchoolYears.Common;
 using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.ClassRegister.Api.Controllers
 {
-    [Authorize(nameof(TenantRoleType.Administrator))]
+    [Authorize(PolicyNames.Administrator)]
     [ApiController]
     [Route("api/school-years")]
     public class SchoolYearsController : ControllerBase
