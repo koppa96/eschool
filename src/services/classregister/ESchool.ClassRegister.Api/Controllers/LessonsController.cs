@@ -14,6 +14,7 @@ namespace ESchool.ClassRegister.Api.Controllers
 {
     [ApiController]
     [Route("api/lessons")]
+    [Route("api/school-years/{schoolYearId}/classes/{classId}/subjects/{subjectId}/lessons")]
     public class LessonsController : ControllerBase
     {
         private readonly IMediator mediator;

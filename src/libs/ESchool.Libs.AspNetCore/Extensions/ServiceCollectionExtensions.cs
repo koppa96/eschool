@@ -1,9 +1,14 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Reflection;
+using ESchool.Libs.Application.Cqrs.Authorization;
+using ESchool.Libs.Application.Cqrs.Authorization.PipelineBehaviors;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Services;
 using ESchool.Libs.Domain;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -62,6 +67,29 @@ namespace ESchool.Libs.AspNetCore.Extensions
                 options.AddPolicy("Default", policy => policy.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
             });
+            return services;
+        }
+
+        public static IServiceCollection AddMediatRAuthorization(this IServiceCollection services, params Assembly[] assemblies)
+        {
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizingPipelineBehaviour<,>));
+
+            var authorizationHandlers = assemblies.SelectMany(x => x.GetTypes())
+                .Where(x => x.GetInterfaces().Any(i =>
+                    i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequestAuthorizationHandler<>)))
+                .ToList();
+
+            foreach (var handler in authorizationHandlers)
+            {
+                var interfaces = handler.GetInterfaces().Where(i =>
+                        i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequestAuthorizationHandler<>));
+
+                foreach (var @interface in interfaces)
+                {
+                    services.AddScoped(@interface, handler);
+                }
+            }
+
             return services;
         }
     }

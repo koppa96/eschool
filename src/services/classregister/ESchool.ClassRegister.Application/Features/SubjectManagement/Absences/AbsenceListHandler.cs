@@ -45,27 +45,5 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Absences
         {
             return entities.OrderByDescending(x => x.Lesson.StartsAt);
         }
-
-        protected override async Task ThrowIfCannotListAsync(AbsenceListQuery query, CancellationToken cancellationToken)
-        {
-            var currentUserId = identityService.GetCurrentUserId();
-            if (identityService.IsInRole(TenantRoleType.Administrator) ||
-                currentUserId == query.StudentId)
-            {
-                return;
-            }
-
-            var student = await context.Students.Include(x => x.Class)
-                .Include(x => x.StudentParents)
-                .SingleAsync(x => x.Id == query.StudentId);
-
-            if (student.Class.HeadTeacherId == currentUserId || student.StudentParents.Any(x => x.ParentId == currentUserId))
-            {
-                return;
-            }
-
-            throw new UnauthorizedAccessException(
-                "Egy diák hiányzásait csak az osztályfőnök, a diák, a szülei és az adminisztrátorok tekinthetik meg.");
-        }
     }
 }

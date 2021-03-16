@@ -23,25 +23,5 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Absences
         {
             this.identityService = identityService;
         }
-
-        protected override IQueryable<Absence> Include(IQueryable<Absence> entities)
-        {
-            return entities.Include(x => x.Lesson)
-                    .ThenInclude(x => x.ClassSchoolYearSubject)
-                        .ThenInclude(x => x.ClassSchoolYearSubjectTeachers)
-                .Include(x => x.Lesson);
-        }
-
-        protected override Task ThrowIfCannotDeleteAsync(Absence entity)
-        {
-            var currentUserId = identityService.GetCurrentUserId();
-            if (!identityService.IsInRole(TenantRoleType.Administrator) && 
-                entity.Lesson.ClassSchoolYearSubject.ClassSchoolYearSubjectTeachers.All(x => x.Id != currentUserId))
-            {
-                throw new UnauthorizedAccessException(
-                    "A hiányzást csak a tárgy oktatói vagy az adminisztrátorok törölhetik.");
-            }
-            return Task.CompletedTask;
-        }
     }
 }

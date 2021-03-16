@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ESchool.ClassRegister.Domain.Entities.Grading;
 
 namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
 {
@@ -15,5 +16,6 @@ namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
         
         public virtual ICollection<ClassSchoolYearSubjectTeacher> ClassSchoolYearSubjectTeachers { get; set; }
         public virtual ICollection<Lesson> Lessons { get; set; }
+        public virtual ICollection<Grade> Grades { get; set; }
     }
 }
