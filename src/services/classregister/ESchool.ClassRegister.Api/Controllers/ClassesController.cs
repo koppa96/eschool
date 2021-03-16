@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Classes;
 using ESchool.ClassRegister.Application.Features.Classes.Common;
+using ESchool.ClassRegister.Application.Features.Users.Students;
 using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Application.Cqrs.Query;
 using ESchool.Libs.Application.Cqrs.Response;
@@ -47,6 +48,25 @@ namespace ESchool.ClassRegister.Api.Controllers
             CancellationToken cancellationToken)
         {
             return mediator.Send(command, cancellationToken);
+        }
+
+        [HttpPost("{classId}/students/{studentId}")]
+        public Task AssignStudent(Guid classId, Guid studentId, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new AssignStudentToClassCommand
+            {
+                ClassId = classId,
+                StudentId = studentId
+            }, cancellationToken);
+        }
+
+        [HttpDelete("{classId}/students/{studentId}")]
+        public Task RemoveStudent(Guid classId, Guid studentId, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new RemoveStudentFromClassCommand
+            {
+                StudentId = studentId
+            }, cancellationToken);
         }
 
         [HttpPut("{id}")]
