@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.ClassRegister.Application.Features.Grading.Grades;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Absences;
 using ESchool.Libs.Application.Cqrs.Query;
 using ESchool.Libs.Application.Cqrs.Response;
@@ -41,6 +43,24 @@ namespace ESchool.ClassRegister.Api.Controllers
                 SchoolYearId = schoolYearId,
                 PageIndex = pageIndex,
                 PageSize = pageSize == 0 ? PagedListQuery.DefaultPageSize : pageSize
+            }, cancellationToken);
+        }
+
+        [HttpGet("{studentId}/grades")]
+        public Task<List<GradeListByStudentResponse>> ListGrades(
+            Guid studentId,
+            [FromQuery] Guid schoolYearId,
+            CancellationToken cancellationToken)
+        {
+            if (schoolYearId == default)
+            {
+                throw new ArgumentOutOfRangeException(nameof(schoolYearId), "A tanév megadása kötelező.");
+            }
+            
+            return mediator.Send(new GradeListByStudentQuery
+            {
+                StudentId = studentId,
+                SchoolYearId = schoolYearId
             }, cancellationToken);
         }
     }

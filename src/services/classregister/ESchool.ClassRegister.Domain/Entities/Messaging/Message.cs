@@ -10,6 +10,7 @@ namespace ESchool.ClassRegister.Domain.Entities.Messaging
 
         public string Subject { get; set; }
         public string Text { get; set; }
+        public DateTime SentAt { get; set; }
 
         public Guid? SenderUserId { get; set; }
         public virtual UserBase SenderUser { get; set; }
