@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Api.Dtos;
@@ -42,7 +43,21 @@ namespace ESchool.ClassRegister.Api.Controllers
                 Value = dto.Value
             }, cancellationToken);
         }
-        
-        
+
+        [Authorize(PolicyNames.TeacherOrAdministrator)]
+        [HttpGet]
+        public Task<List<GradeListByClassSchoolYearSubjectResponse>> ListGradesBySubject(
+            Guid schoolYearId,
+            Guid classId,
+            Guid subjectId,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(new GradeListByClassSchoolYearSubjectQuery
+            {
+                SchoolYearId = schoolYearId,
+                ClassId = classId,
+                SubjectId = subjectId
+            }, cancellationToken);
+        }
     }
 }
