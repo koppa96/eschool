@@ -1,5 +1,7 @@
 ﻿using System;
+using ESchool.ClassRegister.Application.Features.Classes.Common;
 using ESchool.ClassRegister.Application.Features.Classrooms;
+using ESchool.ClassRegister.Application.Features.SchoolYears;
 using ESchool.ClassRegister.Application.Features.Subjects;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common
@@ -14,6 +16,8 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.C
         public DateTime StartsAt { get; set; }
         public DateTime EndsAt { get; set; }
 
+        public SchoolYearListResponse SchoolYear { get; set; }
+        public ClassListResponse Class { get; set; }
         public SubjectListResponse Subject { get; set; }
         public ClassroomListResponse Classroom { get; set; }
     }

@@ -8,7 +8,9 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.C
         public LessonMappings()
         {
             CreateMap<Lesson, LessonDetailsResponse>()
-                .ForMember(x => x.Subject, o => o.MapFrom(x => x.ClassSchoolYearSubject.Subject));
+                .ForMember(x => x.Subject, o => o.MapFrom(x => x.ClassSchoolYearSubject.Subject))
+                .ForMember(x => x.Class, o => o.MapFrom(x => x.ClassSchoolYearSubject.ClassSchoolYear.Class))
+                .ForMember(x => x.SchoolYear, o => o.MapFrom(x => x.ClassSchoolYearSubject.ClassSchoolYear.SchoolYear));
 
             CreateMap<Lesson, LessonListResponse>()
                 .ForMember(x => x.Subject, o => o.MapFrom(x => x.ClassSchoolYearSubject.Subject));

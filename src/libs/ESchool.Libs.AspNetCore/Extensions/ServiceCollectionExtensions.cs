@@ -1,15 +1,21 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using ESchool.Libs.Application.Cqrs.Authorization;
 using ESchool.Libs.Application.Cqrs.Authorization.PipelineBehaviors;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Services;
 using ESchool.Libs.Domain;
 using ESchool.Libs.Domain.Enums;
+using ESchool.Libs.Domain.MultiTenancy;
+using ESchool.Libs.Domain.MultiTenancy.Entities;
 using ESchool.Libs.Domain.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ESchool.Libs.AspNetCore.Extensions
@@ -25,7 +31,8 @@ namespace ESchool.Libs.AspNetCore.Extensions
             return services;
         }
 
-        public static IServiceCollection AddCommonAuthentication(this IServiceCollection services, AuthConfiguration authConfiguration)
+        public static IServiceCollection AddCommonAuthentication(this IServiceCollection services,
+            AuthConfiguration authConfiguration)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.AddAuthentication(config =>
@@ -45,32 +52,36 @@ namespace ESchool.Libs.AspNetCore.Extensions
         {
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(nameof(GlobalRoleType.TenantAdministrator), policy => policy.RequireAuthenticatedUser()
+                options.AddPolicy(nameof(GlobalRoleType.TenantAdministrator), policy => policy
+                    .RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                     .RequireClaim(Constants.ClaimTypes.GlobalRole, nameof(GlobalRoleType.TenantAdministrator)));
-                
+
                 options.AddTenantUserPolicy(TenantRoleType.Administrator);
                 options.AddTenantUserPolicy(TenantRoleType.Parent);
                 options.AddTenantUserPolicy(TenantRoleType.Teacher);
                 options.AddTenantUserPolicy(TenantRoleType.Student);
-                
+
                 options.AddPolicy(PolicyNames.AnyRole, policy => policy.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                     .RequireClaim(Constants.ClaimTypes.TenantId));
-                
+
                 options.AddPolicy(PolicyNames.TeacherOrAdministrator, policy => policy.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                     .RequireClaim(Constants.ClaimTypes.TenantId)
-                    .RequireAssertion(context => context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Teacher.ToString()) ||
-                                                 context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Administrator.ToString())));
-                
+                    .RequireAssertion(context =>
+                        context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Teacher.ToString()) ||
+                        context.User.HasClaim(Constants.ClaimTypes.TenantRoles,
+                            TenantRoleType.Administrator.ToString())));
+
                 options.AddPolicy("Default", policy => policy.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
             });
             return services;
         }
 
-        public static IServiceCollection AddMediatRAuthorization(this IServiceCollection services, params Assembly[] assemblies)
+        public static IServiceCollection AddMediatRAuthorization(this IServiceCollection services,
+            params Assembly[] assemblies)
         {
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizingPipelineBehaviour<,>));
 
@@ -82,7 +93,7 @@ namespace ESchool.Libs.AspNetCore.Extensions
             foreach (var handler in authorizationHandlers)
             {
                 var interfaces = handler.GetInterfaces().Where(i =>
-                        i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequestAuthorizationHandler<>));
+                    i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequestAuthorizationHandler<>));
 
                 foreach (var @interface in interfaces)
                 {
@@ -91,6 +102,33 @@ namespace ESchool.Libs.AspNetCore.Extensions
             }
 
             return services;
+        }
+
+        public static IServiceCollection AddMultitenancy(this IServiceCollection services)
+        {
+            services.AddScoped(provider =>
+            {
+                var identityService = provider.GetRequiredService<IIdentityService>();
+                var masterDbContext = provider.GetRequiredService<MasterDbContext>();
+                var memoryCache = provider.GetRequiredService<IMemoryCache>();
+
+                var tenantId = identityService.TryGetTenantId();
+
+                return tenantId == null
+                    ? null
+                    : memoryCache.GetOrCreate(tenantId.Value, entry => masterDbContext.Tenants.Find(tenantId.Value));
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddLazyDbContext<TContext>(this IServiceCollection services)
+            where TContext : DbContext
+        {
+            return services.AddScoped(provider =>
+            {
+                return new Lazy<TContext>(() => provider.GetRequiredService<TContext>());
+            });
         }
     }
 }

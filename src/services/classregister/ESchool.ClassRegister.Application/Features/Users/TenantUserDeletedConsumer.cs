@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Users
 {
-    public class TenantUserDeletedHandler : IConsumer<TenantUserDeletedEvent>
+    public class TenantUserDeletedConsumer : IConsumer<TenantUserDeletedEvent>
     {
         private readonly ClassRegisterContext dbContext;
 
-        public TenantUserDeletedHandler(ClassRegisterContext dbContext)
+        public TenantUserDeletedConsumer(ClassRegisterContext dbContext)
         {
             this.dbContext = dbContext;
         }

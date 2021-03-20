@@ -1,16 +1,16 @@
 ﻿using System;
 using ESchool.HomeAssignments.Domain.Entities.Users;
 
-namespace ESchool.HomeAssignments.Domain.Entities.ClassRegisterData
+namespace ESchool.HomeAssignments.Domain.Entities
 {
-    public class GroupTeacher
+    public class TeacherHomework
     {
         public Guid Id { get; set; }
 
+        public Guid HomeworkId { get; set; }
+        public virtual Homework Homework { get; set; }
+
         public Guid TeacherId { get; set; }
         public virtual Teacher Teacher { get; set; }
-
-        public Guid GroupId { get; set; }
-        public virtual HomeWorkGroup HomeWorkGroup { get; set; }
     }
 }

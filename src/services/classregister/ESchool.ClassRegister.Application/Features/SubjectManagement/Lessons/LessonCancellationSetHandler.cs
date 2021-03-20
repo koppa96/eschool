@@ -33,7 +33,11 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
         public async Task<LessonDetailsResponse> Handle(EditCommand<LessonCancellationSetCommand, LessonDetailsResponse> request,
             CancellationToken cancellationToken)
         {
-            var lesson = await context.Lessons.FindOrThrowAsync(request.Id, cancellationToken);
+            var lesson = await context.Lessons.Include(x => x.ClassSchoolYearSubject)
+                    .ThenInclude(x => x.ClassSchoolYear)
+                .Include(x => x.Classroom)
+                .SingleAsync(x => x.Id == request.Id, cancellationToken);
+            
             lesson.Canceled = request.InnerCommand.Canceled;
             await context.SaveChangesAsync(cancellationToken);
             return mapper.Map<LessonDetailsResponse>(lesson);

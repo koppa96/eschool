@@ -4,7 +4,7 @@ using ESchool.HomeAssignments.Domain.Entities.ClassRegisterData;
 
 namespace ESchool.HomeAssignments.Domain.Entities
 {
-    public class HomeWork
+    public class Homework
     {
         public Guid Id { get; set; }
 
@@ -15,7 +15,9 @@ namespace ESchool.HomeAssignments.Domain.Entities
 
         public Guid LessonId { get; set; }
         public virtual Lesson Lesson { get; set; }
-
-        public virtual ICollection<HomeWorkSolution> Solutions { get; set; }
+        
+        public virtual ICollection<HomeworkSolution> Solutions { get; set; }
+        public virtual ICollection<StudentHomework> StudentHomeworks { get; set; }
+        public virtual ICollection<TeacherHomework> TeacherHomeworks { get; set; }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ESchool.ClassRegister.Api.Grpc;
 using ESchool.ClassRegister.Domain;
 using ESchool.IdentityProvider.Grpc;
 using ESchool.Libs.AspNetCore.Configuration;
@@ -44,6 +45,7 @@ namespace ESchool.ClassRegister.Api
                     config.MigrationsAssembly(typeof(ClassRegisterContext).Assembly.GetName().Name)));
             
             services.AddControllers();
+            services.AddGrpc();
 
             services.AddMediatR(Assembly.Load("ESchool.ClassRegister.Application"));
             services.AddAutoMapper(Assembly.Load("ESchool.ClassRegister.Application"));
@@ -110,20 +112,7 @@ namespace ESchool.ClassRegister.Api
             services.AddMassTransitHostedService();
 
             services.AddCommonServices();
-            services.AddScoped(provider =>
-            {
-                var identityService = provider.GetRequiredService<IIdentityService>();
-                var masterDbContext = provider.GetRequiredService<MasterDbContext>();
-                var memoryCache = provider.GetRequiredService<IMemoryCache>();
-
-                var tenantId = identityService.TryGetTenantId();
-                if (tenantId == null)
-                {
-                    return null;
-                }
-
-                return memoryCache.GetOrCreate(tenantId.Value, entry => masterDbContext.Tenants.Find(tenantId.Value));
-            });
+            services.AddMultitenancy();
 
             services.AddGrpcClient<TenantService.TenantServiceClient>(options =>
             {
@@ -158,6 +147,7 @@ namespace ESchool.ClassRegister.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGrpcService<LessonServiceImpl>();
             });
         }
     }

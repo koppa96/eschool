@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "ESchool.ClassRegister.Grpc";
+
+service LessonService {
+  rpc GetLessonInfoForHomeAssignments(LessonInfoForHomeAssignmentsRequest) returns (LessonInfoForHomeAssignmentsResponse);
+}
+
+service UserService {
+  rpc GetStudent(StudentGetRequest) returns (StudentGetResponse);
+  rpc GetTeacher(TeacherGetRequest) returns (TeacherGetResponse);
+}
+
+message LessonInfoForHomeAssignmentsRequest {
+  string id = 1;
+}
+
+message LessonInfoForHomeAssignmentsResponse {
+  string id = 1;
+  string title = 2;
+  string classId = 3;
+  string schoolYearId = 4;
+  string subjectId = 5;
+}
+
+message StudentGetRequest {
+  string id = 1;  
+}
+
+message StudentGetResponse {
+  string id = 1;
+  string name = 2;
+  string userId = 3;
+}
+
+message TeacherGetRequest {
+  string id = 1;
+}
+
+message TeacherGetResponse {
+  string id = 1;
+  string name = 2;
+  string userId = 3;
+}

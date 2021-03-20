@@ -5,6 +5,7 @@ namespace ESchool.HomeAssignments.Domain.Entities.Users
 {
     public class Teacher : UserBase
     {
-        public virtual ICollection<GroupTeacher> GroupTeachers { get; set; }
+        public virtual ICollection<TeacherHomework> TeacherHomeworks { get; set; }
+        public virtual ICollection<HomeworkReview> Reviews { get; set; }
     }
 }

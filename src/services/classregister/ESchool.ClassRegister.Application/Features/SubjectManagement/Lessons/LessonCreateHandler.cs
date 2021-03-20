@@ -6,6 +6,7 @@ using AutoMapper;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.Libs.Domain.Extensions;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -59,7 +60,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
                         .ThenInclude(x => x.Lessons)
                 .Include(x => x.ClassSchoolYears)
                     .ThenInclude(x => x.SchoolYear)
-                .SingleAsync(x => x.Id == request.ClassId);
+                .SingleAsync(x => x.Id == request.ClassId, cancellationToken);
 
             var classSchoolYear = @class.ClassSchoolYears.Single(x => x.SchoolYearId == request.SchoolYearId);
             if (classSchoolYear.ClassSchoolYearSubjects
@@ -75,6 +76,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
                 throw new InvalidOperationException("Az órának a megadott tanév tanítási idején belül kell lennie.");
             }
 
+            var classroom = await context.Classrooms.FindOrThrowAsync(request.Body.ClassroomId, cancellationToken);
             var lesson = new Lesson
             {
                 Title = request.Body.Title,
@@ -82,7 +84,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
                 StartsAt = request.Body.StartsAt,
                 EndsAt = request.Body.EndsAt,
                 ClassSchoolYearSubject = classSchoolYear.ClassSchoolYearSubjects.Single(x => x.SubjectId == request.SubjectId),
-                ClassroomId = request.Body.ClassroomId
+                Classroom = classroom
             };
 
             context.Lessons.Add(lesson);

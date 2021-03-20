@@ -68,6 +68,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proto", "Proto", "{9E63BC66-0279-44B4-9385-D400A68A52E8}"
 ProjectSection(SolutionItems) = preProject
 	src\proto\identityprovider.proto = src\proto\identityprovider.proto
+	src\proto\classregister.proto = src\proto\classregister.proto
 EndProjectSection
 EndProject
 Global

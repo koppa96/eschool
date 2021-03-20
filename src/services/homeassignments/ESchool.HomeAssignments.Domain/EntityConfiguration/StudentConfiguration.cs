@@ -8,7 +8,7 @@ namespace ESchool.HomeAssignments.Domain.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<Student> builder)
         {
-            builder.HasMany(x => x.GroupStudents)
+            builder.HasMany(x => x.StudentHomeworks)
                 .WithOne(x => x.Student)
                 .HasForeignKey(x => x.StudentId);
 

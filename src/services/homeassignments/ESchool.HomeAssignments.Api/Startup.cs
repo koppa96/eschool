@@ -1,7 +1,10 @@
+using System;
 using System.Reflection;
+using ESchool.ClassRegister.Grpc;
 using ESchool.HomeAssignments.Domain;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
+using ESchool.Libs.Domain.MultiTenancy;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,6 +31,11 @@ namespace ESchool.HomeAssignments.Api
         {
             services.AddDbContext<HomeAssignmentsContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddLazyDbContext<HomeAssignmentsContext>();
+            
+            services.AddDbContext<MasterDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection"), config =>
+                    config.MigrationsAssembly(typeof(HomeAssignmentsContext).Assembly.GetName().Name)));
             
             services.AddControllers();
 
@@ -36,22 +44,8 @@ namespace ESchool.HomeAssignments.Api
             services.AddCommonAuthentication(authConfig);
             services.AddCommonAuthorization();
 
-            services.AddAuthentication()
-                .AddJwtBearer(config =>
-                {
-                    config.Authority = Configuration.GetValue<string>("Authentication:Authority");
-                    config.Audience = Configuration.GetValue<string>("Authentication:Audience");
-                    config.RequireHttpsMetadata = false;
-                });
-            
-            services.AddAuthorization(config =>
-            {
-                config.AddPolicy("Default", builder => builder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireAuthenticatedUser()
-                    .RequireClaim("scope", "homeassignmentsapi.readwrite"));
-
-                config.DefaultPolicy = config.GetPolicy("Default");
-            });
+            services.AddCommonServices();
+            services.AddMultitenancy();
 
             services.AddMediatR(Assembly.Load("ESchool.HomeAssignments.Application"));
             
@@ -68,6 +62,11 @@ namespace ESchool.HomeAssignments.Api
                 });
             });
             services.AddMassTransitHostedService();
+
+            services.AddGrpcClient<LessonService.LessonServiceClient>(config =>
+            {
+                config.Address = new Uri(Configuration.GetValue<string>("ClassRegisterUri"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -9,6 +9,6 @@ namespace ESchool.HomeAssignments.Domain.Entities
         public string FileName { get; set; }
 
         public Guid HomeWorkSolutionId { get; set; }
-        public virtual HomeWorkSolution HomeWorkSolution { get; set; }
+        public virtual HomeworkSolution HomeworkSolution { get; set; }
     }
 }

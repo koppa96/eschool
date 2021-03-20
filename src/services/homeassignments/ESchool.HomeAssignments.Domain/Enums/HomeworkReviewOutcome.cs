@@ -2,7 +2,6 @@
 {
     public enum HomeworkReviewOutcome
     {
-        NotReviewed,
         Accepted,
         Rejected
     }

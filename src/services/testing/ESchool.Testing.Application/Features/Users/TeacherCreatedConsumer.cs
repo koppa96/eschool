@@ -6,7 +6,7 @@ using MassTransit;
 
 namespace ESchool.Testing.Application.Features.Users
 {
-    public class TeacherCreatedConsumer : IConsumer<TeacherCreatedEvent>
+    public class TeacherCreatedConsumer : IConsumer<TeacherCreatedOrUpdatedEvent>
     {
         private readonly TestingContext dbContext;
 
@@ -15,7 +15,7 @@ namespace ESchool.Testing.Application.Features.Users
             this.dbContext = dbContext;
         }
 
-        public async Task Consume(ConsumeContext<TeacherCreatedEvent> context)
+        public async Task Consume(ConsumeContext<TeacherCreatedOrUpdatedEvent> context)
         {
             dbContext.Teachers.Add(new Teacher
             {
