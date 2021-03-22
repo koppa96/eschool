@@ -30,7 +30,6 @@ namespace ESchool.Libs.Application.Cqrs.Authorization.PipelineBehaviors
             }
 
             throw new UnauthorizedAccessException(result.ErrorMessage);
-
         }
     }
 }

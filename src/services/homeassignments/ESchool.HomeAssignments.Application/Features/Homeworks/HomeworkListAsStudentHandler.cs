@@ -28,8 +28,7 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks
         public HomeworkReviewOutcome? Outcome { get; set; }
     }
 
-    public class
-        HomeworkListAsStudentHandler : PagedListHandler<HomeworkListAsStudentQuery, StudentHomework,
+    public class HomeworkListAsStudentHandler : PagedListHandler<HomeworkListAsStudentQuery, StudentHomework,
             HomeworkListAsStudentResponse>
     {
         private readonly IIdentityService identityService;

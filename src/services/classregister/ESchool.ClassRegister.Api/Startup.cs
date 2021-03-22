@@ -43,7 +43,9 @@ namespace ESchool.ClassRegister.Api
             services.AddControllers();
             services.AddGrpc();
 
-            services.AddMediatR(Assembly.Load("ESchool.ClassRegister.Application"));
+            services.AddMediatR(Assembly.Load("ESchool.ClassRegister.Application"))
+                .AddMediatRAuthorization(Assembly.Load("ESchool.ClassRegister.Application"));
+            
             services.AddAutoMapper(Assembly.Load("ESchool.ClassRegister.Application"));
 
             var authConfig = new AuthConfiguration();
