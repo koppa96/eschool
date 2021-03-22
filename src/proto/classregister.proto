@@ -6,11 +6,12 @@ option csharp_namespace = "ESchool.ClassRegister.Grpc";
 
 service LessonService {
   rpc GetLessonInfoForHomeAssignments(LessonInfoForHomeAssignmentsRequest) returns (LessonInfoForHomeAssignmentsResponse);
+  rpc ListStudentsAndTeachersForLesson(StudentAndTeacherListRequest) returns (StudentAndTeacherListResponse);
 }
 
 service UserService {
-  rpc GetStudent(StudentGetRequest) returns (StudentGetResponse);
-  rpc GetTeacher(TeacherGetRequest) returns (TeacherGetResponse);
+  rpc GetStudent(UserGetRequest) returns (UserGetResponse);
+  rpc GetTeacher(UserGetRequest) returns (UserGetResponse);
 }
 
 message LessonInfoForHomeAssignmentsRequest {
@@ -25,22 +26,21 @@ message LessonInfoForHomeAssignmentsResponse {
   string subjectId = 5;
 }
 
-message StudentGetRequest {
+message UserGetRequest {
   string id = 1;  
 }
 
-message StudentGetResponse {
+message UserGetResponse {
   string id = 1;
   string name = 2;
   string userId = 3;
 }
 
-message TeacherGetRequest {
-  string id = 1;
+message StudentAndTeacherListRequest {
+  string lessonId = 1;
 }
 
-message TeacherGetResponse {
-  string id = 1;
-  string name = 2;
-  string userId = 3;
+message StudentAndTeacherListResponse {
+  repeated string studentIds = 1;
+  repeated string teacherIds = 2;
 }

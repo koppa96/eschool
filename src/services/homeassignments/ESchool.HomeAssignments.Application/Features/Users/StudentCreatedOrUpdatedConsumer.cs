@@ -22,7 +22,7 @@ namespace ESchool.HomeAssignments.Application.Features.Users
         public async Task Consume(ConsumeContext<StudentCreatedOrUpdatedEvent> context)
         {
             var dbContext = lazyDbContext.Value;
-            var student = await client.GetStudentAsync(new StudentGetRequest
+            var student = await client.GetStudentAsync(new UserGetRequest
             {
                 Id = context.Message.Id.ToString()
             });

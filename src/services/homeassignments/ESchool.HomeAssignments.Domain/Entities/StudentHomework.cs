@@ -12,5 +12,8 @@ namespace ESchool.HomeAssignments.Domain.Entities
 
         public Guid HomeworkId { get; set; }
         public virtual Homework Homework { get; set; }
+
+        public Guid? HomeworkSolutionId { get; set; }
+        public HomeworkSolution HomeworkSolution { get; set; }
     }
 }

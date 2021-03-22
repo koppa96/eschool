@@ -1,13 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.Libs.Application.Cqrs.Commands;
-using ESchool.Libs.Domain.Enums;
-using ESchool.Libs.Domain.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

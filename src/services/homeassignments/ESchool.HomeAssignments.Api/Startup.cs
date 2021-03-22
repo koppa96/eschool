@@ -7,7 +7,6 @@ using ESchool.Libs.AspNetCore.Extensions;
 using ESchool.Libs.Domain.MultiTenancy;
 using MassTransit;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
