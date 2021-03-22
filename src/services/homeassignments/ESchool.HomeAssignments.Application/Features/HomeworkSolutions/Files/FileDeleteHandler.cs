@@ -36,6 +36,10 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Files
                 .SingleAsync(x => x.Id == request.Id, cancellationToken);
 
             var solution = file.HomeworkSolution;
+            if (solution.TurnInDate != null)
+            {
+                throw new InvalidOperationException("Ez a feladat már beadásra került, nem lehetséges módosítani.");
+            }
 
             await using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
             

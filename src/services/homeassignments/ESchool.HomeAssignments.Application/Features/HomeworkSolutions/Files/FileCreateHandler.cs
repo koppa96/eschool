@@ -46,6 +46,11 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Files
                 throw new InvalidOperationException("A fájlneveknek egyedinek kell lenniük.");
             }
 
+            if (solution.TurnInDate != null)
+            {
+                throw new InvalidOperationException("Ez a feladat már beadásra került, nem lehetséges módosítani.");
+            }
+
             await using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
 
             var file = new File
