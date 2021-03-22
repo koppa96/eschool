@@ -1,4 +1,5 @@
 ﻿using System;
+using ESchool.HomeAssignments.Application.Features.Users.Common;
 
 namespace ESchool.HomeAssignments.Application.Features.Homeworks.Common
 {
@@ -11,6 +12,12 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks.Common
         public DateTime Deadline { get; set; }
         public bool Optional { get; set; }
         public LessonListResponse Lesson { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+        public UserListResponse CreatedBy { get; set; }
+
+        public DateTime? LastModifiedAt { get; set; }
+        public UserListResponse LastModifiedBy { get; set; }
         
         public class LessonListResponse
         {

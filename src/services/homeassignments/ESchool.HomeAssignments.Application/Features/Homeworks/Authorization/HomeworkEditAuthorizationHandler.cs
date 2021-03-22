@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.HomeAssignments.Application.Extensions;
 using ESchool.HomeAssignments.Application.Features.Homeworks.Common;
 using ESchool.HomeAssignments.Domain;
 using ESchool.Libs.Application.Cqrs.Authorization;
@@ -25,11 +26,9 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks.Authorization
             CancellationToken cancellationToken)
         {
             var currentUserId = identityService.GetCurrentUserId();
-            var isAuthorized = await context.Homeworks.Where(x => x.Id == request.Id)
-                .Select(x => x.TeacherHomeworks.Any(th => th.Teacher.UserId == currentUserId))
-                .SingleAsync(cancellationToken);
+            var isTeacher = await context.Teachers.IsTeacherAtHomework(currentUserId, request.Id);
 
-            return isAuthorized
+            return isTeacher
                 ? RequestAuthorizationResult.Success
                 : RequestAuthorizationResult.Failure("Csak javító tanárok módosíthatják az adott házi feladatot.");
         }

@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.HomeAssignments.Application.Extensions;
 using ESchool.HomeAssignments.Domain;
 using ESchool.Libs.Application.Cqrs.Authorization;
 using ESchool.Libs.Domain.Services;
@@ -25,9 +26,7 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks.Authorization
             CancellationToken cancellationToken)
         {
             var currentUserId = identityService.GetCurrentUserId();
-            var isTeacher = await context.Teachers.AnyAsync(
-                x => x.TeacherHomeworks.Any(th => th.HomeworkId == request.HomeworkId) && x.UserId == currentUserId,
-                cancellationToken);
+            var isTeacher = await context.Teachers.IsTeacherAtHomework(currentUserId, request.HomeworkId);
 
             return isTeacher
                 ? RequestAuthorizationResult.Success

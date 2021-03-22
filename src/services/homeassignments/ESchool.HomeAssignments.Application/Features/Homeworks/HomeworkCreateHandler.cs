@@ -99,7 +99,8 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks
                 TeacherHomeworks = teachers.Select(x => new TeacherHomework
                 {
                     Teacher = x
-                }).ToList()
+                }).ToList(),
+                CreatedBy = teachers.Single(x => x.UserId == currentUserId)
             };
 
             context.Homeworks.Add(homework);
