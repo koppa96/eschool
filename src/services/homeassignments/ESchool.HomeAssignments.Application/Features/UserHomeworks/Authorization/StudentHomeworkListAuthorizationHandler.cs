@@ -27,7 +27,7 @@ namespace ESchool.HomeAssignments.Application.Features.UserHomeworks.Authorizati
             return isTeacher
                 ? RequestAuthorizationResult.Success
                 : RequestAuthorizationResult.Failure(
-                    "Csak olyan tanár frissítheti a résztvevők listáját, aki már fel van véve javító tanárként a feladathoz.");
+                    "Csak olyan tanár kérheti le a résztvevők listáját, aki már fel van véve javító tanárként a feladathoz.");
         }
     }
 }

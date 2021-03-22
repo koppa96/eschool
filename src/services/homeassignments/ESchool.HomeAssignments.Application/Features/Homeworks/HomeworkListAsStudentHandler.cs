@@ -58,7 +58,7 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks
                 Id = x.Homework.Id,
                 Deadline = x.Homework.Deadline,
                 Title = x.Homework.Title,
-                Submitted = x.HomeworkSolutionId != null,
+                Submitted = x.HomeworkSolution != null && x.HomeworkSolution.TurnInDate != null,
                 Outcome = x.HomeworkSolution != null && x.HomeworkSolution.HomeworkReview != null
                     ? x.HomeworkSolution.HomeworkReview.Outcome
                     : (HomeworkReviewOutcome?) null

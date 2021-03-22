@@ -41,7 +41,8 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks
                                        x.Homework.Lesson.SubjectId == query.SubjectId &&
                                        x.Homework.Lesson.SchoolYearId == query.SchoolYearId &&
                                        x.Teacher.UserId == currentUserId &&
-                                       (query.IncludeReviewed || x.Homework.StudentHomeworks.Where(sh => sh.HomeworkSolution != null)
+                                       (query.IncludeReviewed || x.Homework.StudentHomeworks
+                                           .Where(sh => sh.HomeworkSolution != null && sh.HomeworkSolution.TurnInDate != null)
                                            .All(sh => sh.HomeworkSolution.HomeworkReview != null)));
         }
 
@@ -53,7 +54,7 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks
                 Deadline = x.Homework.Deadline,
                 Title = x.Homework.Title,
                 Ratings = x.Homework.StudentHomeworks.Count(sh => sh.HomeworkSolution != null && sh.HomeworkSolution.HomeworkReview != null),
-                Submissions = x.Homework.StudentHomeworks.Count(sh => sh.HomeworkSolution != null)
+                Submissions = x.Homework.StudentHomeworks.Count(sh => sh.HomeworkSolution != null && sh.HomeworkSolution.TurnInDate != null)
             });
         }
 

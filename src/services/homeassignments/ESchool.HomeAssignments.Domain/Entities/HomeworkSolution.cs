@@ -13,7 +13,7 @@ namespace ESchool.HomeAssignments.Domain.Entities
         
         public virtual StudentHomework StudentHomework { get; set; }
 
-        public DateTime TurnInDate { get; set; }
+        public DateTime? TurnInDate { get; set; }
 
         public virtual HomeworkReview HomeworkReview { get; set; }
         public virtual ICollection<File> Files { get; set; }
