@@ -7,6 +7,7 @@ using ESchool.HomeAssignments.Domain.Entities.Users;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Domain.Interfaces;
 using ESchool.Libs.Domain.MultiTenancy.Entities;
+using ESchool.Libs.Domain.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Domain
@@ -14,6 +15,7 @@ namespace ESchool.HomeAssignments.Domain
     public class HomeAssignmentsContext : DbContext
     {
         private readonly Tenant tenant;
+        private readonly IIdentityService identityService;
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
@@ -24,9 +26,10 @@ namespace ESchool.HomeAssignments.Domain
         public DbSet<StudentHomework> StudentHomeworks { get; set; }
         public DbSet<TeacherHomework> TeacherHomeworks { get; set; }
         
-        public HomeAssignmentsContext(DbContextOptions<HomeAssignmentsContext> options, Tenant tenant) : base(options)
+        public HomeAssignmentsContext(DbContextOptions<HomeAssignmentsContext> options, Tenant tenant, IIdentityService identityService) : base(options)
         {
             this.tenant = tenant;
+            this.identityService = identityService;
         }
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -46,19 +49,21 @@ namespace ESchool.HomeAssignments.Domain
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            EntityAudit();
+            EntityAuditAsync().GetAwaiter().GetResult();
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
-        private void EntityAudit()
+        private async Task EntityAuditAsync(CancellationToken cancellationToken = default)
         {
             this.SoftDelete();
+            await this.CreationAuditAsync(identityService.GetCurrentUserId(), cancellationToken);
+            await this.ModificationAuditAsync(identityService.GetCurrentUserId(), cancellationToken);
         }
 
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
         {
-            EntityAudit();
-            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+            await EntityAuditAsync(cancellationToken);
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
     }
 }

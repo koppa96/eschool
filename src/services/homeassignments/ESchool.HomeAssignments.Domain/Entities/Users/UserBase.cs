@@ -3,7 +3,7 @@ using System;
 
 namespace ESchool.HomeAssignments.Domain.Entities.Users
 {
-    public class UserBase : ISoftDelete
+    public class UserBase : ISoftDelete, IUser
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

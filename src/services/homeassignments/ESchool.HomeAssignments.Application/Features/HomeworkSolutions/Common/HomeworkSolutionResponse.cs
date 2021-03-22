@@ -1,4 +1,5 @@
 using System;
+using ESchool.HomeAssignments.Application.Features.HomeworkReviews.Common;
 
 namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common
 {
@@ -6,6 +7,7 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common
     {
         public Guid Id { get; set; }
         public DateTime? TurnInDate { get; set; }
+        public HomeworkReviewResponse Review { get; set; }
         
         public class FileResponse
         {
