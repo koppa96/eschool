@@ -30,11 +30,17 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions
         public async Task<HomeworkSolutionResponse> Handle(HomeworkSolutionSubmitCommand request, CancellationToken cancellationToken)
         {
             var solution = await context.HomeworkSolutions.Include(x => x.Files)
+                .Include(x => x.Homework)
                 .SingleAsync(x => x.Id == request.Id, cancellationToken);
 
             if (solution.Files.Count == 0)
             {
                 throw new InvalidOperationException("Nem adható be üres megoldás.");
+            }
+
+            if (solution.Homework.Deadline < DateTime.Now)
+            {
+                throw new InvalidOperationException("A határidő lejárt.");
             }
             
             solution.TurnInDate = DateTime.Now;

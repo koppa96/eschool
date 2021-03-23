@@ -10,7 +10,7 @@ namespace ESchool.HomeAssignments.Domain.EntityConfiguration
         {
             builder.HasBaseType<HomeAssignmentsUserRole>();
             
-            builder.HasMany(x => x.TeacherHomeworks)
+            builder.HasMany(x => x.ClassSchoolYearSubjectTeachers)
                 .WithOne(x => x.Teacher)
                 .HasForeignKey(x => x.TeacherId);
         }

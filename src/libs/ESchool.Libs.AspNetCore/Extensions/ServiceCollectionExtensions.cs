@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using ESchool.Libs.Application.Cqrs.Authorization;
 using ESchool.Libs.Application.Cqrs.Authorization.PipelineBehaviors;
+using ESchool.Libs.Application.Dtos;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Services;
 using ESchool.Libs.Domain;
@@ -71,8 +72,14 @@ namespace ESchool.Libs.AspNetCore.Extensions
                     .RequireClaim(Constants.ClaimTypes.TenantId)
                     .RequireAssertion(context =>
                         context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Teacher.ToString()) ||
-                        context.User.HasClaim(Constants.ClaimTypes.TenantRoles,
-                            TenantRoleType.Administrator.ToString())));
+                        context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Administrator.ToString())));
+                
+                options.AddPolicy(PolicyNames.TeacherOrStudent, policy => policy.RequireAuthenticatedUser()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireClaim(Constants.ClaimTypes.TenantId)
+                    .RequireAssertion(context =>
+                        context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Teacher.ToString()) ||
+                        context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Student.ToString())));
 
                 options.AddPolicy("Default", policy => policy.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));

@@ -16,9 +16,9 @@ namespace ESchool.HomeAssignments.Domain.EntityConfiguration
                 .WithOne(x => x.HomeworkSolution)
                 .HasForeignKey<HomeworkReview>(x => x.HomeWorkSolutionId);
 
-            builder.HasOne(x => x.StudentHomework)
-                .WithOne(x => x.HomeworkSolution)
-                .HasForeignKey<StudentHomework>(x => x.HomeworkSolutionId);
+            builder.HasOne(x => x.Student)
+                .WithMany(x => x.Solutions)
+                .HasForeignKey(x => x.StudentId);
         }
     }
 }

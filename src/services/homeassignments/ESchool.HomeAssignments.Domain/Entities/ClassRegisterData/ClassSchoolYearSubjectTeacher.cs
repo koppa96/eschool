@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
+using ESchool.HomeAssignments.Domain.Entities.Users;
 
 namespace ESchool.HomeAssignments.Domain.Entities.ClassRegisterData
 {
-    public class Lesson
+    public class ClassSchoolYearSubjectTeacher
     {
         public Guid Id { get; set; }
-        public string Title { get; set; }
 
         public Guid ClassSchoolYearSubjectId { get; set; }
         public virtual ClassSchoolYearSubject ClassSchoolYearSubject { get; set; }
-        
-        public virtual ICollection<Homework> HomeWorks { get; set; }
+
+        public Guid TeacherId { get; set; }
+        public virtual Teacher Teacher { get; set; }
     }
 }

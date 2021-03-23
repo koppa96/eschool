@@ -33,9 +33,8 @@ namespace ESchool.HomeAssignments.Application.Features.Lessons
             {
                 lesson = new Lesson
                 {
-                    ClassId = Guid.Parse(lessonDetails.ClassId),
-                    SubjectId = Guid.Parse(lessonDetails.SubjectId),
-                    SchoolYearId = Guid.Parse(lessonDetails.SchoolYearId)
+                    Id = context.Message.LessonId,
+                    ClassSchoolYearSubjectId = Guid.Parse(lessonDetails.ClassSchoolYearSubjectId)
                 };
                 dbContext.Lessons.Add(lesson);
             }

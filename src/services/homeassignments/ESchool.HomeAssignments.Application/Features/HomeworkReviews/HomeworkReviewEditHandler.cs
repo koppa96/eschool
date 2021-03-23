@@ -7,6 +7,7 @@ using ESchool.HomeAssignments.Domain.Enums;
 using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Domain.Extensions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.HomeworkReviews
 {
@@ -29,7 +30,9 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkReviews
         
         public async Task<HomeworkReviewResponse> Handle(EditCommand<HomeworkReviewEditCommand, HomeworkReviewResponse> request, CancellationToken cancellationToken)
         {
-            var review = await context.HomeworkReviews.FindOrThrowAsync(request.Id, cancellationToken);
+            var review = await context.HomeworkReviews.Include(x => x.CreatedBy)
+                .Include(x => x.LastModifiedBy)
+                .SingleAsync(x => x.Id == request.Id, cancellationToken);
             review.Comment = request.InnerCommand.Comment;
             review.Outcome = request.InnerCommand.Outcome;
 

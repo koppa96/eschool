@@ -32,12 +32,17 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions
         public async Task<HomeworkSolutionResponse> Handle(HomeworkSolutionCreateCommand request, CancellationToken cancellationToken)
         {
             var currentUserId = identityService.GetCurrentUserId();
-            var studentHomework = await context.StudentHomeworks.SingleAsync(
-                x => x.Student.UserId == currentUserId && x.HomeworkId == request.HomeworkId, cancellationToken);
+            var studentHomework = await context.StudentHomeworks.Include(x => x.Homework)
+                .SingleAsync(x => x.Student.UserId == currentUserId && x.HomeworkId == request.HomeworkId, cancellationToken);
 
             if (studentHomework.HomeworkSolutionId != null)
             {
                 throw new InvalidOperationException("Már létrehozásra került egy megoldás ehhez a feladathoz.");
+            }
+
+            if (studentHomework.Homework.Deadline < DateTime.Now)
+            {
+                throw new InvalidOperationException("A határidő lejárt.");
             }
 
             var solution = new HomeworkSolution

@@ -4,7 +4,7 @@ using ESchool.Libs.Domain.Interfaces;
 
 namespace ESchool.Libs.Domain.MultiTenancy.Entities
 {
-    public class UserBase<TUser, TUserRole> : IEntity
+    public abstract class UserBase<TUser, TUserRole> : IEntity
         where TUserRole : UserRoleBase<TUser, TUserRole>
         where TUser : UserBase<TUser, TUserRole>
     {

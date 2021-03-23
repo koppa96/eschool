@@ -5,6 +5,7 @@ namespace ESchool.HomeAssignments.Domain.Entities.Users
 {
     public class Student : HomeAssignmentsUserRole
     {
-        public virtual ICollection<StudentHomework> StudentHomeworks { get; set; }
+        public virtual ICollection<ClassSchoolYearSubjectStudent> ClassSchoolYearSubjectStudents { get; set; }
+        public virtual ICollection<HomeworkSolution> Solutions { get; set; }
     }
 }

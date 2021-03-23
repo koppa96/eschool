@@ -17,6 +17,9 @@ namespace ESchool.HomeAssignments.Domain
         private readonly Tenant tenant;
         private readonly IIdentityService identityService;
 
+        public DbSet<ClassSchoolYearSubjectTeacher> ClassSchoolYearSubjectTeachers { get; set; }
+        public DbSet<ClassSchoolYearSubjectStudent> ClassSchoolYearSubjectStudents { get; set; }
+        public DbSet<ClassSchoolYearSubject> ClassSchoolYearSubjects { get; set; }
         public DbSet<HomeAssignmentsUserRole> UserRoles { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
@@ -26,9 +29,7 @@ namespace ESchool.HomeAssignments.Domain
         public DbSet<Homework> Homeworks { get; set; }
         public DbSet<HomeworkSolution> HomeworkSolutions { get; set; }
         public DbSet<HomeworkReview> HomeworkReviews { get; set; }
-        public DbSet<StudentHomework> StudentHomeworks { get; set; }
-        public DbSet<TeacherHomework> TeacherHomeworks { get; set; }
-        
+
         public HomeAssignmentsContext(DbContextOptions<HomeAssignmentsContext> options, Tenant tenant, IIdentityService identityService) : base(options)
         {
             this.tenant = tenant;

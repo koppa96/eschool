@@ -6,13 +6,31 @@ option csharp_namespace = "ESchool.ClassRegister.Grpc";
 
 service LessonService {
   rpc GetLessonInfoForHomeAssignments(LessonInfoForHomeAssignmentsRequest) returns (LessonInfoForHomeAssignmentsResponse);
-  rpc ListStudentsAndTeachersForLesson(StudentAndTeacherListRequest) returns (StudentAndTeacherListResponse);
 }
 
 service UserService {
   rpc GetStudent(UserGetRequest) returns (UserGetResponse);
+  rpc GetStudentOfClass(StudentsOfClassRequest) returns (UserListResponse);
+  rpc GetTeachersOfClassSchoolYearSubject(TeachersOfClassSchoolYearSubjectRequest) returns (UserListResponse);
   rpc GetTeacher(UserGetRequest) returns (UserGetResponse);
   rpc GetUser(IdentityUserGetRequest) returns (IdentityUserGetResponse);
+}
+
+service ClassSchoolYearSubjectService {
+  rpc GetDetails(ClassSchoolYearSubjectDetailsRequest) returns (ClassSchoolYearSubjectDetailsResponse);
+}
+
+message ClassSchoolYearSubjectDetailsRequest {
+  string id = 1;
+}
+
+message ClassSchoolYearSubjectDetailsResponse {
+  string id = 1;
+  string schoolYearId = 2;
+  string classId = 3;
+  string subjectId = 4;
+  repeated string studentIds = 5;
+  repeated string teacherIds = 6;
 }
 
 message LessonInfoForHomeAssignmentsRequest {
@@ -22,9 +40,7 @@ message LessonInfoForHomeAssignmentsRequest {
 message LessonInfoForHomeAssignmentsResponse {
   string id = 1;
   string title = 2;
-  string classId = 3;
-  string schoolYearId = 4;
-  string subjectId = 5;
+  string classSchoolYearSubjectId = 3;
 }
 
 message IdentityUserGetRequest {
@@ -46,11 +62,14 @@ message UserGetResponse {
   string userId = 3;
 }
 
-message StudentAndTeacherListRequest {
-  string lessonId = 1;
+message StudentsOfClassRequest {
+  string classId = 1;
 }
 
-message StudentAndTeacherListResponse {
-  repeated string studentIds = 1;
-  repeated string teacherIds = 2;
+message TeachersOfClassSchoolYearSubjectRequest {
+  string classSchoolYearSubjectId = 1;
+}
+
+message UserListResponse {
+  repeated string userIds = 1;
 }
