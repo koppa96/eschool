@@ -12,6 +12,7 @@ service LessonService {
 service UserService {
   rpc GetStudent(UserGetRequest) returns (UserGetResponse);
   rpc GetTeacher(UserGetRequest) returns (UserGetResponse);
+  rpc GetUser(IdentityUserGetRequest) returns (IdentityUserGetResponse);
 }
 
 message LessonInfoForHomeAssignmentsRequest {
@@ -24,6 +25,15 @@ message LessonInfoForHomeAssignmentsResponse {
   string classId = 3;
   string schoolYearId = 4;
   string subjectId = 5;
+}
+
+message IdentityUserGetRequest {
+  string id = 1;
+}
+
+message IdentityUserGetResponse {
+  string id = 1;
+  string name = 2;
 }
 
 message UserGetRequest {

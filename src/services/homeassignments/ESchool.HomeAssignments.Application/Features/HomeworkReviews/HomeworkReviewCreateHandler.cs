@@ -60,9 +60,7 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkReviews
             {
                 Comment = request.Comment,
                 Outcome = request.Outcome,
-                HomeworkSolution = solution,
-                ReviewedAt = DateTime.Now,
-                Reviewer = reviewer
+                HomeworkSolution = solution
             };
 
             context.HomeworkReviews.Add(review);

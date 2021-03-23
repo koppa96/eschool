@@ -1,4 +1,5 @@
 ﻿using ESchool.ClassRegister.Domain.Entities.Users;
+using ESchool.ClassRegister.Domain.Entities.Users.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,11 +8,12 @@ namespace ESchool.ClassRegister.Domain.EntityConfiguration
     public class UserConfiguration : IEntityTypeConfiguration<Teacher>,
         IEntityTypeConfiguration<Parent>,
         IEntityTypeConfiguration<Student>,
-        IEntityTypeConfiguration<UserBase>
+        IEntityTypeConfiguration<Administrator>,
+        IEntityTypeConfiguration<ClassRegisterUser>
     {
         public void Configure(EntityTypeBuilder<Teacher> builder)
         {
-            builder.HasBaseType<UserBase>();
+            builder.HasBaseType<ClassRegisterUserRole>();
 
             builder.HasMany(x => x.ClassSchoolYearSubjectTeachers)
                 .WithOne(x => x.Teacher)
@@ -28,7 +30,7 @@ namespace ESchool.ClassRegister.Domain.EntityConfiguration
 
         public void Configure(EntityTypeBuilder<Parent> builder)
         {
-            builder.HasBaseType<UserBase>();
+            builder.HasBaseType<ClassRegisterUserRole>();
             
             builder.HasMany(x => x.StudentParents)
                 .WithOne(x => x.Parent)
@@ -37,7 +39,7 @@ namespace ESchool.ClassRegister.Domain.EntityConfiguration
 
         public void Configure(EntityTypeBuilder<Student> builder)
         {
-            builder.HasBaseType<UserBase>();
+            builder.HasBaseType<ClassRegisterUserRole>();
 
             builder.HasMany(x => x.StudentParents)
                 .WithOne(x => x.Student)
@@ -56,15 +58,24 @@ namespace ESchool.ClassRegister.Domain.EntityConfiguration
                 .HasForeignKey(x => x.ClassId);
         }
 
-        public void Configure(EntityTypeBuilder<UserBase> builder)
+        public void Configure(EntityTypeBuilder<ClassRegisterUser> builder)
         {
             builder.HasMany(x => x.ReceivedMessages)
-                .WithOne(x => x.User)
+                .WithOne(x => x.ClassRegisterUser)
                 .HasForeignKey(x => x.UserId);
 
             builder.HasMany(x => x.SentMessages)
-                .WithOne(x => x.SenderUser)
+                .WithOne(x => x.SenderClassRegisterUser)
                 .HasForeignKey(x => x.SenderUserId);
+
+            builder.HasMany(x => x.UserRoles)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId);
+        }
+
+        public void Configure(EntityTypeBuilder<Administrator> builder)
+        {
+            builder.HasBaseType<ClassRegisterUserRole>();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using ESchool.HomeAssignments.Application.Features.HomeworkReviews.Common;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Enums;
@@ -18,10 +19,12 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkReviews
     public class HomeworkReviewEditHandler : IRequestHandler<EditCommand<HomeworkReviewEditCommand, HomeworkReviewResponse>, HomeworkReviewResponse>
     {
         private readonly HomeAssignmentsContext context;
+        private readonly IMapper mapper;
 
-        public HomeworkReviewEditHandler(HomeAssignmentsContext context)
+        public HomeworkReviewEditHandler(HomeAssignmentsContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
         
         public async Task<HomeworkReviewResponse> Handle(EditCommand<HomeworkReviewEditCommand, HomeworkReviewResponse> request, CancellationToken cancellationToken)
@@ -29,6 +32,9 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkReviews
             var review = await context.HomeworkReviews.FindOrThrowAsync(request.Id, cancellationToken);
             review.Comment = request.InnerCommand.Comment;
             review.Outcome = request.InnerCommand.Outcome;
+
+            await context.SaveChangesAsync(cancellationToken);
+            return mapper.Map<HomeworkReviewResponse>(review);
         }
     }
 }

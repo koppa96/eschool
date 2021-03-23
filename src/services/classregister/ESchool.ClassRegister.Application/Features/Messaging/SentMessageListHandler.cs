@@ -35,7 +35,7 @@ namespace ESchool.ClassRegister.Application.Features.Messaging
         protected override IQueryable<Message> Filter(IQueryable<Message> entities, SentMessageListQuery query)
         {
             var currentUserId = identityService.GetCurrentUserId();
-            return entities.Where(x => x.SenderUser.UserId == currentUserId);
+            return entities.Where(x => x.SenderClassRegisterUser.Id == currentUserId);
         }
 
         protected override IOrderedQueryable<Message> Order(IQueryable<Message> entities)

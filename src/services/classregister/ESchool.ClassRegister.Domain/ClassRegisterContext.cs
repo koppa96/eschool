@@ -7,6 +7,7 @@ using ESchool.ClassRegister.Domain.Entities.Grading;
 using ESchool.ClassRegister.Domain.Entities.Messaging;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.ClassRegister.Domain.Entities.Users;
+using ESchool.ClassRegister.Domain.Entities.Users.Abstractions;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Domain.Interfaces;
 using ESchool.Libs.Domain.MultiTenancy.Entities;
@@ -37,7 +38,8 @@ namespace ESchool.ClassRegister.Domain
         public DbSet<SubjectTeacher> SubjectTeachers { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Administrator> Administrators { get; set; }
-        public DbSet<UserBase> UserBases { get; set; }
+        public DbSet<ClassRegisterUserRole> UserRoles { get; set; }
+        public DbSet<ClassRegisterUser> Users { get; set; }
         public DbSet<ClassSchoolYearSubjectTeacher> ClassSchoolYearSubjectTeachers { get; set; }
 
         public ClassRegisterContext(DbContextOptions<ClassRegisterContext> options, Tenant tenant) : base(options)

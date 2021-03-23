@@ -8,9 +8,13 @@ namespace ESchool.HomeAssignments.Domain.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<HomeworkReview> builder)
         {
-            builder.HasOne(x => x.Reviewer)
-                .WithMany(x => x.Reviews)
-                .HasForeignKey(x => x.ReviewerId);
+            builder.HasOne(x => x.CreatedBy)
+                .WithMany()
+                .HasForeignKey(x => x.CreatedById);
+
+            builder.HasOne(x => x.LastModifiedBy)
+                .WithMany()
+                .HasForeignKey(x => x.LastModifiedById);
         }
     }
 }

@@ -5,7 +5,7 @@ using ESchool.Libs.Domain.Interfaces;
 
 namespace ESchool.HomeAssignments.Domain.Entities
 {
-    public class HomeworkReview : IFullAuditedEntity<Teacher>
+    public class HomeworkReview : IFullAuditedEntity<HomeAssignmentsUser, HomeAssignmentsUserRole>
     {
         public Guid Id { get; set; }
 
@@ -14,11 +14,11 @@ namespace ESchool.HomeAssignments.Domain.Entities
         
         public DateTime CreatedAt { get; set; }
         public Guid CreatedById { get; set; }
-        public Teacher CreatedBy { get; set; }
+        public HomeAssignmentsUser CreatedBy { get; set; }
         
         public DateTime? LastModifiedAt { get; set; }
         public Guid? LastModifiedById { get; set; }
-        public Teacher LastModifiedBy { get; set; }
+        public HomeAssignmentsUser LastModifiedBy { get; set; }
         
         public Guid HomeWorkSolutionId { get; set; }
         public virtual HomeworkSolution HomeworkSolution { get; set; }

@@ -46,13 +46,13 @@ namespace ESchool.ClassRegister.Application.Features.Grading.Grades
             GradeListByClassSchoolYearSubjectQuery request, CancellationToken cancellationToken)
         {
             return await context.Students.Where(x => x.ClassId == request.ClassId)
-                .OrderBy(x => x.Name)
+                .OrderBy(x => x.User.Name)
                 .Select(x => new GradeListByClassSchoolYearSubjectResponse
                 {
                     Student = new UserListResponse
                     {
                         Id = x.Id,
-                        Name = x.Name
+                        Name = x.User.Name
                     },
                     Grades = x.Grades.Where(g => g.ClassSchoolYearSubject.ClassSchoolYear.SchoolYearId ==
                                                  request.SchoolYearId &&

@@ -18,11 +18,11 @@ namespace ESchool.ClassRegister.Application.Features.Users
 
         public async Task Consume(ConsumeContext<TenantUserDeletedEvent> context)
         {
-            var userBases = await dbContext.UserBases.IgnoreQueryFilters()
+            var userBases = await dbContext.UserRoles.IgnoreQueryFilters()
                 .Where(x => x.UserId == context.Message.UserId)
                 .ToListAsync();
 
-            dbContext.UserBases.RemoveRange(userBases);
+            dbContext.UserRoles.RemoveRange(userBases);
             await dbContext.SaveChangesAsync();
         }
     }

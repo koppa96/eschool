@@ -36,7 +36,7 @@ namespace ESchool.ClassRegister.Application.Features.Subjects
                 Teachers = subject.SubjectTeachers.Select(x => new UserListResponse
                 {
                     Id = x.TeacherId,
-                    Name = x.Teacher.Name
+                    Name = x.Teacher.User.Name
                 }).ToList()
             };
         }

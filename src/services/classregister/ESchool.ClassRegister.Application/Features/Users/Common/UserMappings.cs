@@ -17,11 +17,11 @@ namespace ESchool.ClassRegister.Application.Features.Users.Common
             CreateMap<Student, TenantUserDeletedEvent>()
                 .ConstructUsing(student => new StudentDeletedEvent());
 
-            CreateMap<Teacher, TenantUserCreatedOrUpdatedEvent>()
-                .ConstructUsing(teacher => new TeacherCreatedOrUpdatedEvent());
+            CreateMap<Teacher, TenantUserCreatedEvent>()
+                .ConstructUsing(teacher => new TeacherCreatedEvent());
 
-            CreateMap<Student, TenantUserCreatedOrUpdatedEvent>()
-                .ConstructUsing(student => new StudentCreatedOrUpdatedEvent());
+            CreateMap<Student, TenantUserCreatedEvent>()
+                .ConstructUsing(student => new StudentCreatedEvent());
         }
     }
 }

@@ -8,14 +8,16 @@ namespace ESchool.HomeAssignments.Application.Features.Users.Common
     {
         public UserMappings()
         {
-            CreateMap<UserBase, UserListResponse>();
+            CreateMap<HomeAssignmentsUserRole, UserListResponse>()
+                .ForMember(x => x.Name, o => o.MapFrom(x => x.User.Name));
+            
             CreateMap<StudentHomework, UserListResponse>()
                 .ForMember(x => x.Id, o => o.MapFrom(x => x.StudentId))
-                .ForMember(x => x.Name, o => o.MapFrom(x => x.Student.Name));
+                .ForMember(x => x.Name, o => o.MapFrom(x => x.Student.User.Name));
 
             CreateMap<TeacherHomework, UserListResponse>()
                 .ForMember(x => x.Id, o => o.MapFrom(x => x.TeacherId))
-                .ForMember(x => x.Name, o => o.MapFrom(x => x.Teacher.Name));
+                .ForMember(x => x.Name, o => o.MapFrom(x => x.Teacher.User.Name));
         }
     }
 }

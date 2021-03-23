@@ -89,7 +89,6 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks
                 Title = request.Title,
                 Description = request.Description,
                 Optional = request.Optional,
-                CreatedAt = DateTime.Now,
                 Deadline = request.Deadline,
                 Lesson = lesson,
                 StudentHomeworks = students.Select(x => new StudentHomework
@@ -100,7 +99,6 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks
                 {
                     Teacher = x
                 }).ToList(),
-                CreatedBy = teachers.Single(x => x.UserId == currentUserId)
             };
 
             context.Homeworks.Add(homework);

@@ -24,7 +24,7 @@ namespace ESchool.HomeAssignments.Application.Features.UserHomeworks
 
         protected override IOrderedQueryable<TeacherHomework> Order(IQueryable<TeacherHomework> entities)
         {
-            return entities.OrderBy(x => x.Teacher.Name);
+            return entities.OrderBy(x => x.Teacher.User.Name);
         }
     }
 }

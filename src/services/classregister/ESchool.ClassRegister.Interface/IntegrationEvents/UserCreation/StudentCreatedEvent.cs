@@ -2,8 +2,7 @@
 
 namespace ESchool.ClassRegister.Interface.IntegrationEvents.UserCreation
 {
-    public abstract class TenantUserCreatedOrUpdatedEvent
+    public class StudentCreatedEvent : TenantUserCreatedEvent
     {
-        public Guid Id { get; set; }
     }
 }

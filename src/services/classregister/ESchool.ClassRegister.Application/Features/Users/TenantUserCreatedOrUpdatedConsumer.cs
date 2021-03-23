@@ -7,19 +7,21 @@ using AutoMapper;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Attributes;
 using ESchool.ClassRegister.Domain.Entities.Users;
+using ESchool.ClassRegister.Domain.Entities.Users.Abstractions;
 using ESchool.ClassRegister.Interface.IntegrationEvents.UserCreation;
 using ESchool.IdentityProvider.Grpc;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers;
 using ESchool.Libs.Application.Extensions;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.MultiTenancy;
+using ESchool.Libs.Domain.MultiTenancy.Entities;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using TenantUserDeletedEvent = ESchool.ClassRegister.Interface.IntegrationEvents.UserDeletion.TenantUserDeletedEvent;
 
 namespace ESchool.ClassRegister.Application.Features.Users
 {
-    public class TenantUserCreatedConsumer : IConsumer<TenantUserCreatedOrEditedEvent>
+    public class TenantUserCreatedOrUpdatedConsumer : IConsumer<TenantUserCreatedOrEditedEvent>
     {
         private readonly DbContextOptions<ClassRegisterContext> dbContextOptions;
         private readonly MasterDbContext masterDbContext;
@@ -27,7 +29,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
         private readonly IPublishEndpoint publishEndpoint;
         private readonly IMapper mapper;
 
-        public TenantUserCreatedConsumer(DbContextOptions<ClassRegisterContext> dbContextOptions,
+        public TenantUserCreatedOrUpdatedConsumer(DbContextOptions<ClassRegisterContext> dbContextOptions,
             MasterDbContext masterDbContext,
             TenantUserService.TenantUserServiceClient client,
             IPublishEndpoint publishEndpoint,
@@ -50,12 +52,12 @@ namespace ESchool.ClassRegister.Application.Features.Users
             
             var tenantUserTypes = Assembly.GetExecutingAssembly()
                 .GetTypes()
-                .Where(x => x.BaseType == typeof(UserBase) && x.GetCustomAttribute<TenantUserAttribute>() != null)
+                .Where(x => x.BaseType == typeof(ClassRegisterUser) && x.GetCustomAttribute<TenantUserAttribute>() != null)
                 .ToList();
 
-            var existingUserBases = await dbContext.UserBases.IgnoreQueryFilters()
-                .Where(x => x.UserId == context.Message.UserId)
-                .ToListAsync();
+            var existingUser = await dbContext.Users.IgnoreQueryFilters()
+                .Include(x => x.UserRoles)
+                .SingleOrDefaultAsync(x => x.Id == context.Message.UserId);
 
             var tenantUserData = await client.GetTenantUserDetailsAsync(new TenantUserDetailsRequest
             {
@@ -63,13 +65,28 @@ namespace ESchool.ClassRegister.Application.Features.Users
                 UserId = context.Message.UserId.ToString()
             });
 
+            if (existingUser == null)
+            {
+                existingUser = new ClassRegisterUser
+                {
+                    Id = context.Message.UserId,
+                    Email = tenantUserData.Email,
+                    UserRoles = new List<ClassRegisterUserRole>()
+                };
+                dbContext.Users.Add(existingUser);
+            }
+            else
+            {
+                existingUser.Email = tenantUserData.Email;
+            }
+
             // Delete or update userBases
-            foreach (var userBase in existingUserBases)
+            foreach (var userBase in existingUser.UserRoles)
             {
                 if (tenantUserData.TenantRoleTypes.Cast<TenantRoleType>()
                     .All(x => x != userBase.GetType().GetCustomAttribute<TenantUserAttribute>()!.TenantRoleType))
                 {
-                    dbContext.UserBases.Remove(userBase);
+                    dbContext.UserRoles.Remove(userBase);
                     if (mapper.TryMap<TenantUserDeletedEvent>(userBase, out var @event))
                     {
                         events.Add(@event);
@@ -79,19 +96,19 @@ namespace ESchool.ClassRegister.Application.Features.Users
 
             foreach (var roleType in tenantUserData.TenantRoleTypes.Cast<TenantRoleType>())
             {
-                var existingUserBase = existingUserBases.SingleOrDefault(x =>
+                var existingUserRole = existingUser.UserRoles.SingleOrDefault(x =>
                     x.GetType().GetCustomAttribute<TenantUserAttribute>()?.TenantRoleType == roleType);
 
-                if (existingUserBase == null)
+                if (existingUserRole == null)
                 {
                     var userType = tenantUserTypes.Single(x =>
                         x.GetCustomAttribute<TenantUserAttribute>()!.TenantRoleType == roleType);
 
-                    var user = (UserBase) Activator.CreateInstance(userType);
-                    user.Id = Guid.NewGuid();
-                    user.Email = tenantUserData.Email;
-                    dbContext.UserBases.Add(user);
-                    if (mapper.TryMap<TenantUserCreatedOrUpdatedEvent>(user, out var @event))
+                    var userRole = (ClassRegisterUserRole) Activator.CreateInstance(userType);
+                    userRole.Id = Guid.NewGuid();
+                    userRole.User = existingUser;
+                    dbContext.UserRoles.Add(userRole);
+                    if (mapper.TryMap<TenantUserCreatedEvent>(userRole, out var @event))
                     {
                         events.Add(@event);
                     }
@@ -99,8 +116,8 @@ namespace ESchool.ClassRegister.Application.Features.Users
                 else
                 {
                     // Undelete the existing user
-                    existingUserBase.IsDeleted = false;
-                    if (mapper.TryMap<TenantUserCreatedOrUpdatedEvent>(existingUserBase, out var @event))
+                    existingUserRole.IsDeleted = false;
+                    if (mapper.TryMap<TenantUserCreatedEvent>(existingUserRole, out var @event))
                     {
                         events.Add(@event);
                     }

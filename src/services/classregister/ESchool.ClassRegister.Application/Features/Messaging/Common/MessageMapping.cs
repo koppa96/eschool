@@ -9,11 +9,11 @@ namespace ESchool.ClassRegister.Application.Features.Messaging.Common
         public MessageMapping()
         {
             CreateMap<Message, MessageListResponse>()
-                .ForMember(x => x.Sender, o => o.MapFrom(x => x.SenderUser));
+                .ForMember(x => x.Sender, o => o.MapFrom(x => x.SenderClassRegisterUser));
 
             CreateMap<Message, MessageDetailsResponse>()
-                .ForMember(x => x.Sender, o => o.MapFrom(x => x.SenderUser))
-                .ForMember(x => x.Recipients, o => o.MapFrom(x => x.ReceiverUserMessages.Select(r => r.User)));
+                .ForMember(x => x.Sender, o => o.MapFrom(x => x.SenderClassRegisterUser))
+                .ForMember(x => x.Recipients, o => o.MapFrom(x => x.ReceiverUserMessages.Select(r => r.ClassRegisterUser)));
         }
     }
 }

@@ -16,8 +16,11 @@ namespace ESchool.HomeAssignments.Domain
     {
         private readonly Tenant tenant;
         private readonly IIdentityService identityService;
+
+        public DbSet<HomeAssignmentsUserRole> UserRoles { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
+        public DbSet<HomeAssignmentsUser> Users { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<Homework> Homeworks { get; set; }
@@ -56,8 +59,10 @@ namespace ESchool.HomeAssignments.Domain
         private async Task EntityAuditAsync(CancellationToken cancellationToken = default)
         {
             this.SoftDelete();
-            await this.CreationAuditAsync(identityService.GetCurrentUserId(), cancellationToken);
-            await this.ModificationAuditAsync(identityService.GetCurrentUserId(), cancellationToken);
+            
+            var currentUserId = identityService.GetCurrentUserId();
+            await this.CreationAuditAsync<HomeAssignmentsUser, HomeAssignmentsUserRole>(currentUserId, cancellationToken);
+            await this.ModificationAuditAsync<HomeAssignmentsUser, HomeAssignmentsUserRole>(currentUserId, cancellationToken);
         }
 
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())

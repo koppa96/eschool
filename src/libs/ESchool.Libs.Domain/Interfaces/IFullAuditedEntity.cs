@@ -1,7 +1,10 @@
+using ESchool.Libs.Domain.MultiTenancy.Entities;
+
 namespace ESchool.Libs.Domain.Interfaces
 {
-    public interface IFullAuditedEntity<TNavigation> : ICreationAuditedEntity<TNavigation>, IModificationAuditedEntity<TNavigation>
-        where TNavigation : IUser
+    public interface IFullAuditedEntity<TUser, TUserRole> : ICreationAuditedEntity<TUser, TUserRole>, IModificationAuditedEntity<TUser, TUserRole>
+        where TUser : UserBase<TUser, TUserRole>
+        where TUserRole : UserRoleBase<TUser, TUserRole>
     {
     }
 }
