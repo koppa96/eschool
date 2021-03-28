@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -32,22 +33,34 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions
         public async Task<HomeworkSolutionResponse> Handle(HomeworkSolutionCreateCommand request, CancellationToken cancellationToken)
         {
             var currentUserId = identityService.GetCurrentUserId();
-            var studentHomework = await context.StudentHomeworks.Include(x => x.Homework)
-                .SingleAsync(x => x.Student.UserId == currentUserId && x.HomeworkId == request.HomeworkId, cancellationToken);
+            var homework = await context.Homeworks.Include(x => x.Lesson)
+                    .ThenInclude(x => x.ClassSchoolYearSubject)
+                        .ThenInclude(x => x.ClassSchoolYearSubjectStudents)
+                            .ThenInclude(x => x.Student)
+                .Include(x => x.Solutions)
+                    .ThenInclude(x => x.Student)
+                .SingleAsync(x => x.Id == request.HomeworkId, cancellationToken);
 
-            if (studentHomework.HomeworkSolutionId != null)
+            var student = homework.Lesson.ClassSchoolYearSubject.ClassSchoolYearSubjectStudents
+                .Where(x => x.Student.UserId == currentUserId)
+                .Select(x => x.Student)
+                .Single();
+            
+            if (homework.Solutions.Any(x => x.Student.UserId == currentUserId))
             {
-                throw new InvalidOperationException("Már létrehozásra került egy megoldás ehhez a feladathoz.");
+                throw new InvalidOperationException(
+                    "Már létrehozásra került egy megoldás az adott házi feladathoz ez által a diák által.");
             }
-
-            if (studentHomework.Homework.Deadline < DateTime.Now)
+            
+            if (homework.Deadline < DateTime.Now)
             {
                 throw new InvalidOperationException("A határidő lejárt.");
             }
 
             var solution = new HomeworkSolution
             {
-                StudentHomework = studentHomework
+                Homework = homework,
+                Student = student
             };
 
             context.HomeworkSolutions.Add(solution);

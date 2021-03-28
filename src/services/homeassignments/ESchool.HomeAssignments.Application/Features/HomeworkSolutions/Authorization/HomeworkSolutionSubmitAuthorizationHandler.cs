@@ -22,11 +22,11 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Authori
         public async Task<RequestAuthorizationResult> IsAuthorizedAsync(HomeworkSolutionSubmitCommand request, CancellationToken cancellationToken)
         {
             var currentUserId = identityService.GetCurrentUserId();
-            var solution = await context.HomeworkSolutions.Include(x => x.StudentHomework)
-                .ThenInclude(x => x.Student)
-                .SingleAsync(x => x.Id == request.Id, cancellationToken);
+            var isAuthorized =
+                await context.HomeworkSolutions.AnyAsync(x => x.Id == request.Id && x.Student.UserId == currentUserId,
+                    cancellationToken);
 
-            return solution.StudentHomework.Student.UserId == currentUserId
+            return isAuthorized
                 ? RequestAuthorizationResult.Success
                 : RequestAuthorizationResult.Failure("A házi feladatot csak a készítő diák adhatja be.");
         }

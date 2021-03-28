@@ -62,43 +62,28 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks
         
         public async Task<HomeworkDetailsResponse> Handle(HomeworkCreateCommand request, CancellationToken cancellationToken)
         {
-            var response = await client.ListStudentsAndTeachersForLessonAsync(new StudentAndTeacherListRequest
-            {
-                LessonId = request.LessonId.ToString()
-            }, cancellationToken: cancellationToken);
+            var lesson = await context.Lessons.Include(x => x.ClassSchoolYearSubject)
+                    .ThenInclude(x => x.ClassSchoolYearSubjectStudents)
+                        .ThenInclude(x => x.Student)
+                .Include(x => x.ClassSchoolYearSubject)
+                    .ThenInclude(x => x.ClassSchoolYearSubjectTeachers)
+                        .ThenInclude(x => x.Teacher)
+                .SingleAsync(x => x.Id == request.LessonId, cancellationToken);
             
-            var studentGuids = response.StudentIds.Select(x => Guid.Parse(x)).ToList();
-            var students = await context.Students.Where(x => studentGuids.Contains(x.Id))
-                .ToListAsync(cancellationToken);
-
-            var teacherGuids = response.TeacherIds.Select(x => Guid.Parse(x)).ToList();
-            var teachers = await context.Teachers.Where(x => teacherGuids.Contains(x.Id))
-                .ToListAsync(cancellationToken);
-
             var currentUserId = identityService.GetCurrentUserId();
-            if (teachers.All(x => x.UserId != currentUserId))
+            if (lesson.ClassSchoolYearSubject.ClassSchoolYearSubjectTeachers.All(x => x.Teacher.UserId != currentUserId))
             {
                 throw new UnauthorizedAccessException(
                     "Csak olyan tanár írhat ki házi feladatot, aki tanítja az adott tárgyat az osztálynak a tanévben.");
             }
-
-            var lesson = await context.Lessons.FindOrThrowAsync(request.LessonId, cancellationToken);
-
+            
             var homework = new Homework
             {
                 Title = request.Title,
                 Description = request.Description,
                 Optional = request.Optional,
                 Deadline = request.Deadline,
-                Lesson = lesson,
-                StudentHomeworks = students.Select(x => new StudentHomework
-                {
-                    Student = x
-                }).ToList(),
-                TeacherHomeworks = teachers.Select(x => new TeacherHomework
-                {
-                    Teacher = x
-                }).ToList(),
+                Lesson = lesson
             };
 
             context.Homeworks.Add(homework);

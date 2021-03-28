@@ -37,23 +37,20 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkReviews
         {
             var solution = await context.HomeworkSolutions.Include(x => x.HomeworkReview)
                 .Include(x => x.Homework)
-                    .ThenInclude(x => x.TeacherHomeworks)
-                        .ThenInclude(x => x.Teacher)
+                    .ThenInclude(x => x.Lesson)
+                        .ThenInclude(x => x.ClassSchoolYearSubject)
+                            .ThenInclude(x => x.ClassSchoolYearSubjectTeachers)
+                                .ThenInclude(x => x.Teacher)
                 .SingleAsync(x => x.Id == request.HomeworkSolutionId, cancellationToken);
 
             var currentUserId = identityService.GetCurrentUserId();
-            var reviewer = solution.Homework.TeacherHomeworks.Select(x => x.Teacher)
+            var reviewer = solution.Homework.Lesson.ClassSchoolYearSubject.ClassSchoolYearSubjectTeachers.Select(x => x.Teacher)
                 .SingleOrDefault(x => x.UserId == currentUserId);
-
+            
             if (reviewer == null)
             {
                 throw new UnauthorizedAccessException(
                     "Csak a tárgyat tanító tanár véleményezheti a tárgyhoz tartozó házi feladat megoldásokat.");
-            }
-
-            if (solution.HomeworkReview != null)
-            {
-                throw new InvalidOperationException("Ez a feladat már értékelve lett.");
             }
 
             var review = new HomeworkReview

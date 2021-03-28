@@ -30,9 +30,7 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions
         
         public Task<HomeworkSolutionResponse> Handle(HomeworkSolutionGetQuery request, CancellationToken cancellationToken)
         {
-            return context.HomeworkSolutions.Where(x =>
-                    x.StudentHomework.StudentId == request.StudentId &&
-                    x.StudentHomework.HomeworkId == request.HomeworkId)
+            return context.HomeworkSolutions.Where(x => x.StudentId == request.StudentId && x.HomeworkId == request.HomeworkId)
                 .ProjectTo<HomeworkSolutionResponse>(configurationProvider)
                 .SingleAsync(cancellationToken);
         }

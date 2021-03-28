@@ -18,14 +18,17 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks.Authorization
             this.context = context;
             this.identityService = identityService;
         }
-        
-        public async Task<RequestAuthorizationResult> IsAuthorizedAsync(HomeworkGetQuery request, CancellationToken cancellationToken)
+
+        public async Task<RequestAuthorizationResult> IsAuthorizedAsync(HomeworkGetQuery request,
+            CancellationToken cancellationToken)
         {
             var currentUserId = identityService.GetCurrentUserId();
             var isAuthorized = await context.Homeworks.AnyAsync(x =>
                 x.Id == request.Id &&
-                (x.StudentHomeworks.Any(sh => sh.Student.UserId == currentUserId) ||
-                 x.TeacherHomeworks.Any(th => th.Teacher.UserId == currentUserId)), cancellationToken);
+                (x.Lesson.ClassSchoolYearSubject.ClassSchoolYearSubjectStudents.Any(s =>
+                     s.Student.UserId == currentUserId) ||
+                 x.Lesson.ClassSchoolYearSubject.ClassSchoolYearSubjectTeachers.Any(t =>
+                     t.Teacher.UserId == currentUserId)), cancellationToken);
 
             return isAuthorized
                 ? RequestAuthorizationResult.Success

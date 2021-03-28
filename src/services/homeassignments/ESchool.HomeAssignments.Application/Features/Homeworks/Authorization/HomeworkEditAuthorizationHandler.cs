@@ -26,7 +26,7 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks.Authorization
             CancellationToken cancellationToken)
         {
             var currentUserId = identityService.GetCurrentUserId();
-            var isTeacher = await context.Teachers.IsTeacherAtHomework(currentUserId, request.Id);
+            var isTeacher = await context.Homeworks.IsTeacherAtHomework(currentUserId, request.Id);
 
             return isTeacher
                 ? RequestAuthorizationResult.Success

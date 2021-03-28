@@ -18,24 +18,21 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Authori
             this.context = context;
             this.identityService = identityService;
         }
-        
-        public async Task<RequestAuthorizationResult> IsAuthorizedAsync(HomeworkSolutionGetQuery request, CancellationToken cancellationToken)
+
+        public async Task<RequestAuthorizationResult> IsAuthorizedAsync(HomeworkSolutionGetQuery request,
+            CancellationToken cancellationToken)
         {
             var currentUserId = identityService.GetCurrentUserId();
-            var studentHomework = await context.StudentHomeworks.Include(x => x.Homework)
-                    .ThenInclude(x => x.TeacherHomeworks)
-                        .ThenInclude(x => x.Teacher)
-                .Include(x => x.Student)
-                .SingleAsync(x => x.StudentId == request.StudentId && x.HomeworkId == request.HomeworkId,
-                    cancellationToken);
+            var isAuthorized = await context.HomeworkSolutions
+                .AnyAsync(x => x.HomeworkId == request.HomeworkId && x.StudentId == request.StudentId &&
+                               (x.Student.UserId == currentUserId ||
+                                x.Homework.Lesson.ClassSchoolYearSubject.ClassSchoolYearSubjectTeachers
+                                    .Any(t => t.Teacher.UserId == currentUserId)), cancellationToken);
 
-            if (studentHomework.Student.UserId == currentUserId ||
-                studentHomework.Homework.TeacherHomeworks.Any(x => x.Teacher.UserId == currentUserId))
-            {
-                return RequestAuthorizationResult.Success;
-            }
-            
-            return RequestAuthorizationResult.Failure("A házifeladat megoldást csak a készítője, és a házi feladat javító tanárok tekinthetik meg.");
+            return isAuthorized
+                ? RequestAuthorizationResult.Success
+                : RequestAuthorizationResult.Failure(
+                    "A házifeladat megoldást csak a készítője, és a házi feladat javító tanárok tekinthetik meg.");
         }
     }
 }

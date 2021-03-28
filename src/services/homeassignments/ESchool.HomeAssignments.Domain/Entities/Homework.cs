@@ -26,5 +26,7 @@ namespace ESchool.HomeAssignments.Domain.Entities
         public DateTime? LastModifiedAt { get; set; }
         public Guid? LastModifiedById { get; set; }
         public virtual HomeAssignmentsUser LastModifiedBy { get; set; }
+
+        public virtual ICollection<HomeworkSolution> Solutions { get; set; }
     }
 }
