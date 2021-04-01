@@ -10,7 +10,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ESchool.ClassRegister.Api.Controllers
+namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
 {
     [ApiController]
     [Route("api/lessons")]

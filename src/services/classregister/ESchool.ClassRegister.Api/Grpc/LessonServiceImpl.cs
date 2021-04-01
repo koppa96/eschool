@@ -20,7 +20,7 @@ namespace ESchool.ClassRegister.Api.Grpc
             LessonInfoForHomeAssignmentsRequest request,
             ServerCallContext context)
         {
-            var lessonDetails = await mediator.Send(new LessonGetCommand
+            var lessonDetails = await mediator.Send(new LessonInfoQuery
             {
                 Id = Guid.Parse(request.Id)
             });
@@ -29,9 +29,7 @@ namespace ESchool.ClassRegister.Api.Grpc
             {
                 Id = lessonDetails.ToString(),
                 Title = lessonDetails.Title,
-                ClassId = lessonDetails.Class.Id.ToString(),
-                SubjectId = lessonDetails.Subject.Id.ToString(),
-                SchoolYearId = lessonDetails.SchoolYear.Id.ToString()
+                ClassSchoolYearSubjectId = lessonDetails.ClassSchoolYearSubjectId.ToString()
             };
         }
     }

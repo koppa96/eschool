@@ -24,7 +24,7 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks.Authorization
         public async Task<RequestAuthorizationResult> IsAuthorizedAsync(HomeworkDeleteCommand request, CancellationToken cancellationToken)
         {
             var currentUserId = identityService.GetCurrentUserId();
-            var isTeacher = await context.Teachers.IsTeacherAtHomework(currentUserId, request.Id);
+            var isTeacher = await context.Homeworks.IsTeacherAtHomework(currentUserId, request.Id, cancellationToken);
 
             return isTeacher
                 ? RequestAuthorizationResult.Success

@@ -7,12 +7,11 @@ using ESchool.ClassRegister.Application.Features.Subjects;
 using ESchool.Libs.Application.Cqrs.Query;
 using ESchool.Libs.Application.Cqrs.Response;
 using ESchool.Libs.AspNetCore;
-using ESchool.Libs.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ESchool.ClassRegister.Api.Controllers
+namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
 {
     [Authorize(PolicyNames.Administrator)]
     [ApiController]

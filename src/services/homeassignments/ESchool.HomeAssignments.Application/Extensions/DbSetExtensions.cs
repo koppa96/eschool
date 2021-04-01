@@ -31,5 +31,14 @@ namespace ESchool.HomeAssignments.Application.Extensions
                           t => t.Teacher.UserId == userId)
                      ), cancellationToken);
         }
+
+        public static Task<bool> IsTeacherAtHomework(this DbSet<Homework> homeworks, Guid userId, Guid homeworkId,
+            CancellationToken cancellationToken = default)
+        {
+            return homeworks.AnyAsync(
+                x => x.Id == homeworkId &&
+                     x.Lesson.ClassSchoolYearSubject.ClassSchoolYearSubjectTeachers.Any(t =>
+                         t.Teacher.UserId == userId), cancellationToken);
+        }
     }
 }
