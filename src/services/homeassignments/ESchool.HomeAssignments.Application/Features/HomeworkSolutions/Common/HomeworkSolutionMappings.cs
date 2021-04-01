@@ -14,6 +14,9 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common
             CreateMap<File, HomeworkSolutionResponse.FileResponse>();
 
             CreateMap<HomeworkReview, HomeworkReviewResponse>();
+
+            CreateMap<HomeworkSolution, HomeworkSolutionListResponse>()
+                .ForMember(x => x.Reviewed, o => o.MapFrom(x => x.HomeworkReview != null));
         }
     }
 }

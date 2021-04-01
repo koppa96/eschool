@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.HomeAssignments.Application.Features.Homeworks;
+using ESchool.HomeAssignments.Application.Features.UserHomeworks;
 using ESchool.Libs.Application.Cqrs.Query;
 using ESchool.Libs.Application.Cqrs.Response;
 using ESchool.Libs.AspNetCore;
@@ -23,7 +24,7 @@ namespace ESchool.HomeAssignments.Api.Controllers
 
         [Authorize(PolicyNames.Student)]
         [HttpGet("api/student/school-years/{schoolYearId}/subjects/{subjectId}/homeworks")]
-        public Task<PagedListResponse<HomeworkListAsStudentResponse>> ListStudentHomeworks(
+        public Task<PagedListResponse<StudentHomeworkListResponse>> ListStudentHomeworks(
             Guid schoolYearId,
             Guid subjectId,
             [FromQuery] int pageIndex,
@@ -31,7 +32,7 @@ namespace ESchool.HomeAssignments.Api.Controllers
             [FromQuery] bool expired,
             CancellationToken cancellationToken)
         {
-            return mediator.Send(new HomeworkListAsStudentQuery
+            return mediator.Send(new StudentHomeworkListQuery
             {
                 SchoolYearId = schoolYearId,
                 SubjectId = subjectId,
@@ -43,7 +44,7 @@ namespace ESchool.HomeAssignments.Api.Controllers
 
         [Authorize(PolicyNames.Teacher)]
         [HttpGet("api/teacher/school-years/{schoolYearId}/classes/{classId}/subjects/{subjectId}/homeworks")]
-        public Task<PagedListResponse<HomeworkListAsTeacherResponse>> ListTeacherHomeworks(
+        public Task<PagedListResponse<TeacherHomeworkListResponse>> ListTeacherHomeworks(
             Guid schoolYearId,
             Guid classId,
             Guid subjectId,
@@ -52,7 +53,7 @@ namespace ESchool.HomeAssignments.Api.Controllers
             [FromQuery] bool includeReviewed,
             CancellationToken cancellationToken)
         {
-            return mediator.Send(new HomeworkListAsTeacherQuery
+            return mediator.Send(new TeacherHomeworkListQuery
             {
                 SchoolYearId = schoolYearId,
                 ClassId = classId,

@@ -16,8 +16,13 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkReviews
     public class HomeworkReviewCreateCommand : IRequest<HomeworkReviewResponse>
     {
         public Guid HomeworkSolutionId { get; set; }
-        public HomeworkReviewOutcome Outcome { get; set; }
-        public string Comment { get; set; }
+        public Body RequestBody { get; set; }
+        
+        public class Body
+        {
+            public HomeworkReviewOutcome Outcome { get; set; }
+            public string Comment { get; set; }
+        }
     }
     
     public class HomeworkReviewCreateHandler : IRequestHandler<HomeworkReviewCreateCommand, HomeworkReviewResponse>
@@ -55,8 +60,8 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkReviews
 
             var review = new HomeworkReview
             {
-                Comment = request.Comment,
-                Outcome = request.Outcome,
+                Comment = request.RequestBody.Comment,
+                Outcome = request.RequestBody.Outcome,
                 HomeworkSolution = solution
             };
 

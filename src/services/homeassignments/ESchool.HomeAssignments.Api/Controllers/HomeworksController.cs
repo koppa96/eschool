@@ -3,7 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.HomeAssignments.Application.Features.Homeworks;
 using ESchool.HomeAssignments.Application.Features.Homeworks.Common;
+using ESchool.HomeAssignments.Application.Features.HomeworkSolutions;
+using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common;
 using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.Libs.Application.Cqrs.Query;
+using ESchool.Libs.Application.Cqrs.Response;
 using ESchool.Libs.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -23,12 +27,35 @@ namespace ESchool.HomeAssignments.Api.Controllers
         }
 
         [Authorize(PolicyNames.TeacherOrStudent)]
-        [HttpGet("{id}")]
-        public Task<HomeworkDetailsResponse> GetHomework(Guid id, CancellationToken cancellationToken)
+        [HttpGet("{homeworkId}")]
+        public Task<HomeworkDetailsResponse> GetHomework(Guid homeworkId, CancellationToken cancellationToken)
         {
             return mediator.Send(new HomeworkGetQuery
             {
-                Id = id
+                Id = homeworkId
+            }, cancellationToken);
+        }
+        
+        [Authorize(PolicyNames.Teacher)]
+        [HttpGet("{homeworkId}/solutions")]
+        public Task<PagedListResponse<HomeworkSolutionListResponse>> ListSolutions(Guid homeworkId,
+            [FromQuery] int pageIndex, [FromQuery] int pageSize, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new HomeworkSolutionListQuery
+            {
+                HomeworkId = homeworkId,
+                PageIndex = pageIndex,
+                PageSize = pageSize == 0 ? PagedListQuery.DefaultPageSize : pageSize
+            }, cancellationToken);
+        }
+
+        [Authorize(PolicyNames.Student)]
+        [HttpPost("{homeworkId/solutions}")]
+        public Task<HomeworkSolutionResponse> CreateSolution(Guid homeworkId, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new HomeworkSolutionCreateCommand
+            {
+                HomeworkId = homeworkId
             }, cancellationToken);
         }
 
@@ -41,24 +68,24 @@ namespace ESchool.HomeAssignments.Api.Controllers
         }
 
         [Authorize(PolicyNames.Teacher)]
-        [HttpPut("{id}")]
-        public Task<HomeworkDetailsResponse> EditHomework(Guid id, [FromBody] HomeworkEditCommand command,
+        [HttpPut("{homeworkId}")]
+        public Task<HomeworkDetailsResponse> EditHomework(Guid homeworkId, [FromBody] HomeworkEditCommand command,
             CancellationToken cancellationToken)
         {
             return mediator.Send(new EditCommand<HomeworkEditCommand, HomeworkDetailsResponse>
             {
-                Id = id,
+                Id = homeworkId,
                 InnerCommand = command
             }, cancellationToken);
         }
 
         [Authorize(PolicyNames.Teacher)]
-        [HttpDelete("{id}")]
-        public Task DeleteHomework(Guid id, CancellationToken cancellationToken)
+        [HttpDelete("{homeworkId}")]
+        public Task DeleteHomework(Guid homeworkId, CancellationToken cancellationToken)
         {
             return mediator.Send(new HomeworkDeleteCommand
             {
-                Id = id
+                Id = homeworkId
             }, cancellationToken);
         }
     }

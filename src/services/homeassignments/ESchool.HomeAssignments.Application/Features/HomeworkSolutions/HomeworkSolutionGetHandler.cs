@@ -13,8 +13,7 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions
 {
     public class HomeworkSolutionGetQuery : IRequest<HomeworkSolutionResponse>
     {
-        public Guid HomeworkId { get; set; }
-        public Guid StudentId { get; set; }
+        public Guid Id { get; set; }
     }
     
     public class HomeworkSolutionGetHandler : IRequestHandler<HomeworkSolutionGetQuery, HomeworkSolutionResponse>
@@ -30,7 +29,7 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions
         
         public Task<HomeworkSolutionResponse> Handle(HomeworkSolutionGetQuery request, CancellationToken cancellationToken)
         {
-            return context.HomeworkSolutions.Where(x => x.StudentId == request.StudentId && x.HomeworkId == request.HomeworkId)
+            return context.HomeworkSolutions.Where(x => x.Id == request.Id)
                 .ProjectTo<HomeworkSolutionResponse>(configurationProvider)
                 .SingleAsync(cancellationToken);
         }

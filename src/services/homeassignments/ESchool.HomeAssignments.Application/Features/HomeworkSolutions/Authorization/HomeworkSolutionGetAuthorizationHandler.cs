@@ -24,7 +24,7 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Authori
         {
             var currentUserId = identityService.GetCurrentUserId();
             var isAuthorized = await context.HomeworkSolutions
-                .AnyAsync(x => x.HomeworkId == request.HomeworkId && x.StudentId == request.StudentId &&
+                .AnyAsync(x => x.Id == request.Id &&
                                (x.Student.UserId == currentUserId ||
                                 x.Homework.Lesson.ClassSchoolYearSubject.ClassSchoolYearSubjectTeachers
                                     .Any(t => t.Teacher.UserId == currentUserId)), cancellationToken);
