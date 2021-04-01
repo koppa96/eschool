@@ -11,7 +11,7 @@ namespace ESchool.ClassRegister.Application.Features.Classes.Common
         public int Grade { get; set; }
         public bool DidFinish { get; set; }
         public ClassTypeListResponse ClassType { get; set; }
-        public UserListResponse HeadTeacher { get; set; }
+        public UserRoleListResponse HeadTeacher { get; set; }
         public SchoolYearListResponse StartingSchoolYear { get; set; }
         public SchoolYearListResponse FinishingSchoolYear { get; set; }
     }

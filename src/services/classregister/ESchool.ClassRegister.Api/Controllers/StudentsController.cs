@@ -4,6 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Grading.Grades;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Absences;
+using ESchool.ClassRegister.Application.Features.Users.Common;
+using ESchool.ClassRegister.Application.Features.Users.Students;
+using ESchool.ClassRegister.Grpc;
 using ESchool.Libs.Application.Cqrs.Query;
 using ESchool.Libs.Application.Cqrs.Response;
 using ESchool.Libs.AspNetCore;
@@ -22,6 +25,14 @@ namespace ESchool.ClassRegister.Api.Controllers
         public StudentsController(IMediator mediator)
         {
             this.mediator = mediator;
+        }
+
+        [HttpGet("unassigned")]
+        [Authorize(PolicyNames.Administrator)]
+        public Task<PagedListResponse<UserRoleListResponse>> ListUnassignedStudents(
+            [FromQuery] StudentsWithoutClassListQuery query, CancellationToken cancellationToken)
+        {
+            return mediator.Send(query, cancellationToken);
         }
 
         [HttpGet("{studentId}/absences")]

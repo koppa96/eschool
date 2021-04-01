@@ -12,7 +12,7 @@ namespace ESchool.ClassRegister.Application.Features.Messaging.Common
         public string Text { get; set; }
         public DateTime SentAt { get; set; }
 
-        public UserListResponse Sender { get; set; }
-        public List<UserListResponse> Recipients { get; set; }
+        public UserRoleListResponse Sender { get; set; }
+        public List<UserRoleListResponse> Recipients { get; set; }
     }
 }

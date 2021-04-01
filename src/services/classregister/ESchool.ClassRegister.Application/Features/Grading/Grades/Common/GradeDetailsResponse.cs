@@ -12,8 +12,8 @@ namespace ESchool.ClassRegister.Application.Features.Grading.Grades.Common
         public GradeValue GradeValue { get; set; }
         public string Description { get; set; }
         public GradeKindResponse GradeKind { get; set; }
-        public UserListResponse Student { get; set; }
-        public UserListResponse Teacher { get; set; }
+        public UserRoleListResponse Student { get; set; }
+        public UserRoleListResponse Teacher { get; set; }
         public SubjectListResponse Subject { get; set; }
     }
 }

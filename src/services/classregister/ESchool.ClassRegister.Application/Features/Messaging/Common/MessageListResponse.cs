@@ -9,6 +9,6 @@ namespace ESchool.ClassRegister.Application.Features.Messaging.Common
         public string Subject { get; set; }
         public DateTime SentAt { get; set; }
         
-        public UserListResponse Sender { get; set; }
+        public UserRoleListResponse Sender { get; set; }
     }
 }

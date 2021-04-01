@@ -28,7 +28,7 @@ namespace ESchool.ClassRegister.Application.Features.Grading.Grades
 
     public class GradeListByClassSchoolYearSubjectResponse
     {
-        public UserListResponse Student { get; set; }
+        public UserRoleListResponse Student { get; set; }
         public List<GradeListResponse> Grades { get; set; }
     }
 
@@ -49,7 +49,7 @@ namespace ESchool.ClassRegister.Application.Features.Grading.Grades
                 .OrderBy(x => x.User.Name)
                 .Select(x => new GradeListByClassSchoolYearSubjectResponse
                 {
-                    Student = new UserListResponse
+                    Student = new UserRoleListResponse
                     {
                         Id = x.Id,
                         Name = x.User.Name

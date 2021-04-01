@@ -33,7 +33,7 @@ namespace ESchool.ClassRegister.Application.Features.Subjects
             {
                 Id = subject.Id,
                 Name = subject.Name,
-                Teachers = subject.SubjectTeachers.Select(x => new UserListResponse
+                Teachers = subject.SubjectTeachers.Select(x => new UserRoleListResponse
                 {
                     Id = x.TeacherId,
                     Name = x.Teacher.User.Name
