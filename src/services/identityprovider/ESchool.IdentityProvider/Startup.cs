@@ -23,6 +23,7 @@ using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
 using ESchool.IdentityProvider.Grpc;
+using ESchool.Libs.AspNetCore.Filters;
 using ESchool.Libs.Outbox.AspNetCore.Extensions;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
 
@@ -48,6 +49,8 @@ namespace ESchool.IdentityProvider
                 config.UseEntityFrameworkCore(options => options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"), serverConfig =>
                         serverConfig.MigrationsAssembly(typeof(IdentityProviderContext).Assembly.GetName().Name)));
+
+                config.AddPublishFilter(typeof(AuthDataSetterPublishFilter<>));
             });
 
             services.AddIdentity<User, IdentityRole<Guid>>()

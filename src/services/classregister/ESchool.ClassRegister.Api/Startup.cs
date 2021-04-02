@@ -6,6 +6,7 @@ using ESchool.ClassRegister.Domain;
 using ESchool.IdentityProvider.Grpc;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
+using ESchool.Libs.AspNetCore.Filters;
 using ESchool.Libs.Domain.MultiTenancy;
 using ESchool.Libs.Outbox.AspNetCore.Extensions;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
@@ -47,6 +48,8 @@ namespace ESchool.ClassRegister.Api
                 config.UseEntityFrameworkCore(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), serverConfig =>
                         serverConfig.MigrationsAssembly(typeof(ClassRegisterContext).Assembly.GetName().Name)));
+
+                config.AddPublishFilter(typeof(AuthDataSetterPublishFilter<>));
             });
             
             services.AddControllers();

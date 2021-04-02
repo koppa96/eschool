@@ -1,12 +1,12 @@
+using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Libs.Domain.Services;
-using GreenPipes;
-using MassTransit;
+using ESchool.Libs.Outbox.Filters;
+using ESchool.Libs.Outbox.Models;
 
 namespace ESchool.Libs.AspNetCore.Filters
 {
-    internal class AuthDataSetterPublishFilter<T> : IFilter<PublishContext<T>>
-        where T : class
+    public class AuthDataSetterPublishFilter<T> : IPublishFilter<T>
     {
         private readonly IIdentityService identityService;
 
@@ -15,20 +15,16 @@ namespace ESchool.Libs.AspNetCore.Filters
             this.identityService = identityService;
         }
         
-        public Task Send(PublishContext<T> context, IPipe<PublishContext<T>> next)
+        public Task Execute(OutboxPublishContext<T> context, CancellationToken cancellationToken = default)
         {
             var tenantId = identityService.TryGetTenantId();
             if (tenantId != null)
             {
-                context.Headers.Set(MessagingConstants.TenantId, tenantId.ToString());
+                context.Headers.Add(MessagingConstants.TenantId, tenantId.ToString());
             }
-            context.Headers.Set(MessagingConstants.UserId, identityService.GetCurrentUserId().ToString());
+            context.Headers.Add(MessagingConstants.UserId, identityService.GetCurrentUserId().ToString());
 
             return Task.CompletedTask;
-        }
-
-        public void Probe(ProbeContext context)
-        {
         }
     }
 }

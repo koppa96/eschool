@@ -10,6 +10,7 @@ using ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers;
 using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
+using ESchool.Libs.Outbox.Services;
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -27,14 +28,14 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
         private readonly IdentityProviderContext context;
         private readonly IIdentityService identityService;
         private readonly IMapper mapper;
-        private readonly IPublishEndpoint publishEndpoint;
+        private readonly IEventPublisher publisher;
 
         public TenantUserEditHandler(IdentityProviderContext context, IIdentityService identityService,
-            IPublishEndpoint publishEndpoint, IMapper mapper)
+            IEventPublisher publisher, IMapper mapper)
         {
             this.context = context;
             this.identityService = identityService;
-            this.publishEndpoint = publishEndpoint;
+            this.publisher = publisher;
             this.mapper = mapper;
         }
 
@@ -56,11 +57,11 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
                 TenantRole = x
             }));
             await context.SaveChangesAsync(cancellationToken);
-            await publishEndpoint.Publish(new TenantUserCreatedOrEditedEvent
+            await publisher.PublishAsync(new TenantUserCreatedOrEditedEvent
             {
                 UserId = tenantUser.UserId,
                 TenantId = tenantId,
-            });
+            }, cancellationToken);
 
             return new TenantUserDetailsResponse
             {

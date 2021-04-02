@@ -9,6 +9,7 @@ using ESchool.IdentityProvider.Domain.Entities.Users;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
+using ESchool.Libs.Outbox.Services;
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -26,14 +27,14 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
     {
         private readonly IdentityProviderContext context;
         private readonly IIdentityService identityService;
-        private readonly IPublishEndpoint publishEndpoint;
+        private readonly IEventPublisher publisher;
 
         public TenantUserCreateByEmailHandler(IdentityProviderContext context, IIdentityService identityService,
-            IPublishEndpoint publishEndpoint)
+            IEventPublisher publisher)
         {
             this.context = context;
             this.identityService = identityService;
-            this.publishEndpoint = publishEndpoint;
+            this.publisher = publisher;
         }
 
         public async Task<TenantUserDetailsResponse> Handle(TenantUserCreateByEmailCommand request,
@@ -80,12 +81,12 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
                 context.TenantUsers.Add(tenantUser);
             }
 
-            await context.SaveChangesAsync(cancellationToken);
-            await publishEndpoint.Publish(new TenantUserCreatedOrEditedEvent
+            await publisher.PublishAsync(new TenantUserCreatedOrEditedEvent
             {
                 UserId = user.Id,
                 TenantId = tenantId
             }, CancellationToken.None);
+            await context.SaveChangesAsync(cancellationToken);
 
             return new TenantUserDetailsResponse
             {

@@ -11,6 +11,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.3" />
     
     <ProjectReference Include="..\ESchool.Libs.Application\ESchool.Libs.Application.csproj" />
+    
+    <ProjectReference Include="..\ESchool.Libs.Outbox\ESchool.Libs.Outbox.csproj" />
   </ItemGroup>
 
 </Project>

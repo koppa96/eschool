@@ -8,6 +8,7 @@ using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers;
 using ESchool.Libs.Domain.Enums;
+using ESchool.Libs.Outbox.Services;
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -24,12 +25,12 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
     public class TenantUserCreateByIdHandler : IRequestHandler<TenantUserCreateByIdCommand, TenantUserDetailsResponse>
     {
         private readonly IdentityProviderContext context;
-        private readonly IPublishEndpoint publishEndpoint;
+        private readonly IEventPublisher publisher;
 
-        public TenantUserCreateByIdHandler(IdentityProviderContext context, IPublishEndpoint publishEndpoint)
+        public TenantUserCreateByIdHandler(IdentityProviderContext context, IEventPublisher publisher)
         {
             this.context = context;
-            this.publishEndpoint = publishEndpoint;
+            this.publisher = publisher;
         }
 
         public async Task<TenantUserDetailsResponse> Handle(TenantUserCreateByIdCommand request,
@@ -53,7 +54,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             });
 
             await context.SaveChangesAsync(cancellationToken);
-            await publishEndpoint.Publish(new TenantUserCreatedOrEditedEvent
+            await publisher.PublishAsync(new TenantUserCreatedOrEditedEvent
             {
                 UserId = user.Id,
                 TenantId = request.TenantId
