@@ -24,21 +24,15 @@ namespace ESchool.HomeAssignments.Application.Features.Users
         public async Task Consume(ConsumeContext<TeacherCreatedEvent> context)
         {
             var dbContext = lazyDbContext.Value;
-            var teacher = await client.GetTeacherAsync(new UserGetRequest
-            {
-                Id = context.Message.Id.ToString()
-            });
-
-            var userId = Guid.Parse(teacher.UserId);
             var user = await dbContext.Users.Include(x => x.UserRoles)
-                .SingleOrDefaultAsync(x => x.Id == userId);
+                .SingleOrDefaultAsync(x => x.Id == context.Message.UserId);
             
             if (user == null)
             {
                 user = new HomeAssignmentsUser
                 {
-                    Id = userId,
-                    Name = teacher.Name
+                    Id = context.Message.UserId,
+                    Name = context.Message.Name
                 };
                 dbContext.Users.Add(user);
             }

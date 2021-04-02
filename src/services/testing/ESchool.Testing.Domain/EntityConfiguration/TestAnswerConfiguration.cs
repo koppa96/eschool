@@ -12,9 +12,9 @@ namespace ESchool.Testing.Domain.EntityConfiguration
                 .WithOne(x => x.TestAnswer)
                 .HasForeignKey(x => x.TestAnswerId);
 
-            builder.HasOne(x => x.Student)
-                .WithMany()
-                .HasForeignKey(x => x.StudentId);
+            builder.HasOne(x => x.StudentTest)
+                .WithOne()
+                .HasForeignKey<StudentTest>(x => x.TestId);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace ESchool.ClassRegister.Interface.IntegrationEvents.UserDeletion
 {
-    public class TeacherDeletedEvent : TenantUserDeletedEvent
+    public class TeacherDeletedEvent : TenantUserRoleDeletedEvent
     {
     }
 }

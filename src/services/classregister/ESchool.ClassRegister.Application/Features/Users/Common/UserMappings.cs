@@ -13,16 +13,16 @@ namespace ESchool.ClassRegister.Application.Features.Users.Common
             CreateMap<ClassRegisterUserRole, UserRoleListResponse>()
                 .ForMember(x => x.Name, o => o.MapFrom(x => x.User.Name));
 
-            CreateMap<Teacher, TenantUserDeletedEvent>()
+            CreateMap<Teacher, TenantUserRoleDeletedEvent>()
                 .ConstructUsing(teacher => new TeacherDeletedEvent());
 
-            CreateMap<Student, TenantUserDeletedEvent>()
+            CreateMap<Student, TenantUserRoleDeletedEvent>()
                 .ConstructUsing(student => new StudentDeletedEvent());
 
-            CreateMap<Teacher, TenantUserCreatedEvent>()
+            CreateMap<Teacher, TenantUserRoleCreatedEvent>()
                 .ConstructUsing(teacher => new TeacherCreatedEvent());
 
-            CreateMap<Student, TenantUserCreatedEvent>()
+            CreateMap<Student, TenantUserRoleCreatedEvent>()
                 .ConstructUsing(student => new StudentCreatedEvent());
         }
     }

@@ -20,4 +20,8 @@
     <ProjectReference Include="..\ESchool.Testing.Application\ESchool.Testing.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers" />
+  </ItemGroup>
+
 </Project>

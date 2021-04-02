@@ -2,7 +2,7 @@
 
 namespace ESchool.ClassRegister.Interface.IntegrationEvents.UserCreation
 {
-    public class TeacherCreatedEvent : TenantUserCreatedEvent
+    public class TeacherCreatedEvent : TenantUserRoleCreatedEvent
     {
     }
 }

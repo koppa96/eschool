@@ -1,13 +1,14 @@
 ﻿using System;
+using ESchool.Testing.Domain.Entities.Users;
 
 namespace ESchool.Testing.Domain.Entities.ClassRegisterData
 {
-    public class GroupTeacher
+    public class ClassSchoolYearSubjectTeacher
     {
         public Guid Id { get; set; }
 
         public Guid GroupId { get; set; }
-        public virtual Group Group { get; set; }
+        public virtual ClassSchoolYearSubject ClassSchoolYearSubject { get; set; }
 
         public Guid TeacherId { get; set; }
         public virtual Teacher Teacher { get; set; }

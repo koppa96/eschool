@@ -29,14 +29,7 @@ namespace ESchool.Testing.Domain.Entities.Answers
 
         protected void AllOrNothingAutoCorrect(bool isCorrect)
         {
-            if (isCorrect)
-            {
-                GivenPoints = TestTask.PointValue;
-            }
-            else
-            {
-                GivenPoints = TestTask.IncorrectAnswerPointValue;
-            }
+            GivenPoints = isCorrect ? TestTask.PointValue : TestTask.IncorrectAnswerPointValue;
             HasBeenCorrected = true;
         }
     }

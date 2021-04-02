@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using ESchool.Testing.Domain.Entities.ClassRegisterData;
+using ESchool.Testing.Domain.Entities.Users;
 
 namespace ESchool.Testing.Domain.Entities
 {
@@ -12,12 +13,8 @@ namespace ESchool.Testing.Domain.Entities
         public DateTime Started { get; set; }
         public DateTime? Closed { get; set; }
         public bool? ClosedByTeacher { get; set; }
-
-        public Guid TestId { get; set; }
-        public virtual Test Test { get; set; }
-
-        public Guid StudentId { get; set; }
-        public virtual Student Student { get; set; }
+        
+        public virtual StudentTest StudentTest { get; set; }
 
         public virtual ICollection<TaskAnswer> TaskAnswers { get; set; }
     }

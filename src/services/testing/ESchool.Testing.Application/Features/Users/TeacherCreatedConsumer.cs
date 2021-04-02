@@ -1,31 +1,50 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using ESchool.ClassRegister.Interface.IntegrationEvents.UserCreation;
 using ESchool.Testing.Domain;
 using ESchool.Testing.Domain.Entities.ClassRegisterData;
+using ESchool.Testing.Domain.Entities.Users;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Testing.Application.Features.Users
 {
     public class TeacherCreatedConsumer : IConsumer<TeacherCreatedEvent>
     {
-        private readonly TestingContext dbContext;
+        private readonly Lazy<TestingContext> lazyDbContext;
 
-        public TeacherCreatedConsumer(TestingContext dbContext)
+        public TeacherCreatedConsumer(Lazy<TestingContext> lazyDbContext)
         {
-            this.dbContext = dbContext;
+            this.lazyDbContext = lazyDbContext;
         }
 
         public async Task Consume(ConsumeContext<TeacherCreatedEvent> context)
         {
-            // dbContext.Teachers.Add(new Teacher
-            // {
-            //     Id = context.Message.Id,
-            //     Name = context.Message.Name,
-            //     UserId = context.Message.UserId,
-            //     TenantId = context.Message.TenantId
-            // });
-            //
-            // await dbContext.SaveChangesAsync();
+            var dbContext = lazyDbContext.Value;
+            var user = await dbContext.Users.Include(x => x.UserRoles)
+                .SingleOrDefaultAsync(x => x.Id == context.Message.UserId);
+            
+            if (user == null)
+            {
+                user = new TestingUser
+                {
+                    Id = context.Message.UserId,
+                    Name = context.Message.Name
+                };
+                dbContext.Users.Add(user);
+            }
+
+            if (user.UserRoles.All(x => x.Id != context.Message.Id))
+            {
+                dbContext.Teachers.Add(new Teacher
+                {
+                    Id = context.Message.Id,
+                    User = user
+                });
+            }
+            
+            await dbContext.SaveChangesAsync();
         }
     }
 }

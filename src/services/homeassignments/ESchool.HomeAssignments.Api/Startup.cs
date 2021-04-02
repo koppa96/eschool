@@ -46,8 +46,9 @@ namespace ESchool.HomeAssignments.Api
             services.AddCommonServices();
             services.AddMultitenancy();
 
-            services.AddMediatR(Assembly.Load("ESchool.HomeAssignments.Application"));
-            
+            services.AddMediatR(Assembly.Load("ESchool.HomeAssignments.Application"))
+                .AddMediatRAuthorization(Assembly.Load("ESchool.HomeAssignments.Application"));
+
             services.AddMassTransit(config =>
             {
                 config.AddConsumers(Assembly.Load("ESchool.HomeAssignments.Application"));

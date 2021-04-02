@@ -9,6 +9,7 @@ using ESchool.ClassRegister.Domain.Attributes;
 using ESchool.ClassRegister.Domain.Entities.Users;
 using ESchool.ClassRegister.Domain.Entities.Users.Abstractions;
 using ESchool.ClassRegister.Interface.IntegrationEvents.UserCreation;
+using ESchool.ClassRegister.Interface.IntegrationEvents.UserDeletion;
 using ESchool.IdentityProvider.Grpc;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers;
 using ESchool.Libs.Application.Extensions;
@@ -17,7 +18,6 @@ using ESchool.Libs.Domain.MultiTenancy;
 using ESchool.Libs.Domain.MultiTenancy.Entities;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using TenantUserDeletedEvent = ESchool.ClassRegister.Interface.IntegrationEvents.UserDeletion.TenantUserDeletedEvent;
 
 namespace ESchool.ClassRegister.Application.Features.Users
 {
@@ -87,7 +87,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
                     .All(x => x != userBase.GetType().GetCustomAttribute<TenantUserAttribute>()!.TenantRoleType))
                 {
                     dbContext.UserRoles.Remove(userBase);
-                    if (mapper.TryMap<TenantUserDeletedEvent>(userBase, out var @event))
+                    if (mapper.TryMap<TenantUserRoleDeletedEvent>(userBase, out var @event))
                     {
                         events.Add(@event);
                     }
@@ -108,7 +108,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
                     userRole.Id = Guid.NewGuid();
                     userRole.User = existingUser;
                     dbContext.UserRoles.Add(userRole);
-                    if (mapper.TryMap<TenantUserCreatedEvent>(userRole, out var @event))
+                    if (mapper.TryMap<TenantUserRoleCreatedEvent>(userRole, out var @event))
                     {
                         events.Add(@event);
                     }
@@ -117,7 +117,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
                 {
                     // Undelete the existing user
                     existingUserRole.IsDeleted = false;
-                    if (mapper.TryMap<TenantUserCreatedEvent>(existingUserRole, out var @event))
+                    if (mapper.TryMap<TenantUserRoleCreatedEvent>(existingUserRole, out var @event))
                     {
                         events.Add(@event);
                     }

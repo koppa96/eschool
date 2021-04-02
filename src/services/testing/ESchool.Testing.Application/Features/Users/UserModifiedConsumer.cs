@@ -1,22 +1,19 @@
 using System;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Grpc;
 using ESchool.ClassRegister.Interface.IntegrationEvents.UserModification;
-using ESchool.HomeAssignments.Domain;
-using ESchool.HomeAssignments.Domain.Entities.Users;
+using ESchool.Testing.Domain;
+using ESchool.Testing.Domain.Entities.Users;
 using MassTransit;
 
-namespace ESchool.HomeAssignments.Application.Features.Users
+namespace ESchool.Testing.Application.Features.Users
 {
     public class UserModifiedConsumer : IConsumer<UserModifiedEvent>
     {
-        private readonly Lazy<HomeAssignmentsContext> lazyDbContext;
-        private readonly UserService.UserServiceClient client;
+        private readonly Lazy<TestingContext> lazyDbContext;
 
-        public UserModifiedConsumer(Lazy<HomeAssignmentsContext> lazyDbContext, UserService.UserServiceClient client)
+        public UserModifiedConsumer(Lazy<TestingContext> lazyDbContext)
         {
             this.lazyDbContext = lazyDbContext;
-            this.client = client;
         }
         
         public async Task Consume(ConsumeContext<UserModifiedEvent> context)
@@ -26,7 +23,7 @@ namespace ESchool.HomeAssignments.Application.Features.Users
 
             if (user == null)
             {
-                user = new HomeAssignmentsUser
+                user = new TestingUser
                 {
                     Id = context.Message.Id
                 };

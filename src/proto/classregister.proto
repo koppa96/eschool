@@ -7,11 +7,8 @@ service LessonService {
 }
 
 service UserService {
-  rpc GetStudent(UserGetRequest) returns (UserGetResponse);
   rpc GetStudentOfClass(StudentsOfClassRequest) returns (UserListResponse);
   rpc GetTeachersOfClassSchoolYearSubject(TeachersOfClassSchoolYearSubjectRequest) returns (UserListResponse);
-  rpc GetTeacher(UserGetRequest) returns (UserGetResponse);
-  rpc GetUser(IdentityUserGetRequest) returns (IdentityUserGetResponse);
 }
 
 service ClassSchoolYearSubjectService {
