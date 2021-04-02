@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 using ESchool.ClassRegister.Domain.Entities;
 using ESchool.ClassRegister.Domain.Entities.Grading;
 using ESchool.ClassRegister.Domain.Entities.Messaging;
@@ -11,6 +12,9 @@ using ESchool.ClassRegister.Domain.Entities.Users.Abstractions;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Domain.Interfaces;
 using ESchool.Libs.Domain.MultiTenancy.Entities;
+using ESchool.Libs.Outbox.EntityFrameworkCore;
+using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
+using ESchool.Libs.Outbox.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Domain
@@ -18,6 +22,7 @@ namespace ESchool.ClassRegister.Domain
     public class ClassRegisterContext : DbContext
     {
         private readonly Tenant tenant;
+        private readonly OutboxDbContext outboxDbContext;
 
         public DbSet<Class> Classes { get; set; }
         public DbSet<Classroom> Classrooms { get; set; }
@@ -42,9 +47,13 @@ namespace ESchool.ClassRegister.Domain
         public DbSet<ClassRegisterUser> Users { get; set; }
         public DbSet<ClassSchoolYearSubjectTeacher> ClassSchoolYearSubjectTeachers { get; set; }
 
-        public ClassRegisterContext(DbContextOptions<ClassRegisterContext> options, Tenant tenant) : base(options)
+        public ClassRegisterContext(
+            DbContextOptions<ClassRegisterContext> options,
+            Tenant tenant,
+            OutboxDbContext outboxDbContext) : base(options)
         {
             this.tenant = tenant;
+            this.outboxDbContext = outboxDbContext;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -66,14 +75,17 @@ namespace ESchool.ClassRegister.Domain
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             EntityAudit();
-            return base.SaveChanges(acceptAllChangesOnSuccess);
+            return this.SaveChangesWithOutbox(outboxDbContext, () => base.SaveChanges(acceptAllChangesOnSuccess));
         }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
             CancellationToken cancellationToken = default)
         {
             EntityAudit();
-            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+            return this.SaveChangesWithOutboxAsync(
+                outboxDbContext,
+                token => base.SaveChangesAsync(acceptAllChangesOnSuccess, token),
+                cancellationToken: cancellationToken);
         }
 
         private void EntityAudit()
