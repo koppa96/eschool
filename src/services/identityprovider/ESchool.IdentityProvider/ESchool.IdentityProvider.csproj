@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\ESchool.Libs.AspNetCore\ESchool.Libs.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\libs\ESchool.Libs.Outbox.AspNetCore\ESchool.Libs.Outbox.AspNetCore.csproj" />
     <ProjectReference Include="..\ESchool.IdentityProvider.Application\ESchool.IdentityProvider.Application.csproj" />
   </ItemGroup>
 

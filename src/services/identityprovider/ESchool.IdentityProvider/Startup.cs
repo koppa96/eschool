@@ -23,6 +23,8 @@ using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
 using ESchool.IdentityProvider.Grpc;
+using ESchool.Libs.Outbox.AspNetCore.Extensions;
+using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
 
 namespace ESchool.IdentityProvider
 {
@@ -40,6 +42,13 @@ namespace ESchool.IdentityProvider
         {
             services.AddDbContext<IdentityProviderContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddMassTransitOutbox(config =>
+            {
+                config.UseEntityFrameworkCore(options => options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection"), serverConfig =>
+                        serverConfig.MigrationsAssembly(typeof(IdentityProviderContext).Assembly.GetName().Name)));
+            });
 
             services.AddIdentity<User, IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<IdentityProviderContext>();

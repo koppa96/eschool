@@ -11,7 +11,6 @@ namespace ESchool.Libs.AspNetCore.Extensions
         {
             configurator.UseConsumeFilter(typeof(MessageLoggerConsumeFilter<>), provider);
             configurator.UseConsumeFilter(typeof(AuthDataGetterConsumeFilter<>), provider);
-            configurator.UsePublishFilter(typeof(AuthDataSetterPublishFilter<>), provider);
             return configurator;
         }
     }

@@ -1,4 +1,3 @@
-using System;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Entities;
 using Microsoft.EntityFrameworkCore;
 

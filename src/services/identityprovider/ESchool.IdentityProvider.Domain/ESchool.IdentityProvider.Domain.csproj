@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\ESchool.Libs.Domain\ESchool.Libs.Domain.csproj" />
+    <ProjectReference Include="..\..\..\libs\ESchool.Libs.Outbox.EntityFrameworkCore\ESchool.Libs.Outbox.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>

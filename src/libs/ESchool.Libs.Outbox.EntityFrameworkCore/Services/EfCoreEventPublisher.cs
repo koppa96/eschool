@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Entities;
 using ESchool.Libs.Outbox.Filters;
@@ -17,16 +18,18 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
             this.publishFilterRunner = publishFilterRunner;
             this.outboxDbContext = outboxDbContext;
         }
-        
-        public async Task PublishAsync<TMessage>(TMessage message, Func<OutboxPublishContext<TMessage>, Task> inlineFilter = null)
-        {
-            var context = await publishFilterRunner.RunFiltersAsync(message);
-            if (inlineFilter != null)
-            {
-                await inlineFilter(context);
-            }
-            var entity = OutboxEntry.FromPublishContext(context);
 
+        public Task PublishAsync<TMessage>(TMessage message, CancellationToken cancellationToken = default)
+        {
+            return PublishAsync(message, _ => Task.CompletedTask, cancellationToken);
+        }
+
+        public async Task PublishAsync<TMessage>(TMessage message, Func<OutboxPublishContext<TMessage>, Task> inlineFilter, CancellationToken cancellationToken = default)
+        {
+            var context = await publishFilterRunner.RunFiltersAsync(message, cancellationToken);
+            await inlineFilter(context);
+            
+            var entity = OutboxEntry.FromPublishContext(context);
             outboxDbContext.OutboxEntries.Add(entity);
         }
     }

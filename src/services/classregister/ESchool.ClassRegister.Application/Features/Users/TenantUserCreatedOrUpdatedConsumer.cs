@@ -16,6 +16,7 @@ using ESchool.Libs.Application.Extensions;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.MultiTenancy;
 using ESchool.Libs.Domain.MultiTenancy.Entities;
+using ESchool.Libs.Outbox.EntityFrameworkCore;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,18 +26,21 @@ namespace ESchool.ClassRegister.Application.Features.Users
     {
         private readonly DbContextOptions<ClassRegisterContext> dbContextOptions;
         private readonly MasterDbContext masterDbContext;
+        private readonly OutboxDbContext outboxDbContext;
         private readonly TenantUserService.TenantUserServiceClient client;
         private readonly IPublishEndpoint publishEndpoint;
         private readonly IMapper mapper;
 
         public TenantUserCreatedOrUpdatedConsumer(DbContextOptions<ClassRegisterContext> dbContextOptions,
             MasterDbContext masterDbContext,
+            OutboxDbContext outboxDbContext,
             TenantUserService.TenantUserServiceClient client,
             IPublishEndpoint publishEndpoint,
             IMapper mapper)
         {
             this.dbContextOptions = dbContextOptions;
             this.masterDbContext = masterDbContext;
+            this.outboxDbContext = outboxDbContext;
             this.client = client;
             this.publishEndpoint = publishEndpoint;
             this.mapper = mapper;
@@ -48,7 +52,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
             var tenant = await masterDbContext.Tenants.FindAsync(context.Message.TenantId);
             
             // Global admins can also create users => No tenant Id will be set in the Identity Service.
-            await using var dbContext = new ClassRegisterContext(dbContextOptions, tenant);
+            await using var dbContext = new ClassRegisterContext(dbContextOptions, tenant, outboxDbContext);
             
             var tenantUserTypes = Assembly.GetExecutingAssembly()
                 .GetTypes()

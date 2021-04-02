@@ -7,6 +7,8 @@ using ESchool.IdentityProvider.Grpc;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
 using ESchool.Libs.Domain.MultiTenancy;
+using ESchool.Libs.Outbox.AspNetCore.Extensions;
+using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +41,13 @@ namespace ESchool.ClassRegister.Api
             services.AddDbContext<MasterDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection"), config =>
                     config.MigrationsAssembly(typeof(ClassRegisterContext).Assembly.GetName().Name)));
+
+            services.AddMassTransitOutbox(config =>
+            {
+                config.UseEntityFrameworkCore(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), serverConfig =>
+                        serverConfig.MigrationsAssembly(typeof(ClassRegisterContext).Assembly.GetName().Name)));
+            });
             
             services.AddControllers();
             services.AddGrpc();

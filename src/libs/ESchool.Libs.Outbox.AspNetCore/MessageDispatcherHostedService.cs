@@ -10,8 +10,7 @@ using Microsoft.Extensions.Options;
 
 namespace ESchool.Libs.Outbox.AspNetCore
 {
-    internal sealed class MessageDispatcherHostedService<TPrimaryKey> : IHostedService, IDisposable
-        where TPrimaryKey : IEquatable<TPrimaryKey>
+    internal sealed class MessageDispatcherHostedService : IHostedService, IDisposable
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IOptions<OutboxConfiguration> options;
