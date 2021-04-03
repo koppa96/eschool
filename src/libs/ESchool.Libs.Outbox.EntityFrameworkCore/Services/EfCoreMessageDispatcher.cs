@@ -17,14 +17,14 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
 {
     public class EfCoreMessageDispatcher : IMessageDispatcher
     {
-        private readonly OutboxDbContext context;
+        private readonly IOutboxDbContext context;
         private readonly IOptions<OutboxConfiguration> options;
         private readonly IPublishEndpoint publishEndpoint;
         private readonly ILogger<EfCoreMessageDispatcher> logger;
         private readonly string schemaQualifiedTableName;
 
         public EfCoreMessageDispatcher(
-            OutboxDbContext context,
+            IOutboxDbContext context,
             IOptions<OutboxConfiguration> options,
             IPublishEndpoint publishEndpoint,
             ILogger<EfCoreMessageDispatcher> logger)

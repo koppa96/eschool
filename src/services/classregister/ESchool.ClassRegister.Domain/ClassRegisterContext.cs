@@ -19,10 +19,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Domain
 {
-    public class ClassRegisterContext : DbContext
+    public class ClassRegisterContext : OutboxDbContext
     {
         private readonly Tenant tenant;
-        private readonly OutboxDbContext outboxDbContext;
 
         public DbSet<Class> Classes { get; set; }
         public DbSet<Classroom> Classrooms { get; set; }
@@ -36,7 +35,6 @@ namespace ESchool.ClassRegister.Domain
         public DbSet<UserMessage> UserMessages { get; set; }
         public DbSet<Absence> Absences { get; set; }
         public DbSet<ClassSchoolYearSubject> ClassSchoolYearSubjects { get; set; }
-        public DbSet<ClassSchoolYearSubjectTeacher> GroupTeachers { get; set; }
         public DbSet<HomeWork> HomeWorks { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Student> Students { get; set; }
@@ -49,11 +47,9 @@ namespace ESchool.ClassRegister.Domain
 
         public ClassRegisterContext(
             DbContextOptions<ClassRegisterContext> options,
-            Tenant tenant,
-            OutboxDbContext outboxDbContext) : base(options)
+            Tenant tenant) : base(options)
         {
             this.tenant = tenant;
-            this.outboxDbContext = outboxDbContext;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -75,17 +71,14 @@ namespace ESchool.ClassRegister.Domain
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             EntityAudit();
-            return this.SaveChangesWithOutbox(outboxDbContext, () => base.SaveChanges(acceptAllChangesOnSuccess));
+            return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
             CancellationToken cancellationToken = default)
         {
             EntityAudit();
-            return this.SaveChangesWithOutboxAsync(
-                outboxDbContext,
-                token => base.SaveChangesAsync(acceptAllChangesOnSuccess, token),
-                cancellationToken: cancellationToken);
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
         private void EntityAudit()

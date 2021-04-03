@@ -47,10 +47,7 @@ namespace ESchool.IdentityProvider
 
             services.AddMassTransitOutbox(config =>
             {
-                config.UseEntityFrameworkCore(options => options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection"), serverConfig =>
-                        serverConfig.MigrationsAssembly(typeof(IdentityProviderContext).Assembly.GetName().Name)));
-
+                config.UseEntityFrameworkCore<IdentityProviderContext>();
                 config.AddPublishFilter(typeof(AuthDataSetterPublishFilter<>));
             });
 

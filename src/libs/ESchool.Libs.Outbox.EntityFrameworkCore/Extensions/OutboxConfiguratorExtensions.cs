@@ -8,9 +8,10 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Extensions
 {
     public static class OutboxConfiguratorExtensions 
     {
-        public static IOutboxConfigurator UseEntityFrameworkCore(this IOutboxConfigurator configurator, Action<DbContextOptionsBuilder> configureDbContext)
+        public static IOutboxConfigurator UseEntityFrameworkCore<TContext>(this IOutboxConfigurator configurator)
+            where TContext : IOutboxDbContext
         {
-            configurator.Services.AddDbContext<OutboxDbContext>(configureDbContext);
+            configurator.Services.AddScoped<IOutboxDbContext>(provider => provider.GetRequiredService<TContext>());
             configurator.Services.AddScoped<IMessageDispatcher, EfCoreMessageDispatcher>();
             configurator.Services.AddScoped<IEventPublisher, EfCoreEventPublisher>();
             return configurator;

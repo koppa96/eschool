@@ -27,7 +27,7 @@ namespace ESchool.ClassRegister.Application.Features.Tenants
         public async Task Consume(ConsumeContext<TenantDeletedEvent> context)
         {
             var tenant = await masterDbContext.Tenants.FindOrThrowAsync(context.Message.TenantId);
-            await using var tenantDbContext = new ClassRegisterContext(dbContextOptions, tenant, outboxDbContext);
+            await using var tenantDbContext = new ClassRegisterContext(dbContextOptions, tenant);
             
             await tenantDbContext.Database.EnsureDeletedAsync();
             masterDbContext.Tenants.Remove(tenant);

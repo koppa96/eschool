@@ -17,19 +17,16 @@ namespace ESchool.ClassRegister.Application.Features.Tenants
         private readonly TenantService.TenantServiceClient client;
         private readonly IConfiguration configuration;
         private readonly DbContextOptions<ClassRegisterContext> dbContextOptions;
-        private readonly OutboxDbContext outboxDbContext;
 
         public TenantCreatedOrUpdatedConsumer(MasterDbContext masterDbContext,
             TenantService.TenantServiceClient client,
             IConfiguration configuration,
-            DbContextOptions<ClassRegisterContext> dbContextOptions,
-            OutboxDbContext outboxDbContext)
+            DbContextOptions<ClassRegisterContext> dbContextOptions)
         {
             this.masterDbContext = masterDbContext;
             this.client = client;
             this.configuration = configuration;
             this.dbContextOptions = dbContextOptions;
-            this.outboxDbContext = outboxDbContext;
         }
         
         public async Task Consume(ConsumeContext<TenantCreatedOrUpdatedEvent> context)
@@ -45,7 +42,7 @@ namespace ESchool.ClassRegister.Application.Features.Tenants
                 };
                 masterDbContext.Tenants.Add(tenant);
 
-                await using var tenantDbContext = new ClassRegisterContext(dbContextOptions, tenant, outboxDbContext);
+                await using var tenantDbContext = new ClassRegisterContext(dbContextOptions, tenant);
                 await tenantDbContext.Database.MigrateAsync();
             }
 

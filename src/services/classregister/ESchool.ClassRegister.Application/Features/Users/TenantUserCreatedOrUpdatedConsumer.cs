@@ -52,7 +52,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
             var tenant = await masterDbContext.Tenants.FindAsync(context.Message.TenantId);
             
             // Global admins can also create users => No tenant Id will be set in the Identity Service.
-            await using var dbContext = new ClassRegisterContext(dbContextOptions, tenant, outboxDbContext);
+            await using var dbContext = new ClassRegisterContext(dbContextOptions, tenant);
             
             var tenantUserTypes = Assembly.GetExecutingAssembly()
                 .GetTypes()

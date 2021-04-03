@@ -3,18 +3,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Libs.Outbox.EntityFrameworkCore
 {
-    public class OutboxDbContext : DbContext
+    public abstract class OutboxDbContext : DbContext, IOutboxDbContext
     {
         public DbSet<OutboxEntry> OutboxEntries { get; set; }
 
-        public OutboxDbContext(DbContextOptions<OutboxDbContext> options) : base(options)
+        protected OutboxDbContext(DbContextOptions options) : base(options)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("outbox");
-            
             modelBuilder.Entity<OutboxEntry>()
                 .HasIndex(x => x.State)
                 .IsUnique(false);

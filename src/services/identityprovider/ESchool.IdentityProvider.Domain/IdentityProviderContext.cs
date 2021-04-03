@@ -12,11 +12,12 @@ using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Domain.Interfaces;
 using ESchool.Libs.Outbox.EntityFrameworkCore;
+using ESchool.Libs.Outbox.EntityFrameworkCore.Entities;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
 
 namespace ESchool.IdentityProvider.Domain
 {
-    public class IdentityProviderContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+    public class IdentityProviderContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>, IOutboxDbContext
     {
         private readonly OutboxDbContext outboxDbContext;
         private readonly Guid? tenantId;
@@ -24,6 +25,7 @@ namespace ESchool.IdentityProvider.Domain
         public DbSet<Tenant> Tenants { get; set; }
         public DbSet<TenantUser> TenantUsers { get; set; }
         public DbSet<TenantUserRole> TenantUserRoles { get; set; }
+        public DbSet<OutboxEntry> OutboxEntries { get; set; }
         
         public IdentityProviderContext(DbContextOptions<IdentityProviderContext> options, IIdentityService identityService, OutboxDbContext outboxDbContext) : base(options)
         {
@@ -35,18 +37,22 @@ namespace ESchool.IdentityProvider.Domain
         {
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            builder.Entity<OutboxEntry>()
+                .HasIndex(x => x.State)
+                .IsUnique(false);
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             EntityAudit();
-            return this.SaveChangesWithOutbox(outboxDbContext, () => base.SaveChanges(acceptAllChangesOnSuccess));
+            return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             EntityAudit();
-            return this.SaveChangesWithOutboxAsync(outboxDbContext, token => base.SaveChangesAsync(token), cancellationToken: cancellationToken);
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
         private void EntityAudit()

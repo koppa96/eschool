@@ -11,9 +11,9 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
     public class EfCoreEventPublisher : IEventPublisher
     {
         private readonly IPublishFilterRunner publishFilterRunner;
-        private readonly OutboxDbContext outboxDbContext;
+        private readonly IOutboxDbContext outboxDbContext;
 
-        public EfCoreEventPublisher(IPublishFilterRunner publishFilterRunner, OutboxDbContext outboxDbContext)
+        public EfCoreEventPublisher(IPublishFilterRunner publishFilterRunner, IOutboxDbContext outboxDbContext)
         {
             this.publishFilterRunner = publishFilterRunner;
             this.outboxDbContext = outboxDbContext;

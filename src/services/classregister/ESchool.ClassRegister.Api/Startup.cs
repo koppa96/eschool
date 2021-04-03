@@ -45,10 +45,7 @@ namespace ESchool.ClassRegister.Api
 
             services.AddMassTransitOutbox(config =>
             {
-                config.UseEntityFrameworkCore(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection"), serverConfig =>
-                        serverConfig.MigrationsAssembly(typeof(ClassRegisterContext).Assembly.GetName().Name)));
-
+                config.UseEntityFrameworkCore<ClassRegisterContext>();
                 config.AddPublishFilter(typeof(AuthDataSetterPublishFilter<>));
             });
             
