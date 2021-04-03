@@ -11,27 +11,16 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Extensions
         public static int SaveChangesWithOutbox(
             this DbContext dbContext,
             OutboxDbContext outboxDbContext,
-            Func<int> baseSaveChanges,
-            IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+            Func<int> baseSaveChanges)
         {
-            using var transaction = new CommittableTransaction(new TransactionOptions
+            var result = 0;
+            using (var scope = new TransactionScope(TransactionScopeOption.Required))
             {
-                IsolationLevel = isolationLevel
-            });
-            
-            dbContext.Database.OpenConnection();
-            outboxDbContext.Database.OpenConnection();
-            
-            dbContext.Database.EnlistTransaction(transaction);
-            outboxDbContext.Database.EnlistTransaction(transaction);
+                result = baseSaveChanges();
+                outboxDbContext.SaveChanges();
+                scope.Complete();
+            }
 
-            var result = baseSaveChanges();
-            outboxDbContext.SaveChanges();
-            transaction.Commit();
-
-            dbContext.Database.CloseConnection();
-            outboxDbContext.Database.CloseConnection();
-            
             return result;
         }
 
@@ -39,27 +28,16 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Extensions
             this DbContext dbContext,
             OutboxDbContext outboxDbContext,
             Func<CancellationToken, Task<int>> baseSaveChangesAsync,
-            IsolationLevel isolationLevel = IsolationLevel.ReadCommitted,
             CancellationToken cancellationToken = default)
         {
-            using var transaction = new CommittableTransaction(new TransactionOptions
+            var result = 0;
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
             {
-                IsolationLevel = isolationLevel
-            });
-
-            await dbContext.Database.OpenConnectionAsync(cancellationToken);
-            await outboxDbContext.Database.OpenConnectionAsync(cancellationToken);
+                result = await baseSaveChangesAsync(cancellationToken);
+                await outboxDbContext.SaveChangesAsync(cancellationToken);
+                scope.Complete();
+            }
             
-            dbContext.Database.EnlistTransaction(transaction);
-            outboxDbContext.Database.EnlistTransaction(transaction);
-
-            var result = await baseSaveChangesAsync(cancellationToken);
-            await outboxDbContext.SaveChangesAsync(cancellationToken);
-            transaction.Commit();
-
-            await dbContext.Database.CloseConnectionAsync();
-            await outboxDbContext.Database.CloseConnectionAsync();
-
             return result;
         }
     }

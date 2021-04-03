@@ -1,5 +1,6 @@
 using System;
 using ESchool.Libs.Outbox.AspNetCore.Configuration;
+using ESchool.Libs.Outbox.Filters;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ESchool.Libs.Outbox.AspNetCore.Extensions
@@ -13,6 +14,7 @@ namespace ESchool.Libs.Outbox.AspNetCore.Extensions
             var outboxConfigurator = new OutboxConfigurator(services);
             configureAction(outboxConfigurator);
 
+            services.AddTransient<IPublishFilterRunner, DefaultPublishFilterRunner>();
             services.AddHostedService<MessageDispatcherHostedService>();
             
             return services;

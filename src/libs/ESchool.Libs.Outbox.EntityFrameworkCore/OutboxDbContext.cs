@@ -13,6 +13,8 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasDefaultSchema("outbox");
+            
             modelBuilder.Entity<OutboxEntry>()
                 .HasIndex(x => x.State)
                 .IsUnique(false);

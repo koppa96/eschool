@@ -26,6 +26,7 @@ using ESchool.IdentityProvider.Grpc;
 using ESchool.Libs.AspNetCore.Filters;
 using ESchool.Libs.Outbox.AspNetCore.Extensions;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
+using ESchool.Libs.Outbox.Filters;
 
 namespace ESchool.IdentityProvider
 {
@@ -52,6 +53,8 @@ namespace ESchool.IdentityProvider
 
                 config.AddPublishFilter(typeof(AuthDataSetterPublishFilter<>));
             });
+
+            services.AddTransient(typeof(IPublishFilter<>), typeof(AuthDataSetterPublishFilter<>));
 
             services.AddIdentity<User, IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<IdentityProviderContext>();
