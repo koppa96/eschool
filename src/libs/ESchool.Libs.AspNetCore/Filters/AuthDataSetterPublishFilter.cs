@@ -15,7 +15,7 @@ namespace ESchool.Libs.AspNetCore.Filters
             this.identityService = identityService;
         }
         
-        public Task Execute(OutboxPublishContext<T> context, CancellationToken cancellationToken = default)
+        public Task ExecuteAsync(OutboxPublishContext<T> context, CancellationToken cancellationToken = default)
         {
             var tenantId = identityService.TryGetTenantId();
             if (tenantId != null)

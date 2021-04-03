@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Entities;
@@ -7,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ESchool.Libs.Outbox.EntityFrameworkCore
 {
-    public interface IOutboxDbContext
+    public interface IOutboxDbContext : IDisposable, IAsyncDisposable
     {
         IModel Model { get; }
-        public DatabaseFacade Database { get; }
-        public DbSet<OutboxEntry> OutboxEntries { get; set; }
+        DatabaseFacade Database { get; }
+        DbSet<OutboxEntry> OutboxEntries { get; set; }
 
         int SaveChanges();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

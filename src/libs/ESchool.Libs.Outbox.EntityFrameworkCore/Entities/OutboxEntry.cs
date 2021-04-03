@@ -18,7 +18,7 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Entities
         {
             return new OutboxEntry
             {
-                Id = context.Id,
+                Id = Guid.NewGuid(),
                 Headers = JsonSerializer.Serialize(context.Headers),
                 Body = JsonSerializer.Serialize(context.Message, context.Message.GetType()),
                 TypeName = context.Message.GetType().AssemblyQualifiedName,

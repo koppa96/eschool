@@ -27,7 +27,7 @@ namespace ESchool.Libs.Outbox.Filters
                     break;
                 }
                 
-                await filter.Execute(context, cancellationToken);
+                await filter.ExecuteAsync(context, cancellationToken);
             }
 
             return context;

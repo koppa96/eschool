@@ -1,6 +1,7 @@
 using System;
 using ESchool.Libs.Outbox.AspNetCore.Configuration;
 using ESchool.Libs.Outbox.Filters;
+using ESchool.Libs.Outbox.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ESchool.Libs.Outbox.AspNetCore.Extensions

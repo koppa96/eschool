@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using ESchool.ClassRegister.Api.Grpc;
+using ESchool.ClassRegister.Api.Infrastructure;
 using ESchool.ClassRegister.Domain;
 using ESchool.IdentityProvider.Grpc;
 using ESchool.Libs.AspNetCore.Configuration;
@@ -45,7 +46,11 @@ namespace ESchool.ClassRegister.Api
 
             services.AddMassTransitOutbox(config =>
             {
-                config.UseEntityFrameworkCore<ClassRegisterContext>();
+                config.UseEntityFrameworkCore<ClassRegisterContext>(efCoreConfig =>
+                {
+                    efCoreConfig.UseMultiTenantMessageDispatcher();
+                    efCoreConfig.UseTenantOutboxDbContextFactory<TenantDbContextFactory>();
+                });
                 config.AddPublishFilter(typeof(AuthDataSetterPublishFilter<>));
             });
             

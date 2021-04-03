@@ -78,7 +78,7 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
                 {
                     var headers = JsonSerializer.Deserialize<Dictionary<string, string>>(entry.Headers);
                     var messageType = Type.GetType(entry.TypeName);
-                    var message = JsonSerializer.Deserialize(entry.Body, messageType);
+                    var message = JsonSerializer.Deserialize(entry.Body, messageType!);
 
                     try
                     {

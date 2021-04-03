@@ -47,7 +47,10 @@ namespace ESchool.IdentityProvider
 
             services.AddMassTransitOutbox(config =>
             {
-                config.UseEntityFrameworkCore<IdentityProviderContext>();
+                config.UseEntityFrameworkCore<IdentityProviderContext>(efCoreConfig =>
+                {
+                    efCoreConfig.UseStandardMessageDispatcher();
+                });
                 config.AddPublishFilter(typeof(AuthDataSetterPublishFilter<>));
             });
 

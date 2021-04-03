@@ -6,6 +6,6 @@ namespace ESchool.Libs.Outbox.Filters
 {
     public interface IPublishFilter<TMessage>
     {
-        Task Execute(OutboxPublishContext<TMessage> context, CancellationToken cancellationToken = default);
+        Task ExecuteAsync(OutboxPublishContext<TMessage> context, CancellationToken cancellationToken = default);
     }
 }
