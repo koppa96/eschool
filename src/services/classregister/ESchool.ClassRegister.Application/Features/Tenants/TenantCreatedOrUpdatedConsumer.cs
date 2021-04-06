@@ -4,7 +4,6 @@ using ESchool.IdentityProvider.Grpc;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.Tenants;
 using ESchool.Libs.Domain.MultiTenancy;
 using ESchool.Libs.Domain.MultiTenancy.Entities;
-using ESchool.Libs.Outbox.EntityFrameworkCore;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,17 +15,17 @@ namespace ESchool.ClassRegister.Application.Features.Tenants
         private readonly MasterDbContext masterDbContext;
         private readonly TenantService.TenantServiceClient client;
         private readonly IConfiguration configuration;
-        private readonly DbContextOptions<ClassRegisterContext> dbContextOptions;
+        private readonly ITenantDbContextFactory<ClassRegisterContext> tenantDbContextFactory;
 
         public TenantCreatedOrUpdatedConsumer(MasterDbContext masterDbContext,
             TenantService.TenantServiceClient client,
             IConfiguration configuration,
-            DbContextOptions<ClassRegisterContext> dbContextOptions)
+            ITenantDbContextFactory<ClassRegisterContext> tenantDbContextFactory)
         {
             this.masterDbContext = masterDbContext;
             this.client = client;
             this.configuration = configuration;
-            this.dbContextOptions = dbContextOptions;
+            this.tenantDbContextFactory = tenantDbContextFactory;
         }
         
         public async Task Consume(ConsumeContext<TenantCreatedOrUpdatedEvent> context)
@@ -42,7 +41,7 @@ namespace ESchool.ClassRegister.Application.Features.Tenants
                 };
                 masterDbContext.Tenants.Add(tenant);
 
-                await using var tenantDbContext = new ClassRegisterContext(dbContextOptions, tenant);
+                await using var tenantDbContext = tenantDbContextFactory.CreateContext(tenant);
                 await tenantDbContext.Database.MigrateAsync();
             }
 

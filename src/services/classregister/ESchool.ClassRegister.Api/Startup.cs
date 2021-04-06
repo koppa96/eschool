@@ -49,9 +49,8 @@ namespace ESchool.ClassRegister.Api
                 config.UseEntityFrameworkCore<ClassRegisterContext>(efCoreConfig =>
                 {
                     efCoreConfig.UseMultiTenantMessageDispatcher();
-                    efCoreConfig.UseTenantOutboxDbContextFactory<TenantDbContextFactory>();
                 });
-                config.AddPublishFilter(typeof(AuthDataSetterPublishFilter<>));
+                config.AddPublishFilter<AuthDataSetterPublishFilter>();
             });
             
             services.AddControllers();

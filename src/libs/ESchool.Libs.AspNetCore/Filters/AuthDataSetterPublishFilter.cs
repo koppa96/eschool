@@ -6,7 +6,7 @@ using ESchool.Libs.Outbox.Models;
 
 namespace ESchool.Libs.AspNetCore.Filters
 {
-    public class AuthDataSetterPublishFilter<T> : IPublishFilter<T>
+    public class AuthDataSetterPublishFilter : IPublishFilter
     {
         private readonly IIdentityService identityService;
 
@@ -15,7 +15,7 @@ namespace ESchool.Libs.AspNetCore.Filters
             this.identityService = identityService;
         }
         
-        public Task ExecuteAsync(OutboxPublishContext<T> context, CancellationToken cancellationToken = default)
+        public Task ExecuteAsync(OutboxPublishContext context, CancellationToken cancellationToken = default)
         {
             var tenantId = identityService.TryGetTenantId();
             if (tenantId != null)

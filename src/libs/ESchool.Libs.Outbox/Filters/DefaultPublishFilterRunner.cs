@@ -15,11 +15,11 @@ namespace ESchool.Libs.Outbox.Filters
             this.serviceProvider = serviceProvider;
         }
         
-        public async Task<OutboxPublishContext<TMessage>> RunFiltersAsync<TMessage>(TMessage message, CancellationToken cancellationToken = default)
+        public async Task<OutboxPublishContext> RunFiltersAsync(object message, CancellationToken cancellationToken = default)
         {
-            var publishFilters = serviceProvider.GetServices<IPublishFilter<TMessage>>();
+            var publishFilters = serviceProvider.GetServices<IPublishFilter>();
             
-            var context = new OutboxPublishContext<TMessage>(message);
+            var context = new OutboxPublishContext(message);
             foreach (var filter in publishFilters)
             {
                 if (context.Canceled)

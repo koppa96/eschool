@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace ESchool.Libs.Outbox.Models
 {
-    public class OutboxPublishContext<TMessage>
+    public class OutboxPublishContext
     {
-        public Dictionary<string, string> Headers { get; set; }
-        public TMessage Message { get; set; }
+        public Dictionary<string, string> Headers { get; }
+        public object Message { get; }
         public bool Canceled { get; private set; }
 
-        public OutboxPublishContext(TMessage message)
+        public OutboxPublishContext(object message)
         {
             Headers = new Dictionary<string, string>();
             Message = message;

@@ -13,14 +13,15 @@ using Microsoft.Extensions.Options;
 
 namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
 {
-    public class EfCoreMultiTenantMessageDispatcher : IMessageDispatcher
-    {
+    public class EfCoreMultiTenantMessageDispatcher<TContext> : IMessageDispatcher
+        where TContext : DbContext, IOutboxDbContext
+        {
         private readonly IServiceProvider serviceProvider;
-        private readonly ITenantOutboxDbContextFactory tenantOutboxDbContextFactory;
+        private readonly ITenantDbContextFactory<TContext> tenantOutboxDbContextFactory;
         private readonly MasterDbContext masterDbContext;
 
         public EfCoreMultiTenantMessageDispatcher(IServiceProvider serviceProvider,
-            ITenantOutboxDbContextFactory tenantOutboxDbContextFactory,
+            ITenantDbContextFactory<TContext> tenantOutboxDbContextFactory,
             MasterDbContext masterDbContext)
         {
             this.serviceProvider = serviceProvider;

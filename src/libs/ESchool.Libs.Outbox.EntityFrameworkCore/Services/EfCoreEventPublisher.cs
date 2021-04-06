@@ -19,12 +19,12 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
             this.outboxDbContext = outboxDbContext;
         }
 
-        public Task PublishAsync<TMessage>(TMessage message, CancellationToken cancellationToken = default)
+        public Task PublishAsync(object message, CancellationToken cancellationToken = default)
         {
             return PublishAsync(message, _ => Task.CompletedTask, cancellationToken);
         }
 
-        public async Task PublishAsync<TMessage>(TMessage message, Func<OutboxPublishContext<TMessage>, Task> inlineFilter, CancellationToken cancellationToken = default)
+        public async Task PublishAsync(object message, Func<OutboxPublishContext, Task> inlineFilter, CancellationToken cancellationToken = default)
         {
             var context = await publishFilterRunner.RunFiltersAsync(message, cancellationToken);
             if (!context.Canceled)

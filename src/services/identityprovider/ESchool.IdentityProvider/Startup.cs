@@ -51,10 +51,9 @@ namespace ESchool.IdentityProvider
                 {
                     efCoreConfig.UseStandardMessageDispatcher();
                 });
-                config.AddPublishFilter(typeof(AuthDataSetterPublishFilter<>));
+                
+                config.AddPublishFilter<AuthDataSetterPublishFilter>();
             });
-
-            services.AddTransient(typeof(IPublishFilter<>), typeof(AuthDataSetterPublishFilter<>));
 
             services.AddIdentity<User, IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<IdentityProviderContext>();

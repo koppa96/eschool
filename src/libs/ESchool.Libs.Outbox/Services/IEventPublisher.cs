@@ -7,9 +7,9 @@ namespace ESchool.Libs.Outbox.Services
 {
     public interface IEventPublisher
     {
-        Task PublishAsync<TMessage>(TMessage message, CancellationToken cancellationToken = default);
+        Task PublishAsync(object message, CancellationToken cancellationToken = default);
 
-        Task PublishAsync<TMessage>(TMessage message, Func<OutboxPublishContext<TMessage>, Task> inlineFilter,
+        Task PublishAsync(object message, Func<OutboxPublishContext, Task> inlineFilter,
             CancellationToken cancellationToken = default);
     }
 }

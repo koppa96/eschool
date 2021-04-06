@@ -20,11 +20,10 @@ namespace ESchool.ClassRegister.Api
                 await masterDbContext.Database.MigrateAsync();
 
                 var tenants = await masterDbContext.Tenants.ToListAsync();
-                var dbContextOptions =
-                    scope.ServiceProvider.GetRequiredService<DbContextOptions<ClassRegisterContext>>();
+                var factory = scope.ServiceProvider.GetRequiredService<ITenantDbContextFactory<ClassRegisterContext>>();
                 foreach (var tenant in tenants)
                 {
-                    await using var tenantDbContext = new ClassRegisterContext(dbContextOptions, tenant);
+                    await using var tenantDbContext = factory.CreateContext(tenant); 
                     await tenantDbContext.Database.MigrateAsync();
                 }
             }

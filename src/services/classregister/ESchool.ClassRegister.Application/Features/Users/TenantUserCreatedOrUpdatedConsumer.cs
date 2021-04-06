@@ -17,6 +17,7 @@ using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.MultiTenancy;
 using ESchool.Libs.Domain.MultiTenancy.Entities;
 using ESchool.Libs.Outbox.EntityFrameworkCore;
+using ESchool.Libs.Outbox.Services;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,35 +25,36 @@ namespace ESchool.ClassRegister.Application.Features.Users
 {
     public class TenantUserCreatedOrUpdatedConsumer : IConsumer<TenantUserCreatedOrEditedEvent>
     {
-        private readonly DbContextOptions<ClassRegisterContext> dbContextOptions;
         private readonly MasterDbContext masterDbContext;
         private readonly OutboxDbContext outboxDbContext;
         private readonly TenantUserService.TenantUserServiceClient client;
-        private readonly IPublishEndpoint publishEndpoint;
         private readonly IMapper mapper;
+        private readonly ITenantDbContextFactory<ClassRegisterContext> tenantDbContextFactory;
+        private readonly IEventPublisher publisher;
 
-        public TenantUserCreatedOrUpdatedConsumer(DbContextOptions<ClassRegisterContext> dbContextOptions,
+        public TenantUserCreatedOrUpdatedConsumer(
             MasterDbContext masterDbContext,
             OutboxDbContext outboxDbContext,
             TenantUserService.TenantUserServiceClient client,
-            IPublishEndpoint publishEndpoint,
-            IMapper mapper)
+            IMapper mapper,
+            ITenantDbContextFactory<ClassRegisterContext> tenantDbContextFactory,
+            IEventPublisher publisher)
         {
-            this.dbContextOptions = dbContextOptions;
+
             this.masterDbContext = masterDbContext;
             this.outboxDbContext = outboxDbContext;
             this.client = client;
-            this.publishEndpoint = publishEndpoint;
             this.mapper = mapper;
+            this.tenantDbContextFactory = tenantDbContextFactory;
+            this.publisher = publisher;
         }
 
         public async Task Consume(ConsumeContext<TenantUserCreatedOrEditedEvent> context)
         {
-            var events = new List<object>();
             var tenant = await masterDbContext.Tenants.FindAsync(context.Message.TenantId);
             
             // Global admins can also create users => No tenant Id will be set in the Identity Service.
-            await using var dbContext = new ClassRegisterContext(dbContextOptions, tenant);
+            await using var dbContext = tenantDbContextFactory.CreateContext(tenant);
             
             var tenantUserTypes = Assembly.GetExecutingAssembly()
                 .GetTypes()
@@ -93,7 +95,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
                     dbContext.UserRoles.Remove(userBase);
                     if (mapper.TryMap<TenantUserRoleDeletedEvent>(userBase, out var @event))
                     {
-                        events.Add(@event);
+                        await publisher.PublishAsync(@event);
                     }
                 }
             }
@@ -114,7 +116,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
                     dbContext.UserRoles.Add(userRole);
                     if (mapper.TryMap<TenantUserRoleCreatedEvent>(userRole, out var @event))
                     {
-                        events.Add(@event);
+                        await publisher.PublishAsync(@event);
                     }
                 }
                 else
@@ -123,17 +125,12 @@ namespace ESchool.ClassRegister.Application.Features.Users
                     existingUserRole.IsDeleted = false;
                     if (mapper.TryMap<TenantUserRoleCreatedEvent>(existingUserRole, out var @event))
                     {
-                        events.Add(@event);
+                        await publisher.PublishAsync(@event);
                     }
                 }
             }
 
             await dbContext.SaveChangesAsync();
-
-            foreach (var @event in events)
-            {
-                await publishEndpoint.Publish(@event);
-            }
         }
     }
 }

@@ -4,8 +4,8 @@ using ESchool.Libs.Outbox.Models;
 
 namespace ESchool.Libs.Outbox.Filters
 {
-    public interface IPublishFilter<TMessage>
+    public interface IPublishFilter
     {
-        Task ExecuteAsync(OutboxPublishContext<TMessage> context, CancellationToken cancellationToken = default);
+        Task ExecuteAsync(OutboxPublishContext context, CancellationToken cancellationToken = default);
     }
 }

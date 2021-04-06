@@ -3,7 +3,6 @@ using ESchool.ClassRegister.Domain;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.Tenants;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Domain.MultiTenancy;
-using ESchool.Libs.Outbox.EntityFrameworkCore;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,23 +10,21 @@ namespace ESchool.ClassRegister.Application.Features.Tenants
 {
     public class TenantDeletedConsumer : IConsumer<TenantDeletedEvent>
     {
-        private readonly DbContextOptions<ClassRegisterContext> dbContextOptions;
         private readonly MasterDbContext masterDbContext;
-        private readonly OutboxDbContext outboxDbContext;
+        private readonly ITenantDbContextFactory<ClassRegisterContext> tenantDbContextFactory;
 
-        public TenantDeletedConsumer(DbContextOptions<ClassRegisterContext> dbContextOptions,
+        public TenantDeletedConsumer(
             MasterDbContext masterDbContext,
-            OutboxDbContext outboxDbContext)
+            ITenantDbContextFactory<ClassRegisterContext> tenantDbContextFactory)
         {
-            this.dbContextOptions = dbContextOptions;
             this.masterDbContext = masterDbContext;
-            this.outboxDbContext = outboxDbContext;
+            this.tenantDbContextFactory = tenantDbContextFactory;
         }
         
         public async Task Consume(ConsumeContext<TenantDeletedEvent> context)
         {
             var tenant = await masterDbContext.Tenants.FindOrThrowAsync(context.Message.TenantId);
-            await using var tenantDbContext = new ClassRegisterContext(dbContextOptions, tenant);
+            await using var tenantDbContext = tenantDbContextFactory.CreateContext(tenant);
             
             await tenantDbContext.Database.EnsureDeletedAsync();
             masterDbContext.Tenants.Remove(tenant);

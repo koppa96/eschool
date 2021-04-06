@@ -15,7 +15,9 @@ using ESchool.Libs.Domain.MultiTenancy.Entities;
 using ESchool.Libs.Outbox.EntityFrameworkCore;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
 using ESchool.Libs.Outbox.Services;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ESchool.ClassRegister.Domain
 {
@@ -47,7 +49,9 @@ namespace ESchool.ClassRegister.Domain
 
         public ClassRegisterContext(
             DbContextOptions<ClassRegisterContext> options,
-            Tenant tenant) : base(options)
+            IMediator mediator,
+            ILogger<ClassRegisterContext> logger,
+            Tenant tenant) : base(options, mediator, logger)
         {
             this.tenant = tenant;
         }

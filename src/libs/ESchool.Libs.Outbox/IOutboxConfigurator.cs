@@ -9,22 +9,15 @@ namespace ESchool.Libs.Outbox
     {
         public IServiceCollection Services { get; }
 
-        public IOutboxConfigurator AddPublishFilter<TFilter, TMessage>()
-            where TFilter : IPublishFilter<TMessage>
+        public IOutboxConfigurator AddPublishFilter<TFilter>()
+            where TFilter : IPublishFilter
         {
             return AddPublishFilter(typeof(TFilter));
         }
 
         public IOutboxConfigurator AddPublishFilter(Type filterType)
         {
-            var interfaces = filterType.GetInterfaces().Where(i =>
-                i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IPublishFilter<>));
-
-            foreach (var @interface in interfaces)
-            {
-                Services.AddTransient(@interface, filterType);
-            }
-
+            Services.AddTransient(typeof(IPublishFilter), filterType);
             return this;
         }
     }

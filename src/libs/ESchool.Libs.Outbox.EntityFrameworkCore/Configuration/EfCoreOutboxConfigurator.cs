@@ -1,10 +1,12 @@
 using ESchool.Libs.Outbox.EntityFrameworkCore.Services;
 using ESchool.Libs.Outbox.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ESchool.Libs.Outbox.EntityFrameworkCore.Configuration
 {
-    public class EfCoreOutboxConfigurator
+    public class EfCoreOutboxConfigurator<TContext>
+        where TContext : DbContext, IOutboxDbContext
     {
         public IServiceCollection Services { get; }
 
@@ -13,22 +15,15 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Configuration
             Services = services;
         }
 
-        public EfCoreOutboxConfigurator UseStandardMessageDispatcher()
+        public EfCoreOutboxConfigurator<TContext> UseStandardMessageDispatcher()
         {
             Services.AddTransient<IMessageDispatcher, EfCoreMessageDispatcher>();
             return this;
         }
 
-        public EfCoreOutboxConfigurator UseMultiTenantMessageDispatcher()
+        public EfCoreOutboxConfigurator<TContext> UseMultiTenantMessageDispatcher()
         {
-            Services.AddTransient<IMessageDispatcher, EfCoreMultiTenantMessageDispatcher>();
-            return this;
-        }
-
-        public EfCoreOutboxConfigurator UseTenantOutboxDbContextFactory<TFactory>()
-            where TFactory : class, ITenantOutboxDbContextFactory
-        {
-            Services.AddTransient<ITenantOutboxDbContextFactory, TFactory>();
+            Services.AddTransient<IMessageDispatcher, EfCoreMultiTenantMessageDispatcher<TContext>>();
             return this;
         }
     }

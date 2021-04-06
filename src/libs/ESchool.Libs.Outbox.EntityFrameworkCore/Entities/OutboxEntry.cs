@@ -14,7 +14,7 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Entities
         public OutboxEntryState State { get; set; }
         public int Retries { get; set; }
 
-        public static OutboxEntry FromPublishContext<TMessage>(OutboxPublishContext<TMessage> context)
+        public static OutboxEntry FromPublishContext(OutboxPublishContext context)
         {
             return new OutboxEntry
             {
