@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using ESchool.ClassRegister.Api.Grpc;
-using ESchool.ClassRegister.Api.Infrastructure;
 using ESchool.ClassRegister.Domain;
 using ESchool.IdentityProvider.Grpc;
 using ESchool.Libs.AspNetCore.Configuration;
@@ -123,7 +122,7 @@ namespace ESchool.ClassRegister.Api
             services.AddMassTransitHostedService();
 
             services.AddCommonServices();
-            services.AddMultitenancy();
+            services.AddMultitenancy<ClassRegisterContext>();
 
             services.AddGrpcClient<TenantService.TenantServiceClient>(options =>
             {

@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using ESchool.ClassRegister.Grpc;
+using ESchool.HomeAssignments.Api.Infrastructure;
 using ESchool.HomeAssignments.Domain;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
@@ -44,7 +45,7 @@ namespace ESchool.HomeAssignments.Api
             services.AddCommonAuthorization();
 
             services.AddCommonServices();
-            services.AddMultitenancy();
+            services.AddMultitenancy<HomeAssignmentsContext>();
 
             services.AddMediatR(Assembly.Load("ESchool.HomeAssignments.Application"))
                 .AddMediatRAuthorization(Assembly.Load("ESchool.HomeAssignments.Application"));

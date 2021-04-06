@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.HomeAssignments.Domain.Entities;
@@ -8,11 +9,14 @@ using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Domain.Interfaces;
 using ESchool.Libs.Domain.MultiTenancy.Entities;
 using ESchool.Libs.Domain.Services;
+using ESchool.Libs.Outbox.EntityFrameworkCore;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ESchool.HomeAssignments.Domain
 {
-    public class HomeAssignmentsContext : DbContext
+    public class HomeAssignmentsContext : OutboxDbContext
     {
         private readonly Tenant tenant;
         private readonly IIdentityService identityService;
@@ -30,7 +34,12 @@ namespace ESchool.HomeAssignments.Domain
         public DbSet<HomeworkSolution> HomeworkSolutions { get; set; }
         public DbSet<HomeworkReview> HomeworkReviews { get; set; }
 
-        public HomeAssignmentsContext(DbContextOptions<HomeAssignmentsContext> options, Tenant tenant, IIdentityService identityService) : base(options)
+        public HomeAssignmentsContext(
+            DbContextOptions<HomeAssignmentsContext> options,
+            Tenant tenant,
+            IIdentityService identityService,
+            IMediator mediator,
+            ILogger<HomeAssignmentsContext> logger) : base(options, mediator, logger)
         {
             this.tenant = tenant;
             this.identityService = identityService;
@@ -61,9 +70,12 @@ namespace ESchool.HomeAssignments.Domain
         {
             this.SoftDelete();
             
-            var currentUserId = identityService.GetCurrentUserId();
-            await this.CreationAuditAsync<HomeAssignmentsUser, HomeAssignmentsUserRole>(currentUserId, cancellationToken);
-            await this.ModificationAuditAsync<HomeAssignmentsUser, HomeAssignmentsUserRole>(currentUserId, cancellationToken);
+            var currentUserId = identityService.TryGetCurrentUserId();
+            if (currentUserId != null)
+            {
+                await this.CreationAuditAsync<HomeAssignmentsUser, HomeAssignmentsUserRole>(currentUserId.Value, cancellationToken);
+                await this.ModificationAuditAsync<HomeAssignmentsUser, HomeAssignmentsUserRole>(currentUserId.Value, cancellationToken);
+            }
         }
 
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())

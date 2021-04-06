@@ -36,8 +36,11 @@ namespace ESchool.Libs.Domain.Extensions
             }
         }
 
-        public static async Task CreationAuditAsync<TUser, TUserRole>(this DbContext dbContext, Guid currentUserId,
-            CancellationToken cancellationToken = default)
+        public static async Task CreationAuditAsync<TUser, TUserRole>(
+            this DbContext dbContext,
+            Guid currentUserId,
+            CancellationToken cancellationToken = default
+        )
             where TUser : UserBase<TUser, TUserRole>
             where TUserRole : UserRoleBase<TUser, TUserRole>
         {
@@ -53,8 +56,11 @@ namespace ESchool.Libs.Domain.Extensions
             }
         }
 
-        public static async Task ModificationAuditAsync<TUser, TUserRole>(this DbContext dbContext, Guid currentUserId,
-            CancellationToken cancellationToken = default)
+        public static async Task ModificationAuditAsync<TUser, TUserRole>(
+            this DbContext dbContext,
+            Guid currentUserId,
+            CancellationToken cancellationToken = default
+        )
             where TUser : UserBase<TUser, TUserRole>
             where TUserRole : UserRoleBase<TUser, TUserRole>
         {

@@ -111,7 +111,15 @@ namespace ESchool.Libs.AspNetCore.Extensions
             return services;
         }
 
-        public static IServiceCollection AddMultitenancy(this IServiceCollection services)
+        public static IServiceCollection AddMultitenancy<TContext>(this IServiceCollection services)
+            where TContext : DbContext
+        {
+            return services.AddMultitenancy<TContext, DefaultTenantDbContextFactory<TContext>>();
+        }
+
+        public static IServiceCollection AddMultitenancy<TContext, TFactory>(this IServiceCollection services)
+            where TContext : DbContext
+            where TFactory : class, ITenantDbContextFactory<TContext>
         {
             services.AddScoped(provider =>
             {
@@ -126,6 +134,7 @@ namespace ESchool.Libs.AspNetCore.Extensions
                     : memoryCache.GetOrCreate(tenantId.Value, entry => masterDbContext.Tenants.Find(tenantId.Value));
             });
 
+            services.AddScoped<ITenantDbContextFactory<TContext>, TFactory>();
             return services;
         }
 

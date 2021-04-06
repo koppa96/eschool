@@ -20,14 +20,20 @@ namespace ESchool.Libs.AspNetCore.Services
             httpContext = httpContextAccessor.HttpContext;
         }
 
-        public Guid GetCurrentUserId()
+        public Guid? TryGetCurrentUserId()
         {
             if (httpContext != null)
             {
-                return Guid.Parse(httpContext.User.Claims.Single(x => x.Type == JwtClaimTypes.Subject).Value);
+                var claim = httpContext.User.Claims.SingleOrDefault(x => x.Type == JwtClaimTypes.Subject);
+                return claim != null ? Guid.Parse(claim.Value) : null;
             }
 
-            return messagingIdentityService.UserId!.Value;
+            return messagingIdentityService.UserId;
+        }
+
+        public Guid GetCurrentUserId()
+        {
+            return TryGetCurrentUserId()!.Value;
         }
 
         public Guid? TryGetTenantId()
