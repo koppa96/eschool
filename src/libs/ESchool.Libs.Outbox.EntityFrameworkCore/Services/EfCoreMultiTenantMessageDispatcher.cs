@@ -37,11 +37,11 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
             foreach (var tenant in tenants)
             {
                 await using var context = tenantOutboxDbContextFactory.CreateContext(tenant);
-                var dispatcher = new EfCoreMessageDispatcher(
+                var dispatcher = new EfCoreMessageDispatcher<TContext>(
                     context,
                     serviceProvider.GetRequiredService<IOptions<OutboxConfiguration>>(),
                     serviceProvider.GetRequiredService<IPublishEndpoint>(),
-                    serviceProvider.GetRequiredService<ILogger<EfCoreMessageDispatcher>>());
+                    serviceProvider.GetRequiredService<ILogger<EfCoreMessageDispatcher<TContext>>>());
 
                 await dispatcher.DispatchAllAsync(cancellationToken);
             }
@@ -54,11 +54,11 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
             var tenant = serviceProvider.GetRequiredService<Tenant>();
             await using var context = tenantOutboxDbContextFactory.CreateContext(tenant);
             
-            var dispatcher = new EfCoreMessageDispatcher(
+            var dispatcher = new EfCoreMessageDispatcher<TContext>(
                 context,
                 serviceProvider.GetRequiredService<IOptions<OutboxConfiguration>>(),
                 serviceProvider.GetRequiredService<IPublishEndpoint>(),
-                serviceProvider.GetRequiredService<ILogger<EfCoreMessageDispatcher>>());
+                serviceProvider.GetRequiredService<ILogger<EfCoreMessageDispatcher<TContext>>>());
 
             await dispatcher.DispatchMessagesAsync(messageIds, cancellationToken);
         }

@@ -17,7 +17,7 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Configuration
 
         public EfCoreOutboxConfigurator<TContext> UseStandardMessageDispatcher()
         {
-            Services.AddTransient<IMessageDispatcher, EfCoreMessageDispatcher>();
+            Services.AddTransient<IMessageDispatcher, EfCoreMessageDispatcher<TContext>>();
             return this;
         }
 

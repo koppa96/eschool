@@ -15,19 +15,20 @@ using MoreLinq;
 
 namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
 {
-    public class EfCoreMessageDispatcher : IMessageDispatcher
+    public class EfCoreMessageDispatcher<TContext> : IMessageDispatcher
+        where TContext : DbContext, IOutboxDbContext
     {
-        private readonly IOutboxDbContext context;
+        private readonly TContext context;
         private readonly IOptions<OutboxConfiguration> options;
         private readonly IPublishEndpoint publishEndpoint;
-        private readonly ILogger<EfCoreMessageDispatcher> logger;
+        private readonly ILogger<EfCoreMessageDispatcher<TContext>> logger;
         private readonly string schemaQualifiedTableName;
 
         public EfCoreMessageDispatcher(
-            IOutboxDbContext context,
+            TContext context,
             IOptions<OutboxConfiguration> options,
             IPublishEndpoint publishEndpoint,
-            ILogger<EfCoreMessageDispatcher> logger)
+            ILogger<EfCoreMessageDispatcher<TContext>> logger)
         {
             this.context = context;
             this.options = options;
@@ -36,7 +37,7 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
             schemaQualifiedTableName = context.Model.FindEntityType(typeof(OutboxEntry))
                 .GetSchemaQualifiedTableName();
         }
-        
+
         public async Task DispatchAllAsync(CancellationToken cancellationToken = default)
         {
             var messageIds = await context.OutboxEntries.Where(x => x.State == OutboxEntryState.Pending)
@@ -46,7 +47,8 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
             await DispatchMessagesAsync(messageIds, cancellationToken);
         }
 
-        public async Task DispatchMessagesAsync(IEnumerable<Guid> messageIds, CancellationToken cancellationToken = default)
+        public async Task DispatchMessagesAsync(IEnumerable<Guid> messageIds,
+            CancellationToken cancellationToken = default)
         {
             foreach (var id in messageIds)
             {
@@ -93,8 +95,9 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
                     }
                     catch (Exception e)
                     {
-                        logger.LogError(e, $"Failed to dispatch a message due to a network error. Message id: {entry.Id}");
-                        
+                        logger.LogError(e,
+                            $"Failed to dispatch a message due to a network error. Message id: {entry.Id}");
+
                         entry.Retries++;
                         if (entry.Retries > options.Value.RetryCount)
                         {
@@ -104,7 +107,7 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
 
                     await context.SaveChangesAsync(CancellationToken.None);
                 }
-                
+
                 transaction.Commit();
             }
             catch (Exception e)
