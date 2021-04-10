@@ -8,6 +8,7 @@ using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
 using ESchool.Libs.AspNetCore.Filters;
 using ESchool.Libs.Domain.MultiTenancy;
+using ESchool.Libs.Outbox;
 using ESchool.Libs.Outbox.AspNetCore.Extensions;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
 using MassTransit;
@@ -36,13 +37,16 @@ namespace ESchool.ClassRegister.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
             services.AddDbContext<ClassRegisterContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddLazyDbContext<ClassRegisterContext>();
 
             services.AddDbContext<MasterDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection"), config =>
                     config.MigrationsAssembly(typeof(ClassRegisterContext).Assembly.GetName().Name)));
 
+            services.Configure<OutboxConfiguration>(Configuration.GetSection("Outbox"));
             services.AddMassTransitOutbox(config =>
             {
                 config.UseEntityFrameworkCore<ClassRegisterContext>(efCoreConfig =>
@@ -125,6 +129,11 @@ namespace ESchool.ClassRegister.Api
             services.AddMultitenancy<ClassRegisterContext>();
 
             services.AddGrpcClient<TenantService.TenantServiceClient>(options =>
+            {
+                options.Address = new Uri(authConfig.IdentityProviderUri);
+            });
+
+            services.AddGrpcClient<TenantUserService.TenantUserServiceClient>(options =>
             {
                 options.Address = new Uri(authConfig.IdentityProviderUri);
             });

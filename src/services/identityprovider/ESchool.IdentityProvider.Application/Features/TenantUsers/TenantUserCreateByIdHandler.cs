@@ -53,12 +53,12 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
                 }).ToList()
             });
 
-            await context.SaveChangesAsync(cancellationToken);
             await publisher.PublishAsync(new TenantUserCreatedOrEditedEvent
             {
                 UserId = user.Id,
                 TenantId = request.TenantId
             }, CancellationToken.None);
+            await context.SaveChangesAsync(cancellationToken);
 
             return new TenantUserDetailsResponse
             {

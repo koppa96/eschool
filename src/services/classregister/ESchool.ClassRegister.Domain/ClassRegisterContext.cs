@@ -67,8 +67,9 @@ namespace ESchool.ClassRegister.Domain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+            
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
             modelBuilder.AddGlobalQueryFilter<ISoftDelete>(x => x.IsDeleted);
         }
 

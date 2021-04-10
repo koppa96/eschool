@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using ESchool.HomeAssignments.Domain;
+using ESchool.Libs.Domain.MultiTenancy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,8 +15,17 @@ namespace ESchool.HomeAssignments.Api
             var host = CreateHostBuilder(args).Build();
             using (var scope = host.Services.CreateScope())
             {
-                var context = scope.ServiceProvider.GetRequiredService<HomeAssignmentsContext>();
-                await context.Database.MigrateAsync();
+                var masterDbContext = scope.ServiceProvider.GetRequiredService<MasterDbContext>();
+                
+                await masterDbContext.Database.MigrateAsync();
+
+                var tenants = await masterDbContext.Tenants.ToListAsync();
+                var factory = scope.ServiceProvider.GetRequiredService<ITenantDbContextFactory<HomeAssignmentsContext>>();
+                foreach (var tenant in tenants)
+                {
+                    await using var tenantDbContext = factory.CreateContext(tenant);
+                    await tenantDbContext.Database.MigrateAsync();
+                }
             }
 
             await host.RunAsync();

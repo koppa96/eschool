@@ -43,20 +43,6 @@ namespace ESchool.ClassRegister.Domain.Migrations
                     b.ToTable("Classes");
                 });
 
-            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.ClassRoom", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ClassRooms");
-                });
-
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.ClassSchoolYear", b =>
                 {
                     b.Property<Guid>("Id")
@@ -99,13 +85,30 @@ namespace ESchool.ClassRegister.Domain.Migrations
                     b.ToTable("ClassTypes");
                 });
 
+            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Classroom", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Classrooms");
+                });
+
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Grading.Grade", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClassSubjectId")
+                    b.Property<Guid>("ClassSchoolYearSubjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ClassSchoolYearSubjectId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -128,7 +131,9 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassSubjectId");
+                    b.HasIndex("ClassSchoolYearSubjectId");
+
+                    b.HasIndex("ClassSchoolYearSubjectId1");
 
                     b.HasIndex("KindId");
 
@@ -164,6 +169,9 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
                     b.Property<Guid?>("SenderUserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Subject")
                         .HasColumnType("nvarchar(max)");
@@ -302,7 +310,7 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("GroupTeachers");
+                    b.ToTable("ClassSchoolYearSubjectTeachers");
                 });
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.SubjectManagement.HomeWork", b =>
@@ -333,10 +341,10 @@ namespace ESchool.ClassRegister.Domain.Migrations
                     b.Property<bool>("Canceled")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ClassRoomId")
+                    b.Property<Guid>("ClassSchoolYearSubjectId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClassSchoolYearSubjectId")
+                    b.Property<Guid>("ClassroomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -344,9 +352,6 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
                     b.Property<DateTime>("EndsAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("LessonNumber")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartsAt")
                         .HasColumnType("datetime2");
@@ -356,9 +361,9 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassRoomId");
-
                     b.HasIndex("ClassSchoolYearSubjectId");
+
+                    b.HasIndex("ClassroomId");
 
                     b.ToTable("Lessons");
                 });
@@ -384,6 +389,57 @@ namespace ESchool.ClassRegister.Domain.Migrations
                     b.ToTable("SubjectTeachers");
                 });
 
+            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUserRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRoles");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ClassRegisterUserRole");
+                });
+
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.StudentParent", b =>
                 {
                     b.Property<Guid>("Id")
@@ -405,58 +461,54 @@ namespace ESchool.ClassRegister.Domain.Migrations
                     b.ToTable("StudentParent");
                 });
 
-            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.UserBase", b =>
+            modelBuilder.Entity("ESchool.Libs.Outbox.EntityFrameworkCore.Entities.OutboxEntry", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("Body")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Headers")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
+                    b.Property<int>("Retries")
+                        .HasColumnType("int");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TypeName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserBases");
+                    b.HasIndex("State");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("UserBase");
+                    b.ToTable("OutboxEntries");
                 });
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.Administrator", b =>
                 {
-                    b.HasBaseType("ESchool.ClassRegister.Domain.Entities.Users.UserBase");
+                    b.HasBaseType("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUserRole");
 
                     b.HasDiscriminator().HasValue("Administrator");
                 });
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.Parent", b =>
                 {
-                    b.HasBaseType("ESchool.ClassRegister.Domain.Entities.Users.UserBase");
+                    b.HasBaseType("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUserRole");
 
                     b.HasDiscriminator().HasValue("Parent");
                 });
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.Student", b =>
                 {
-                    b.HasBaseType("ESchool.ClassRegister.Domain.Entities.Users.UserBase");
+                    b.HasBaseType("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUserRole");
 
                     b.Property<Guid?>("ClassId")
                         .HasColumnType("uniqueidentifier");
@@ -471,7 +523,7 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.Teacher", b =>
                 {
-                    b.HasBaseType("ESchool.ClassRegister.Domain.Entities.Users.UserBase");
+                    b.HasBaseType("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUserRole");
 
                     b.Property<Guid?>("CurrentClassId")
                         .HasColumnType("uniqueidentifier");
@@ -523,9 +575,13 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 {
                     b.HasOne("ESchool.ClassRegister.Domain.Entities.SubjectManagement.ClassSchoolYearSubject", "ClassSchoolYearSubject")
                         .WithMany()
-                        .HasForeignKey("ClassSubjectId")
+                        .HasForeignKey("ClassSchoolYearSubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ESchool.ClassRegister.Domain.Entities.SubjectManagement.ClassSchoolYearSubject", null)
+                        .WithMany("Grades")
+                        .HasForeignKey("ClassSchoolYearSubjectId1");
 
                     b.HasOne("ESchool.ClassRegister.Domain.Entities.Grading.GradeKind", "Kind")
                         .WithMany()
@@ -552,11 +608,11 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Messaging.Message", b =>
                 {
-                    b.HasOne("ESchool.ClassRegister.Domain.Entities.Users.UserBase", "SenderUser")
+                    b.HasOne("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUser", "SenderClassRegisterUser")
                         .WithMany("SentMessages")
                         .HasForeignKey("SenderUserId");
 
-                    b.Navigation("SenderUser");
+                    b.Navigation("SenderClassRegisterUser");
                 });
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Messaging.UserMessage", b =>
@@ -567,13 +623,13 @@ namespace ESchool.ClassRegister.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ESchool.ClassRegister.Domain.Entities.Users.UserBase", "User")
+                    b.HasOne("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUser", "ClassRegisterUser")
                         .WithMany("ReceivedMessages")
                         .HasForeignKey("UserId");
 
-                    b.Navigation("Message");
+                    b.Navigation("ClassRegisterUser");
 
-                    b.Navigation("User");
+                    b.Navigation("Message");
                 });
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.SubjectManagement.Absence", b =>
@@ -598,7 +654,7 @@ namespace ESchool.ClassRegister.Domain.Migrations
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.SubjectManagement.ClassSchoolYearSubject", b =>
                 {
                     b.HasOne("ESchool.ClassRegister.Domain.Entities.ClassSchoolYear", "ClassSchoolYear")
-                        .WithMany("ClassSubjects")
+                        .WithMany("ClassSchoolYearSubjects")
                         .HasForeignKey("ClassSchoolYearId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -617,13 +673,13 @@ namespace ESchool.ClassRegister.Domain.Migrations
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.SubjectManagement.ClassSchoolYearSubjectTeacher", b =>
                 {
                     b.HasOne("ESchool.ClassRegister.Domain.Entities.SubjectManagement.ClassSchoolYearSubject", "ClassSchoolYearSubject")
-                        .WithMany()
+                        .WithMany("ClassSchoolYearSubjectTeachers")
                         .HasForeignKey("ClassSchoolYearSubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ESchool.ClassRegister.Domain.Entities.Users.Teacher", "Teacher")
-                        .WithMany("GroupTeachers")
+                        .WithMany("ClassSchoolYearSubjectTeachers")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -646,19 +702,19 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.SubjectManagement.Lesson", b =>
                 {
-                    b.HasOne("ESchool.ClassRegister.Domain.Entities.ClassRoom", "ClassRoom")
-                        .WithMany("Lessons")
-                        .HasForeignKey("ClassRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ESchool.ClassRegister.Domain.Entities.SubjectManagement.ClassSchoolYearSubject", "ClassSchoolYearSubject")
                         .WithMany("Lessons")
                         .HasForeignKey("ClassSchoolYearSubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ClassRoom");
+                    b.HasOne("ESchool.ClassRegister.Domain.Entities.Classroom", "Classroom")
+                        .WithMany("Lessons")
+                        .HasForeignKey("ClassroomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Classroom");
 
                     b.Navigation("ClassSchoolYearSubject");
                 });
@@ -680,6 +736,17 @@ namespace ESchool.ClassRegister.Domain.Migrations
                     b.Navigation("Subject");
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUserRole", b =>
+                {
+                    b.HasOne("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUser", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.StudentParent", b =>
@@ -724,14 +791,14 @@ namespace ESchool.ClassRegister.Domain.Migrations
                     b.Navigation("Students");
                 });
 
-            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.ClassRoom", b =>
-                {
-                    b.Navigation("Lessons");
-                });
-
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.ClassSchoolYear", b =>
                 {
-                    b.Navigation("ClassSubjects");
+                    b.Navigation("ClassSchoolYearSubjects");
+                });
+
+            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Classroom", b =>
+                {
+                    b.Navigation("Lessons");
                 });
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Messaging.Message", b =>
@@ -751,6 +818,10 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.SubjectManagement.ClassSchoolYearSubject", b =>
                 {
+                    b.Navigation("ClassSchoolYearSubjectTeachers");
+
+                    b.Navigation("Grades");
+
                     b.Navigation("Lessons");
                 });
 
@@ -761,11 +832,13 @@ namespace ESchool.ClassRegister.Domain.Migrations
                     b.Navigation("HomeWorks");
                 });
 
-            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.UserBase", b =>
+            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUser", b =>
                 {
                     b.Navigation("ReceivedMessages");
 
                     b.Navigation("SentMessages");
+
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.Parent", b =>
@@ -784,7 +857,7 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.Teacher", b =>
                 {
-                    b.Navigation("GroupTeachers");
+                    b.Navigation("ClassSchoolYearSubjectTeachers");
 
                     b.Navigation("PreviousClasses");
 

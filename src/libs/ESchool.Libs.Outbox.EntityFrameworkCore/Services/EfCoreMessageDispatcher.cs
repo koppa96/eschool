@@ -44,7 +44,10 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
                 .Select(x => x.Id)
                 .ToListAsync(cancellationToken);
 
-            await DispatchMessagesAsync(messageIds, cancellationToken);
+            if (messageIds.Count > 0)
+            {
+                await DispatchMessagesAsync(messageIds, cancellationToken);
+            }
         }
 
         public async Task DispatchMessagesAsync(IEnumerable<Guid> messageIds,
@@ -54,6 +57,7 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
             {
                 await DispatchMessageAsync(id, cancellationToken);
             }
+            logger.LogDebug("Successfully dispatched {0} messages", messageIds.Count());
         }
 
         private async Task DispatchMessageAsync(Guid messageId, CancellationToken cancellationToken)

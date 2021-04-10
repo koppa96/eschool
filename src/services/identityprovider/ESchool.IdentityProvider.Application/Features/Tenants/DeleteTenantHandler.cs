@@ -33,11 +33,11 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
             {
                 context.Tenants.Remove(tenant);
                 
-                await context.SaveChangesAsync(cancellationToken);
                 await publisher.PublishAsync(new TenantDeletedEvent
                 {
                     TenantId = tenant.Id
                 }, cancellationToken);
+                await context.SaveChangesAsync(cancellationToken);
             }
 
             return Unit.Value;

@@ -26,7 +26,6 @@ namespace ESchool.ClassRegister.Application.Features.Users
     public class TenantUserCreatedOrUpdatedConsumer : IConsumer<TenantUserCreatedOrEditedEvent>
     {
         private readonly MasterDbContext masterDbContext;
-        private readonly OutboxDbContext outboxDbContext;
         private readonly TenantUserService.TenantUserServiceClient client;
         private readonly IMapper mapper;
         private readonly ITenantDbContextFactory<ClassRegisterContext> tenantDbContextFactory;
@@ -34,15 +33,12 @@ namespace ESchool.ClassRegister.Application.Features.Users
 
         public TenantUserCreatedOrUpdatedConsumer(
             MasterDbContext masterDbContext,
-            OutboxDbContext outboxDbContext,
-            TenantUserService.TenantUserServiceClient client,
             IMapper mapper,
             ITenantDbContextFactory<ClassRegisterContext> tenantDbContextFactory,
             IEventPublisher publisher)
         {
 
             this.masterDbContext = masterDbContext;
-            this.outboxDbContext = outboxDbContext;
             this.client = client;
             this.mapper = mapper;
             this.tenantDbContextFactory = tenantDbContextFactory;

@@ -40,12 +40,12 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
             var tenant = mapper.Map<Tenant>(request);
             context.Tenants.Add(tenant);
             
-            await context.SaveChangesAsync(cancellationToken);
             await publisher.PublishAsync(new TenantCreatedOrUpdatedEvent
             {
                 TenantId = tenant.Id
-            }, CancellationToken.None);
+            }, cancellationToken);
             
+            await context.SaveChangesAsync(cancellationToken);
             return mapper.Map<TenantDetailsResponse>(tenant);
         }
     }

@@ -24,6 +24,7 @@ using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
 using ESchool.IdentityProvider.Grpc;
 using ESchool.Libs.AspNetCore.Filters;
+using ESchool.Libs.Outbox;
 using ESchool.Libs.Outbox.AspNetCore.Extensions;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
 using ESchool.Libs.Outbox.Filters;
@@ -45,6 +46,7 @@ namespace ESchool.IdentityProvider
             services.AddDbContext<IdentityProviderContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.Configure<OutboxConfiguration>(Configuration.GetSection("Outbox"));
             services.AddMassTransitOutbox(config =>
             {
                 config.UseEntityFrameworkCore<IdentityProviderContext>(efCoreConfig =>

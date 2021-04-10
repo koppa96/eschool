@@ -15,8 +15,8 @@ namespace ESchool.IdentityProvider.Domain.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Tenant", b =>
@@ -102,8 +102,8 @@ namespace ESchool.IdentityProvider.Domain.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -118,12 +118,12 @@ namespace ESchool.IdentityProvider.Domain.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -141,22 +141,53 @@ namespace ESchool.IdentityProvider.Domain.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DefaultTenantId");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
+                        .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("ESchool.Libs.Outbox.EntityFrameworkCore.Entities.OutboxEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Headers")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Retries")
+                        .HasColumnType("int");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TypeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("State");
+
+                    b.ToTable("OutboxEntries");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -170,18 +201,18 @@ namespace ESchool.IdentityProvider.Domain.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
+                        .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
@@ -301,6 +332,10 @@ namespace ESchool.IdentityProvider.Domain.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Tenant");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Users.TenantUserRole", b =>
@@ -310,6 +345,8 @@ namespace ESchool.IdentityProvider.Domain.Migrations
                         .HasForeignKey("TenantUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("TenantUser");
                 });
 
             modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Users.User", b =>
@@ -317,6 +354,8 @@ namespace ESchool.IdentityProvider.Domain.Migrations
                     b.HasOne("ESchool.IdentityProvider.Domain.Entities.Tenant", "DefaultTenant")
                         .WithMany()
                         .HasForeignKey("DefaultTenantId");
+
+                    b.Navigation("DefaultTenant");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -368,6 +407,21 @@ namespace ESchool.IdentityProvider.Domain.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Tenant", b =>
+                {
+                    b.Navigation("TenantUsers");
+                });
+
+            modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Users.TenantUser", b =>
+                {
+                    b.Navigation("TenantUserRoles");
+                });
+
+            modelBuilder.Entity("ESchool.IdentityProvider.Domain.Entities.Users.User", b =>
+                {
+                    b.Navigation("TenantUsers");
                 });
 #pragma warning restore 612, 618
         }
