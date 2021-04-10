@@ -8,7 +8,7 @@ namespace ESchool.ClassRegister.Domain.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ClassRooms",
+                name: "Classrooms",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -16,7 +16,7 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClassRooms", x => x.Id);
+                    table.PrimaryKey("PK_Classrooms", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -47,6 +47,23 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OutboxEntries",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Headers = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Body = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TypeName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: false),
+                    Retries = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OutboxEntries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SchoolYears",
                 columns: table => new
                 {
@@ -71,6 +88,69 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Subjects", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SentAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SenderUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_Users_SenderUserId",
+                        column: x => x.SenderUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserMessages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    MessageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserMessages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserMessages_Messages_MessageId",
+                        column: x => x.MessageId,
+                        principalTable: "Messages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserMessages_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -122,22 +202,21 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LessonNumber = table.Column<int>(type: "int", nullable: false),
                     Canceled = table.Column<bool>(type: "bit", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StartsAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndsAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ClassSchoolYearSubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClassRoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ClassroomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Lessons", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Lessons_ClassRooms_ClassRoomId",
-                        column: x => x.ClassRoomId,
-                        principalTable: "ClassRooms",
+                        name: "FK_Lessons_Classrooms_ClassroomId",
+                        column: x => x.ClassroomId,
+                        principalTable: "Classrooms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -168,24 +247,26 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserBases",
+                name: "UserRoles",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StudentIdentificationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CurrentClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CurrentClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserBases", x => x.Id);
+                    table.PrimaryKey("PK_UserRoles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -207,9 +288,9 @@ namespace ESchool.ClassRegister.Domain.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Absences_UserBases_StudentId",
+                        name: "FK_Absences_UserRoles_StudentId",
                         column: x => x.StudentId,
-                        principalTable: "UserBases",
+                        principalTable: "UserRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -233,11 +314,36 @@ namespace ESchool.ClassRegister.Domain.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Classes_UserBases_HeadTeacherId",
+                        name: "FK_Classes_UserRoles_HeadTeacherId",
                         column: x => x.HeadTeacherId,
-                        principalTable: "UserBases",
+                        principalTable: "UserRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClassSchoolYearSubjectTeachers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClassSchoolYearSubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassSchoolYearSubjectTeachers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClassSchoolYearSubjectTeachers_ClassSchoolYearSubjects_ClassSchoolYearSubjectId",
+                        column: x => x.ClassSchoolYearSubjectId,
+                        principalTable: "ClassSchoolYearSubjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClassSchoolYearSubjectTeachers_UserRoles_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "UserRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -250,18 +356,25 @@ namespace ESchool.ClassRegister.Domain.Migrations
                     WrittenIn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ClassSubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ClassSchoolYearSubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ClassSchoolYearSubjectId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Grades", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Grades_ClassSchoolYearSubjects_ClassSubjectId",
-                        column: x => x.ClassSubjectId,
+                        name: "FK_Grades_ClassSchoolYearSubjects_ClassSchoolYearSubjectId",
+                        column: x => x.ClassSchoolYearSubjectId,
                         principalTable: "ClassSchoolYearSubjects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Grades_ClassSchoolYearSubjects_ClassSchoolYearSubjectId1",
+                        column: x => x.ClassSchoolYearSubjectId1,
+                        principalTable: "ClassSchoolYearSubjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Grades_GradeKinds_KindId",
                         column: x => x.KindId,
@@ -269,60 +382,15 @@ namespace ESchool.ClassRegister.Domain.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Grades_UserBases_StudentId",
+                        name: "FK_Grades_UserRoles_StudentId",
                         column: x => x.StudentId,
-                        principalTable: "UserBases",
+                        principalTable: "UserRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Grades_UserBases_TeacherId",
+                        name: "FK_Grades_UserRoles_TeacherId",
                         column: x => x.TeacherId,
-                        principalTable: "UserBases",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GroupTeachers",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClassSchoolYearSubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GroupTeachers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_GroupTeachers_ClassSchoolYearSubjects_ClassSchoolYearSubjectId",
-                        column: x => x.ClassSchoolYearSubjectId,
-                        principalTable: "ClassSchoolYearSubjects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_GroupTeachers_UserBases_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "UserBases",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Messages",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SenderUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Messages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Messages_UserBases_SenderUserId",
-                        column: x => x.SenderUserId,
-                        principalTable: "UserBases",
+                        principalTable: "UserRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -339,15 +407,15 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 {
                     table.PrimaryKey("PK_StudentParent", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StudentParent_UserBases_ParentId",
+                        name: "FK_StudentParent_UserRoles_ParentId",
                         column: x => x.ParentId,
-                        principalTable: "UserBases",
+                        principalTable: "UserRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudentParent_UserBases_StudentId",
+                        name: "FK_StudentParent_UserRoles_StudentId",
                         column: x => x.StudentId,
-                        principalTable: "UserBases",
+                        principalTable: "UserRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -370,37 +438,11 @@ namespace ESchool.ClassRegister.Domain.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SubjectTeachers_UserBases_TeacherId",
+                        name: "FK_SubjectTeachers_UserRoles_TeacherId",
                         column: x => x.TeacherId,
-                        principalTable: "UserBases",
+                        principalTable: "UserRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserMessages",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    MessageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsRead = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserMessages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserMessages_Messages_MessageId",
-                        column: x => x.MessageId,
-                        principalTable: "Messages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserMessages_UserBases_UserId",
-                        column: x => x.UserId,
-                        principalTable: "UserBases",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -445,9 +487,24 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Grades_ClassSubjectId",
+                name: "IX_ClassSchoolYearSubjectTeachers_ClassSchoolYearSubjectId",
+                table: "ClassSchoolYearSubjectTeachers",
+                column: "ClassSchoolYearSubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassSchoolYearSubjectTeachers_TeacherId",
+                table: "ClassSchoolYearSubjectTeachers",
+                column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Grades_ClassSchoolYearSubjectId",
                 table: "Grades",
-                column: "ClassSubjectId");
+                column: "ClassSchoolYearSubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Grades_ClassSchoolYearSubjectId1",
+                table: "Grades",
+                column: "ClassSchoolYearSubjectId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Grades_KindId",
@@ -465,24 +522,14 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GroupTeachers_ClassSchoolYearSubjectId",
-                table: "GroupTeachers",
-                column: "ClassSchoolYearSubjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GroupTeachers_TeacherId",
-                table: "GroupTeachers",
-                column: "TeacherId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_HomeWorks_LessonId",
                 table: "HomeWorks",
                 column: "LessonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lessons_ClassRoomId",
+                name: "IX_Lessons_ClassroomId",
                 table: "Lessons",
-                column: "ClassRoomId");
+                column: "ClassroomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lessons_ClassSchoolYearSubjectId",
@@ -515,18 +562,6 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserBases_ClassId",
-                table: "UserBases",
-                column: "ClassId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserBases_CurrentClassId",
-                table: "UserBases",
-                column: "CurrentClassId",
-                unique: true,
-                filter: "[CurrentClassId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserMessages_MessageId",
                 table: "UserMessages",
                 column: "MessageId");
@@ -534,6 +569,23 @@ namespace ESchool.ClassRegister.Domain.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserMessages_UserId",
                 table: "UserMessages",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRoles_ClassId",
+                table: "UserRoles",
+                column: "ClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRoles_CurrentClassId",
+                table: "UserRoles",
+                column: "CurrentClassId",
+                unique: true,
+                filter: "[CurrentClassId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRoles_UserId",
+                table: "UserRoles",
                 column: "UserId");
 
             migrationBuilder.AddForeignKey(
@@ -545,16 +597,16 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_UserBases_Classes_ClassId",
-                table: "UserBases",
+                name: "FK_UserRoles_Classes_ClassId",
+                table: "UserRoles",
                 column: "ClassId",
                 principalTable: "Classes",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_UserBases_Classes_CurrentClassId",
-                table: "UserBases",
+                name: "FK_UserRoles_Classes_CurrentClassId",
+                table: "UserRoles",
                 column: "CurrentClassId",
                 principalTable: "Classes",
                 principalColumn: "Id",
@@ -564,20 +616,23 @@ namespace ESchool.ClassRegister.Domain.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Classes_UserBases_HeadTeacherId",
+                name: "FK_Classes_UserRoles_HeadTeacherId",
                 table: "Classes");
 
             migrationBuilder.DropTable(
                 name: "Absences");
 
             migrationBuilder.DropTable(
+                name: "ClassSchoolYearSubjectTeachers");
+
+            migrationBuilder.DropTable(
                 name: "Grades");
 
             migrationBuilder.DropTable(
-                name: "GroupTeachers");
+                name: "HomeWorks");
 
             migrationBuilder.DropTable(
-                name: "HomeWorks");
+                name: "OutboxEntries");
 
             migrationBuilder.DropTable(
                 name: "StudentParent");
@@ -598,7 +653,7 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "Messages");
 
             migrationBuilder.DropTable(
-                name: "ClassRooms");
+                name: "Classrooms");
 
             migrationBuilder.DropTable(
                 name: "ClassSchoolYearSubjects");
@@ -613,10 +668,13 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "SchoolYears");
 
             migrationBuilder.DropTable(
-                name: "UserBases");
+                name: "UserRoles");
 
             migrationBuilder.DropTable(
                 name: "Classes");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "ClassTypes");
