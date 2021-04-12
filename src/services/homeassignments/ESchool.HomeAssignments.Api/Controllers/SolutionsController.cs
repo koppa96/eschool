@@ -6,6 +6,8 @@ using ESchool.HomeAssignments.Application.Features.HomeworkReviews.Common;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Files;
+using ESchool.Libs.Application.Cqrs.Query;
+using ESchool.Libs.Application.Cqrs.Response;
 using ESchool.Libs.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -24,6 +26,29 @@ namespace ESchool.HomeAssignments.Api.Controllers
         public SolutionsController(IMediator mediator)
         {
             this.mediator = mediator;
+        }
+        
+        [Authorize(PolicyNames.Teacher)]
+        [HttpGet]
+        public Task<PagedListResponse<HomeworkSolutionListResponse>> ListSolutions(Guid homeworkId,
+            [FromQuery] int pageIndex, [FromQuery] int pageSize, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new HomeworkSolutionListQuery
+            {
+                HomeworkId = homeworkId,
+                PageIndex = pageIndex,
+                PageSize = pageSize == 0 ? PagedListQuery.DefaultPageSize : pageSize
+            }, cancellationToken);
+        }
+
+        [Authorize(PolicyNames.Student)]
+        [HttpPost]
+        public Task<HomeworkSolutionResponse> CreateSolution(Guid homeworkId, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new HomeworkSolutionCreateCommand
+            {
+                HomeworkId = homeworkId
+            }, cancellationToken);
         }
 
         [Authorize(PolicyNames.TeacherOrStudent)]
