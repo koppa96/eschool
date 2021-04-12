@@ -3,9 +3,13 @@ using System.Reflection;
 using ESchool.ClassRegister.Grpc;
 using ESchool.HomeAssignments.Api.Infrastructure;
 using ESchool.HomeAssignments.Domain;
+using ESchool.HomeAssignments.Domain.Services;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
+using ESchool.Libs.AspNetCore.Filters;
 using ESchool.Libs.Domain.MultiTenancy;
+using ESchool.Libs.Outbox.AspNetCore.Extensions;
+using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +33,7 @@ namespace ESchool.HomeAssignments.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
             services.AddDbContext<HomeAssignmentsContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddLazyDbContext<HomeAssignmentsContext>();
@@ -36,7 +41,7 @@ namespace ESchool.HomeAssignments.Api
             services.AddDbContext<MasterDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection"), config =>
                     config.MigrationsAssembly(typeof(HomeAssignmentsContext).Assembly.GetName().Name)));
-            
+
             services.AddControllers();
 
             var authConfig = new AuthConfiguration();
@@ -64,7 +69,31 @@ namespace ESchool.HomeAssignments.Api
             });
             services.AddMassTransitHostedService();
 
+            services.AddMassTransitOutbox(options =>
+            {
+                options.UseEntityFrameworkCore<HomeAssignmentsContext>(config =>
+                {
+                    config.UseMultiTenantMessageDispatcher();
+                });
+                options.AddPublishFilter<AuthDataSetterPublishFilter>();
+            });
+
+            services.AddMultitenancy<HomeAssignmentsContext>();
+            services.AddTransient<ISolutionFileHandlerService, LocalSolutionFileHandlerService>();
+            
+            services.AddAutoMapper(Assembly.Load("ESchool.HomeAssignments.Application"));
+
             services.AddGrpcClient<LessonService.LessonServiceClient>(config =>
+            {
+                config.Address = new Uri(Configuration.GetValue<string>("ClassRegisterUri"));
+            });
+
+            services.AddGrpcClient<UserService.UserServiceClient>(config =>
+            {
+                config.Address = new Uri(Configuration.GetValue<string>("ClassRegisterUri"));
+            });
+
+            services.AddGrpcClient<ClassSchoolYearSubjectService.ClassSchoolYearSubjectServiceClient>(config =>
             {
                 config.Address = new Uri(Configuration.GetValue<string>("ClassRegisterUri"));
             });

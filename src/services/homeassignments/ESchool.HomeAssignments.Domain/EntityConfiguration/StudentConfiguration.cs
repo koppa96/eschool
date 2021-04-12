@@ -13,6 +13,10 @@ namespace ESchool.HomeAssignments.Domain.EntityConfiguration
             builder.HasMany(x => x.Solutions)
                 .WithOne(x => x.Student)
                 .HasForeignKey(x => x.StudentId);
+
+            builder.HasMany(x => x.ClassSchoolYearSubjectStudents)
+                .WithOne(x => x.Student)
+                .HasForeignKey(x => x.StudentId);
         }
     }
 }

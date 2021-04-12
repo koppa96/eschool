@@ -35,29 +35,6 @@ namespace ESchool.HomeAssignments.Api.Controllers
                 Id = homeworkId
             }, cancellationToken);
         }
-        
-        [Authorize(PolicyNames.Teacher)]
-        [HttpGet("{homeworkId}/solutions")]
-        public Task<PagedListResponse<HomeworkSolutionListResponse>> ListSolutions(Guid homeworkId,
-            [FromQuery] int pageIndex, [FromQuery] int pageSize, CancellationToken cancellationToken)
-        {
-            return mediator.Send(new HomeworkSolutionListQuery
-            {
-                HomeworkId = homeworkId,
-                PageIndex = pageIndex,
-                PageSize = pageSize == 0 ? PagedListQuery.DefaultPageSize : pageSize
-            }, cancellationToken);
-        }
-
-        [Authorize(PolicyNames.Student)]
-        [HttpPost("{homeworkId/solutions}")]
-        public Task<HomeworkSolutionResponse> CreateSolution(Guid homeworkId, CancellationToken cancellationToken)
-        {
-            return mediator.Send(new HomeworkSolutionCreateCommand
-            {
-                HomeworkId = homeworkId
-            }, cancellationToken);
-        }
 
         [Authorize(PolicyNames.Teacher)]
         [HttpPost]

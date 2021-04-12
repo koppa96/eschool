@@ -16,7 +16,6 @@ namespace ESchool.HomeAssignments.Api
             using (var scope = host.Services.CreateScope())
             {
                 var masterDbContext = scope.ServiceProvider.GetRequiredService<MasterDbContext>();
-                
                 await masterDbContext.Database.MigrateAsync();
 
                 var tenants = await masterDbContext.Tenants.ToListAsync();
