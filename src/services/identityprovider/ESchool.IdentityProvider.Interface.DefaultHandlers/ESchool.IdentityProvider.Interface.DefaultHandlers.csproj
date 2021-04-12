@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Google.Protobuf" Version="3.15.3" />
+        <PackageReference Include="Grpc.Core" Version="2.36.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.36.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.3" />
+        <ProjectReference Include="..\..\..\libs\ESchool.Libs.Application\ESchool.Libs.Application.csproj" />
+        <ProjectReference Include="..\ESchool.IdentityProvider.Interface\ESchool.IdentityProvider.Interface.csproj" />
+        <Protobuf Include="../../../proto/identityprovider.proto" GrpcServices="Client" />
+    </ItemGroup>
+
+</Project>

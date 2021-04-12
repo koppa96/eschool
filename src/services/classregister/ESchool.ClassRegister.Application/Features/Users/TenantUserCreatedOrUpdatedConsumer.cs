@@ -34,6 +34,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
         public TenantUserCreatedOrUpdatedConsumer(
             MasterDbContext masterDbContext,
             IMapper mapper,
+            TenantUserService.TenantUserServiceClient client,
             ITenantDbContextFactory<ClassRegisterContext> tenantDbContextFactory,
             IEventPublisher publisher)
         {

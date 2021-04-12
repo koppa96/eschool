@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using ESchool.ClassRegister.Domain;
+using System.Threading.Tasks;
 using ESchool.IdentityProvider.Grpc;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.Tenants;
 using ESchool.Libs.Domain.MultiTenancy;
@@ -9,20 +8,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 
-namespace ESchool.ClassRegister.Application.Features.Tenants
+namespace ESchool.IdentityProvider.Interface.DefaultHandlers
 {
-    public class TenantCreatedOrUpdatedConsumer : IConsumer<TenantCreatedOrUpdatedEvent>
+    public class TenantCreatedOrUpdatedConsumer<TContext> : IConsumer<TenantCreatedOrUpdatedEvent>
+        where TContext : DbContext
     {
         private readonly MasterDbContext masterDbContext;
         private readonly TenantService.TenantServiceClient client;
         private readonly IConfiguration configuration;
-        private readonly ITenantDbContextFactory<ClassRegisterContext> tenantDbContextFactory;
+        private readonly ITenantDbContextFactory<TContext> tenantDbContextFactory;
         private readonly IMemoryCache memoryCache;
 
         public TenantCreatedOrUpdatedConsumer(MasterDbContext masterDbContext,
             TenantService.TenantServiceClient client,
             IConfiguration configuration,
-            ITenantDbContextFactory<ClassRegisterContext> tenantDbContextFactory,
+            ITenantDbContextFactory<TContext> tenantDbContextFactory,
             IMemoryCache memoryCache)
         {
             this.masterDbContext = masterDbContext;

@@ -7,6 +7,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\libs\ESchool.Libs.Application\ESchool.Libs.Application.csproj" />
       <ProjectReference Include="..\..\classregister\ESchool.ClassRegister.Interface\ESchool.ClassRegister.Interface.csproj" />
+      <ProjectReference Include="..\..\identityprovider\ESchool.IdentityProvider.Interface.DefaultHandlers\ESchool.IdentityProvider.Interface.DefaultHandlers.csproj" />
       <ProjectReference Include="..\ESchool.HomeAssignments.Domain\ESchool.HomeAssignments.Domain.csproj" />
     </ItemGroup>
 
@@ -19,6 +20,10 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <Protobuf Include="../../../proto/classregister.proto" GrpcServices="Client" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\Tenants" />
     </ItemGroup>
 
 </Project>

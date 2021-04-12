@@ -4,6 +4,7 @@ using ESchool.ClassRegister.Grpc;
 using ESchool.HomeAssignments.Api.Infrastructure;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Services;
+using ESchool.IdentityProvider.Interface.DefaultHandlers.Extensions;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
 using ESchool.Libs.AspNetCore.Filters;
@@ -58,6 +59,7 @@ namespace ESchool.HomeAssignments.Api
             services.AddMassTransit(config =>
             {
                 config.AddConsumers(Assembly.Load("ESchool.HomeAssignments.Application"));
+                config.AddTenantEventConsumers<HomeAssignmentsContext>();
                 config.UsingRabbitMq((context, configurator) =>
                 {
                     configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));

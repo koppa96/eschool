@@ -4,6 +4,7 @@ using System.Reflection;
 using ESchool.ClassRegister.Api.Grpc;
 using ESchool.ClassRegister.Domain;
 using ESchool.IdentityProvider.Grpc;
+using ESchool.IdentityProvider.Interface.DefaultHandlers.Extensions;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
 using ESchool.Libs.AspNetCore.Filters;
@@ -112,6 +113,7 @@ namespace ESchool.ClassRegister.Api
             services.AddMassTransit(config =>
             {
                 config.AddConsumers(Assembly.Load("ESchool.ClassRegister.Application"));
+                config.AddTenantEventConsumers<ClassRegisterContext>();
                 config.UsingRabbitMq((context, configurator) =>
                 {
                     configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));

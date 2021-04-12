@@ -1,6 +1,11 @@
 using System.Reflection;
+using ESchool.IdentityProvider.Interface.DefaultHandlers.Extensions;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
+using ESchool.Libs.AspNetCore.Filters;
+using ESchool.Libs.Domain.MultiTenancy;
+using ESchool.Libs.Outbox.AspNetCore.Extensions;
+using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
 using ESchool.Testing.Domain;
 using MassTransit;
 using MediatR;
@@ -25,8 +30,14 @@ namespace ESchool.Testing.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<MasterDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection"), serverConfig =>
+                    serverConfig.MigrationsAssembly(typeof(TestingContext).Assembly.GetName().Name)));
+            
             services.AddDbContext<TestingContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddMultitenancy<TestingContext>();
 
             services.AddControllers();
 
@@ -39,6 +50,7 @@ namespace ESchool.Testing.Api
             services.AddMassTransit(config =>
             {
                 config.AddConsumers(Assembly.Load("ESchool.Testing.Application"));
+                config.AddTenantEventConsumers<TestingContext>();
                 config.UsingRabbitMq((context, configurator) =>
                 {
                     configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
@@ -49,6 +61,14 @@ namespace ESchool.Testing.Api
                 });
             });
             services.AddMassTransitHostedService();
+            services.AddMassTransitOutbox(options =>
+            {
+                options.UseEntityFrameworkCore<TestingContext>(config =>
+                {
+                    config.UseMultiTenantMessageDispatcher();
+                });
+                options.AddPublishFilter<AuthDataSetterPublishFilter>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
