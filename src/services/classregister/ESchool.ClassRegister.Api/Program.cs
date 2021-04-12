@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.Libs.Domain.MultiTenancy;
-using ESchool.Libs.Outbox.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

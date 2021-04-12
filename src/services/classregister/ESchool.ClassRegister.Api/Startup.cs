@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using ESchool.ClassRegister.Api.Grpc;
 using ESchool.ClassRegister.Domain;
-using ESchool.IdentityProvider.Grpc;
 using ESchool.IdentityProvider.Interface.DefaultHandlers.Extensions;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
@@ -129,16 +127,6 @@ namespace ESchool.ClassRegister.Api
 
             services.AddCommonServices();
             services.AddMultitenancy<ClassRegisterContext>();
-
-            services.AddGrpcClient<TenantService.TenantServiceClient>(options =>
-            {
-                options.Address = new Uri(authConfig.IdentityProviderUri);
-            });
-
-            services.AddGrpcClient<TenantUserService.TenantUserServiceClient>(options =>
-            {
-                options.Address = new Uri(authConfig.IdentityProviderUri);
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

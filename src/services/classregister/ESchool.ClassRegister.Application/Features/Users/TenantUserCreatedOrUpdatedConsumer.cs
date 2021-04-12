@@ -6,17 +6,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Attributes;
-using ESchool.ClassRegister.Domain.Entities.Users;
 using ESchool.ClassRegister.Domain.Entities.Users.Abstractions;
 using ESchool.ClassRegister.Interface.IntegrationEvents.UserCreation;
 using ESchool.ClassRegister.Interface.IntegrationEvents.UserDeletion;
-using ESchool.IdentityProvider.Grpc;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers;
 using ESchool.Libs.Application.Extensions;
-using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.MultiTenancy;
-using ESchool.Libs.Domain.MultiTenancy.Entities;
-using ESchool.Libs.Outbox.EntityFrameworkCore;
 using ESchool.Libs.Outbox.Services;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +21,6 @@ namespace ESchool.ClassRegister.Application.Features.Users
     public class TenantUserCreatedOrUpdatedConsumer : IConsumer<TenantUserCreatedOrEditedEvent>
     {
         private readonly MasterDbContext masterDbContext;
-        private readonly TenantUserService.TenantUserServiceClient client;
         private readonly IMapper mapper;
         private readonly ITenantDbContextFactory<ClassRegisterContext> tenantDbContextFactory;
         private readonly IEventPublisher publisher;
@@ -34,13 +28,11 @@ namespace ESchool.ClassRegister.Application.Features.Users
         public TenantUserCreatedOrUpdatedConsumer(
             MasterDbContext masterDbContext,
             IMapper mapper,
-            TenantUserService.TenantUserServiceClient client,
             ITenantDbContextFactory<ClassRegisterContext> tenantDbContextFactory,
             IEventPublisher publisher)
         {
 
             this.masterDbContext = masterDbContext;
-            this.client = client;
             this.mapper = mapper;
             this.tenantDbContextFactory = tenantDbContextFactory;
             this.publisher = publisher;
@@ -62,32 +54,25 @@ namespace ESchool.ClassRegister.Application.Features.Users
                 .Include(x => x.UserRoles)
                 .SingleOrDefaultAsync(x => x.Id == context.Message.UserId);
 
-            var tenantUserData = await client.GetTenantUserDetailsAsync(new TenantUserDetailsRequest
-            {
-                TenantId = context.Message.TenantId.ToString(),
-                UserId = context.Message.UserId.ToString()
-            });
-
             if (existingUser == null)
             {
                 existingUser = new ClassRegisterUser
                 {
                     Id = context.Message.UserId,
-                    Email = tenantUserData.Email,
+                    Email = context.Message.Email,
                     UserRoles = new List<ClassRegisterUserRole>()
                 };
                 dbContext.Users.Add(existingUser);
             }
             else
             {
-                existingUser.Email = tenantUserData.Email;
+                existingUser.Email = context.Message.Email;
             }
 
             // Delete or update userBases
             foreach (var userBase in existingUser.UserRoles)
             {
-                if (tenantUserData.TenantRoleTypes.Cast<TenantRoleType>()
-                    .All(x => x != userBase.GetType().GetCustomAttribute<TenantUserAttribute>()!.TenantRoleType))
+                if (context.Message.TenantRoles.All(x => x != userBase.GetType().GetCustomAttribute<TenantUserAttribute>()!.TenantRoleType))
                 {
                     dbContext.UserRoles.Remove(userBase);
                     if (mapper.TryMap<TenantUserRoleDeletedEvent>(userBase, out var @event))
@@ -97,7 +82,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
                 }
             }
 
-            foreach (var roleType in tenantUserData.TenantRoleTypes.Cast<TenantRoleType>())
+            foreach (var roleType in context.Message.TenantRoles)
             {
                 var existingUserRole = existingUser.UserRoles.SingleOrDefault(x =>
                     x.GetType().GetCustomAttribute<TenantUserAttribute>()?.TenantRoleType == roleType);

@@ -22,12 +22,10 @@ using Microsoft.Extensions.Hosting;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
-using ESchool.IdentityProvider.Grpc;
 using ESchool.Libs.AspNetCore.Filters;
 using ESchool.Libs.Outbox;
 using ESchool.Libs.Outbox.AspNetCore.Extensions;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
-using ESchool.Libs.Outbox.Filters;
 
 namespace ESchool.IdentityProvider
 {
@@ -82,7 +80,6 @@ namespace ESchool.IdentityProvider
 
             services.AddControllers();
             services.AddRazorPages();
-            services.AddGrpc();
 
             services.AddMediatR(Assembly.Load("ESchool.IdentityProvider.Application"));
 
@@ -166,7 +163,6 @@ namespace ESchool.IdentityProvider
             {
                 endpoints.MapControllers();
                 endpoints.MapRazorPages();
-                endpoints.MapGrpcService<TenantServiceImpl>();
             });
         }
     }

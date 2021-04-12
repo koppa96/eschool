@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using ESchool.IdentityProvider.Grpc;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.Tenants;
 using ESchool.Libs.Domain.MultiTenancy;
 using ESchool.Libs.Domain.MultiTenancy.Entities;
@@ -14,19 +13,16 @@ namespace ESchool.IdentityProvider.Interface.DefaultHandlers
         where TContext : DbContext
     {
         private readonly MasterDbContext masterDbContext;
-        private readonly TenantService.TenantServiceClient client;
         private readonly IConfiguration configuration;
         private readonly ITenantDbContextFactory<TContext> tenantDbContextFactory;
         private readonly IMemoryCache memoryCache;
 
         public TenantCreatedOrUpdatedConsumer(MasterDbContext masterDbContext,
-            TenantService.TenantServiceClient client,
             IConfiguration configuration,
             ITenantDbContextFactory<TContext> tenantDbContextFactory,
             IMemoryCache memoryCache)
         {
             this.masterDbContext = masterDbContext;
-            this.client = client;
             this.configuration = configuration;
             this.tenantDbContextFactory = tenantDbContextFactory;
             this.memoryCache = memoryCache;
@@ -49,13 +45,8 @@ namespace ESchool.IdentityProvider.Interface.DefaultHandlers
                 await tenantDbContext.Database.MigrateAsync();
             }
 
-            var remoteTenant = await client.GetTenantDetailsAsync(new TenantDetailsRequest
-            {
-                TenantId = context.Message.TenantId.ToString()
-            });
-
-            tenant.Name = remoteTenant.Name;
-            tenant.OmIdentifier = remoteTenant.OmIdentifier;
+            tenant.Name = context.Message.Name;
+            tenant.OmIdentifier = context.Message.OmIdentifier;
 
             memoryCache.Set(tenant.Id, tenant);
             await masterDbContext.SaveChangesAsync();
