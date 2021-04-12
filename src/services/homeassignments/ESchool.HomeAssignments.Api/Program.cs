@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ESchool.HomeAssignments.Domain;
 using ESchool.Libs.Domain.MultiTenancy;
@@ -5,6 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Polly;
 
 namespace ESchool.HomeAssignments.Api
 {
@@ -13,19 +16,26 @@ namespace ESchool.HomeAssignments.Api
         public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-            using (var scope = host.Services.CreateScope())
-            {
-                var masterDbContext = scope.ServiceProvider.GetRequiredService<MasterDbContext>();
-                await masterDbContext.Database.MigrateAsync();
+            var logger = host.Services.GetRequiredService<ILogger<Program>>();
 
-                var tenants = await masterDbContext.Tenants.ToListAsync();
-                var factory = scope.ServiceProvider.GetRequiredService<ITenantDbContextFactory<HomeAssignmentsContext>>();
-                foreach (var tenant in tenants)
+            await Policy.Handle<Exception>()
+                .WaitAndRetryForeverAsync(x => TimeSpan.FromSeconds(3),
+                    (exception, span) => logger.LogCritical(exception, "Failed to start up."))
+                .ExecuteAsync(async () =>
                 {
-                    await using var tenantDbContext = factory.CreateContext(tenant);
-                    await tenantDbContext.Database.MigrateAsync();
-                }
-            }
+                    using var scope = host.Services.CreateScope();
+                    var masterDbContext = scope.ServiceProvider.GetRequiredService<MasterDbContext>();
+                    await masterDbContext.Database.MigrateAsync();
+
+                    var tenants = await masterDbContext.Tenants.ToListAsync();
+                    var factory = scope.ServiceProvider
+                        .GetRequiredService<ITenantDbContextFactory<HomeAssignmentsContext>>();
+                    foreach (var tenant in tenants)
+                    {
+                        await using var tenantDbContext = factory.CreateContext(tenant);
+                        await tenantDbContext.Database.MigrateAsync();
+                    }
+                });
 
             await host.RunAsync();
         }
