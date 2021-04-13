@@ -1,15 +1,15 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["ESchool.ApiGateway/ESchool.ApiGateway.csproj", "ESchool.ApiGateway/"]
-RUN dotnet restore "ESchool.ApiGateway/ESchool.ApiGateway.csproj"
+COPY ["src/services/apigateway/ESchool.ApiGateway/ESchool.ApiGateway.csproj", "src/services/apigateway/ESchool.ApiGateway/"]
+RUN dotnet restore "src/services/apigateway/ESchool.ApiGateway/ESchool.ApiGateway.csproj"
 COPY . .
-WORKDIR "/src/ESchool.ApiGateway"
+WORKDIR "/src/src/services/apigateway/ESchool.ApiGateway"
 RUN dotnet build "ESchool.ApiGateway.csproj" -c Release -o /app/build
 
 FROM build AS publish
