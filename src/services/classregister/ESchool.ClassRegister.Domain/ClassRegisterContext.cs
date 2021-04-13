@@ -37,7 +37,6 @@ namespace ESchool.ClassRegister.Domain
         public DbSet<UserMessage> UserMessages { get; set; }
         public DbSet<Absence> Absences { get; set; }
         public DbSet<ClassSchoolYearSubject> ClassSchoolYearSubjects { get; set; }
-        public DbSet<HomeWork> HomeWorks { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<SubjectTeacher> SubjectTeachers { get; set; }

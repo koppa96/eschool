@@ -20,8 +20,7 @@ namespace ESchool.ClassRegister.Domain.Entities.SubjectManagement
 
         public Guid ClassroomId { get; set; }
         public virtual Classroom Classroom { get; set; }
-
-        public virtual ICollection<HomeWork> HomeWorks { get; set; }
+        
         public virtual ICollection<Absence> Absences { get; set; }
     }
 }

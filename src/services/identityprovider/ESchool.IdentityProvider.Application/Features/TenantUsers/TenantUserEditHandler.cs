@@ -61,6 +61,9 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             {
                 UserId = tenantUser.UserId,
                 TenantId = tenantId,
+                Email = tenantUser.User.Email,
+                TenantRoles = tenantUser.TenantUserRoles.Select(x => x.TenantRole)
+                    .ToList()
             }, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
 

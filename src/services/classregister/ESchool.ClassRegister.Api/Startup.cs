@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Reflection;
-using ESchool.ClassRegister.Api.Grpc;
 using ESchool.ClassRegister.Domain;
 using ESchool.IdentityProvider.Interface.DefaultHandlers.Extensions;
 using ESchool.Libs.AspNetCore.Configuration;
@@ -156,7 +155,6 @@ namespace ESchool.ClassRegister.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapGrpcService<LessonServiceImpl>();
             });
         }
     }

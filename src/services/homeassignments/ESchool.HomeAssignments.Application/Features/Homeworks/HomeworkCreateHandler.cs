@@ -44,17 +44,15 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks
     
     public class HomeworkCreateHandler : IRequestHandler<HomeworkCreateCommand, HomeworkDetailsResponse>
     {
-        private readonly LessonService.LessonServiceClient client;
         private readonly HomeAssignmentsContext context;
         private readonly IMapper mapper;
         private readonly IIdentityService identityService;
 
-        public HomeworkCreateHandler(LessonService.LessonServiceClient client,
+        public HomeworkCreateHandler(
             HomeAssignmentsContext context,
             IMapper mapper,
             IIdentityService identityService)
         {
-            this.client = client;
             this.context = context;
             this.mapper = mapper;
             this.identityService = identityService;

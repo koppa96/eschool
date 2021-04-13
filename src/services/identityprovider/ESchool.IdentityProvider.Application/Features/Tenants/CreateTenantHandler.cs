@@ -42,7 +42,9 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
             
             await publisher.PublishAsync(new TenantCreatedOrUpdatedEvent
             {
-                TenantId = tenant.Id
+                TenantId = tenant.Id,
+                Name = tenant.Name,
+                OmIdentifier = tenant.OmIdentifier
             }, cancellationToken);
             
             await context.SaveChangesAsync(cancellationToken);

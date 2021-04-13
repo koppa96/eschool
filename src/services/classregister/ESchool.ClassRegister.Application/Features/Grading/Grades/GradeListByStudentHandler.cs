@@ -30,7 +30,6 @@ namespace ESchool.ClassRegister.Application.Features.Grading.Grades
     public class GradeListByStudentHandler : IRequestHandler<GradeListByStudentQuery, List<GradeListByStudentResponse>>
     {
         private readonly ClassRegisterContext context;
-        private readonly IIdentityService identityService;
 
         public GradeListByStudentHandler(ClassRegisterContext context)
         {

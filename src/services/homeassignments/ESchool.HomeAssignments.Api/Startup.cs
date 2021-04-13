@@ -85,11 +85,6 @@ namespace ESchool.HomeAssignments.Api
             
             services.AddAutoMapper(Assembly.Load("ESchool.HomeAssignments.Application"));
 
-            services.AddGrpcClient<LessonService.LessonServiceClient>(config =>
-            {
-                config.Address = new Uri(Configuration.GetValue<string>("ClassRegisterUri"));
-            });
-
             services.AddGrpcClient<UserService.UserServiceClient>(config =>
             {
                 config.Address = new Uri(Configuration.GetValue<string>("ClassRegisterUri"));

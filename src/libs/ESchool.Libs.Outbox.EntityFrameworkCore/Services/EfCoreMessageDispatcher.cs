@@ -41,6 +41,7 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
         public async Task DispatchAllAsync(CancellationToken cancellationToken = default)
         {
             var messageIds = await context.OutboxEntries.Where(x => x.State == OutboxEntryState.Pending)
+                .OrderBy(x => x.CreatedAt)
                 .Select(x => x.Id)
                 .ToListAsync(cancellationToken);
 
@@ -53,11 +54,12 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
         public async Task DispatchMessagesAsync(IEnumerable<Guid> messageIds,
             CancellationToken cancellationToken = default)
         {
-            foreach (var id in messageIds)
+            var ids = messageIds.ToList();
+            foreach (var id in ids)
             {
                 await DispatchMessageAsync(id, cancellationToken);
             }
-            logger.LogDebug("Successfully dispatched {0} messages", messageIds.Count());
+            logger.LogDebug("Successfully dispatched {0} messages", ids.Count);
         }
 
         private async Task DispatchMessageAsync(Guid messageId, CancellationToken cancellationToken)
