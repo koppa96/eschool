@@ -23,7 +23,7 @@ stages:
     - task: Docker@2
       displayName: Build an image
       inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/src/services/apigateway/ESchool.ApiGateway/Dockerfile'
-        tags: |
-          $(tag)
+        command: 'build'
+        Dockerfile: '$(Build.SourcesDirectory)/src/services/apigateway/ESchool.ApiGateway/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)'
+        tags: '$(tag)'
