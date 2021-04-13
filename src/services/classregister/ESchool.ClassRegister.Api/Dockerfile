@@ -14,9 +14,9 @@ COPY ["src/libs/ESchool.Libs.AspNetCore/ESchool.Libs.AspNetCore.csproj", "src/li
 COPY ["src/libs/ESchool.Libs.Application/ESchool.Libs.Application.csproj", "src/libs/ESchool.Libs.Application/"]
 COPY ["src/libs/ESchool.Libs.Domain/ESchool.Libs.Domain.csproj", "src/libs/ESchool.Libs.Domain/"]
 COPY ["src/services/classregister/ESchool.ClassRegister.Application/ESchool.ClassRegister.Application.csproj", "src/services/classregister/ESchool.ClassRegister.Application/"]
-COPY ["src/services/homeassignments/ESchool.HomeAssignments.Interface/ESchool.HomeAssignments.Interface.csproj", "src/services/homeassignments/ESchool.HomeAssignments.Interface/"]
-COPY ["src/services/classregister/ESchool.ClassRegister.Interface/ESchool.ClassRegister.Interface.csproj", "src/services/classregister/ESchool.ClassRegister.Interface/"]
+COPY ["src/services/identityprovider/ESchool.IdentityProvider.Interface.DefaultHandlers/ESchool.IdentityProvider.Interface.DefaultHandlers.csproj", "src/services/identityprovider/ESchool.IdentityProvider.Interface.DefaultHandlers/"]
 COPY ["src/services/identityprovider/ESchool.IdentityProvider.Interface/ESchool.IdentityProvider.Interface.csproj", "src/services/identityprovider/ESchool.IdentityProvider.Interface/"]
+COPY ["src/services/classregister/ESchool.ClassRegister.Interface/ESchool.ClassRegister.Interface.csproj", "src/services/classregister/ESchool.ClassRegister.Interface/"]
 COPY ["src/services/classregister/ESchool.ClassRegister.Domain/ESchool.ClassRegister.Domain.csproj", "src/services/classregister/ESchool.ClassRegister.Domain/"]
 COPY ["src/libs/ESchool.Libs.Outbox.EntityFrameworkCore/ESchool.Libs.Outbox.EntityFrameworkCore.csproj", "src/libs/ESchool.Libs.Outbox.EntityFrameworkCore/"]
 RUN dotnet restore "src/services/classregister/ESchool.ClassRegister.Api/ESchool.ClassRegister.Api.csproj"
