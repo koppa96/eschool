@@ -7,7 +7,7 @@ namespace ESchool.Testing.Domain.Entities.ClassRegisterData
     {
         public Guid Id { get; set; }
 
-        public Guid GroupId { get; set; }
+        public Guid ClassSchoolYearSubjectId { get; set; }
         public virtual ClassSchoolYearSubject ClassSchoolYearSubject { get; set; }
 
         public Guid TeacherId { get; set; }

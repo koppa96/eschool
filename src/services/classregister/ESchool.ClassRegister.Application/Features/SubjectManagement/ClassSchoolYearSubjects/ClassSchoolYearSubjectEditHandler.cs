@@ -5,6 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.Interface.IntegrationEvents.ClassSchoolYearSubjects;
+using ESchool.Libs.Outbox.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,10 +23,12 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassScho
     public class ClassSchoolYearSubjectEditHandler : IRequestHandler<ClassSchoolYearSubjectEditCommand>
     {
         private readonly ClassRegisterContext context;
+        private readonly IEventPublisher eventPublisher;
 
-        public ClassSchoolYearSubjectEditHandler(ClassRegisterContext context)
+        public ClassSchoolYearSubjectEditHandler(ClassRegisterContext context, IEventPublisher eventPublisher)
         {
             this.context = context;
+            this.eventPublisher = eventPublisher;
         }
 
         public async Task<Unit> Handle(ClassSchoolYearSubjectEditCommand request, CancellationToken cancellationToken)
@@ -43,6 +47,11 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassScho
                 ClassSchoolYearSubjectId = classSchoolYearSubject.Id
             }));
 
+            await eventPublisher.PublishAsync(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
+            {
+                Id = classSchoolYearSubject.Id
+            }, cancellationToken);
+            
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

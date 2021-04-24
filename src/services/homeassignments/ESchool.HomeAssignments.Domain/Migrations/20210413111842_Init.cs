@@ -101,7 +101,7 @@ namespace ESchool.HomeAssignments.Domain.Migrations
                     Optional = table.Column<bool>(type: "bit", nullable: false),
                     LessonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedById = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
@@ -119,7 +119,7 @@ namespace ESchool.HomeAssignments.Domain.Migrations
                         column: x => x.CreatedById,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Homeworks_Users_LastModifiedById",
                         column: x => x.LastModifiedById,
@@ -184,7 +184,7 @@ namespace ESchool.HomeAssignments.Domain.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     HomeworkId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     TurnInDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -201,7 +201,7 @@ namespace ESchool.HomeAssignments.Domain.Migrations
                         column: x => x.StudentId,
                         principalTable: "UserRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -231,7 +231,7 @@ namespace ESchool.HomeAssignments.Domain.Migrations
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Outcome = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedById = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     HomeWorkSolutionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -257,7 +257,7 @@ namespace ESchool.HomeAssignments.Domain.Migrations
                         column: x => x.CreatedById,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_HomeworkReviews_Users_LastModifiedById",
                         column: x => x.LastModifiedById,

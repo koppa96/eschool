@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Interface.IntegrationEvents.ClassSchoolYearSubjects;
 using ESchool.Libs.Domain.Extensions;
+using ESchool.Libs.Outbox.Services;
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +20,12 @@ namespace ESchool.ClassRegister.Application.Features.Users.Students
     public class RemoveStudentFromClassHandler : IRequestHandler<RemoveStudentFromClassCommand>
     {
         private readonly ClassRegisterContext context;
-        private readonly IPublishEndpoint publishEndpoint;
+        private readonly IEventPublisher eventPublisher;
 
-        public RemoveStudentFromClassHandler(ClassRegisterContext context, IPublishEndpoint publishEndpoint)
+        public RemoveStudentFromClassHandler(ClassRegisterContext context, IEventPublisher eventPublisher)
         {
             this.context = context;
-            this.publishEndpoint = publishEndpoint;
+            this.eventPublisher = eventPublisher;
         }
         
         public async Task<Unit> Handle(RemoveStudentFromClassCommand request, CancellationToken cancellationToken)
@@ -36,16 +37,17 @@ namespace ESchool.ClassRegister.Application.Features.Users.Students
 
             var @class = student.Class;
             student.Class = null;
-            await context.SaveChangesAsync(cancellationToken);
-
+            
             foreach (var classSchoolYearSubject in @class.ClassSchoolYears.SelectMany(x => x.ClassSchoolYearSubjects))
             {
-                await publishEndpoint.Publish(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
+                await eventPublisher.PublishAsync(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
                 {
                     Id = classSchoolYearSubject.Id
-                }, CancellationToken.None);
+                }, cancellationToken);
             }
             
+            await context.SaveChangesAsync(cancellationToken);
+
             return Unit.Value;
         }
     }

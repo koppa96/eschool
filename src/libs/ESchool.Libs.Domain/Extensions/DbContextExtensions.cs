@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Libs.Domain.Interfaces;
+using ESchool.Libs.Domain.Interfaces.Audit;
 using ESchool.Libs.Domain.MultiTenancy.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;

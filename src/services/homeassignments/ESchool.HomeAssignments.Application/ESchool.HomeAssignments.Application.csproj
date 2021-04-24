@@ -22,8 +22,4 @@
       <Protobuf Include="../../../proto/classregister.proto" GrpcServices="Client" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Features\Tenants" />
-    </ItemGroup>
-
 </Project>

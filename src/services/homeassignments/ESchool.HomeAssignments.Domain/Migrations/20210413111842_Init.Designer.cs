@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ESchool.HomeAssignments.Domain.Migrations
 {
     [DbContext(typeof(HomeAssignmentsContext))]
-    [Migration("20210410141718_Init")]
+    [Migration("20210413111842_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,7 +130,7 @@ namespace ESchool.HomeAssignments.Domain.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedById")
+                    b.Property<Guid?>("CreatedById")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Deadline")
@@ -177,7 +177,7 @@ namespace ESchool.HomeAssignments.Domain.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedById")
+                    b.Property<Guid?>("CreatedById")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("HomeWorkSolutionId")
@@ -218,7 +218,7 @@ namespace ESchool.HomeAssignments.Domain.Migrations
                     b.Property<Guid>("HomeworkId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("StudentId")
+                    b.Property<Guid?>("StudentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("TurnInDate")
@@ -384,9 +384,7 @@ namespace ESchool.HomeAssignments.Domain.Migrations
                 {
                     b.HasOne("ESchool.HomeAssignments.Domain.Entities.Users.HomeAssignmentsUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatedById");
 
                     b.HasOne("ESchool.HomeAssignments.Domain.Entities.Users.HomeAssignmentsUser", "LastModifiedBy")
                         .WithMany()
@@ -409,9 +407,7 @@ namespace ESchool.HomeAssignments.Domain.Migrations
                 {
                     b.HasOne("ESchool.HomeAssignments.Domain.Entities.Users.HomeAssignmentsUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatedById");
 
                     b.HasOne("ESchool.HomeAssignments.Domain.Entities.HomeworkSolution", "HomeworkSolution")
                         .WithOne("HomeworkReview")
@@ -444,9 +440,7 @@ namespace ESchool.HomeAssignments.Domain.Migrations
 
                     b.HasOne("ESchool.HomeAssignments.Domain.Entities.Users.Student", "Student")
                         .WithMany("Solutions")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentId");
 
                     b.Navigation("Homework");
 

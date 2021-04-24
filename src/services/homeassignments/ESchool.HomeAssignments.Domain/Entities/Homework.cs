@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ESchool.HomeAssignments.Domain.Entities.ClassRegisterData;
 using ESchool.HomeAssignments.Domain.Entities.Users;
 using ESchool.Libs.Domain.Interfaces;
+using ESchool.Libs.Domain.Interfaces.Audit;
 
 namespace ESchool.HomeAssignments.Domain.Entities
 {
@@ -20,7 +21,7 @@ namespace ESchool.HomeAssignments.Domain.Entities
         public virtual Lesson Lesson { get; set; }
 
         public DateTime CreatedAt { get; set; }
-        public Guid CreatedById { get; set; }
+        public Guid? CreatedById { get; set; }
         public virtual HomeAssignmentsUser CreatedBy { get; set; }
 
         public DateTime? LastModifiedAt { get; set; }

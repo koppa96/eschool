@@ -3,19 +3,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Grpc;
 using ESchool.ClassRegister.Interface.IntegrationEvents.ClassSchoolYearSubjects;
-using ESchool.HomeAssignments.Domain;
-using ESchool.HomeAssignments.Domain.Entities.ClassRegisterData;
+using ESchool.Testing.Domain;
+using ESchool.Testing.Domain.Entities.ClassRegisterData;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
-namespace ESchool.HomeAssignments.Application.Features.ClassSchoolYearSubjects
+namespace ESchool.Testing.Application.Features.ClassSchoolYearSubjects
 {
     public class ClassSchoolYearSubjectCreatedOrUpdatedConsumer : IConsumer<ClassSchoolYearSubjectCreatedOrUpdatedEvent>
     {
-        private readonly Lazy<HomeAssignmentsContext> lazyDbContext;
+        private readonly Lazy<TestingContext> lazyDbContext;
         private readonly ClassSchoolYearSubjectService.ClassSchoolYearSubjectServiceClient client;
 
-        public ClassSchoolYearSubjectCreatedOrUpdatedConsumer(Lazy<HomeAssignmentsContext> lazyDbContext,
+        public ClassSchoolYearSubjectCreatedOrUpdatedConsumer(Lazy<TestingContext> lazyDbContext,
             ClassSchoolYearSubjectService.ClassSchoolYearSubjectServiceClient client)
         {
             this.lazyDbContext = lazyDbContext;

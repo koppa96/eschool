@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Interface.IntegrationEvents.ClassSchoolYearSubjects;
 using ESchool.Libs.Domain.Extensions;
+using ESchool.Libs.Outbox.Services;
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -20,12 +21,12 @@ namespace ESchool.ClassRegister.Application.Features.Users.Students
     public class AssignStudentToClassHandler : IRequestHandler<AssignStudentToClassCommand>
     {
         private readonly ClassRegisterContext context;
-        private readonly IPublishEndpoint publishEndpoint;
+        private readonly IEventPublisher eventPublisher;
 
-        public AssignStudentToClassHandler(ClassRegisterContext context, IPublishEndpoint publishEndpoint)
+        public AssignStudentToClassHandler(ClassRegisterContext context, IEventPublisher eventPublisher)
         {
             this.context = context;
-            this.publishEndpoint = publishEndpoint;
+            this.eventPublisher = eventPublisher;
         }
         
         public async Task<Unit> Handle(AssignStudentToClassCommand request, CancellationToken cancellationToken)
@@ -41,15 +42,16 @@ namespace ESchool.ClassRegister.Application.Features.Users.Students
                 .SingleAsync(x => x.Id == request.ClassId, cancellationToken);
             
             student.Class = @class;
-            await context.SaveChangesAsync(cancellationToken);
             
             foreach (var classSchoolYearSubject in @class.ClassSchoolYears.SelectMany(x => x.ClassSchoolYearSubjects))
             {
-                await publishEndpoint.Publish(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
+                await eventPublisher.PublishAsync(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
                 {
                     Id = classSchoolYearSubject.Id
-                }, CancellationToken.None);
+                }, cancellationToken);
             }
+            
+            await context.SaveChangesAsync(cancellationToken);
             
             return Unit.Value;
         }

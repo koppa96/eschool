@@ -45,9 +45,9 @@ namespace ESchool.ClassRegister.Application.Features.Users
             // Global admins can also create users => No tenant Id will be set in the Identity Service.
             await using var dbContext = tenantDbContextFactory.CreateContext(tenant);
             
-            var tenantUserTypes = Assembly.GetExecutingAssembly()
+            var tenantUserTypes = typeof(ClassRegisterUserRole).Assembly
                 .GetTypes()
-                .Where(x => x.BaseType == typeof(ClassRegisterUser) && x.GetCustomAttribute<TenantUserAttribute>() != null)
+                .Where(x => x.BaseType == typeof(ClassRegisterUserRole) && x.GetCustomAttribute<TenantUserAttribute>() != null)
                 .ToList();
 
             var existingUser = await dbContext.Users.IgnoreQueryFilters()

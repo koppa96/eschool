@@ -84,7 +84,9 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             await publisher.PublishAsync(new TenantUserCreatedOrEditedEvent
             {
                 UserId = user.Id,
-                TenantId = tenantId
+                Email = user.Email,
+                TenantId = tenantId,
+                TenantRoles = request.Roles.ToList()
             }, CancellationToken.None);
             await context.SaveChangesAsync(cancellationToken);
 

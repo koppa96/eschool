@@ -19,7 +19,9 @@ namespace ESchool.Testing.Domain
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<TestingUser> Users { get; set; }
         public DbSet<TestingUserRole> UserRoles { get; set; }
-        public DbSet<ClassSchoolYearSubject> Groups { get; set; }
+        public DbSet<ClassSchoolYearSubject> ClassSchoolYearSubjects { get; set; }
+        public DbSet<ClassSchoolYearSubjectStudent> ClassSchoolYearSubjectStudents { get; set; }
+        public DbSet<ClassSchoolYearSubjectTeacher> ClassSchoolYearSubjectTeachers { get; set; }
         public DbSet<StudentTest> TestGroups { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<TestAnswer> Answers { get; set; }

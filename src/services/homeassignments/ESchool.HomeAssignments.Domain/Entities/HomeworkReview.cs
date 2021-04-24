@@ -2,6 +2,7 @@
 using ESchool.HomeAssignments.Domain.Entities.Users;
 using ESchool.HomeAssignments.Domain.Enums;
 using ESchool.Libs.Domain.Interfaces;
+using ESchool.Libs.Domain.Interfaces.Audit;
 
 namespace ESchool.HomeAssignments.Domain.Entities
 {
@@ -13,7 +14,7 @@ namespace ESchool.HomeAssignments.Domain.Entities
         public HomeworkReviewOutcome Outcome { get; set; }
         
         public DateTime CreatedAt { get; set; }
-        public Guid CreatedById { get; set; }
+        public Guid? CreatedById { get; set; }
         public HomeAssignmentsUser CreatedBy { get; set; }
         
         public DateTime? LastModifiedAt { get; set; }

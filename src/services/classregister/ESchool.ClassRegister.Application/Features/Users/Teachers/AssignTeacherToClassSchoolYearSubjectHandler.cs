@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.ClassRegister.Interface.IntegrationEvents.ClassSchoolYearSubjects;
+using ESchool.Libs.Outbox.Services;
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,17 +20,16 @@ namespace ESchool.ClassRegister.Application.Features.Users.Teachers
         public Guid TeacherId { get; set; }
     }
 
-    public class
-        AssignTeacherToClassSchoolYearSubjectHandler : IRequestHandler<AssignTeacherToClassSchoolYearSubjectCommand>
+    public class AssignTeacherToClassSchoolYearSubjectHandler : IRequestHandler<AssignTeacherToClassSchoolYearSubjectCommand>
     {
         private readonly ClassRegisterContext context;
-        private readonly IPublishEndpoint publishEndpoint;
+        private readonly IEventPublisher eventPublisher;
 
         public AssignTeacherToClassSchoolYearSubjectHandler(ClassRegisterContext context,
-            IPublishEndpoint publishEndpoint)
+            IEventPublisher eventPublisher)
         {
             this.context = context;
-            this.publishEndpoint = publishEndpoint;
+            this.eventPublisher = eventPublisher;
         }
 
         public async Task<Unit> Handle(AssignTeacherToClassSchoolYearSubjectCommand request,
@@ -53,12 +53,12 @@ namespace ESchool.ClassRegister.Application.Features.Users.Teachers
                 TeacherId = request.TeacherId,
                 ClassSchoolYearSubjectId = classSchoolYearSubject.Id
             });
-
-            await context.SaveChangesAsync(cancellationToken);
-            await publishEndpoint.Publish(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
+            
+            await eventPublisher.PublishAsync(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
             {
                 Id = classSchoolYearSubject.Id
-            }, CancellationToken.None);
+            }, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }
