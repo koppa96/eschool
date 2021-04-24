@@ -11,11 +11,22 @@ namespace ESchool.Testing.Domain.Entities
         public Guid Id { get; set; }
 
         public DateTime Started { get; set; }
-        public DateTime? Closed { get; set; }
-        public bool? ClosedByTeacher { get; set; }
+        public DateTime? Closed { get; private set; }
+        public bool? ClosedByTeacher { get; private set; }
         
         public virtual StudentTest StudentTest { get; set; }
 
         public virtual ICollection<TaskAnswer> TaskAnswers { get; set; }
+
+        public void Close(bool closedByTeacher)
+        {
+            if (Closed != null)
+            {
+                throw new InvalidOperationException("A dolgozatbeadás már le van zárva.");
+            }
+            
+            Closed = DateTime.Now;
+            ClosedByTeacher = closedByTeacher;
+        }
     }
 }

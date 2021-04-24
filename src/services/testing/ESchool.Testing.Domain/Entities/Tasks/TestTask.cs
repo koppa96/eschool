@@ -1,4 +1,5 @@
 ﻿using System;
+using ESchool.Testing.Domain.Enums;
 
 namespace ESchool.Testing.Domain.Entities.Tasks
 {

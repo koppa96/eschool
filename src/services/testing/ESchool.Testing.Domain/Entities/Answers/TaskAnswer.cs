@@ -11,6 +11,8 @@ namespace ESchool.Testing.Domain.Entities.Answers
 
         public Guid TestAnswerId { get; set; }
         public virtual TestAnswer TestAnswer { get; set; }
+        
+        public Guid? TestTaskId { get; set; }
 
         public abstract void AutoCorrect();
 
@@ -24,7 +26,6 @@ namespace ESchool.Testing.Domain.Entities.Answers
     public abstract class TaskAnswer<TTask> : TaskAnswer
         where TTask : TestTask
     {
-        public Guid? TestTaskId { get; set; }
         public virtual TTask TestTask { get; set; }
 
         protected void AllOrNothingAutoCorrect(bool isCorrect)

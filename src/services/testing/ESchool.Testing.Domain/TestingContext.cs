@@ -1,13 +1,13 @@
-﻿using ESchool.Testing.Domain.Entities;
+﻿using System.Reflection;
+using ESchool.Libs.Domain.MultiTenancy.Entities;
+using ESchool.Libs.Outbox.EntityFrameworkCore;
+using ESchool.Testing.Domain.Entities;
 using ESchool.Testing.Domain.Entities.Answers;
 using ESchool.Testing.Domain.Entities.ClassRegisterData;
 using ESchool.Testing.Domain.Entities.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using ESchool.Libs.Domain.MultiTenancy.Entities;
-using ESchool.Libs.Outbox.EntityFrameworkCore;
 using ESchool.Testing.Domain.Entities.Users;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ESchool.Testing.Domain
@@ -22,9 +22,10 @@ namespace ESchool.Testing.Domain
         public DbSet<ClassSchoolYearSubject> ClassSchoolYearSubjects { get; set; }
         public DbSet<ClassSchoolYearSubjectStudent> ClassSchoolYearSubjectStudents { get; set; }
         public DbSet<ClassSchoolYearSubjectTeacher> ClassSchoolYearSubjectTeachers { get; set; }
+        public DbSet<StudentTest> StudentTests { get; set; }
         public DbSet<StudentTest> TestGroups { get; set; }
         public DbSet<Test> Tests { get; set; }
-        public DbSet<TestAnswer> Answers { get; set; }
+        public DbSet<TestAnswer> TestAnswers { get; set; }
         public DbSet<TestTask> Tasks { get; set; }
         public DbSet<TaskAnswer> TaskAnswers { get; set; }
 

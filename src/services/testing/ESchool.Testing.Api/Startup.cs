@@ -1,4 +1,6 @@
+using System;
 using System.Reflection;
+using ESchool.ClassRegister.Grpc;
 using ESchool.IdentityProvider.Interface.DefaultHandlers.Extensions;
 using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
@@ -6,6 +8,9 @@ using ESchool.Libs.AspNetCore.Filters;
 using ESchool.Libs.Domain.MultiTenancy;
 using ESchool.Libs.Outbox.AspNetCore.Extensions;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
+using ESchool.Testing.Api.Extensions;
+using ESchool.Testing.Api.Infrastructure;
+using ESchool.Testing.Application.Features.TaskAnswers.Common;
 using ESchool.Testing.Domain;
 using MassTransit;
 using MediatR;
@@ -33,13 +38,19 @@ namespace ESchool.Testing.Api
             services.AddDbContext<MasterDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection"), serverConfig =>
                     serverConfig.MigrationsAssembly(typeof(TestingContext).Assembly.GetName().Name)));
-            
+
             services.AddDbContext<TestingContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddLazyDbContext<TestingContext>();
+
             services.AddMultitenancy<TestingContext>();
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.AddTaskTypeDiscriminatorConverterForHierarchy<TaskAnswerCreateEditCommand>();
+                });
 
             var authConfig = new AuthConfiguration();
             Configuration.GetSection("Authentication").Bind(authConfig);
@@ -54,21 +65,25 @@ namespace ESchool.Testing.Api
                 config.UsingRabbitMq((context, configurator) =>
                 {
                     configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
-                    configurator.ReceiveEndpoint("testing", endpoint =>
-                    {
-                        endpoint.ConfigureConsumers(context);
-                    });
+                    configurator.ReceiveEndpoint("testing", endpoint => { endpoint.ConfigureConsumers(context); });
                 });
             });
             services.AddMassTransitHostedService();
             services.AddMassTransitOutbox(options =>
             {
-                options.UseEntityFrameworkCore<TestingContext>(config =>
-                {
-                    config.UseMultiTenantMessageDispatcher();
-                });
+                options.UseEntityFrameworkCore<TestingContext>(config => { config.UseMultiTenantMessageDispatcher(); });
                 options.AddPublishFilter<AuthDataSetterPublishFilter>();
             });
+
+            services.AddAutoMapper(Assembly.Load("ESchool.Testing.Application"));
+            services.AddCommonServices();
+
+            services.AddGrpcClient<ClassSchoolYearSubjectService.ClassSchoolYearSubjectServiceClient>(options =>
+            {
+                options.Address = new Uri(Configuration.GetValue<string>("ClassRegisterUri"));
+            });
+
+            services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,10 +99,7 @@ namespace ESchool.Testing.Api
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
