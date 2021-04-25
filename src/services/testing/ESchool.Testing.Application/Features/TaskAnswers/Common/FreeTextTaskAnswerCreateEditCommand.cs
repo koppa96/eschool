@@ -2,7 +2,7 @@
 
 namespace ESchool.Testing.Application.Features.TaskAnswers.Common
 {
-    [Discriminator("FreeText")]
+    [JsonSubClass(Discriminator = "FreeText")]
     public class FreeTextTaskAnswerCreateEditCommand : TaskAnswerCreateEditCommand
     {
         public string Answer { get; set; }

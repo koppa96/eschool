@@ -3,7 +3,7 @@ using ESchool.Libs.Json.Attributes;
 
 namespace ESchool.Testing.Application.Features.TaskAnswers.Common
 {
-    [Discriminator("MultipleChoice")]
+    [JsonSubClass(Discriminator = "MultipleChoice")]
     public class MultipleChoiceTaskAnswerCreateEditCommand : TaskAnswerCreateEditCommand
     {
         public Guid SelectedOptionId { get; set; }

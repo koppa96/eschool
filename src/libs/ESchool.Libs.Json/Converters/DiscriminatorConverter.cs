@@ -10,45 +10,35 @@ using ESchool.Libs.Json.Attributes;
 
 namespace ESchool.Libs.Json.Converters
 {
-    public static class DiscriminatorConverter
-    {
-        public static IEnumerable<JsonConverter> ForHierarchy<TBaseClass>(string discriminatorPropertyName)
-        {
-            return typeof(TBaseClass).Assembly.GetTypes()
-                .Where(x => x.IsAssignableTo(typeof(TBaseClass)))
-                .Select(x => (JsonConverter)Activator.CreateInstance(typeof(DiscriminatorConverter<>).MakeGenericType(x), discriminatorPropertyName));
-        }
-    }
-    
     /// <summary>
-    /// Appends a TaskType property to the serialized type based on the TaskTypeAttribute on the class,
+    /// Appends a discriminator property to the serialized json based on the <see cref="JsonSubClassAttribute"/> on the class,
     /// and deserializes polymorphic types with the help of it.
     /// </summary>
-    /// <typeparam name="TBaseClass">The type of the base class</typeparam>
-    public class DiscriminatorConverter<TBaseClass> : JsonConverter<TBaseClass>
+    /// <typeparam name="TBaseOrSubClass">The type of the class that the converter can convert</typeparam>
+    public class DiscriminatorConverter<TBaseOrSubClass> : JsonConverter<TBaseOrSubClass>
     {
         private readonly string discriminatorPropertyName;
-        private readonly List<Type> subTypes;
+        private readonly Dictionary<string, Type> subTypes;
 
         public DiscriminatorConverter(string discriminatorPropertyName, params Assembly[] assembliesToSearch)
         {
             this.discriminatorPropertyName = discriminatorPropertyName;
 
-            subTypes = assembliesToSearch.Append(typeof(TBaseClass).Assembly)
+            subTypes = assembliesToSearch.Append(typeof(TBaseOrSubClass).Assembly)
                 .Distinct()
                 .SelectMany(x => x.GetTypes())
-                .Where(x => x.IsAssignableTo(typeof(TBaseClass)) &&
-                            x.GetCustomAttribute<DiscriminatorAttribute>() != null)
-                .ToList();
+                .Where(x => x.IsAssignableTo(typeof(TBaseOrSubClass)) &&
+                            x.GetCustomAttribute<JsonSubClassAttribute>() != null)
+                .ToDictionary(x => x.GetCustomAttribute<JsonSubClassAttribute>()!.Discriminator ?? x.Name);
         }
 
-        public override TBaseClass Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override TBaseOrSubClass Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             using var document = JsonDocument.ParseValue(ref reader);
 
             var discriminatorProperty = document.RootElement.EnumerateObject().Single(x => x.NameEquals(discriminatorPropertyName));
             var discriminatorValue = discriminatorProperty.Value.GetString();
-            var objectType = subTypes.Single(x => x.GetCustomAttribute<DiscriminatorAttribute>()!.DiscriminatorValue == discriminatorValue);
+            var objectType = subTypes.Single(x => x.Key == discriminatorValue).Value;
             
             using var stream = new MemoryStream();
             var writer = new Utf8JsonWriter(stream);
@@ -63,10 +53,10 @@ namespace ESchool.Libs.Json.Converters
             var childConverter = options.Converters.SingleOrDefault(x => x.GetType() == childConverterType);
             newOptions.Converters.Remove(childConverter);
 
-            return (TBaseClass) JsonSerializer.Deserialize(jsonString, objectType, newOptions);
+            return (TBaseOrSubClass) JsonSerializer.Deserialize(jsonString, objectType, newOptions);
         }
 
-        public override void Write(Utf8JsonWriter writer, TBaseClass value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, TBaseOrSubClass value, JsonSerializerOptions options)
         {
             var newOptions = new JsonSerializerOptions(options);
             newOptions.Converters.Remove(this);
@@ -75,11 +65,16 @@ namespace ESchool.Libs.Json.Converters
             using var document = JsonDocument.Parse(jsonString);
 
             writer.WriteStartObject();
-            writer.WriteString(discriminatorPropertyName, value.GetType().GetCustomAttribute<DiscriminatorAttribute>()?.DiscriminatorValue);
+            
+            var valueType = value.GetType();
+            var discriminatorValue = valueType.GetCustomAttribute<JsonSubClassAttribute>()?.Discriminator ?? valueType.Name;
+            writer.WriteString(discriminatorPropertyName, discriminatorValue);
+            
             foreach (var property in document.RootElement.EnumerateObject())
             {
                 property.WriteTo(writer);
             }
+            
             writer.WriteEndObject();
         }
     }

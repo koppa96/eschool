@@ -48,7 +48,7 @@ namespace ESchool.Testing.Api
             services.AddControllers()
                 .AddJsonOptions(options =>
                 {
-                    options.JsonSerializerOptions.AddDiscriminatorConverterForHierarchy<TaskAnswerCreateEditCommand>("taskType");
+                    options.JsonSerializerOptions.AddDiscriminatorConverters(Assembly.Load("ESchool.Testing.Application"));
                 });
 
             var authConfig = new AuthConfiguration();
