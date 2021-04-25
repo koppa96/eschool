@@ -1,8 +1,8 @@
-﻿using ESchool.Libs.Json.Attributes;
+﻿using System.Text.Json.Polymorph.Attributes;
 
 namespace ESchool.Testing.Application.Features.TaskAnswers.Common
 {
-    [JsonSubClass(Discriminator = "TrueOrFalse")]
+    [JsonSubClass(DiscriminatorValue = "TrueOrFalse")]
     public class TrueOrFalseTaskAnswerCreateEditCommand : TaskAnswerCreateEditCommand
     {
         public bool IsTrue { get; set; }

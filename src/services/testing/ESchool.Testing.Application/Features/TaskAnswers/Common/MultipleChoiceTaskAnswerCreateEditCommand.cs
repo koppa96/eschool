@@ -1,9 +1,9 @@
 ﻿using System;
-using ESchool.Libs.Json.Attributes;
+using System.Text.Json.Polymorph.Attributes;
 
 namespace ESchool.Testing.Application.Features.TaskAnswers.Common
 {
-    [JsonSubClass(Discriminator = "MultipleChoice")]
+    [JsonSubClass(DiscriminatorValue = "MultipleChoice")]
     public class MultipleChoiceTaskAnswerCreateEditCommand : TaskAnswerCreateEditCommand
     {
         public Guid SelectedOptionId { get; set; }

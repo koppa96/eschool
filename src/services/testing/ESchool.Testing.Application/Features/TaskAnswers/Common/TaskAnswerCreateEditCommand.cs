@@ -1,8 +1,8 @@
-﻿using ESchool.Libs.Json.Attributes;
+﻿using System.Text.Json.Polymorph.Attributes;
 
 namespace ESchool.Testing.Application.Features.TaskAnswers.Common
 {
-    [JsonBaseClass(DiscriminatorPropertyName = "taskType")]
+    [JsonBaseClass(DiscriminatorName = "taskType")]
     public abstract class TaskAnswerCreateEditCommand
     {
     }
