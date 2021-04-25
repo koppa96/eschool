@@ -28,10 +28,18 @@ namespace ESchool.Libs.Json.Converters
     public class TaskTypeDiscriminatorConverter<TBaseClass> : JsonConverter<TBaseClass>
     {
         private readonly string discriminatorPropertyName;
+        private readonly List<Type> subTypes;
 
-        public TaskTypeDiscriminatorConverter(string discriminatorPropertyName)
+        public TaskTypeDiscriminatorConverter(string discriminatorPropertyName, params Assembly[] assembliesToSearch)
         {
             this.discriminatorPropertyName = discriminatorPropertyName;
+
+            subTypes = assembliesToSearch.Append(typeof(TBaseClass).Assembly)
+                .Distinct()
+                .SelectMany(x => x.GetTypes())
+                .Where(x => x.IsAssignableTo(typeof(TBaseClass)) &&
+                            x.GetCustomAttribute<DiscriminatorAttribute>() != null)
+                .ToList();
         }
 
         public override TBaseClass Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -40,9 +48,7 @@ namespace ESchool.Libs.Json.Converters
 
             var discriminatorProperty = document.RootElement.EnumerateObject().Single(x => x.NameEquals(discriminatorPropertyName));
             var discriminatorValue = discriminatorProperty.Value.GetString();
-            var objectType = typeof(TBaseClass).Assembly.GetTypes()
-                .Single(x => x.IsAssignableTo(typeof(TBaseClass)) &&
-                             x.GetCustomAttribute<DiscriminatorAttribute>()?.DiscriminatorValue == discriminatorValue);
+            var objectType = subTypes.Single(x => x.GetCustomAttribute<DiscriminatorAttribute>()!.DiscriminatorValue == discriminatorValue);
             
             using var stream = new MemoryStream();
             var writer = new Utf8JsonWriter(stream);
