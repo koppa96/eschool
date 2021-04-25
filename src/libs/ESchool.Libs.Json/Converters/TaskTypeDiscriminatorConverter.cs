@@ -6,18 +6,17 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ESchool.Testing.Domain.Attributes;
-using ESchool.Testing.Domain.Enums;
+using ESchool.Libs.Json.Attributes;
 
-namespace ESchool.Testing.Api.Infrastructure
+namespace ESchool.Libs.Json.Converters
 {
     public static class TaskTypeDiscriminatorConverter
     {
-        public static IEnumerable<JsonConverter> ForHierarchy<TBaseClass>()
+        public static IEnumerable<JsonConverter> ForHierarchy<TBaseClass>(string discriminatorPropertyName)
         {
             return typeof(TBaseClass).Assembly.GetTypes()
                 .Where(x => x.IsAssignableTo(typeof(TBaseClass)))
-                .Select(x => (JsonConverter)Activator.CreateInstance(typeof(TaskTypeDiscriminatorConverter<>).MakeGenericType(x)));
+                .Select(x => (JsonConverter)Activator.CreateInstance(typeof(TaskTypeDiscriminatorConverter<>).MakeGenericType(x), discriminatorPropertyName));
         }
     }
     
@@ -28,17 +27,22 @@ namespace ESchool.Testing.Api.Infrastructure
     /// <typeparam name="TBaseClass">The type of the base class</typeparam>
     public class TaskTypeDiscriminatorConverter<TBaseClass> : JsonConverter<TBaseClass>
     {
-        public const string Discriminator = "taskType";
+        private readonly string discriminatorPropertyName;
+
+        public TaskTypeDiscriminatorConverter(string discriminatorPropertyName)
+        {
+            this.discriminatorPropertyName = discriminatorPropertyName;
+        }
 
         public override TBaseClass Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             using var document = JsonDocument.ParseValue(ref reader);
 
-            var taskTypeProperty = document.RootElement.EnumerateObject().Single(x => x.NameEquals(Discriminator));
-            var taskTypeName = taskTypeProperty.Value.GetString();
+            var discriminatorProperty = document.RootElement.EnumerateObject().Single(x => x.NameEquals(discriminatorPropertyName));
+            var discriminatorValue = discriminatorProperty.Value.GetString();
             var objectType = typeof(TBaseClass).Assembly.GetTypes()
                 .Single(x => x.IsAssignableTo(typeof(TBaseClass)) &&
-                             x.GetCustomAttribute<TaskTypeAttribute>()?.TaskType.Name == taskTypeName);
+                             x.GetCustomAttribute<DiscriminatorAttribute>()?.DiscriminatorValue == discriminatorValue);
             
             using var stream = new MemoryStream();
             var writer = new Utf8JsonWriter(stream);
@@ -48,7 +52,11 @@ namespace ESchool.Testing.Api.Infrastructure
 
             var newOptions = new JsonSerializerOptions(options);
             newOptions.Converters.Remove(this);
-            
+
+            var childConverterType = typeof(TaskTypeDiscriminatorConverter<>).MakeGenericType(objectType);
+            var childConverter = options.Converters.SingleOrDefault(x => x.GetType() == childConverterType);
+            newOptions.Converters.Remove(childConverter);
+
             return (TBaseClass) JsonSerializer.Deserialize(jsonString, objectType, newOptions);
         }
 
@@ -61,7 +69,7 @@ namespace ESchool.Testing.Api.Infrastructure
             using var document = JsonDocument.Parse(jsonString);
 
             writer.WriteStartObject();
-            writer.WriteString(Discriminator, value.GetType().GetCustomAttribute<TaskTypeAttribute>()?.TaskType.Name);
+            writer.WriteString(discriminatorPropertyName, value.GetType().GetCustomAttribute<DiscriminatorAttribute>()?.DiscriminatorValue);
             foreach (var property in document.RootElement.EnumerateObject())
             {
                 property.WriteTo(writer);

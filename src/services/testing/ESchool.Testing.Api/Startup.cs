@@ -6,10 +6,9 @@ using ESchool.Libs.AspNetCore.Configuration;
 using ESchool.Libs.AspNetCore.Extensions;
 using ESchool.Libs.AspNetCore.Filters;
 using ESchool.Libs.Domain.MultiTenancy;
+using ESchool.Libs.Json.Extensions;
 using ESchool.Libs.Outbox.AspNetCore.Extensions;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
-using ESchool.Testing.Api.Extensions;
-using ESchool.Testing.Api.Infrastructure;
 using ESchool.Testing.Application.Features.TaskAnswers.Common;
 using ESchool.Testing.Domain;
 using MassTransit;
@@ -49,7 +48,7 @@ namespace ESchool.Testing.Api
             services.AddControllers()
                 .AddJsonOptions(options =>
                 {
-                    options.AddTaskTypeDiscriminatorConverterForHierarchy<TaskAnswerCreateEditCommand>();
+                    options.JsonSerializerOptions.AddDiscriminatorConverterForHierarchy<TaskAnswerCreateEditCommand>("taskType");
                 });
 
             var authConfig = new AuthConfiguration();

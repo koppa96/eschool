@@ -1,9 +1,8 @@
-﻿using ESchool.Testing.Domain.Attributes;
-using ESchool.Testing.Domain.Entities.Tasks.FreeText;
+﻿using ESchool.Libs.Json.Attributes;
 
 namespace ESchool.Testing.Application.Features.TaskAnswers.Common
 {
-    [TaskType(typeof(FreeTextTestTask))]
+    [Discriminator("FreeText")]
     public class FreeTextTaskAnswerCreateEditCommand : TaskAnswerCreateEditCommand
     {
         public string Answer { get; set; }
