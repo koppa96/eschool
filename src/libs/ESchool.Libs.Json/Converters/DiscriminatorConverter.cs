@@ -10,13 +10,13 @@ using ESchool.Libs.Json.Attributes;
 
 namespace ESchool.Libs.Json.Converters
 {
-    public static class TaskTypeDiscriminatorConverter
+    public static class DiscriminatorConverter
     {
         public static IEnumerable<JsonConverter> ForHierarchy<TBaseClass>(string discriminatorPropertyName)
         {
             return typeof(TBaseClass).Assembly.GetTypes()
                 .Where(x => x.IsAssignableTo(typeof(TBaseClass)))
-                .Select(x => (JsonConverter)Activator.CreateInstance(typeof(TaskTypeDiscriminatorConverter<>).MakeGenericType(x), discriminatorPropertyName));
+                .Select(x => (JsonConverter)Activator.CreateInstance(typeof(DiscriminatorConverter<>).MakeGenericType(x), discriminatorPropertyName));
         }
     }
     
@@ -25,12 +25,12 @@ namespace ESchool.Libs.Json.Converters
     /// and deserializes polymorphic types with the help of it.
     /// </summary>
     /// <typeparam name="TBaseClass">The type of the base class</typeparam>
-    public class TaskTypeDiscriminatorConverter<TBaseClass> : JsonConverter<TBaseClass>
+    public class DiscriminatorConverter<TBaseClass> : JsonConverter<TBaseClass>
     {
         private readonly string discriminatorPropertyName;
         private readonly List<Type> subTypes;
 
-        public TaskTypeDiscriminatorConverter(string discriminatorPropertyName, params Assembly[] assembliesToSearch)
+        public DiscriminatorConverter(string discriminatorPropertyName, params Assembly[] assembliesToSearch)
         {
             this.discriminatorPropertyName = discriminatorPropertyName;
 
@@ -59,7 +59,7 @@ namespace ESchool.Libs.Json.Converters
             var newOptions = new JsonSerializerOptions(options);
             newOptions.Converters.Remove(this);
 
-            var childConverterType = typeof(TaskTypeDiscriminatorConverter<>).MakeGenericType(objectType);
+            var childConverterType = typeof(DiscriminatorConverter<>).MakeGenericType(objectType);
             var childConverter = options.Converters.SingleOrDefault(x => x.GetType() == childConverterType);
             newOptions.Converters.Remove(childConverter);
 

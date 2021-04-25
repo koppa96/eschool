@@ -9,7 +9,7 @@ namespace ESchool.Libs.Json.Extensions
             this JsonSerializerOptions options,
             string discriminatorPropertyName = "discriminator")
         {
-            foreach (var converter in TaskTypeDiscriminatorConverter.ForHierarchy<TBaseClass>(discriminatorPropertyName))
+            foreach (var converter in DiscriminatorConverter.ForHierarchy<TBaseClass>(discriminatorPropertyName))
             {
                 options.Converters.Add(converter);
             }
