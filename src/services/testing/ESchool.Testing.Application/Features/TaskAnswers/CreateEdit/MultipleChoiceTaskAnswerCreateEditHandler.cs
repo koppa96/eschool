@@ -4,7 +4,7 @@ using AutoMapper;
 using ESchool.Libs.Domain.Services;
 using ESchool.Testing.Domain;
 
-namespace ESchool.Testing.Application.Features.TaskAnswers
+namespace ESchool.Testing.Application.Features.TaskAnswers.CreateEdit
 {
     [JsonSubClass(DiscriminatorValue = TestingConstants.Discriminators.MultipleChoice)]
     public class MultipleChoiceTaskAnswerCreateEditCommand : TaskAnswerCreateEditCommand

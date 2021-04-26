@@ -11,7 +11,7 @@ using ESchool.Testing.Domain.Entities.Answers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace ESchool.Testing.Application.Features.TaskAnswers
+namespace ESchool.Testing.Application.Features.TaskAnswers.CreateEdit
 {
     [JsonBaseClass(DiscriminatorName = "taskType")]
     public abstract class TaskAnswerCreateEditCommand : IRequest<TaskAnswerResponse>
