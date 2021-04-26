@@ -1,9 +1,10 @@
 ﻿using System;
+using ESchool.Libs.Domain.Interfaces;
 using ESchool.Testing.Domain.Enums;
 
 namespace ESchool.Testing.Domain.Entities.Tasks
 {
-    public abstract class TestTask
+    public abstract class TestTask : IEntity
     {
         public Guid Id { get; set; }
         public string Description { get; set; }

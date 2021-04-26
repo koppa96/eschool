@@ -1,9 +1,10 @@
 ﻿using ESchool.Testing.Domain.Entities.Tasks;
 using System;
+using ESchool.Libs.Domain.Interfaces;
 
 namespace ESchool.Testing.Domain.Entities.Answers
 {
-    public abstract class TaskAnswer
+    public abstract class TaskAnswer : IEntity
     {
         public Guid Id { get; set; }
         public int GivenPoints { get; protected set; }
