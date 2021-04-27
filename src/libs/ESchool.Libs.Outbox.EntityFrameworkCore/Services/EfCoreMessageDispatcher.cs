@@ -68,15 +68,14 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
 
             try
             {
-                await context.Database.ExecuteSqlRawAsync($"LOCK TABLE {schemaQualifiedTableName} IN ACCESS EXCLUSIVE MODE;", cancellationToken);
+                await context.Database.ExecuteSqlRawAsync($"LOCK TABLE \"{schemaQualifiedTableName}\" IN ACCESS EXCLUSIVE MODE", cancellationToken);
 
                 // The filtering must be done in the raw sql query so that the whole table is not gonna get locked.
                 var entry = await context.OutboxEntries
-                    .FromSqlRaw(
-                        $"SELECT *" +
-                        $"FROM {schemaQualifiedTableName}" +
-                        $"WHERE {nameof(OutboxEntry.Id)} = '{messageId}'" +
-                        $"FOR UPDATE;")
+                    .FromSqlRaw($"SELECT * " +
+                                $"FROM \"{schemaQualifiedTableName}\" " +
+                                $"WHERE \"{nameof(OutboxEntry.Id)}\" = '{messageId}' " +
+                                $"FOR UPDATE")
                     .SingleAsync(cancellationToken);
 
                 if (entry.State == OutboxEntryState.Pending)
