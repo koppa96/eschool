@@ -11,8 +11,8 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "Classrooms",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -23,10 +23,10 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "ClassTypes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StartingGrade = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    StartingGrade = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,9 +37,9 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "GradeKinds",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AverageMultiplier = table.Column<double>(type: "float", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    AverageMultiplier = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,13 +50,13 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "OutboxEntries",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Headers = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Body = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TypeName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    State = table.Column<int>(type: "int", nullable: false),
-                    Retries = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Headers = table.Column<string>(type: "text", nullable: true),
+                    Body = table.Column<string>(type: "text", nullable: true),
+                    TypeName = table.Column<string>(type: "text", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    State = table.Column<int>(type: "integer", nullable: false),
+                    Retries = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,11 +67,11 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "SchoolYears",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StartsAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndOfFirstHalf = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndsAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DisplayName = table.Column<string>(type: "text", nullable: true),
+                    StartsAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EndOfFirstHalf = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EndsAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -82,8 +82,8 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "Subjects",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -94,12 +94,12 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -110,11 +110,11 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "Messages",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SentAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SenderUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Subject = table.Column<string>(type: "text", nullable: true),
+                    Text = table.Column<string>(type: "text", nullable: true),
+                    SentAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    SenderUserId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -131,10 +131,10 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "UserMessages",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    MessageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsRead = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    MessageId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsRead = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -157,9 +157,9 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "ClassSchoolYears",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SchoolYearId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    SchoolYearId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClassId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -176,9 +176,9 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "ClassSchoolYearSubjects",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClassSchoolYearId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClassSchoolYearId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SubjectId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -201,14 +201,14 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "Lessons",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Canceled = table.Column<bool>(type: "bit", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StartsAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndsAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ClassSchoolYearSubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClassroomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Canceled = table.Column<bool>(type: "boolean", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    StartsAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EndsAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ClassSchoolYearSubjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClassroomId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -228,35 +228,16 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HomeWorks",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LessonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HomeWorks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_HomeWorks_Lessons_LessonId",
-                        column: x => x.LessonId,
-                        principalTable: "Lessons",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserRoles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StudentIdentificationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CurrentClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    Discriminator = table.Column<string>(type: "text", nullable: false),
+                    StudentIdentificationNumber = table.Column<string>(type: "text", nullable: true),
+                    ClassId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CurrentClassId = table.Column<Guid>(type: "uuid", nullable: true),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -273,10 +254,10 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "Absences",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AbsenceState = table.Column<int>(type: "int", nullable: false),
-                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LessonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    AbsenceState = table.Column<int>(type: "integer", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    LessonId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -299,10 +280,10 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "Classes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DidFinish = table.Column<bool>(type: "bit", nullable: false),
-                    HeadTeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ClassTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DidFinish = table.Column<bool>(type: "boolean", nullable: false),
+                    HeadTeacherId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ClassTypeId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -325,15 +306,15 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "ClassSchoolYearSubjectTeachers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClassSchoolYearSubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    TeacherId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClassSchoolYearSubjectId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ClassSchoolYearSubjectTeachers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClassSchoolYearSubjectTeachers_ClassSchoolYearSubjects_ClassSchoolYearSubjectId",
+                        name: "FK_ClassSchoolYearSubjectTeachers_ClassSchoolYearSubjects_Clas~",
                         column: x => x.ClassSchoolYearSubjectId,
                         principalTable: "ClassSchoolYearSubjects",
                         principalColumn: "Id",
@@ -350,15 +331,15 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "Grades",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Value = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    WrittenIn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ClassSchoolYearSubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ClassSchoolYearSubjectId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Value = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    WrittenIn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    KindId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ClassSchoolYearSubjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TeacherId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ClassSchoolYearSubjectId1 = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -399,9 +380,9 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "StudentParent",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ParentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -424,9 +405,9 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "SubjectTeachers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    SubjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TeacherId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -522,11 +503,6 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HomeWorks_LessonId",
-                table: "HomeWorks",
-                column: "LessonId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Lessons_ClassroomId",
                 table: "Lessons",
                 column: "ClassroomId");
@@ -540,6 +516,11 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "IX_Messages_SenderUserId",
                 table: "Messages",
                 column: "SenderUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OutboxEntries_State",
+                table: "OutboxEntries",
+                column: "State");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentParent_ParentId",
@@ -580,8 +561,7 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "IX_UserRoles_CurrentClassId",
                 table: "UserRoles",
                 column: "CurrentClassId",
-                unique: true,
-                filter: "[CurrentClassId] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_UserId",
@@ -629,9 +609,6 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "Grades");
 
             migrationBuilder.DropTable(
-                name: "HomeWorks");
-
-            migrationBuilder.DropTable(
                 name: "OutboxEntries");
 
             migrationBuilder.DropTable(
@@ -644,10 +621,10 @@ namespace ESchool.ClassRegister.Domain.Migrations
                 name: "UserMessages");
 
             migrationBuilder.DropTable(
-                name: "GradeKinds");
+                name: "Lessons");
 
             migrationBuilder.DropTable(
-                name: "Lessons");
+                name: "GradeKinds");
 
             migrationBuilder.DropTable(
                 name: "Messages");

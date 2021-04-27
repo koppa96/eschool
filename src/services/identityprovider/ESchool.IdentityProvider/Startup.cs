@@ -42,7 +42,7 @@ namespace ESchool.IdentityProvider
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<IdentityProviderContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.Configure<OutboxConfiguration>(Configuration.GetSection("Outbox"));
             services.AddMassTransitOutbox(config =>

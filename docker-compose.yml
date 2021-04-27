@@ -38,9 +38,9 @@ services:
       context: .
       dockerfile: ESchool.Testing.Api/Dockerfile
 
-  eschool.mssql:
-    container_name: eschool.mssql
-    image: mcr.microsoft.com/mssql/server:2017-latest
+  eschool.postgres:
+    container_name: eschool.postgres
+    image: postgres:13
 
   eschool.rabbitmq:
     container_name: eschool.rabbitmq

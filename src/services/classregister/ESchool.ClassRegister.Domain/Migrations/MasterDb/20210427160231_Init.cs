@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ESchool.ClassRegister.Domain.Migrations.MasterDb
 {
-    public partial class InitMasterDb : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,10 +11,10 @@ namespace ESchool.ClassRegister.Domain.Migrations.MasterDb
                 name: "Tenants",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OmIdentifier = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DbConnectionString = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    OmIdentifier = table.Column<string>(type: "text", nullable: true),
+                    DbConnectionString = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {

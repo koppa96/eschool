@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Transactions;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Entities;
 using ESchool.Libs.Outbox.Services;
 using MassTransit;
@@ -64,22 +64,19 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
 
         private async Task DispatchMessageAsync(Guid messageId, CancellationToken cancellationToken)
         {
-            using var transaction = new CommittableTransaction(new TransactionOptions
-            {
-                IsolationLevel = IsolationLevel.Serializable
-            });
+            using var transaction = await context.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
 
             try
             {
-                await context.Database.OpenConnectionAsync(cancellationToken);
-                context.Database.EnlistTransaction(transaction);
+                await context.Database.ExecuteSqlRawAsync($"LOCK TABLE {schemaQualifiedTableName} IN ACCESS EXCLUSIVE MODE;", cancellationToken);
 
                 // The filtering must be done in the raw sql query so that the whole table is not gonna get locked.
                 var entry = await context.OutboxEntries
                     .FromSqlRaw(
                         $"SELECT *" +
-                        $"FROM {schemaQualifiedTableName} WITH (ROWLOCK, XLOCK)" +
-                        $"WHERE {nameof(OutboxEntry.Id)} = '{messageId}'")
+                        $"FROM {schemaQualifiedTableName}" +
+                        $"WHERE {nameof(OutboxEntry.Id)} = '{messageId}'" +
+                        $"FOR UPDATE;")
                     .SingleAsync(cancellationToken);
 
                 if (entry.State == OutboxEntryState.Pending)
@@ -114,23 +111,12 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
                     await context.SaveChangesAsync(CancellationToken.None);
                 }
 
-                transaction.Commit();
+                await transaction.CommitAsync(CancellationToken.None);
             }
             catch (Exception e)
             {
                 logger.LogError(e, $"Failed to dispatch a message due to a local error.");
-                transaction.Rollback();
-            }
-            finally
-            {
-                try
-                {
-                    await context.Database.CloseConnectionAsync();
-                }
-                catch
-                {
-                    // If this throws, that means the connection was already in a closed state.
-                }
+                await transaction.RollbackAsync(CancellationToken.None);
             }
         }
     }

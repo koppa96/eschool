@@ -34,11 +34,11 @@ namespace ESchool.Testing.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<MasterDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection"), serverConfig =>
+                options.UseNpgsql(Configuration.GetConnectionString("MasterDbConnection"), serverConfig =>
                     serverConfig.MigrationsAssembly(typeof(TestingContext).Assembly.GetName().Name)));
 
             services.AddDbContext<TestingContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddLazyDbContext<TestingContext>();
 

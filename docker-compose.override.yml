@@ -96,14 +96,14 @@ services:
     depends_on:
       - eschool.mssql
 
-  eschool.mssql:
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=Password123
+  eschool.postgres:
     ports:
-      - "5500:1433"
+      - "5500:5432"
+    environment:
+      - POSTGRES_PASSWORD=Password123
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - mssql_data:/var/opt/mssql
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - eschool_network
 
@@ -120,5 +120,5 @@ networks:
   eschool_network:
 
 volumes:
-  mssql_data:
+  postgres_data:
   rabbitmq_data:

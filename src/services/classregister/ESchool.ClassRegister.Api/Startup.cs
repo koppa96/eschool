@@ -37,11 +37,11 @@ namespace ESchool.ClassRegister.Api
         {
             services.AddMemoryCache();
             services.AddDbContext<ClassRegisterContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddLazyDbContext<ClassRegisterContext>();
 
             services.AddDbContext<MasterDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection"), config =>
+                options.UseNpgsql(Configuration.GetConnectionString("MasterDbConnection"), config =>
                     config.MigrationsAssembly(typeof(ClassRegisterContext).Assembly.GetName().Name)));
 
             services.Configure<OutboxConfiguration>(Configuration.GetSection("Outbox"));

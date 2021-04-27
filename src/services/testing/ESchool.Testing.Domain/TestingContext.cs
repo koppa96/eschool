@@ -42,7 +42,7 @@ namespace ESchool.Testing.Domain
             base.OnConfiguring(optionsBuilder);
             if (tenant != null)
             {
-                optionsBuilder.UseSqlServer(tenant.DbConnectionString);
+                optionsBuilder.UseNpgsql(tenant.DbConnectionString);
             }
         }
 
