@@ -64,7 +64,7 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
 
         private async Task DispatchMessageAsync(Guid messageId, CancellationToken cancellationToken)
         {
-            using var transaction = await context.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
+            await using var transaction = await context.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
 
             try
             {

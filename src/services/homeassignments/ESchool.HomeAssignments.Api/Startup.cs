@@ -56,13 +56,19 @@ namespace ESchool.HomeAssignments.Api
             services.AddMediatR(Assembly.Load("ESchool.HomeAssignments.Application"))
                 .AddMediatRAuthorization(Assembly.Load("ESchool.HomeAssignments.Application"));
 
+            var rabbitMqConfig = new RabbitMqConfiguration();
+            Configuration.GetSection("RabbitMQ").Bind(rabbitMqConfig);
             services.AddMassTransit(config =>
             {
                 config.AddConsumers(Assembly.Load("ESchool.HomeAssignments.Application"));
                 config.AddTenantEventConsumers<HomeAssignmentsContext>();
                 config.UsingRabbitMq((context, configurator) =>
                 {
-                    configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
+                    configurator.Host(rabbitMqConfig.Host, rabbitConfig =>
+                    {
+                        rabbitConfig.Username(rabbitMqConfig.Username);
+                        rabbitConfig.Password(rabbitMqConfig.Password);
+                    });
                     configurator.ReceiveEndpoint("home-assignments", endpoint =>
                     {
                         endpoint.ConfigureConsumers(context);

@@ -56,13 +56,20 @@ namespace ESchool.Testing.Api
             services.AddCommonAuthorization();
 
             services.AddMediatR(Assembly.Load("ESchool.Testing.Application"));
+            
+            var rabbitMqConfig = new RabbitMqConfiguration();
+            Configuration.GetSection("RabbitMQ").Bind(rabbitMqConfig);
             services.AddMassTransit(config =>
             {
                 config.AddConsumers(Assembly.Load("ESchool.Testing.Application"));
                 config.AddTenantEventConsumers<TestingContext>();
                 config.UsingRabbitMq((context, configurator) =>
                 {
-                    configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
+                    configurator.Host(rabbitMqConfig.Host, rabbitConfig =>
+                    {
+                        rabbitConfig.Username(rabbitMqConfig.Username);
+                        rabbitConfig.Password(rabbitMqConfig.Password);
+                    });
                     configurator.ReceiveEndpoint("testing", endpoint => { endpoint.ConfigureConsumers(context); });
                 });
             });

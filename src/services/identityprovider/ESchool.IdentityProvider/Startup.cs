@@ -121,11 +121,17 @@ namespace ESchool.IdentityProvider
                 config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
             });
             
+            var rabbitMqConfig = new RabbitMqConfiguration();
+            Configuration.GetSection("RabbitMQ").Bind(rabbitMqConfig);
             services.AddMassTransit(configure =>
             {
                 configure.UsingRabbitMq((context, configurator) =>
                 {
-                    configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
+                    configurator.Host(rabbitMqConfig.Host, rabbitConfig =>
+                    {
+                        rabbitConfig.Username(rabbitMqConfig.Username);
+                        rabbitConfig.Password(rabbitMqConfig.Password);
+                    });
 
                     configurator.UseCustomFilters(context);
                 });
