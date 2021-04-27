@@ -61,22 +61,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.Tools.TenantLogin",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{B74216F3-9E6A-4AED-9DB3-1CE0279D6740}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "docker-compose", "docker-compose.dcproj", "{BCDC48F8-A500-4994-989B-F4BE8855C6FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "docker-compose", "docker-compose.dcproj", "{BCDC48F8-A500-4994-989B-F4BE8855C6FC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proto", "Proto", "{9E63BC66-0279-44B4-9385-D400A68A52E8}"
-ProjectSection(SolutionItems) = preProject
-	src\proto\classregister.proto = src\proto\classregister.proto
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		src\proto\classregister.proto = src\proto\classregister.proto
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.Libs.Outbox", "src\libs\ESchool.Libs.Outbox\ESchool.Libs.Outbox.csproj", "{4C0B9AA6-ECA1-4680-A26C-0F24BBFAF77F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.Libs.Outbox", "src\libs\ESchool.Libs.Outbox\ESchool.Libs.Outbox.csproj", "{4C0B9AA6-ECA1-4680-A26C-0F24BBFAF77F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.Libs.Outbox.EntityFrameworkCore", "src\libs\ESchool.Libs.Outbox.EntityFrameworkCore\ESchool.Libs.Outbox.EntityFrameworkCore.csproj", "{09BF7165-C15B-4728-B883-DFEB3BB1D83F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.Libs.Outbox.EntityFrameworkCore", "src\libs\ESchool.Libs.Outbox.EntityFrameworkCore\ESchool.Libs.Outbox.EntityFrameworkCore.csproj", "{09BF7165-C15B-4728-B883-DFEB3BB1D83F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Outbox", "Outbox", "{A46DE01A-2F1E-47DC-AEEC-B88B0B8B8DE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.Libs.Outbox.AspNetCore", "src\libs\ESchool.Libs.Outbox.AspNetCore\ESchool.Libs.Outbox.AspNetCore.csproj", "{5D5FAAF2-E9F0-48CF-ACA3-B8BE17528E51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.Libs.Outbox.AspNetCore", "src\libs\ESchool.Libs.Outbox.AspNetCore\ESchool.Libs.Outbox.AspNetCore.csproj", "{5D5FAAF2-E9F0-48CF-ACA3-B8BE17528E51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.IdentityProvider.Interface.DefaultHandlers", "src\services\identityprovider\ESchool.IdentityProvider.Interface.DefaultHandlers\ESchool.IdentityProvider.Interface.DefaultHandlers.csproj", "{E73A44F7-6A2C-4534-B927-C76E068FBD0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.IdentityProvider.Interface.DefaultHandlers", "src\services\identityprovider\ESchool.IdentityProvider.Interface.DefaultHandlers\ESchool.IdentityProvider.Interface.DefaultHandlers.csproj", "{E73A44F7-6A2C-4534-B927-C76E068FBD0D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kubernetes", "Kubernetes", "{6B6AF014-6DC8-41EB-BDA8-1BCE14A16C01}"
+ProjectSection(SolutionItems) = preProject
+	k8s\mssql-data.yaml = k8s\mssql-data.yaml
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -215,9 +220,9 @@ Global
 		{61F4DDFE-8F48-4D60-91EC-890F82816C44} = {8B32FBF8-1B4B-4EAD-8AB0-1D4B7A9A760C}
 		{A2850E7A-F44A-4FFE-8F5C-9869FDF5B820} = {FEE307E9-5D30-4AB1-9745-8DFA7FE2B7FB}
 		{BCDC48F8-A500-4994-989B-F4BE8855C6FC} = {B74216F3-9E6A-4AED-9DB3-1CE0279D6740}
-		{A46DE01A-2F1E-47DC-AEEC-B88B0B8B8DE2} = {54C08D05-C5A5-4648-B88C-4ED83A585D54}
 		{4C0B9AA6-ECA1-4680-A26C-0F24BBFAF77F} = {A46DE01A-2F1E-47DC-AEEC-B88B0B8B8DE2}
 		{09BF7165-C15B-4728-B883-DFEB3BB1D83F} = {A46DE01A-2F1E-47DC-AEEC-B88B0B8B8DE2}
+		{A46DE01A-2F1E-47DC-AEEC-B88B0B8B8DE2} = {54C08D05-C5A5-4648-B88C-4ED83A585D54}
 		{5D5FAAF2-E9F0-48CF-ACA3-B8BE17528E51} = {A46DE01A-2F1E-47DC-AEEC-B88B0B8B8DE2}
 		{E73A44F7-6A2C-4534-B927-C76E068FBD0D} = {E67B18FA-2869-4E23-BDDD-2119A69A43C0}
 	EndGlobalSection
