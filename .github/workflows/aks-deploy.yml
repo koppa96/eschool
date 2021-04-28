@@ -32,28 +32,38 @@ jobs:
     # Container build and push to a Azure Container registry (ACR)
     - name: Build and push ApiGateway image
       run: |
-        docker build . -f ./src/services/apigateway/ESchool.ApiGateway/Dockerfile -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.GATEWAY_APP_NAME }}:latest
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.GATEWAY_APP_NAME }}:latest
+        docker build . -f ./src/services/apigateway/ESchool.ApiGateway/Dockerfile \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.GATEWAY_APP_NAME }}:${{ github.sha }} \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.GATEWAY_APP_NAME }}:latest
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.GATEWAY_APP_NAME }}:${{ github.sha }}
         
     - name: Build and push ClassRegister image
       run: |
-        docker build . -f ./src/services/classregister/ESchool.ClassRegister.Api/Dockerfile -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.CLASSREGISTER_APP_NAME }}:latest
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.CLASSREGISTER_APP_NAME }}:latest
+        docker build . -f ./src/services/classregister/ESchool.ClassRegister.Api/Dockerfile \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.CLASSREGISTER_APP_NAME }}:${{ github.sha }} \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.CLASSREGISTER_APP_NAME }}:latest
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.CLASSREGISTER_APP_NAME }}:${{ github.sha }}
         
     - name: Build and push HomeAssignments image
       run: |
-        docker build . -f ./src/services/homeassignments/ESchool.HomeAssignments.Api/Dockerfile -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.HOMEASSIGNMENTS_APP_NAME }}:latest
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.HOMEASSIGNMENTS_APP_NAME }}:latest
+        docker build . -f ./src/services/homeassignments/ESchool.HomeAssignments.Api/Dockerfile \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.HOMEASSIGNMENTS_APP_NAME }}:${{ github.sha }} \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.HOMEASSIGNMENTS_APP_NAME }}:latest
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.HOMEASSIGNMENTS_APP_NAME }}:${{ github.sha }}
         
-    - name: Build and push ApiGateway image
+    - name: Build and push IdentityProvider image
       run: |
-        docker build . -f ./src/services/identityprovider/ESchool.IdentityProvider/Dockerfile -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IDP_APP_NAME }}:latest
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IDP_APP_NAME }}:latest
+        docker build . -f ./src/services/identityprovider/ESchool.IdentityProvider/Dockerfile \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IDP_APP_NAME }}:${{ github.sha }} \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IDP_APP_NAME }}:latest
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IDP_APP_NAME }}:${{ github.sha }}
         
-    - name: Build and push ApiGateway image
+    - name: Build and push Testing image
       run: |
-        docker build . -f ./src/services/testing/ESchool.Testing.Api/Dockerfile -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.TESTING_APP_NAME }}:latest
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.TESTING_APP_NAME }}:latest
+        docker build . -f ./src/services/testing/ESchool.Testing.Api/Dockerfile \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.TESTING_APP_NAME }}:${{ github.sha }} \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.TESTING_APP_NAME }}:latest
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.TESTING_APP_NAME }}:${{ github.sha }}
       
     # Set the target Azure Kubernetes Service (AKS) cluster. 
     - uses: azure/aks-set-context@v1
@@ -63,11 +73,42 @@ jobs:
         resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
     
     # Deploy app to AKS
-    - uses: azure/k8s-deploy@v1
+    - name: Deploy ApiGateway
+      uses: azure/k8s-deploy@v1
       with:
         manifests: |
           k8s/services/apigateway.yaml
+        images: |
+          ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.GATEWAY_APP_NAME }}:${{ github.sha }}
+          
+    - name: Deploy ClassRegister
+      uses: azure/k8s-deploy@v1
+      with:
+        manifests: |
           k8s/services/classregister.yaml
+        images: |
+          ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.CLASSREGISTER_APP_NAME }}:${{ github.sha }}
+    
+    - name: Deploy HomeAssignments
+      uses: azure/k8s-deploy@v1
+      with:
+        manifests: |
           k8s/services/homeassignments.yaml
+        images: |
+          ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.HOMEASSIGNMENTS_APP_NAME }}:${{ github.sha }}
+    
+    - name: Deploy IdentityProvider
+      uses: azure/k8s-deploy@v1
+      with:
+        manifests: |
           k8s/services/identityprovider.yaml
+        images: |
+          ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IDP_APP_NAME }}:${{ github.sha }}
+    
+    - name: Deploy Testing
+      uses: azure/k8s-deploy@v1
+      with:
+        manifests: |
           k8s/services/testing.yaml
+        images: |
+          ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.TESTING_APP_NAME }}:${{ github.sha }}
