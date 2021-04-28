@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apigateway
+spec:
+  selector:
+    matchLabels:
+      app: apigateway
+  template:
+    metadata:
+      labels:
+        app: apigateway
+    spec:
+      containers:
+      - name: apigateway
+        image: eschool.azurecr.io/apigateway:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: Routes__0__DownstreamHostAndPorts__0__Host
+          value: classregister
+        - name: Routes__1__DownstreamHostAndPorts__0__Host
+          value: homeassignments
+        - name: Routes__2__DownstreamHostAndPorts__0__Host
+          value: identityprovider
+        - name: Routes__3__DownstreamHostAndPorts__0__Host
+          value: testing
+        - name: GlobalConfiguration__BaseUrl
+          value: https://api.eschool.kmlabz.com
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apigateway
+spec:
+  selector:
+    app: apigateway
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

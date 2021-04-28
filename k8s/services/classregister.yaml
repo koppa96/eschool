@@ -51,3 +51,15 @@ spec:
               secretKeyRef:
                 name: classregisterconnectionstrings
                 key: CONNECTION_STRING_TEMPLATE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: classregister
+spec:
+  selector:
+    app: classregister
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

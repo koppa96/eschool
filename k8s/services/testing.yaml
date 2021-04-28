@@ -51,3 +51,17 @@ spec:
               secretKeyRef:
                 name: testingconnectionstrings
                 key: CONNECTION_STRING_TEMPLATE
+          - name: ClassRegisterUri
+            value: http://classregister
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: testing
+spec:
+  selector:
+    app: testing
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

@@ -41,3 +41,15 @@ spec:
               secretKeyRef:
                 name: idpconnectionstring
                 key: CONNECTION_STRING
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: identityprovider
+spec:
+  selector:
+    app: identityprovider
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
