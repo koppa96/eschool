@@ -36,11 +36,11 @@ namespace ESchool.HomeAssignments.Api
         {
             services.AddMemoryCache();
             services.AddDbContext<HomeAssignmentsContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddLazyDbContext<HomeAssignmentsContext>();
             
             services.AddDbContext<MasterDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection"), config =>
+                options.UseNpgsql(Configuration.GetConnectionString("MasterDbConnection"), config =>
                     config.MigrationsAssembly(typeof(HomeAssignmentsContext).Assembly.GetName().Name)));
 
             services.AddControllers();
@@ -56,13 +56,19 @@ namespace ESchool.HomeAssignments.Api
             services.AddMediatR(Assembly.Load("ESchool.HomeAssignments.Application"))
                 .AddMediatRAuthorization(Assembly.Load("ESchool.HomeAssignments.Application"));
 
+            var rabbitMqConfig = new RabbitMqConfiguration();
+            Configuration.GetSection("RabbitMQ").Bind(rabbitMqConfig);
             services.AddMassTransit(config =>
             {
                 config.AddConsumers(Assembly.Load("ESchool.HomeAssignments.Application"));
                 config.AddTenantEventConsumers<HomeAssignmentsContext>();
                 config.UsingRabbitMq((context, configurator) =>
                 {
-                    configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
+                    configurator.Host(rabbitMqConfig.Host, rabbitConfig =>
+                    {
+                        rabbitConfig.Username(rabbitMqConfig.Username);
+                        rabbitConfig.Password(rabbitMqConfig.Password);
+                    });
                     configurator.ReceiveEndpoint("home-assignments", endpoint =>
                     {
                         endpoint.ConfigureConsumers(context);

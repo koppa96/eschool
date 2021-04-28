@@ -13,7 +13,9 @@ namespace ESchool.Testing.Application.Features.Tests
 {
     public class TestListAsTeacherQuery : PagedListQuery<TestListResponse>
     {
-        public Guid ClassSchoolYearSubjectId { get; set; }
+        public Guid ClassId { get; set; }
+        public Guid SubjectId { get; set; }
+        public Guid SchoolYearId { get; set; }
     }
 
     public class TestListAsTeacherHandler : AutoMapperPagedListHandler<TestListAsTeacherQuery, Test, TestListResponse>
@@ -31,7 +33,9 @@ namespace ESchool.Testing.Application.Features.Tests
         protected override IQueryable<Test> Filter(IQueryable<Test> entities, TestListAsTeacherQuery query)
         {
             var currentUserId = identityService.GetCurrentUserId();
-            return entities.Where(x => x.ClassSchoolYearSubjectId == query.ClassSchoolYearSubjectId &&
+            return entities.Where(x => x.ClassSchoolYearSubject.ClassId == query.ClassId &&
+                                       x.ClassSchoolYearSubject.SubjectId == query.SubjectId &&
+                                       x.ClassSchoolYearSubject.SchoolYearId == query.SchoolYearId &&
                                        x.ClassSchoolYearSubject.ClassSchoolYearSubjectTeachers.Any(t =>
                                            t.Teacher.UserId == currentUserId));
         }

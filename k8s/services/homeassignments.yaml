@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homeassignments
+spec:
+  selector:
+    matchLabels:
+      app: homeassignments
+  template:
+    metadata:
+      labels:
+        app: homeassignments
+    spec:
+      containers:
+      - name: homeassignments
+        image: eschool.azurecr.io/homeassignments:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+          - name: RabbitMQ__Host
+            value: amqp://rabbitmq
+          - name: RabbitMQ__Username
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmqcredentials
+                key: USERNAME
+          - name: RabbitMQ__Password
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmqcredentials
+                key: PASSWORD
+          - name: Authentication__Authority
+            value: http://identityprovider
+          - name: Authentication__Audience
+            value: homeassignments-api
+          - name: Authentication__IdentityProviderUri
+            value: https://idp.eschool.kmlabz.com
+          - name: ConnectionStrings__DefaultConnection
+            valueFrom:
+              secretKeyRef:
+                name: homeassignmentsconnectionstrings
+                key: CONNECTION_STRING
+          - name: ConnectionStrings__MasterDbConnection
+            valueFrom:
+              secretKeyRef:
+                name: homeassignmentsconnectionstrings
+                key: MASTERDB_CONNECTION_STRING
+          - name: ConnectionStrings__ConnectionStringTemplate
+            valueFrom:
+              secretKeyRef:
+                name: homeassignmentsconnectionstrings
+                key: CONNECTION_STRING_TEMPLATE
+          - name: ClassRegisterUri
+            value: http://classregister
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: homeassignments
+spec:
+  selector:
+    app: homeassignments
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

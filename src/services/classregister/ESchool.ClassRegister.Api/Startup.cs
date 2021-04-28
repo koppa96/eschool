@@ -10,6 +10,7 @@ using ESchool.Libs.Outbox;
 using ESchool.Libs.Outbox.AspNetCore.Extensions;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
 using MassTransit;
+using MassTransit.RabbitMqTransport;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,11 +38,11 @@ namespace ESchool.ClassRegister.Api
         {
             services.AddMemoryCache();
             services.AddDbContext<ClassRegisterContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddLazyDbContext<ClassRegisterContext>();
 
             services.AddDbContext<MasterDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection"), config =>
+                options.UseNpgsql(Configuration.GetConnectionString("MasterDbConnection"), config =>
                     config.MigrationsAssembly(typeof(ClassRegisterContext).Assembly.GetName().Name)));
 
             services.Configure<OutboxConfiguration>(Configuration.GetSection("Outbox"));
@@ -107,13 +108,19 @@ namespace ESchool.ClassRegister.Api
                 config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
             });
 
+            var rabbitMqConfig = new RabbitMqConfiguration();
+            Configuration.GetSection("RabbitMQ").Bind(rabbitMqConfig);
             services.AddMassTransit(config =>
             {
                 config.AddConsumers(Assembly.Load("ESchool.ClassRegister.Application"));
                 config.AddTenantEventConsumers<ClassRegisterContext>();
                 config.UsingRabbitMq((context, configurator) =>
                 {
-                    configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
+                    configurator.Host(rabbitMqConfig.Host, rabbitConfig =>
+                    {
+                        rabbitConfig.Username(rabbitMqConfig.Username);
+                        rabbitConfig.Password(rabbitMqConfig.Password);
+                    });
                     configurator.ReceiveEndpoint("class-register", endpoint =>
                     {
                         endpoint.ConfigureConsumers(context);

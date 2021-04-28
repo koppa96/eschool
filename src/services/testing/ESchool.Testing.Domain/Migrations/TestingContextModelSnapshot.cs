@@ -3,8 +3,8 @@ using System;
 using ESchool.Testing.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ESchool.Testing.Domain.Migrations
 {
@@ -15,28 +15,62 @@ namespace ESchool.Testing.Domain.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63)
+                .HasAnnotation("ProductVersion", "5.0.5")
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            modelBuilder.Entity("ESchool.Libs.Outbox.EntityFrameworkCore.Entities.OutboxEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Headers")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Retries")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TypeName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("State");
+
+                    b.ToTable("OutboxEntries");
+                });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Answers.TaskAnswer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("GivenPoints")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("HasBeenCorrected")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<Guid>("TestAnswerId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("TestTaskId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -47,116 +81,106 @@ namespace ESchool.Testing.Domain.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("TaskAnswer");
                 });
 
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.Group", b =>
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassSchoolYearSubject", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("ClassId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("SubjectName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("SchoolYearId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups");
+                    b.ToTable("ClassSchoolYearSubjects");
                 });
 
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.GroupStudent", b =>
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassSchoolYearSubjectStudent", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid>("ClassSchoolYearSubjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("StudentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("ClassSchoolYearSubjectId");
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("GroupStudent");
+                    b.ToTable("ClassSchoolYearSubjectStudents");
                 });
 
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.GroupTeacher", b =>
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassSchoolYearSubjectTeacher", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid>("ClassSchoolYearSubjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("TeacherId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("ClassSchoolYearSubjectId");
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("GroupTeacher");
+                    b.ToTable("ClassSchoolYearSubjectTeachers");
                 });
 
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.Student", b =>
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.StudentTest", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
 
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid?>("TestAnswerId")
+                        .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.Teacher", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid>("TestId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teachers");
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TestAnswerId");
+
+                    b.HasIndex("TestId")
+                        .IsUnique();
+
+                    b.ToTable("StudentTest");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Tasks.MultipleChoice.MultipleChoiceTestTaskOption", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("TestTaskId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -169,23 +193,23 @@ namespace ESchool.Testing.Domain.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("IncorrectAnswerPointValue")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("PointValue")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("TestId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -200,21 +224,29 @@ namespace ESchool.Testing.Domain.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClassSchoolYearSubjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("ClosedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
                     b.Property<TimeSpan>("ScheduledLength")
-                        .HasColumnType("time");
+                        .HasColumnType("interval");
 
                     b.Property<DateTime>("ScheduledStart")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("StartedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClassSchoolYearSubjectId");
 
                     b.ToTable("Tests");
                 });
@@ -223,56 +255,72 @@ namespace ESchool.Testing.Domain.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("Closed")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool?>("ClosedByTeacher")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("Started")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid?>("StudentId")
+                        .HasColumnType("uuid");
 
-                    b.Property<Guid?>("StudentId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TestId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid?>("TestId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("StudentId");
 
-                    b.HasIndex("StudentId1");
-
                     b.HasIndex("TestId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("TestAnswers");
                 });
 
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.TestGroup", b =>
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.Users.TestingUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
-                    b.Property<Guid>("TestId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.ToTable("Users");
+                });
 
-                    b.HasIndex("TestId");
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.Users.TestingUserRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
-                    b.ToTable("TestGroups");
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRoles");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("TestingUserRole");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Answers.FreeText.FreeTextTaskAnswer", b =>
@@ -280,10 +328,7 @@ namespace ESchool.Testing.Domain.Migrations
                     b.HasBaseType("ESchool.Testing.Domain.Entities.Answers.TaskAnswer");
 
                     b.Property<string>("Answer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("TestTaskId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("text");
 
                     b.HasIndex("TestTaskId");
 
@@ -295,11 +340,7 @@ namespace ESchool.Testing.Domain.Migrations
                     b.HasBaseType("ESchool.Testing.Domain.Entities.Answers.TaskAnswer");
 
                     b.Property<Guid?>("SelectedOptionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TestTaskId")
-                        .HasColumnName("MultipleChoiceTaskAnswer_TestTaskId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.HasIndex("SelectedOptionId");
 
@@ -313,11 +354,7 @@ namespace ESchool.Testing.Domain.Migrations
                     b.HasBaseType("ESchool.Testing.Domain.Entities.Answers.TaskAnswer");
 
                     b.Property<bool>("IsTrue")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("TestTaskId")
-                        .HasColumnName("TrueOrFalseTaskAnswer_TestTaskId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("boolean");
 
                     b.HasIndex("TestTaskId");
 
@@ -336,11 +373,10 @@ namespace ESchool.Testing.Domain.Migrations
                     b.HasBaseType("ESchool.Testing.Domain.Entities.Tasks.TestTask");
 
                     b.Property<Guid?>("CorrectOptionId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.HasIndex("CorrectOptionId")
-                        .IsUnique()
-                        .HasFilter("[CorrectOptionId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasDiscriminator().HasValue("MultipleChoiceTestTask");
                 });
@@ -350,9 +386,23 @@ namespace ESchool.Testing.Domain.Migrations
                     b.HasBaseType("ESchool.Testing.Domain.Entities.Tasks.TestTask");
 
                     b.Property<bool>("IsTrue")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.HasDiscriminator().HasValue("TrueOrFalseTestTask");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.Users.Student", b =>
+                {
+                    b.HasBaseType("ESchool.Testing.Domain.Entities.Users.TestingUserRole");
+
+                    b.HasDiscriminator().HasValue("Student");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.Users.Teacher", b =>
+                {
+                    b.HasBaseType("ESchool.Testing.Domain.Entities.Users.TestingUserRole");
+
+                    b.HasDiscriminator().HasValue("Teacher");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Answers.TaskAnswer", b =>
@@ -362,36 +412,77 @@ namespace ESchool.Testing.Domain.Migrations
                         .HasForeignKey("TestAnswerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("TestAnswer");
                 });
 
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.GroupStudent", b =>
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassSchoolYearSubjectStudent", b =>
                 {
-                    b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.Group", "Group")
-                        .WithMany("GroupStudents")
-                        .HasForeignKey("GroupId")
+                    b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassSchoolYearSubject", "ClassSchoolYearSubject")
+                        .WithMany("ClassSchoolYearSubjectStudents")
+                        .HasForeignKey("ClassSchoolYearSubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.Student", "Student")
-                        .WithMany("GroupStudents")
+                    b.HasOne("ESchool.Testing.Domain.Entities.Users.Student", "Student")
+                        .WithMany("ClassSchoolYearSubjectStudents")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ClassSchoolYearSubject");
+
+                    b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.GroupTeacher", b =>
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassSchoolYearSubjectTeacher", b =>
                 {
-                    b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.Group", "Group")
-                        .WithMany("GroupTeachers")
-                        .HasForeignKey("GroupId")
+                    b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassSchoolYearSubject", "ClassSchoolYearSubject")
+                        .WithMany("ClassSchoolYearSubjectTeachers")
+                        .HasForeignKey("ClassSchoolYearSubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.Teacher", "Teacher")
+                    b.HasOne("ESchool.Testing.Domain.Entities.Users.Teacher", "Teacher")
                         .WithMany("GroupTeachers")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ClassSchoolYearSubject");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.StudentTest", b =>
+                {
+                    b.HasOne("ESchool.Testing.Domain.Entities.Users.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ESchool.Testing.Domain.Entities.TestAnswer", "TestAnswer")
+                        .WithMany()
+                        .HasForeignKey("TestAnswerId");
+
+                    b.HasOne("ESchool.Testing.Domain.Entities.Test", "Test")
+                        .WithMany("StudentTests")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ESchool.Testing.Domain.Entities.TestAnswer", null)
+                        .WithOne("StudentTest")
+                        .HasForeignKey("ESchool.Testing.Domain.Entities.StudentTest", "TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Test");
+
+                    b.Navigation("TestAnswer");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Tasks.MultipleChoice.MultipleChoiceTestTaskOption", b =>
@@ -401,6 +492,8 @@ namespace ESchool.Testing.Domain.Migrations
                         .HasForeignKey("TestTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("TestTask");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Tasks.TestTask", b =>
@@ -410,40 +503,41 @@ namespace ESchool.Testing.Domain.Migrations
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Test");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.Test", b =>
+                {
+                    b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassSchoolYearSubject", "ClassSchoolYearSubject")
+                        .WithMany("Tests")
+                        .HasForeignKey("ClassSchoolYearSubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClassSchoolYearSubject");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.TestAnswer", b =>
                 {
-                    b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.Student", null)
+                    b.HasOne("ESchool.Testing.Domain.Entities.Users.Student", null)
                         .WithMany("TestAnswers")
-                        .HasForeignKey("StudentId1");
+                        .HasForeignKey("StudentId");
 
-                    b.HasOne("ESchool.Testing.Domain.Entities.Test", "Test")
+                    b.HasOne("ESchool.Testing.Domain.Entities.Test", null)
                         .WithMany("Answers")
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TestId");
                 });
 
-            modelBuilder.Entity("ESchool.Testing.Domain.Entities.TestGroup", b =>
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.Users.TestingUserRole", b =>
                 {
-                    b.HasOne("ESchool.Testing.Domain.Entities.ClassRegisterData.Group", "Group")
-                        .WithMany("TestGroups")
-                        .HasForeignKey("GroupId")
+                    b.HasOne("ESchool.Testing.Domain.Entities.Users.TestingUser", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ESchool.Testing.Domain.Entities.Test", "Test")
-                        .WithMany("TestGroups")
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Answers.FreeText.FreeTextTaskAnswer", b =>
@@ -451,6 +545,8 @@ namespace ESchool.Testing.Domain.Migrations
                     b.HasOne("ESchool.Testing.Domain.Entities.Tasks.FreeText.FreeTextTestTask", "TestTask")
                         .WithMany()
                         .HasForeignKey("TestTaskId");
+
+                    b.Navigation("TestTask");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Answers.MultipleChoice.MultipleChoiceTaskAnswer", b =>
@@ -462,6 +558,10 @@ namespace ESchool.Testing.Domain.Migrations
                     b.HasOne("ESchool.Testing.Domain.Entities.Tasks.MultipleChoice.MultipleChoiceTestTask", "TestTask")
                         .WithMany()
                         .HasForeignKey("TestTaskId");
+
+                    b.Navigation("SelectedOption");
+
+                    b.Navigation("TestTask");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Answers.TrueOrFalse.TrueOrFalseTaskAnswer", b =>
@@ -469,6 +569,8 @@ namespace ESchool.Testing.Domain.Migrations
                     b.HasOne("ESchool.Testing.Domain.Entities.Tasks.TrueOrFalse.TrueOrFalseTestTask", "TestTask")
                         .WithMany()
                         .HasForeignKey("TestTaskId");
+
+                    b.Navigation("TestTask");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.Tasks.MultipleChoice.MultipleChoiceTestTask", b =>
@@ -476,6 +578,55 @@ namespace ESchool.Testing.Domain.Migrations
                     b.HasOne("ESchool.Testing.Domain.Entities.Tasks.MultipleChoice.MultipleChoiceTestTaskOption", "CorrectOption")
                         .WithOne()
                         .HasForeignKey("ESchool.Testing.Domain.Entities.Tasks.MultipleChoice.MultipleChoiceTestTask", "CorrectOptionId");
+
+                    b.Navigation("CorrectOption");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassSchoolYearSubject", b =>
+                {
+                    b.Navigation("ClassSchoolYearSubjectStudents");
+
+                    b.Navigation("ClassSchoolYearSubjectTeachers");
+
+                    b.Navigation("Tests");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.Test", b =>
+                {
+                    b.Navigation("Answers");
+
+                    b.Navigation("StudentTests");
+
+                    b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.TestAnswer", b =>
+                {
+                    b.Navigation("StudentTest");
+
+                    b.Navigation("TaskAnswers");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.Users.TestingUser", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.Tasks.MultipleChoice.MultipleChoiceTestTask", b =>
+                {
+                    b.Navigation("Options");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.Users.Student", b =>
+                {
+                    b.Navigation("ClassSchoolYearSubjectStudents");
+
+                    b.Navigation("TestAnswers");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.Users.Teacher", b =>
+                {
+                    b.Navigation("GroupTeachers");
                 });
 #pragma warning restore 612, 618
         }

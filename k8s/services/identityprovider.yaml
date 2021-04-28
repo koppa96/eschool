@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identityprovider
+spec:
+  selector:
+    matchLabels:
+      app: identityprovider
+  template:
+    metadata:
+      labels:
+        app: identityprovider
+    spec:
+      containers:
+      - name: identityprovider
+        image: eschool.azurecr.io/identityprovider:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+          - name: RabbitMQ__Host
+            value: amqp://rabbitmq
+          - name: RabbitMQ__Username
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmqcredentials
+                key: USERNAME
+          - name: RabbitMQ__Password
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmqcredentials
+                key: PASSWORD
+          - name: Authentication__Authority
+            value: http://identityprovider
+          - name: Authentication__Audience
+            value: identityprovider-api
+          - name: Authentication__IdentityProviderUri
+            value: https://idp.eschool.kmlabz.com
+          - name: ConnectionStrings__DefaultConnection
+            valueFrom:
+              secretKeyRef:
+                name: idpconnectionstring
+                key: CONNECTION_STRING
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: identityprovider
+spec:
+  selector:
+    app: identityprovider
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

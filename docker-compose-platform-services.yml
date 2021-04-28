@@ -1,18 +1,16 @@
 version: '3.4'
 
 services:
-  eschool.mssql:
-    container_name: eschool.mssql
-    image: mcr.microsoft.com/mssql/server:2017-latest
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=Password123
+  eschool.postgres:
+    container_name: eschool.postgres
+    image: postgres:13
     ports:
-      - "5500:1433"
+      - "5500:5432"
+    environment:
+      - POSTGRES_PASSWORD=Password123
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - mssql_data:/var/opt/mssql
-    networks:
-      - eschool_network
+      - postgres_data:/var/lib/postgresql/data
 
   eschool.rabbitmq:
     container_name: eschool.rabbitmq
@@ -26,7 +24,7 @@ services:
       - eschool_network
         
 volumes:
-  mssql_data:
+  postgres_data:
   rabbitmq_data:
 
 networks:

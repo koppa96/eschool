@@ -34,11 +34,11 @@ namespace ESchool.Testing.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<MasterDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MasterDbConnection"), serverConfig =>
+                options.UseNpgsql(Configuration.GetConnectionString("MasterDbConnection"), serverConfig =>
                     serverConfig.MigrationsAssembly(typeof(TestingContext).Assembly.GetName().Name)));
 
             services.AddDbContext<TestingContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddLazyDbContext<TestingContext>();
 
@@ -56,13 +56,20 @@ namespace ESchool.Testing.Api
             services.AddCommonAuthorization();
 
             services.AddMediatR(Assembly.Load("ESchool.Testing.Application"));
+            
+            var rabbitMqConfig = new RabbitMqConfiguration();
+            Configuration.GetSection("RabbitMQ").Bind(rabbitMqConfig);
             services.AddMassTransit(config =>
             {
                 config.AddConsumers(Assembly.Load("ESchool.Testing.Application"));
                 config.AddTenantEventConsumers<TestingContext>();
                 config.UsingRabbitMq((context, configurator) =>
                 {
-                    configurator.Host(Configuration.GetValue<string>("RabbitMQ:Host"));
+                    configurator.Host(rabbitMqConfig.Host, rabbitConfig =>
+                    {
+                        rabbitConfig.Username(rabbitMqConfig.Username);
+                        rabbitConfig.Password(rabbitMqConfig.Password);
+                    });
                     configurator.ReceiveEndpoint("testing", endpoint => { endpoint.ConfigureConsumers(context); });
                 });
             });

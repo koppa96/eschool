@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testing
+spec:
+  selector:
+    matchLabels:
+      app: testing
+  template:
+    metadata:
+      labels:
+        app: testing
+    spec:
+      containers:
+      - name: testing
+        image: eschool.azurecr.io/testing:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+          - name: RabbitMQ__Host
+            value: amqp://rabbitmq
+          - name: RabbitMQ__Username
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmqcredentials
+                key: USERNAME
+          - name: RabbitMQ__Password
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmqcredentials
+                key: PASSWORD
+          - name: Authentication__Authority
+            value: http://identityprovider
+          - name: Authentication__Audience
+            value: testing-api
+          - name: Authentication__IdentityProviderUri
+            value: https://idp.eschool.kmlabz.com
+          - name: ConnectionStrings__DefaultConnection
+            valueFrom:
+              secretKeyRef:
+                name: testingconnectionstrings
+                key: CONNECTION_STRING
+          - name: ConnectionStrings__MasterDbConnection
+            valueFrom:
+              secretKeyRef:
+                name: testingconnectionstrings
+                key: MASTERDB_CONNECTION_STRING
+          - name: ConnectionStrings__ConnectionStringTemplate
+            valueFrom:
+              secretKeyRef:
+                name: testingconnectionstrings
+                key: CONNECTION_STRING_TEMPLATE
+          - name: ClassRegisterUri
+            value: http://classregister
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: testing
+spec:
+  selector:
+    app: testing
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

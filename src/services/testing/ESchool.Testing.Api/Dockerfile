@@ -8,13 +8,17 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
 COPY ["src/services/testing/ESchool.Testing.Api/ESchool.Testing.Api.csproj", "src/services/testing/ESchool.Testing.Api/"]
-COPY ["src/libs/ESchool.Libs.AspNetCore/ESchool.Libs.AspNetCore.csproj", "src/libs/ESchool.Libs.AspNetCore/"]
+COPY ["src/libs/ESchool.Libs.Outbox.AspNetCore/ESchool.Libs.Outbox.AspNetCore.csproj", "src/libs/ESchool.Libs.Outbox.AspNetCore/"]
 COPY ["src/libs/ESchool.Libs.Outbox/ESchool.Libs.Outbox.csproj", "src/libs/ESchool.Libs.Outbox/"]
+COPY ["src/libs/ESchool.Libs.AspNetCore/ESchool.Libs.AspNetCore.csproj", "src/libs/ESchool.Libs.AspNetCore/"]
 COPY ["src/libs/ESchool.Libs.Application/ESchool.Libs.Application.csproj", "src/libs/ESchool.Libs.Application/"]
 COPY ["src/libs/ESchool.Libs.Domain/ESchool.Libs.Domain.csproj", "src/libs/ESchool.Libs.Domain/"]
 COPY ["src/services/testing/ESchool.Testing.Application/ESchool.Testing.Application.csproj", "src/services/testing/ESchool.Testing.Application/"]
+COPY ["src/services/identityprovider/ESchool.IdentityProvider.Interface.DefaultHandlers/ESchool.IdentityProvider.Interface.DefaultHandlers.csproj", "src/services/identityprovider/ESchool.IdentityProvider.Interface.DefaultHandlers/"]
+COPY ["src/services/identityprovider/ESchool.IdentityProvider.Interface/ESchool.IdentityProvider.Interface.csproj", "src/services/identityprovider/ESchool.IdentityProvider.Interface/"]
 COPY ["src/services/classregister/ESchool.ClassRegister.Interface/ESchool.ClassRegister.Interface.csproj", "src/services/classregister/ESchool.ClassRegister.Interface/"]
 COPY ["src/services/testing/ESchool.Testing.Domain/ESchool.Testing.Domain.csproj", "src/services/testing/ESchool.Testing.Domain/"]
+COPY ["src/libs/ESchool.Libs.Outbox.EntityFrameworkCore/ESchool.Libs.Outbox.EntityFrameworkCore.csproj", "src/libs/ESchool.Libs.Outbox.EntityFrameworkCore/"]
 RUN dotnet restore "src/services/testing/ESchool.Testing.Api/ESchool.Testing.Api.csproj"
 COPY . .
 WORKDIR "/src/src/services/testing/ESchool.Testing.Api"
