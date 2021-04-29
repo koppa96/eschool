@@ -1,3 +1,113 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ocelot-config
+data:
+  ocelot.json: |
+    {
+      "Routes": [
+        {
+          "DownstreamPathTemplate": "/api/{everything}",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
+              "Host": "classregister",
+              "Port": 80
+            }
+          ],
+          "UpstreamPathTemplate": "/api/class-register/{everything}",
+          "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
+        },
+        {
+          "DownstreamPathTemplate": "/swagger",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
+              "Host": "classregister",
+              "Port": 80
+            }
+          ],
+          "UpstreamPathTemplate": "/swagger/classregister",
+          "UpstreamHttpMethod": [ "Get" ]
+        },
+        {
+          "DownstreamPathTemplate": "/api/{everything}",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
+              "Host": "homeassignments",
+              "Port": 80
+            }
+          ],
+          "UpstreamPathTemplate": "/api/home-assignments/{everything}",
+          "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
+        },
+        {
+          "DownstreamPathTemplate": "/swagger",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
+              "Host": "homeassignments",
+              "Port": 80
+            }
+          ],
+          "UpstreamPathTemplate": "/swagger/homeassignments",
+          "UpstreamHttpMethod": [ "Get" ]
+        },
+        {
+          "DownstreamPathTemplate": "/api/{everything}",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
+              "Host": "identityprovider",
+              "Port": 80
+            }
+          ],
+          "UpstreamPathTemplate": "/api/identity-provider/{everything}",
+          "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
+        },
+        {
+          "DownstreamPathTemplate": "/swagger",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
+              "Host": "identityprovider",
+              "Port": 80
+            }
+          ],
+          "UpstreamPathTemplate": "/swagger/identityprovider",
+          "UpstreamHttpMethod": [ "Get" ]
+        },
+        {
+          "DownstreamPathTemplate": "/api/{everything}",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
+              "Host": "testing",
+              "Port": 80
+            }
+          ],
+          "UpstreamPathTemplate": "/api/testing/{everything}",
+          "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
+        },
+        {
+          "DownstreamPathTemplate": "/swagger",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
+              "Host": "testing",
+              "Port": 80
+            }
+          ],
+          "UpstreamPathTemplate": "/swagger/testing",
+          "UpstreamHttpMethod": [ "Get" ]
+        },
+      ],
+      "GlobalConfiguration": {
+      "BaseUrl": "https://api.eschool.kmlabz.com"
+      }
+    }
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,17 +128,14 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
-        env:
-        - name: Routes__0__DownstreamHostAndPorts__0__Host
-          value: classregister
-        - name: Routes__1__DownstreamHostAndPorts__0__Host
-          value: homeassignments
-        - name: Routes__2__DownstreamHostAndPorts__0__Host
-          value: identityprovider
-        - name: Routes__3__DownstreamHostAndPorts__0__Host
-          value: testing
-        - name: GlobalConfiguration__BaseUrl
-          value: https://api.eschool.kmlabz.com
+        volumeMounts:
+          - mountPath: /app/ocelot.json
+            name: config-volume
+            subPath: ocelot.json
+      volumes:
+        - name: config-volume
+          configMap:
+            name: ocelot-config
 ---
 apiVersion: v1
 kind: Service
