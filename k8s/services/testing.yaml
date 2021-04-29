@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: testing
 spec:
+  revisionHistoryLimit: 0
   selector:
     matchLabels:
       app: testing

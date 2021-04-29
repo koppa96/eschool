@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: identityprovider
 spec:
+  revisionHistoryLimit: 0
   selector:
     matchLabels:
       app: identityprovider
