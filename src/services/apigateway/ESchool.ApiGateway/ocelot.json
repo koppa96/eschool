@@ -13,6 +13,18 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
     },
     {
+      "DownstreamPathTemplate": "/swagger",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "eschool.classregister.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/swagger/classregister",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -23,6 +35,18 @@
       ],
       "UpstreamPathTemplate": "/api/home-assignments/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
+    },
+    {
+      "DownstreamPathTemplate": "/swagger",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "eschool.homeassignments.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/swagger/homeassignments",
+      "UpstreamHttpMethod": [ "Get" ]
     },
     {
       "DownstreamPathTemplate": "/api/{everything}",
@@ -37,6 +61,18 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
     },
     {
+      "DownstreamPathTemplate": "/swagger",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "eschool.identityprovider",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/swagger/identityprovider",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -47,6 +83,18 @@
       ],
       "UpstreamPathTemplate": "/api/testing/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
+    },
+    {
+      "DownstreamPathTemplate": "/swagger",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "eschool.testing.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/swagger/testing",
+      "UpstreamHttpMethod": [ "Get" ]
     }
   ],
   "GlobalConfiguration": {
