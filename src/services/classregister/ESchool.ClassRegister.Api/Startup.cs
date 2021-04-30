@@ -149,6 +149,7 @@ namespace ESchool.ClassRegister.Api
             app.UseOpenApi();
             app.UseSwaggerUi3(config =>
             {
+                config.DocumentPath = Configuration.GetValue<string>("Swagger:DocumentPath");
                 config.OAuth2Client = new OAuth2ClientSettings
                 {
                     ClientId = "test",
