@@ -19,6 +19,8 @@ spec:
         ports:
         - containerPort: 80
         env:
+          - name: Swagger__DocumentPath
+            value: /class-register/swagger/{documentName}/swagger.json
           - name: RabbitMQ__Host
             value: amqp://rabbitmq
           - name: RabbitMQ__Username
