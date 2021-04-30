@@ -1,0 +1,52 @@
+name: Build API Gateway and Deploy to AKS
+
+on:
+  push:
+    branches:
+      [ master ]
+    paths:
+      - "src/services/apigateway/**"
+
+env:
+  REGISTRY_NAME: eschool
+  CLUSTER_NAME: eschool
+  CLUSTER_RESOURCE_GROUP: eschool
+  APP_NAME: apigateway
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@main
+    
+    - name: Log into Container registry
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }} 
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    - name: Build ApiGateway image
+      run: |
+        docker build . -f ./src/services/apigateway/ESchool.ApiGateway/Dockerfile \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }} \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:latest
+
+    - name: Push ApiGateway image
+      run: docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
+
+    - name: Set AKS Context
+      uses: azure/aks-set-context@v1
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        cluster-name: ${{ env.CLUSTER_NAME }}
+        resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
+
+    - name: Deploy Services to AKS
+      uses: azure/k8s-deploy@v1
+      with:
+        manifests: |
+          k8s/services/apigateway.yaml
+        images: |
+          ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
