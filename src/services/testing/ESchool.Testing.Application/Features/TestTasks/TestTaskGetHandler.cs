@@ -10,12 +10,12 @@ using MediatR;
 
 namespace ESchool.Testing.Application.Features.TestTasks
 {
-    public class TestTaskGetCommand : IRequest<TestTaskDetailsResponse>
+    public class TestTaskGetQuery : IRequest<TestTaskDetailsResponse>
     {
         public Guid Id { get; set; }
     }
     
-    public class TestTaskGetHandler : IRequestHandler<TestTaskGetCommand, TestTaskDetailsResponse>
+    public class TestTaskGetHandler : IRequestHandler<TestTaskGetQuery, TestTaskDetailsResponse>
     {
         private readonly TestingContext context;
         private readonly IMapper mapper;
@@ -26,7 +26,7 @@ namespace ESchool.Testing.Application.Features.TestTasks
             this.mapper = mapper;
         }
         
-        public async Task<TestTaskDetailsResponse> Handle(TestTaskGetCommand request, CancellationToken cancellationToken)
+        public async Task<TestTaskDetailsResponse> Handle(TestTaskGetQuery request, CancellationToken cancellationToken)
         {
             var task = await context.Tasks.FindOrThrowAsync(request.Id, cancellationToken);
             return mapper.Map<TestTask, TestTaskDetailsResponse>(task);

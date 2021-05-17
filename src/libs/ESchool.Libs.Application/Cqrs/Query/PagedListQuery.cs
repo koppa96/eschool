@@ -1,4 +1,5 @@
-﻿using ESchool.Libs.Application.Cqrs.Response;
+﻿using System;
+using ESchool.Libs.Application.Cqrs.Response;
 using MediatR;
 
 namespace ESchool.Libs.Application.Cqrs.Query
@@ -13,6 +14,18 @@ namespace ESchool.Libs.Application.Cqrs.Query
         public PagedListQuery()
         {
             PageSize = DefaultPageSize;
+        }
+
+        public TQuery ToTypedQuery<TQuery>(Action<TQuery> initialize)
+            where TQuery : PagedListQuery, new()
+        {
+            var query = new TQuery
+            {
+                PageIndex = PageIndex,
+                PageSize = PageSize
+            };
+            initialize(query);
+            return query;
         }
     }
     

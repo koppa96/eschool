@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ESchool.Libs.Domain.Interfaces;
 using ESchool.Testing.Domain.Entities.ClassRegisterData;
 
 namespace ESchool.Testing.Domain.Entities
 {
-    public class Test
+    public class Test : IEntity
     {
         public Guid Id { get; set; }
 

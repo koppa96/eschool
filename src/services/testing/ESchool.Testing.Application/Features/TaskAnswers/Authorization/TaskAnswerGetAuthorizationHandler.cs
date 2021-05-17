@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Testing.Application.Features.TaskAnswers.Authorization
 {
-    public class TaskAnswerGetAuthorizationHandler : IRequestAuthorizationHandler<TaskAnswerGetCommand>
+    public class TaskAnswerGetAuthorizationHandler : IRequestAuthorizationHandler<TaskAnswerGetQuery>
     {
         private readonly TestingContext context;
         private readonly IIdentityService identityService;
@@ -20,7 +20,7 @@ namespace ESchool.Testing.Application.Features.TaskAnswers.Authorization
             this.identityService = identityService;
         }
         
-        public async Task<RequestAuthorizationResult> IsAuthorizedAsync(TaskAnswerGetCommand request, CancellationToken cancellationToken)
+        public async Task<RequestAuthorizationResult> IsAuthorizedAsync(TaskAnswerGetQuery request, CancellationToken cancellationToken)
         {
             var isAuthorized = false;
             var currentUserId = identityService.GetCurrentUserId();
