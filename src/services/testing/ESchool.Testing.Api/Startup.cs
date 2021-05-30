@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json.Polymorph.Extensions;
 using ESchool.ClassRegister.Grpc;
@@ -19,6 +20,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NSwag;
+using NSwag.AspNetCore;
 
 namespace ESchool.Testing.Api
 {
@@ -80,6 +83,35 @@ namespace ESchool.Testing.Api
                 options.UseEntityFrameworkCore<TestingContext>(config => { config.UseMultiTenantMessageDispatcher(); });
                 options.AddPublishFilter<AuthDataSetterPublishFilter>();
             });
+            
+            services.AddOpenApiDocument(config =>
+            {
+                config.Title = "ESchool Class Register API";
+                config.Description = "The REST API documentation of the Class Register microservice.";
+
+                config.AddSecurity("OAuth2", new OpenApiSecurityScheme
+                {
+                    OpenIdConnectUrl = $"{authConfig.IdentityProviderUri}/.well-known/openid-configuration",
+                    Scheme = "Bearer",
+                    Type = OpenApiSecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = $"{authConfig.IdentityProviderUri}/connect/authorize",
+                            TokenUrl = $"{authConfig.IdentityProviderUri}/connect/token",
+                            Scopes = new Dictionary<string, string>
+                            {
+                                { "testingapi.readwrite", "testingapi.readwrite" },
+                                { "classregisterapi.readwrite", "classregisterapi.readwrite" },
+                                { "identityproviderapi.readwrite", "identityproviderapi.readwrite" },
+                                { "openid", "openid" },
+                                { "profile", "profile" }
+                            }
+                        }
+                    }
+                });
+            });
 
             services.AddAutoMapper(Assembly.Load("ESchool.Testing.Application"));
             services.AddCommonServices();
@@ -101,6 +133,18 @@ namespace ESchool.Testing.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            app.UseOpenApi();
+            app.UseSwaggerUi3(config =>
+            {
+                config.DocumentPath = Configuration.GetValue<string>("Swagger:DocumentPath");
+                config.OAuth2Client = new OAuth2ClientSettings
+                {
+                    ClientId = "test",
+                    UsePkceWithAuthorizationCodeGrant = true,
+                    ScopeSeparator = " "
+                };
+            });
 
             app.UseRouting();
 

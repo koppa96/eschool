@@ -21,7 +21,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
-    <PackageReference Include="NSwag.AspNetCore" Version="13.10.9" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.11.1" />
     <PackageReference Include="Polly" Version="7.2.2" />
     <Protobuf Include="../../../proto/classregister.proto" GrpcServices="Server" />
   </ItemGroup>
@@ -31,6 +31,5 @@
     <ProjectReference Include="..\..\..\libs\ESchool.Libs.Outbox.AspNetCore\ESchool.Libs.Outbox.AspNetCore.csproj" />
     <ProjectReference Include="..\ESchool.ClassRegister.Application\ESchool.ClassRegister.Application.csproj" />
   </ItemGroup>
-
-
+  
 </Project>
