@@ -1,27 +1,15 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.IdentityProvider.Application.Features.Tenants.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities;
+using ESchool.IdentityProvider.Interface.Features.Tenants;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.Tenants;
 using ESchool.Libs.Outbox.Services;
-using MassTransit;
 using MediatR;
 
 namespace ESchool.IdentityProvider.Application.Features.Tenants
 {
-    public class EditTenantCommand : IRequest<TenantDetailsResponse>
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string OfficialEmailAddress { get; set; }
-        public string OmIdentifier { get; set; }
-        public string HeadMaster { get; set; }
-    }
-    
     public class EditTenantHandler : IRequestHandler<EditTenantCommand, TenantDetailsResponse>
     {
         private readonly IdentityProviderContext context;

@@ -2,20 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.IdentityProvider.Application.Features.Users.Common;
 using ESchool.IdentityProvider.Domain.Entities.Users;
-using ESchool.Libs.Domain.Enums;
+using ESchool.IdentityProvider.Interface.Features.Users;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace ESchool.IdentityProvider.Application.Features.Users
 {
-    public class UserCreateCommand : IRequest<UserDetailsResponse>
-    {
-        public string Email { get; set; }
-        public GlobalRoleType GlobalRole { get; set; }
-    }
-
     public class UserCreateHandler : IRequestHandler<UserCreateCommand, UserDetailsResponse>
     {
         private readonly IMapper mapper;

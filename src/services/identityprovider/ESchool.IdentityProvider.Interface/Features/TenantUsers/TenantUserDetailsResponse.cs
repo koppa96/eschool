@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ESchool.Libs.Domain.Enums;
 
-namespace ESchool.IdentityProvider.Application.Features.TenantUsers.Common
+namespace ESchool.IdentityProvider.Interface.Features.TenantUsers
 {
     public class TenantUserDetailsResponse
     {

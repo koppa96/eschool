@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.IdentityProvider.Application.Features.TenantUsers.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
+using ESchool.IdentityProvider.Interface.Features.TenantUsers;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
@@ -16,12 +16,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.IdentityProvider.Application.Features.TenantUsers
 {
-    public class TenantUserCreateByEmailCommand : IRequest<TenantUserDetailsResponse>
-    {
-        public string Email { get; set; }
-        public IEnumerable<TenantRoleType> Roles { get; set; }
-    }
-
     public class
         TenantUserCreateByEmailHandler : IRequestHandler<TenantUserCreateByEmailCommand, TenantUserDetailsResponse>
     {

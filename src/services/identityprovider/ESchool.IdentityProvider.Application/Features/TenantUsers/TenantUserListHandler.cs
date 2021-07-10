@@ -1,19 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
-using ESchool.IdentityProvider.Application.Features.Users.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
+using ESchool.IdentityProvider.Interface.Features.TenantUsers;
+using ESchool.IdentityProvider.Interface.Features.Users;
 using ESchool.Libs.Application.Cqrs.Handlers;
-using ESchool.Libs.Application.Cqrs.Query;
 
 namespace ESchool.IdentityProvider.Application.Features.TenantUsers
 {
-    public class TenantUserListQuery : PagedListQuery<UserListResponse>
-    {
-        public Guid TenantId { get; set; }
-    }
-
     public class TenantUserListHandler : AutoMapperPagedListHandler<TenantUserListQuery, User, UserListResponse>
     {
         public TenantUserListHandler(IdentityProviderContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)

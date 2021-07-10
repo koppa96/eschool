@@ -1,7 +1,7 @@
 ﻿using System;
 using ESchool.Libs.Domain.Enums;
 
-namespace ESchool.IdentityProvider.Application.Features.Users.Common
+namespace ESchool.IdentityProvider.Interface.Features.Users
 {
     public class UserListResponse
     {

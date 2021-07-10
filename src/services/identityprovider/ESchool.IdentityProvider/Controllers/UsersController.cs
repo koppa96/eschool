@@ -1,15 +1,12 @@
-﻿using ESchool.IdentityProvider.Application.Features.Users;
-using ESchool.IdentityProvider.Application.Features.Users.Common;
-using ESchool.Libs.Domain.Services;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.Libs.Application.Cqrs.Query;
-using ESchool.Libs.Application.Cqrs.Response;
-using ESchool.Libs.Domain.Enums;
+using ESchool.IdentityProvider.Interface.Features.Users;
+using ESchool.Libs.Domain.Services;
+using ESchool.Libs.Interface.Response;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.IdentityProvider.Controllers
 {

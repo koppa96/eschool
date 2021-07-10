@@ -1,18 +1,15 @@
-﻿using MediatR;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.IdentityProvider.Domain;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.IdentityProvider.Interface.Features.Tenants;
+using ESchool.Libs.Interface.Response;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.IdentityProvider.Application.Features.Tenants
 {
-    public class TenantDropdownQuery : IRequest<List<DropdownResponse>>
-    {
-    }
-
     public class TenantDropdownHandler : IRequestHandler<TenantDropdownQuery, List<DropdownResponse>>
     {
         private readonly IdentityProviderContext context;

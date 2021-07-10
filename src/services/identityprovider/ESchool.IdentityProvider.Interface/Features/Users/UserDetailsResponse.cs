@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ESchool.IdentityProvider.Application.Features.Tenants;
-using ESchool.Libs.Application.Dtos;
+using ESchool.IdentityProvider.Interface.Features.Tenants;
 using ESchool.Libs.Domain.Enums;
 
-namespace ESchool.IdentityProvider.Application.Features.Users.Common
+namespace ESchool.IdentityProvider.Interface.Features.Users
 {
     public class UserDetailsResponse
     {

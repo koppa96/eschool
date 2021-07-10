@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
-using ESchool.IdentityProvider.Application.Features.Users.Common;
 using ESchool.IdentityProvider.Domain.Entities.Users;
+using ESchool.IdentityProvider.Interface.Features.Users;
 
 namespace ESchool.IdentityProvider.Application.Mappings
 {

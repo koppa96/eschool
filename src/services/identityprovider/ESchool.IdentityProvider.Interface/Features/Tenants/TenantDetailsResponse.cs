@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ESchool.IdentityProvider.Application.Features.Tenants.Common
+namespace ESchool.IdentityProvider.Interface.Features.Tenants
 {
     public class TenantDetailsResponse
     {

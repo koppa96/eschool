@@ -1,19 +1,13 @@
 ﻿using ESchool.IdentityProvider.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.IdentityProvider.Application.Features.Users.Common;
+using ESchool.IdentityProvider.Interface.Features.Users;
 
 namespace ESchool.IdentityProvider.Application.Features.Users
 {
-    public class UserGetQuery : IRequest<UserDetailsResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class UserGetHandler : IRequestHandler<UserGetQuery, UserDetailsResponse>
     {
         private readonly IdentityProviderContext context;

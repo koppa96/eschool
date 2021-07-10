@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.IdentityProvider.Application.Features.Tenants;
-using ESchool.IdentityProvider.Application.Features.Tenants.Common;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.IdentityProvider.Interface.Features.Tenants;
 using ESchool.Libs.Domain.Enums;
+using ESchool.Libs.Interface.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

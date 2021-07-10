@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.IdentityProvider.Application.Features.TenantUsers.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
+using ESchool.IdentityProvider.Interface.Features.TenantUsers;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers;
-using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Outbox.Services;
 using MassTransit;
 using MediatR;
@@ -15,13 +13,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.IdentityProvider.Application.Features.TenantUsers
 {
-    public class TenantUserCreateByIdCommand : IRequest<TenantUserDetailsResponse>
-    {
-        public Guid UserId { get; set; }
-        public Guid TenantId { get; set; }
-        public List<TenantRoleType> TenantRoleTypes { get; set; }
-    }
-
     public class TenantUserCreateByIdHandler : IRequestHandler<TenantUserCreateByIdCommand, TenantUserDetailsResponse>
     {
         private readonly IdentityProviderContext context;
