@@ -1,27 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ESchool.Testing.Domain;
+using ESchool.Testing.Interface.Features.TestTasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Testing.Application.Features.TestTasks
 {
-    public class TestTaskListQuery : IRequest<List<TestTaskListResponse>>
-    {
-        public Guid TestId { get; set; }
-    }
-
-    public class TestTaskListResponse
-    {
-        public Guid Id { get; set; }
-        public string Description { get; set; }
-    }
-
     public class TestTaskListHandler : IRequestHandler<TestTaskListQuery, List<TestTaskListResponse>>
     {
         private readonly TestingContext context;

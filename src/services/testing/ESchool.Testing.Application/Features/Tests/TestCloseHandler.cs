@@ -1,20 +1,15 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Testing.Application.Features.Tests.Common;
 using ESchool.Testing.Domain;
+using ESchool.Testing.Interface.Features.Tests;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Testing.Application.Features.Tests
 {
-    public class TestCloseCommand : IRequest<TestDetailsResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class TestCloseHandler : IRequestHandler<TestCloseCommand, TestDetailsResponse>
     {
         private readonly TestingContext context;

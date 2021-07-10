@@ -1,20 +1,15 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.Libs.Domain.Extensions;
-using ESchool.Testing.Application.Features.TestTasks.Common.Editor;
 using ESchool.Testing.Domain;
 using ESchool.Testing.Domain.Entities.Tasks;
+using ESchool.Testing.Interface.Features.TestTasks;
+using ESchool.Testing.Interface.Features.TestTasks.Editor;
 using MediatR;
 
 namespace ESchool.Testing.Application.Features.TestTasks
 {
-    public class TestTaskEditorGetQuery : IRequest<TestTaskEditorResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class TestTaskEditorGetHandler : IRequestHandler<TestTaskEditorGetQuery, TestTaskEditorResponse>
     {
         private readonly TestingContext context;

@@ -1,23 +1,15 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using ESchool.Libs.Application.Cqrs.Handlers;
-using ESchool.Libs.Application.Cqrs.Query;
 using ESchool.Libs.Domain.Services;
 using ESchool.Testing.Application.Features.Tests.Common;
 using ESchool.Testing.Domain;
 using ESchool.Testing.Domain.Entities;
+using ESchool.Testing.Interface.Features.Tests;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Testing.Application.Features.Tests
 {
-    public class TestListAsStudentQuery : PagedListQuery<TestListResponse>
-    {
-        public Guid ClassId { get; set; }
-        public Guid SubjectId { get; set; }
-        public Guid SchoolYearId { get; set; }
-    }
-
     public class TestListAsStudentHandler : AutoMapperPagedListHandler<TestListAsStudentQuery, Test, TestListResponse>
     {
         private readonly IIdentityService identityService;

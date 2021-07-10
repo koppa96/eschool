@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Application.Cqrs.Handlers;
 using ESchool.Testing.Domain;
 using ESchool.Testing.Domain.Entities.Tasks;
+using ESchool.Testing.Interface.Features.TestTasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Testing.Application.Features.TestTasks
 {
-    public class TestTaskDeleteCommand : DeleteCommand
-    {
-    }
-    
     public class TestTaskDeleteHandler : DeleteHandler<TestTaskDeleteCommand, TestTask>
     {
         public TestTaskDeleteHandler(TestingContext context) : base(context)

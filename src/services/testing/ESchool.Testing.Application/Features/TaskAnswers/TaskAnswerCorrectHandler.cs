@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Testing.Domain;
@@ -7,12 +6,6 @@ using MediatR;
 
 namespace ESchool.Testing.Application.Features.TaskAnswers
 {
-    public class TaskAnswerCorrectCommand : IRequest
-    {
-        public Guid TaskAnswerId { get; set; }
-        public int GivenPoints { get; set; }
-    }
-    
     public class TaskAnswerCorrectHandler : IRequestHandler<TaskAnswerCorrectCommand>
     {
         private readonly TestingContext context;

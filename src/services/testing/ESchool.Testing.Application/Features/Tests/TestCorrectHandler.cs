@@ -1,17 +1,12 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Testing.Domain;
+using ESchool.Testing.Interface.Features.Tests;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Testing.Application.Features.Tests
 {
-    public class TestCorrectCommand : IRequest
-    {
-        public Guid TestId { get; set; }
-    }
-    
     public class TestCorrectHandler : IRequestHandler<TestCorrectCommand>
     {
         private readonly TestingContext context;

@@ -1,25 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Polymorph.Attributes;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.Testing.Application.Features.TestTasks.Common;
-using ESchool.Testing.Application.Features.TestTasks.Common.Details;
-using ESchool.Testing.Application.Features.TestTasks.Common.Editor;
 using ESchool.Testing.Domain;
 using ESchool.Testing.Domain.Entities.Tasks.MultipleChoice;
+using ESchool.Testing.Interface.Features.TestTasks.CreateEdit;
+using ESchool.Testing.Interface.Features.TestTasks.Editor;
 using MediatR;
 
 namespace ESchool.Testing.Application.Features.TestTasks.Create
 {
-    [JsonSubClass(DiscriminatorValue = TestingConstants.Discriminators.MultipleChoice)]
-    public class MultipleChoiceTestTaskCreateEditCommand : TestTaskCreateEditCommand
-    {
-        public List<string> Options { get; set; }
-        public int CorrectOptionIndex { get; set; }
-    }
-    
     public class MultipleChoiceTestTaskCreateHandler : IRequestHandler<MultipleChoiceTestTaskCreateEditCommand, TestTaskEditorResponse>
     {
         private readonly TestingContext context;

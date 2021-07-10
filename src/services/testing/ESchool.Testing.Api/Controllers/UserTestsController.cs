@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.Libs.Application.Cqrs.Query;
-using ESchool.Libs.Application.Cqrs.Response;
 using ESchool.Libs.Domain.Enums;
-using ESchool.Testing.Application.Features.Tests;
-using ESchool.Testing.Application.Features.Tests.Common;
+using ESchool.Libs.Interface.Query;
+using ESchool.Libs.Interface.Response;
+using ESchool.Testing.Interface.Features.Tests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

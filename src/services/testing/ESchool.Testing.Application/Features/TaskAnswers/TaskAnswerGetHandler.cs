@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.Libs.Domain.Extensions;
@@ -10,11 +9,6 @@ using MediatR;
 
 namespace ESchool.Testing.Application.Features.TaskAnswers
 {
-    public class TaskAnswerGetQuery : IRequest<TaskAnswerResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class TaskAnswerGetHandler : IRequestHandler<TaskAnswerGetQuery, TaskAnswerResponse>
     {
         private readonly TestingContext context;

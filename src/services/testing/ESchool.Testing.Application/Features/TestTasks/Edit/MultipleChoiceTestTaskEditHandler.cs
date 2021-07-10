@@ -3,11 +3,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.Libs.Application.Cqrs.Commands;
-using ESchool.Testing.Application.Features.TestTasks.Common.Editor;
-using ESchool.Testing.Application.Features.TestTasks.Create;
+using ESchool.Libs.Interface.Commands;
 using ESchool.Testing.Domain;
 using ESchool.Testing.Domain.Entities.Tasks.MultipleChoice;
+using ESchool.Testing.Interface.Features.TestTasks.CreateEdit;
+using ESchool.Testing.Interface.Features.TestTasks.Editor;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.Libs.Application.Cqrs.Commands;
-using ESchool.Testing.Application.Features.TestTasks;
-using ESchool.Testing.Application.Features.TestTasks.Common.Details;
-using ESchool.Testing.Application.Features.TestTasks.Common.Editor;
-using ESchool.Testing.Application.Features.TestTasks.Create;
+using ESchool.Libs.Interface.Commands;
+using ESchool.Testing.Interface.Features.TestTasks;
+using ESchool.Testing.Interface.Features.TestTasks.CreateEdit;
+using ESchool.Testing.Interface.Features.TestTasks.Details;
+using ESchool.Testing.Interface.Features.TestTasks.Editor;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

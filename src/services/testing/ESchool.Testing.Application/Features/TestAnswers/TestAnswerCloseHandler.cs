@@ -3,16 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Libs.Domain.Services;
 using ESchool.Testing.Domain;
+using ESchool.Testing.Interface.Features.TestAnswers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Testing.Application.Features.TestAnswers
 {
-    public class TestAnswerCloseCommand : IRequest
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class TestAnswerCloseHandler : IRequestHandler<TestAnswerCloseCommand>
     {
         private readonly TestingContext context;

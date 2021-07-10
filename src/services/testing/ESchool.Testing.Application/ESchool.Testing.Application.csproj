@@ -9,6 +9,7 @@
       <ProjectReference Include="..\..\classregister\ESchool.ClassRegister.Interface\ESchool.ClassRegister.Interface.csproj" />
       <ProjectReference Include="..\..\identityprovider\ESchool.IdentityProvider.Interface.DefaultHandlers\ESchool.IdentityProvider.Interface.DefaultHandlers.csproj" />
       <ProjectReference Include="..\ESchool.Testing.Domain\ESchool.Testing.Domain.csproj" />
+      <ProjectReference Include="..\ESchool.Testing.Interface\ESchool.Testing.Interface.csproj" />
     </ItemGroup>
 
     <ItemGroup>

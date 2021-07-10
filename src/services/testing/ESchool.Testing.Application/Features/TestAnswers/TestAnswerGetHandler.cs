@@ -1,19 +1,14 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.Testing.Application.Features.TestAnswers.Common;
 using ESchool.Testing.Domain;
+using ESchool.Testing.Interface.Features.TestAnswers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Testing.Application.Features.TestAnswers
 {
-    public class TestAnswerGetQuery : IRequest<TestAnswerDetailsResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class TestAnswerGetHandler : IRequestHandler<TestAnswerGetQuery, TestAnswerDetailsResponse>
     {
         private readonly TestingContext context;

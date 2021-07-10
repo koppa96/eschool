@@ -1,28 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Domain.Extensions;
+using ESchool.Libs.Interface.Commands;
 using ESchool.Testing.Application.Features.Tests.Common;
 using ESchool.Testing.Domain;
 using ESchool.Testing.Domain.Entities;
+using ESchool.Testing.Interface.Features.Tests;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Testing.Application.Features.Tests
 {
-    public class TestEditCommand
-    {
-        public string Name { get; set; }
-        
-        public DateTime ScheduledStart { get; set; }
-        public int ScheduledLengthInMinutes { get; set; }
-        public List<Guid> StudentIds { get; set; }
-    }
-    
     public class TestEditHandler : IRequestHandler<EditCommand<TestEditCommand, TestDetailsResponse>, TestDetailsResponse>
     {
         private readonly TestingContext context;
