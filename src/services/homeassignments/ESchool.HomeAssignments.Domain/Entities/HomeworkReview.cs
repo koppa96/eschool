@@ -1,6 +1,6 @@
 ﻿using System;
 using ESchool.HomeAssignments.Domain.Entities.Users;
-using ESchool.HomeAssignments.Domain.Enums;
+using ESchool.HomeAssignments.SharedDomain.Enums;
 using ESchool.Libs.Domain.Interfaces;
 using ESchool.Libs.Domain.Interfaces.Audit;
 

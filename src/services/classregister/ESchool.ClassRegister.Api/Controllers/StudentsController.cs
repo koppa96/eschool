@@ -9,6 +9,7 @@ using ESchool.ClassRegister.Interface.Features.Users.Students;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Interface.Query;
 using ESchool.Libs.Interface.Response;
+using ESchool.Libs.Interface.Response.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

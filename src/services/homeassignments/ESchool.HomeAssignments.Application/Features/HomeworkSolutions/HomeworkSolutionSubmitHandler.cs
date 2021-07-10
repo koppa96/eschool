@@ -5,17 +5,13 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common;
 using ESchool.HomeAssignments.Domain;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
 using ESchool.Libs.Domain.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions
 {
-    public class HomeworkSolutionSubmitCommand : IRequest<HomeworkSolutionResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class HomeworkSolutionSubmitHandler : IRequestHandler<HomeworkSolutionSubmitCommand, HomeworkSolutionResponse>
     {
         private readonly HomeAssignmentsContext context;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ESchool.ClassRegister.Interface.Features.Users
+namespace ESchool.Libs.Interface.Response.Common
 {
     public class UserRoleListResponse
     {

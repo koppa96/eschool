@@ -5,17 +5,13 @@ using AutoMapper;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Services;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
 using ESchool.Libs.Domain.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Files
 {
-    public class FileDeleteCommand : IRequest<HomeworkSolutionResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class FileDeleteHandler : IRequestHandler<FileDeleteCommand, HomeworkSolutionResponse>
     {
         private readonly HomeAssignmentsContext context;

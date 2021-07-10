@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\ESchool.Libs.Domain\ESchool.Libs.Domain.csproj" />
     <ProjectReference Include="..\..\..\libs\ESchool.Libs.Outbox.EntityFrameworkCore\ESchool.Libs.Outbox.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\ESchool.HomeAssignments.SharedDomain\ESchool.HomeAssignments.SharedDomain.csproj" />
   </ItemGroup>
 
 </Project>

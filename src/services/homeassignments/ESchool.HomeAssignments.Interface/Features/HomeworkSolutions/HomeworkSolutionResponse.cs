@@ -1,15 +1,15 @@
 using System;
-using ESchool.HomeAssignments.Application.Features.HomeworkReviews.Common;
-using ESchool.HomeAssignments.Application.Features.Users.Common;
+using ESchool.HomeAssignments.Interface.Features.HomeworkReviews;
+using ESchool.Libs.Interface.Response.Common;
 
-namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common
+namespace ESchool.HomeAssignments.Interface.Features.HomeworkSolutions
 {
     public class HomeworkSolutionResponse
     {
         public Guid Id { get; set; }
         public DateTime? TurnInDate { get; set; }
         public HomeworkReviewResponse Review { get; set; }
-        public UserListResponse Student { get; set; }
+        public UserRoleListResponse Student { get; set; }
         
         public class FileResponse
         {

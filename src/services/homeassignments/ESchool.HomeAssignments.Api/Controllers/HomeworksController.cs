@@ -1,14 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.HomeAssignments.Application.Features.Homeworks;
-using ESchool.HomeAssignments.Application.Features.Homeworks.Common;
-using ESchool.HomeAssignments.Application.Features.HomeworkSolutions;
-using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common;
-using ESchool.Libs.Application.Cqrs.Commands;
-using ESchool.Libs.Application.Cqrs.Query;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.HomeAssignments.Interface.Features.Homeworks;
 using ESchool.Libs.AspNetCore;
+using ESchool.Libs.Interface.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

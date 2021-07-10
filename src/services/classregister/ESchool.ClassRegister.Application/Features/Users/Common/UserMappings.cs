@@ -4,6 +4,7 @@ using ESchool.ClassRegister.Domain.Entities.Users.Abstractions;
 using ESchool.ClassRegister.Interface.Features.Users;
 using ESchool.ClassRegister.Interface.IntegrationEvents.UserCreation;
 using ESchool.ClassRegister.Interface.IntegrationEvents.UserDeletion;
+using ESchool.Libs.Interface.Response.Common;
 
 namespace ESchool.ClassRegister.Application.Features.Users.Common
 {

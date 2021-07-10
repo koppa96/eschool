@@ -3,28 +3,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.HomeAssignments.Application.Features.HomeworkReviews.Common;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Entities;
-using ESchool.HomeAssignments.Domain.Enums;
+using ESchool.HomeAssignments.Interface.Features.HomeworkReviews;
 using ESchool.Libs.Domain.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.HomeworkReviews
 {
-    public class HomeworkReviewCreateCommand : IRequest<HomeworkReviewResponse>
-    {
-        public Guid HomeworkSolutionId { get; set; }
-        public Body RequestBody { get; set; }
-        
-        public class Body
-        {
-            public HomeworkReviewOutcome Outcome { get; set; }
-            public string Comment { get; set; }
-        }
-    }
-    
     public class HomeworkReviewCreateHandler : IRequestHandler<HomeworkReviewCreateCommand, HomeworkReviewResponse>
     {
         private readonly HomeAssignmentsContext context;

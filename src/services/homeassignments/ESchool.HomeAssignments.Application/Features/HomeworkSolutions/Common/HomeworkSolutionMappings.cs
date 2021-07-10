@@ -1,6 +1,7 @@
 using AutoMapper;
-using ESchool.HomeAssignments.Application.Features.HomeworkReviews.Common;
 using ESchool.HomeAssignments.Domain.Entities;
+using ESchool.HomeAssignments.Interface.Features.HomeworkReviews;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
 
 namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common
 {

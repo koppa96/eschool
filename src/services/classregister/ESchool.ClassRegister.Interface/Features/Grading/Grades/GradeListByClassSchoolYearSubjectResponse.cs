@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ESchool.ClassRegister.Interface.Features.Users;
+using ESchool.Libs.Interface.Response.Common;
 
 namespace ESchool.ClassRegister.Interface.Features.Grading.Grades
 {

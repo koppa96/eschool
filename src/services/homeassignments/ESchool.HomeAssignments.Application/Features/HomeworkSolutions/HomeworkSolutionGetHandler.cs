@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,16 +5,12 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common;
 using ESchool.HomeAssignments.Domain;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions
 {
-    public class HomeworkSolutionGetQuery : IRequest<HomeworkSolutionResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class HomeworkSolutionGetHandler : IRequestHandler<HomeworkSolutionGetQuery, HomeworkSolutionResponse>
     {
         private readonly HomeAssignmentsContext context;

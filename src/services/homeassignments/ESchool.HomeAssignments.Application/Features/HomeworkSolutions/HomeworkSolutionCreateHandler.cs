@@ -6,17 +6,13 @@ using AutoMapper;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Entities;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
 using ESchool.Libs.Domain.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions
 {
-    public class HomeworkSolutionCreateCommand : IRequest<HomeworkSolutionResponse>
-    {
-        public Guid HomeworkId { get; set; }
-    }
-
     public class HomeworkSolutionCreateHandler : IRequestHandler<HomeworkSolutionCreateCommand, HomeworkSolutionResponse>
     {
         private readonly HomeAssignmentsContext context;

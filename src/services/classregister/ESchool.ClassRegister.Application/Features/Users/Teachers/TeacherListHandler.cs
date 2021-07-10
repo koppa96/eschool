@@ -6,6 +6,7 @@ using ESchool.ClassRegister.Domain.Entities.Users;
 using ESchool.ClassRegister.Interface.Features.Users;
 using ESchool.ClassRegister.Interface.Features.Users.Teachers;
 using ESchool.Libs.Application.Cqrs.Handlers;
+using ESchool.Libs.Interface.Response.Common;
 
 namespace ESchool.ClassRegister.Application.Features.Users.Teachers
 {

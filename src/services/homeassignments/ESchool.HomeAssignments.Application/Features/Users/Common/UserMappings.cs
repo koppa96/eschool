@@ -1,6 +1,7 @@
 using AutoMapper;
 using ESchool.HomeAssignments.Domain.Entities;
 using ESchool.HomeAssignments.Domain.Entities.Users;
+using ESchool.Libs.Interface.Response.Common;
 
 namespace ESchool.HomeAssignments.Application.Features.Users.Common
 {
@@ -8,7 +9,7 @@ namespace ESchool.HomeAssignments.Application.Features.Users.Common
     {
         public UserMappings()
         {
-            CreateMap<HomeAssignmentsUserRole, UserListResponse>()
+            CreateMap<HomeAssignmentsUserRole, UserRoleListResponse>()
                 .ForMember(x => x.Name, o => o.MapFrom(x => x.User.Name));
         }
     }

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Files;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
 using ESchool.Libs.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

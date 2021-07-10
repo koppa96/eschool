@@ -2,24 +2,14 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.HomeAssignments.Application.Extensions;
-using ESchool.HomeAssignments.Application.Features.Homeworks.Common;
 using ESchool.HomeAssignments.Domain;
-using ESchool.Libs.Application.Cqrs.Commands;
-using ESchool.Libs.Domain.Extensions;
+using ESchool.HomeAssignments.Interface.Features.Homeworks;
+using ESchool.Libs.Interface.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.Homeworks
 {
-    public class HomeworkEditCommand
-    {
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public bool Optional { get; set; }
-        public DateTime Deadline { get; set; }
-    }
-    
     public class HomeworkEditHandler : IRequestHandler<EditCommand<HomeworkEditCommand, HomeworkDetailsResponse>, HomeworkDetailsResponse>
     {
         private readonly HomeAssignmentsContext context;

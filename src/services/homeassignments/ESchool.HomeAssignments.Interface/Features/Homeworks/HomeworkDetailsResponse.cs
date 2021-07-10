@@ -1,7 +1,7 @@
 ﻿using System;
-using ESchool.HomeAssignments.Application.Features.Users.Common;
+using ESchool.Libs.Interface.Response.Common;
 
-namespace ESchool.HomeAssignments.Application.Features.Homeworks.Common
+namespace ESchool.HomeAssignments.Interface.Features.Homeworks
 {
     public class HomeworkDetailsResponse
     {
@@ -14,10 +14,10 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks.Common
         public LessonListResponse Lesson { get; set; }
 
         public DateTime CreatedAt { get; set; }
-        public UserListResponse CreatedBy { get; set; }
+        public UserRoleListResponse CreatedBy { get; set; }
 
         public DateTime? LastModifiedAt { get; set; }
-        public UserListResponse LastModifiedBy { get; set; }
+        public UserRoleListResponse LastModifiedBy { get; set; }
         
         public class LessonListResponse
         {

@@ -1,4 +1,4 @@
-﻿namespace ESchool.HomeAssignments.Domain.Enums
+﻿namespace ESchool.HomeAssignments.SharedDomain.Enums
 {
     public enum HomeworkReviewOutcome
     {

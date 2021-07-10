@@ -1,22 +1,15 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.HomeAssignments.Application.Features.HomeworkReviews.Common;
 using ESchool.HomeAssignments.Domain;
-using ESchool.HomeAssignments.Domain.Enums;
-using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.HomeAssignments.Interface.Features.HomeworkReviews;
 using ESchool.Libs.Domain.Extensions;
+using ESchool.Libs.Interface.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.HomeworkReviews
 {
-    public class HomeworkReviewEditCommand
-    {
-        public string Comment { get; set; }
-        public HomeworkReviewOutcome Outcome { get; set; }
-    }
-    
     public class HomeworkReviewEditHandler : IRequestHandler<EditCommand<HomeworkReviewEditCommand, HomeworkReviewResponse>, HomeworkReviewResponse>
     {
         private readonly HomeAssignmentsContext context;
