@@ -1,0 +1,14 @@
+﻿using System;
+using ESchool.ClassRegister.Interface.Features.Users;
+
+namespace ESchool.ClassRegister.Interface.Features.Messaging
+{
+    public class MessageListResponse
+    {
+        public Guid Id { get; set; }
+        public string Subject { get; set; }
+        public DateTime SentAt { get; set; }
+        
+        public UserRoleListResponse Sender { get; set; }
+    }
+}

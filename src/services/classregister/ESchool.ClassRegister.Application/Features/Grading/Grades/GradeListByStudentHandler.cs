@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Grading.GradeKinds.Common;
-using ESchool.ClassRegister.Application.Features.Grading.Grades.Common;
 using ESchool.ClassRegister.Application.Features.Subjects;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.Grading.GradeKinds;
+using ESchool.ClassRegister.Interface.Features.Grading.Grades;
+using ESchool.ClassRegister.Interface.Features.Subjects;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Domain.Services;
@@ -15,18 +16,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Grading.Grades
 {
-    public class GradeListByStudentQuery : IRequest<List<GradeListByStudentResponse>>
-    {
-        public Guid StudentId { get; set; }
-        public Guid SchoolYearId { get; set; }
-    }
-
-    public class GradeListByStudentResponse
-    {
-        public SubjectListResponse Subject { get; set; }
-        public List<GradeListResponse> Grades { get; set; }
-    }
-
     public class GradeListByStudentHandler : IRequestHandler<GradeListByStudentQuery, List<GradeListByStudentResponse>>
     {
         private readonly ClassRegisterContext context;

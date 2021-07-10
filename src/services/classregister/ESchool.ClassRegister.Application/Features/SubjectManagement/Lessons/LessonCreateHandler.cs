@@ -6,6 +6,7 @@ using AutoMapper;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
 using ESchool.Libs.Domain.Extensions;
 using FluentValidation;
 using MediatR;
@@ -13,25 +14,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
 {
-    public class LessonCreateCommand : IRequest<LessonDetailsResponse>
-    {
-        public LessonCreateCommandBody Body { get; set; }
-        public Guid SchoolYearId { get; set; }
-        public Guid ClassId { get; set; }
-        public Guid SubjectId { get; set; }
-        
-
-        public class LessonCreateCommandBody
-        {
-            public string Title { get; set; }
-            public string Description { get; set; }
-
-            public DateTime StartsAt { get; set; }
-            public DateTime EndsAt { get; set; }
-            public Guid ClassroomId { get; set; }
-        }
-    }
-
     public class LessonCreateValidator : AbstractValidator<LessonCreateCommand>
     {
         public LessonCreateValidator()

@@ -7,19 +7,14 @@ using AutoMapper;
 using ESchool.ClassRegister.Application.Features.Messaging.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.Messaging;
+using ESchool.ClassRegister.Interface.Features.Messaging;
 using ESchool.Libs.Application.Cqrs.Handlers;
-using ESchool.Libs.Application.Cqrs.Query;
 using ESchool.Libs.Domain.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Messaging
 {
-    public class SentMessageListQuery : PagedListQuery<MessageListResponse>
-    {
-        
-    }
-    
     public class SentMessageListHandler : AutoMapperPagedListHandler<SentMessageListQuery, Message, MessageListResponse>
     {
         private readonly IIdentityService identityService;

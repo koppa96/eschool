@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.SubjectManagement.SubjectTeachers;
-using ESchool.ClassRegister.Application.Features.Subjects;
-using ESchool.ClassRegister.Application.Features.Subjects.Common;
-using ESchool.Libs.Application.Cqrs.Commands;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.SubjectTeachers;
+using ESchool.ClassRegister.Interface.Features.Subjects;
 using ESchool.Libs.AspNetCore;
-using ESchool.Libs.Domain.Enums;
+using ESchool.Libs.Interface.Commands;
+using ESchool.Libs.Interface.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

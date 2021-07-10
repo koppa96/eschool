@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Api.Dtos;
 using ESchool.ClassRegister.Application.Features.Grading.Grades;
-using ESchool.ClassRegister.Application.Features.Grading.Grades.Common;
+using ESchool.ClassRegister.Interface.Features.Grading.Grades;
 using ESchool.Libs.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

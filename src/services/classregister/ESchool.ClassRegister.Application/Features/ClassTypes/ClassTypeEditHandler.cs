@@ -1,22 +1,14 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.ClassRegister.Application.Features.ClassTypes.Common;
 using ESchool.ClassRegister.Domain;
-using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.ClassRegister.Interface.Features.ClassTypes;
 using ESchool.Libs.Domain.Extensions;
+using ESchool.Libs.Interface.Commands;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.ClassTypes
 {
-    public class ClassTypeEditCommand : IRequest<ClassTypeDetailsResponse>
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int StartingGrade { get; set; }
-    }
-    
     public class ClassTypeEditHandler : IRequestHandler<EditCommand<ClassTypeEditCommand, ClassTypeDetailsResponse>, ClassTypeDetailsResponse>
     {
         private readonly ClassRegisterContext context;

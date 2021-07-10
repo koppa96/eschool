@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.ClassSchoolYearSubjects;
 using ESchool.ClassRegister.Interface.IntegrationEvents.ClassSchoolYearSubjects;
 using ESchool.Libs.Outbox.Services;
 using MediatR;
@@ -12,14 +11,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassSchoolYearSubjects
 {
-    public class ClassSchoolYearSubjectEditCommand : IRequest
-    {
-        public Guid ClassId { get; set; }
-        public Guid SubjectId { get; set; }
-        public Guid SchoolYearId { get; set; }
-        public List<Guid> TeacherIds { get; set; }
-    }
-
     public class ClassSchoolYearSubjectEditHandler : IRequestHandler<ClassSchoolYearSubjectEditCommand>
     {
         private readonly ClassRegisterContext context;

@@ -1,22 +1,15 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
-using ESchool.ClassRegister.Domain.Enums;
+using ESchool.ClassRegister.SharedDomain.Enums;
 using ESchool.Libs.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Absences
 {
-    public class AbsenceCreateCommand : IRequest
-    {
-        public Guid LessonId { get; set; }
-        public Guid StudentId { get; set; }
-    }
-    
     public class AbsenceCreateHandler : IRequestHandler<AbsenceCreateCommand>
     {
         private readonly ClassRegisterContext context;

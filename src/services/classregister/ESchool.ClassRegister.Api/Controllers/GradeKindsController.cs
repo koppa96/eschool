@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.Grading.GradeKinds;
-using ESchool.ClassRegister.Application.Features.Grading.GradeKinds.Common;
-using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.ClassRegister.Interface.Features.Grading.GradeKinds;
 using ESchool.Libs.AspNetCore;
+using ESchool.Libs.Interface.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

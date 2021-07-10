@@ -1,20 +1,16 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Subjects.Common;
 using ESchool.ClassRegister.Application.Features.Users.Common;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.Subjects;
+using ESchool.ClassRegister.Interface.Features.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Subjects
 {
-    public class SubjectGetQuery : IRequest<SubjectDetailsResponse>
-    {
-        public Guid Id { get; set; }        
-    }
-    
     public class SubjectGetHandler : IRequestHandler<SubjectGetQuery, SubjectDetailsResponse>
     {
         private readonly ClassRegisterContext context;

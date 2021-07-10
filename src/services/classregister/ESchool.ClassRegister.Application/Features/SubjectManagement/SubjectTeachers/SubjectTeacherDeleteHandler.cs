@@ -1,18 +1,12 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.SubjectTeachers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.SubjectTeachers
 {
-    public class SubjectTeacherDeleteCommand : IRequest
-    {
-        public Guid SubjectId { get; set; }
-        public Guid TeacherId { get; set; }
-    }
-    
     public class SubjectTeacherDeleteHandler : IRequestHandler<SubjectTeacherDeleteCommand>
     {
         private readonly ClassRegisterContext context;

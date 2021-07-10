@@ -2,10 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Absences;
-using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons;
-using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common;
-using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
 using ESchool.Libs.AspNetCore;
+using ESchool.Libs.Interface.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

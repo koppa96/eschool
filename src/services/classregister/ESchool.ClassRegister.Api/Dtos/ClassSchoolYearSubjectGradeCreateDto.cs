@@ -1,5 +1,5 @@
 ﻿using System;
-using ESchool.ClassRegister.Domain.Enums;
+using ESchool.ClassRegister.SharedDomain.Enums;
 
 namespace ESchool.ClassRegister.Api.Dtos
 {

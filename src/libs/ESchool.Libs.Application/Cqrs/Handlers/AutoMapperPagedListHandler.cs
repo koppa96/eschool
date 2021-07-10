@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using ESchool.Libs.Application.Cqrs.Query;
+using ESchool.Libs.Interface.Query;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Libs.Application.Cqrs.Handlers

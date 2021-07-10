@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using AutoMapper;
-using ESchool.ClassRegister.Application.Features.Classes.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
+using ESchool.ClassRegister.Interface.Features.Classes;
 using ESchool.Libs.Application.Cqrs.Handlers;
-using ESchool.Libs.Application.Cqrs.Query;
+using ESchool.Libs.Interface.Query;
 
 namespace ESchool.ClassRegister.Application.Features.Classes
 {

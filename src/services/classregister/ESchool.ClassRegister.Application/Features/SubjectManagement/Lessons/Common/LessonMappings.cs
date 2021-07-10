@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common
 {

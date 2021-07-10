@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Users.Teachers;
+using ESchool.ClassRegister.Interface.Features.Users.Teachers;
 using ESchool.Libs.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

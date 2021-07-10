@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.Users.Teachers;
 using ESchool.ClassRegister.Interface.IntegrationEvents.ClassSchoolYearSubjects;
 using ESchool.Libs.Outbox.Services;
 using MassTransit;
@@ -11,14 +11,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Users.Teachers
 {
-    public class RemoveTeacherFromClassSchoolYearSubjectCommand : IRequest
-    {
-        public Guid ClassId { get; set; }
-        public Guid SubjectId { get; set; }
-        public Guid SchoolYearId { get; set; }
-        public Guid TeacherId { get; set; }
-    }
-
     public class RemoveTeacherFromClassSchoolYearSubjectHandler : IRequestHandler<RemoveTeacherFromClassSchoolYearSubjectCommand>
     {
         private readonly ClassRegisterContext context;

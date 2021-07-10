@@ -1,7 +1,7 @@
 ﻿using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.ClassRegister.Domain.Entities.Users;
-using ESchool.ClassRegister.Domain.Enums;
 using System;
+using ESchool.ClassRegister.SharedDomain.Enums;
 
 namespace ESchool.ClassRegister.Domain.Entities.Grading
 {

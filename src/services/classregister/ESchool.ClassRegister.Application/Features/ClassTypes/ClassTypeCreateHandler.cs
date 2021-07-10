@@ -4,17 +4,11 @@ using AutoMapper;
 using ESchool.ClassRegister.Application.Features.ClassTypes.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
+using ESchool.ClassRegister.Interface.Features.ClassTypes;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.ClassTypes
 {
-    public class ClassTypeCreateCommand : IRequest<ClassTypeDetailsResponse>
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int StartingGrade { get; set; }
-    }
-    
     public class ClassTypeCreateHandler : IRequestHandler<ClassTypeCreateCommand, ClassTypeDetailsResponse>
     {
         private readonly ClassRegisterContext context;

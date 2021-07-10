@@ -1,21 +1,16 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
 {
-    public class LessonGetCommand : IRequest<LessonDetailsResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class LessonGetHandler : IRequestHandler<LessonGetCommand, LessonDetailsResponse>
     {
         private readonly ClassRegisterContext context;

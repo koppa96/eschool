@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
 using ESchool.Libs.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

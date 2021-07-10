@@ -2,16 +2,12 @@
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.Grading;
-using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.ClassRegister.Interface.Features.Grading.GradeKinds;
 using ESchool.Libs.Application.Cqrs.Handlers;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Grading.GradeKinds
 {
-    public class GradeKindDeleteCommand : DeleteCommand
-    {
-    }
-    
     public class GradeKindDeleteHandler : DeleteHandler<GradeKindDeleteCommand, GradeKind>
     {
         private readonly ClassRegisterContext context;

@@ -1,25 +1,16 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.ClassRegister.Application.Features.Grading.Grades.Common;
 using ESchool.ClassRegister.Domain;
-using ESchool.ClassRegister.Domain.Enums;
-using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.ClassRegister.Interface.Features.Grading.Grades;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Domain.Services;
+using ESchool.Libs.Interface.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Grading.Grades
 {
-    public class GradeEditCommand
-    {
-        public GradeValue Value { get; set; }
-        public string Description { get; set; }
-        public Guid GradeKindId { get; set; }
-    }
-    
     public class GradeEditHandler : IRequestHandler<EditCommand<GradeEditCommand, GradeDetailsResponse>, GradeDetailsResponse>
     {
         private readonly ClassRegisterContext context;

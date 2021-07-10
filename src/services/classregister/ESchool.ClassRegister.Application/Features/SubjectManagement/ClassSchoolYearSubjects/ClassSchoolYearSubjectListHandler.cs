@@ -1,20 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using ESchool.ClassRegister.Application.Features.Subjects;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.ClassSchoolYearSubjects;
+using ESchool.ClassRegister.Interface.Features.Subjects;
 using ESchool.Libs.Application.Cqrs.Handlers;
-using ESchool.Libs.Application.Cqrs.Query;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassSchoolYearSubjects
 {
-    public class ClassSchoolYearSubjectListQuery : PagedListQuery<SubjectListResponse>
-    {
-        public Guid ClassId { get; set; }
-        public Guid SchoolYearId { get; set; }
-        public Guid SubjectId { get; set; }
-    }
-
     public class ClassSchoolYearSubjectListHandler : PagedListHandler<ClassSchoolYearSubjectListQuery, ClassSchoolYearSubject, SubjectListResponse>
     {
         public ClassSchoolYearSubjectListHandler(ClassRegisterContext context) : base(context)

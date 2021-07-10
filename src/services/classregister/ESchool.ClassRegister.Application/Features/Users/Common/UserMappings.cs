@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ESchool.ClassRegister.Domain.Entities.Users;
 using ESchool.ClassRegister.Domain.Entities.Users.Abstractions;
+using ESchool.ClassRegister.Interface.Features.Users;
 using ESchool.ClassRegister.Interface.IntegrationEvents.UserCreation;
 using ESchool.ClassRegister.Interface.IntegrationEvents.UserDeletion;
 

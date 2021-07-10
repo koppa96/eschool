@@ -2,13 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Classes;
-using ESchool.ClassRegister.Application.Features.Classes.Common;
-using ESchool.ClassRegister.Application.Features.Users.Students;
-using ESchool.Libs.Application.Cqrs.Commands;
-using ESchool.Libs.Application.Cqrs.Query;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.ClassRegister.Interface.Features.Classes;
+using ESchool.ClassRegister.Interface.Features.Users.Students;
 using ESchool.Libs.AspNetCore;
-using ESchool.Libs.Domain.Enums;
+using ESchool.Libs.Interface.Commands;
+using ESchool.Libs.Interface.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

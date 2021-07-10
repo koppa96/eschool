@@ -3,10 +3,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.ClassRegister.Application.Features.Grading.Grades.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.Grading;
-using ESchool.ClassRegister.Domain.Enums;
+using ESchool.ClassRegister.Interface.Features.Grading.Grades;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Domain.Services;
 using MediatR;
@@ -14,16 +13,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Grading.Grades
 {
-    public class GradeCreateCommand : IRequest<GradeDetailsResponse>
-    {
-        public GradeValue Value { get; set; }
-        public string Description { get; set; }
-        public Guid GradeKindId { get; set; }
-        public Guid StudentId { get; set; }
-        public Guid SchoolYearId { get; set; }
-        public Guid SubjectId { get; set; }
-    }
-    
     public class GradeCreateHandler : IRequestHandler<GradeCreateCommand, GradeDetailsResponse>
     {
         private readonly ClassRegisterContext context;

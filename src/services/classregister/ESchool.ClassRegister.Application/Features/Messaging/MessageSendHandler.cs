@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,19 +6,13 @@ using AutoMapper;
 using ESchool.ClassRegister.Application.Features.Messaging.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.Messaging;
+using ESchool.ClassRegister.Interface.Features.Messaging;
 using ESchool.Libs.Domain.Services;
 using FluentValidation;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.Messaging
 {
-    public class MessageSendCommand : IRequest<MessageDetailsResponse>
-    {
-        public string Subject { get; set; }
-        public string Text { get; set; }
-        public List<Guid> RecipientIds { get; set; }
-    }
-
     public class MessageSendValidator : AbstractValidator<MessageSendCommand>
     {
         public MessageSendValidator()

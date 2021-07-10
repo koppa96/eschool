@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
 using ESchool.ClassRegister.Domain.Entities;
+using ESchool.ClassRegister.Interface.Features.Subjects;
 
 namespace ESchool.ClassRegister.Application.Features.Subjects.Common
 {

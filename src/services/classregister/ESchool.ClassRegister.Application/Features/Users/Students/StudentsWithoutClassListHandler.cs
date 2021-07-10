@@ -3,16 +3,12 @@ using AutoMapper;
 using ESchool.ClassRegister.Application.Features.Users.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.Users;
+using ESchool.ClassRegister.Interface.Features.Users;
+using ESchool.ClassRegister.Interface.Features.Users.Students;
 using ESchool.Libs.Application.Cqrs.Handlers;
-using ESchool.Libs.Application.Cqrs.Query;
 
 namespace ESchool.ClassRegister.Application.Features.Users.Students
 {
-    public class StudentsWithoutClassListQuery : PagedListQuery<UserRoleListResponse>
-    {
-        public string SearchText { get; set; }
-    }
-    
     public class StudentsWithoutClassListHandler : AutoMapperPagedListHandler<StudentsWithoutClassListQuery, Student, UserRoleListResponse>
     {
         public StudentsWithoutClassListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)

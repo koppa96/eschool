@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.ClassSchoolYears;
+using ESchool.ClassRegister.Interface.Features.ClassSchoolYears;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Domain.Enums;
 using MediatR;

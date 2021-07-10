@@ -1,37 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using ESchool.ClassRegister.Application.Features.Grading.GradeKinds.Common;
-using ESchool.ClassRegister.Application.Features.Grading.Grades.Common;
-using ESchool.ClassRegister.Application.Features.Users.Common;
 using ESchool.ClassRegister.Domain;
-using ESchool.ClassRegister.Domain.Entities.Grading;
-using ESchool.ClassRegister.Domain.Entities.Users;
-using ESchool.Libs.Application.Cqrs.Handlers;
-using ESchool.Libs.Application.Cqrs.Query;
-using ESchool.Libs.Domain.Enums;
-using ESchool.Libs.Domain.Services;
+using ESchool.ClassRegister.Interface.Features.Grading.GradeKinds;
+using ESchool.ClassRegister.Interface.Features.Grading.Grades;
+using ESchool.ClassRegister.Interface.Features.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Grading.Grades
 {
-    public class GradeListByClassSchoolYearSubjectQuery : IRequest<List<GradeListByClassSchoolYearSubjectResponse>>
-    {
-        public Guid ClassId { get; set; }
-        public Guid SubjectId { get; set; }
-        public Guid SchoolYearId { get; set; }
-    }
-
-    public class GradeListByClassSchoolYearSubjectResponse
-    {
-        public UserRoleListResponse Student { get; set; }
-        public List<GradeListResponse> Grades { get; set; }
-    }
-
     public class GradeListByClassSchoolYearSubjectHandler : IRequestHandler<GradeListByClassSchoolYearSubjectQuery,
         List<GradeListByClassSchoolYearSubjectResponse>>
     {
