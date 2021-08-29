@@ -11,16 +11,17 @@ namespace ESchool.Frontend.Network.ClassRegister.Endpoints.SchoolYears
         SchoolYearCreateCommand,
         SchoolYearEditCommand>
     {
-        private readonly ParentEndpoint<SchoolYearsChildEndpointSelector> parentEndpoint;
+        private readonly ChildEndpointFactory childEndpointFactory;
         protected override string BasePath => ClassRegisterApi.BasePath + "/school-years";
 
-        public SchoolYearsChildEndpointSelector this[Guid schoolYearId] => parentEndpoint[schoolYearId];
+        public SchoolYearsChildEndpointSelector this[Guid schoolYearId] =>
+            childEndpointFactory.CreateChildEndpointSelector<SchoolYearsChildEndpointSelector>(BasePath + $"/{schoolYearId}");
 
         public SchoolYearsEndpoint(
             IFlurlClient flurlClient,
-            ParentEndpoint<SchoolYearsChildEndpointSelector> parentEndpoint) : base(flurlClient)
+            ChildEndpointFactory childEndpointFactory) : base(flurlClient)
         {
-            this.parentEndpoint = parentEndpoint;
+            this.childEndpointFactory = childEndpointFactory;
         }
     }
 }

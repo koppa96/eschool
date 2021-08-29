@@ -1,16 +1,18 @@
 using System;
+using ESchool.Frontend.Network.Abstractions;
+using ESchool.Frontend.Network.ClassRegister.Endpoints.SchoolYears.ClassSchoolYears;
 
 namespace ESchool.Frontend.Network.ClassRegister.Endpoints.SchoolYears
 {
     public class SchoolYearsChildEndpointSelector
     {
-        private readonly Guid schoolYearId;
-        
         public ClassSchoolYearsEndpoint Classes { get; }
 
-        public SchoolYearsChildEndpointSelector(Guid schoolYearId)
+        public SchoolYearsChildEndpointSelector(
+            string basePath,
+            ChildEndpointFactory childEndpointFactory)
         {
-            this.schoolYearId = schoolYearId;
+            Classes = childEndpointFactory.CreateChildEndpoint<ClassSchoolYearsEndpoint>(basePath + "/classes");
         }
     }
 }
