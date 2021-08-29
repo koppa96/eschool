@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ESchool.HomeAssignments.Api.Controllers
 {
     [ApiController]
-    [Route("api")]
+    [Route("api/school-years/{schoolYearId}")]
     public class UserHomeworksController : ControllerBase
     {
         private readonly IMediator mediator;
@@ -23,7 +23,7 @@ namespace ESchool.HomeAssignments.Api.Controllers
         }
 
         [Authorize(PolicyNames.Student)]
-        [HttpGet("student/school-years/{schoolYearId}/subjects/{subjectId}/homeworks")]
+        [HttpGet("subjects/{subjectId}/homeworks")]
         public Task<PagedListResponse<StudentHomeworkListResponse>> ListStudentHomeworks(
             Guid schoolYearId,
             Guid subjectId,
@@ -43,7 +43,7 @@ namespace ESchool.HomeAssignments.Api.Controllers
         }
 
         [Authorize(PolicyNames.Teacher)]
-        [HttpGet("teacher/school-years/{schoolYearId}/classes/{classId}/subjects/{subjectId}/homeworks")]
+        [HttpGet("classes/{classId}/subjects/{subjectId}/homeworks")]
         public Task<PagedListResponse<TeacherHomeworkListResponse>> ListTeacherHomeworks(
             Guid schoolYearId,
             Guid classId,

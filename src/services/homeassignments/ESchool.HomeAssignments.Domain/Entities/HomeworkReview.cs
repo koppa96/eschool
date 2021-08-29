@@ -6,7 +6,7 @@ using ESchool.Libs.Domain.Interfaces.Audit;
 
 namespace ESchool.HomeAssignments.Domain.Entities
 {
-    public class HomeworkReview : IFullAuditedEntity<HomeAssignmentsUser, HomeAssignmentsUserRole>
+    public class HomeworkReview : IFullAudited<HomeAssignmentsUser, HomeAssignmentsUserRole>
     {
         public Guid Id { get; set; }
 

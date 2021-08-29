@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Interface.Features.Subjects;
 using ESchool.Frontend.Network.Abstractions;
+using ESchool.Frontend.Network.ClassRegister.Endpoints.SchoolYears.ClassSchoolYears.ClassSchoolYearSubjects.ClassSchoolYearSubjectStudents;
 using ESchool.Libs.Interface.Response;
 using Flurl.Http;
 
@@ -15,6 +16,10 @@ namespace ESchool.Frontend.Network.ClassRegister.Endpoints.SchoolYears.ClassScho
         private readonly IFlurlClient flurlClient;
         private readonly ChildEndpointFactory childEndpointFactory;
 
+        public ClassSchoolYearSubjectsChildEndpointSelector this[Guid subjectId] =>
+            childEndpointFactory.CreateChildEndpointSelector<ClassSchoolYearSubjectsChildEndpointSelector>(
+                basePath + $"/{subjectId}");
+        
         public ClassSchoolYearSubjectsEndpoint(
             string basePath,
             IFlurlClient flurlClient,

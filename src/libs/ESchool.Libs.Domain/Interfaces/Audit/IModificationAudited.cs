@@ -3,7 +3,7 @@ using ESchool.Libs.Domain.MultiTenancy.Entities;
 
 namespace ESchool.Libs.Domain.Interfaces.Audit
 {
-    public interface IModificationAuditedEntity<TUser, TUserRole>
+    public interface IModificationAudited<TUser, TUserRole>
         where TUser : UserBase<TUser, TUserRole>
         where TUserRole : UserRoleBase<TUser, TUserRole>
     {

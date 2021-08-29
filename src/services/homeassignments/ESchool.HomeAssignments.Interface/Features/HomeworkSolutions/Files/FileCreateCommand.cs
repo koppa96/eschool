@@ -1,10 +1,8 @@
 using System;
 using System.IO;
-using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common;
-using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
 using MediatR;
 
-namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Files
+namespace ESchool.HomeAssignments.Interface.Features.HomeworkSolutions.Files
 {
     public class FileCreateCommand : IRequest<HomeworkSolutionResponse>
     {

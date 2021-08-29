@@ -1,7 +1,7 @@
 ﻿using System;
 using ESchool.ClassRegister.SharedDomain.Enums;
 
-namespace ESchool.ClassRegister.Api.Dtos
+namespace ESchool.ClassRegister.Interface.Features.Grading.Grades
 {
     public class ClassSchoolYearSubjectGradeCreateDto
     {

@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Files;
 using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions.Files;
 using ESchool.Libs.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace ESchool.HomeAssignments.Api.Controllers
 {
@@ -22,6 +24,25 @@ namespace ESchool.HomeAssignments.Api.Controllers
         public FilesController(IMediator mediator)
         {
             this.mediator = mediator;
+        }
+
+        [Authorize(PolicyNames.TeacherOrStudent)]
+        [HttpGet("{fileId}")]
+        public async Task<FileResult> GetFile(Guid fileId, CancellationToken cancellationToken)
+        {
+            var result = await mediator.Send(new FileGetQuery
+            {
+                FileId = fileId
+            }, cancellationToken);
+
+            var provider = new FileExtensionContentTypeProvider();
+            var contentType = "text/plain";
+            if (provider.TryGetContentType(result.Name, out var contentTypeResult))
+            {
+                contentType = contentTypeResult;
+            }
+
+            return File(result.Stream, contentType, result.Name);
         }
         
         [Authorize(PolicyNames.Student)]

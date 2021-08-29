@@ -8,6 +8,7 @@ using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Entities;
 using ESchool.HomeAssignments.Domain.Services;
 using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions.Files;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using File = ESchool.HomeAssignments.Domain.Entities.File;

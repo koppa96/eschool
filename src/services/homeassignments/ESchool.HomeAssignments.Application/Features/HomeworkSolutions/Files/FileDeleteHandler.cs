@@ -6,6 +6,7 @@ using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Services;
 using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions.Files;
 using ESchool.Libs.Domain.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

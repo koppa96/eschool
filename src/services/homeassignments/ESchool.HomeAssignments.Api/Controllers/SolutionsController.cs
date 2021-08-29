@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Files;
 using ESchool.HomeAssignments.Interface.Features.HomeworkReviews;
 using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions.Files;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Interface.Query;
 using ESchool.Libs.Interface.Response;
@@ -36,16 +37,6 @@ namespace ESchool.HomeAssignments.Api.Controllers
                 HomeworkId = homeworkId,
                 PageIndex = pageIndex,
                 PageSize = pageSize == 0 ? PagedListQuery.DefaultPageSize : pageSize
-            }, cancellationToken);
-        }
-
-        [Authorize(PolicyNames.Student)]
-        [HttpPost]
-        public Task<HomeworkSolutionResponse> CreateSolution(Guid homeworkId, CancellationToken cancellationToken)
-        {
-            return mediator.Send(new HomeworkSolutionCreateCommand
-            {
-                HomeworkId = homeworkId
             }, cancellationToken);
         }
 
