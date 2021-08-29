@@ -5,14 +5,17 @@ namespace ESchool.Frontend.Network.ClassRegister.Endpoints.SchoolYears.ClassScho
 {
     public class ClassSchoolYearsChildEndpointSelector
     {
-        public ClassSchoolYearSubjectsEndpoint Subjects { get; set; }
-        
+        public ClassSchoolYearSubjectsEndpoint Subjects { get; }
+        public ClassSchoolYearLessonsEndpoint Lessons { get; }
+
         public ClassSchoolYearsChildEndpointSelector(
             string basePath,
             ChildEndpointFactory childEndpointFactory)
         {
             Subjects = childEndpointFactory
                 .CreateChildEndpoint<ClassSchoolYearSubjectsEndpoint>(basePath + "/subjects");
+            Lessons = childEndpointFactory
+                .CreateChildEndpoint<ClassSchoolYearLessonsEndpoint>(basePath + "/lessons");
         }
     }
 }

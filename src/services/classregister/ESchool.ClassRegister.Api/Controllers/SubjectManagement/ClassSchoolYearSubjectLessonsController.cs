@@ -24,25 +24,6 @@ namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
             this.mediator = mediator;
         }
 
-        [HttpGet]
-        public Task<List<LessonListResponse>> GetLessonsBetween(
-            Guid schoolYearId,
-            Guid classId,
-            [FromQuery] DateTime from, 
-            [FromQuery] DateTime to,
-            [FromQuery] bool showCanceled,
-            CancellationToken cancellationToken)
-        {
-            return mediator.Send(new LessonListQuery
-            {
-                From = from,
-                To = to,
-                SchoolYearId = schoolYearId,
-                ClassId = classId,
-                ShowCanceled = showCanceled
-            }, cancellationToken);
-        }
-
         [HttpPost]
         public Task<LessonDetailsResponse> CreateLesson(
             Guid schoolYearId,
