@@ -6,7 +6,7 @@ using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
 using ESchool.Libs.Interface.Response;
 using Flurl.Http;
 
-namespace ESchool.Frontend.Network.HomeAssignments.Endpoints.Homeworks.HomeworkSolutions
+namespace ESchool.Frontend.Network.HomeAssignments.Endpoints.Homeworks.Solutions
 {
     public class HomeworkSolutionsEndpoint : SolutionsEndpoint
     {

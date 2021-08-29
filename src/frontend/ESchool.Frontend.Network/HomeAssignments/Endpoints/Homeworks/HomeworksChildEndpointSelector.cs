@@ -1,5 +1,5 @@
 using ESchool.Frontend.Network.Abstractions;
-using ESchool.Frontend.Network.HomeAssignments.Endpoints.Homeworks.HomeworkSolutions;
+using ESchool.Frontend.Network.HomeAssignments.Endpoints.Homeworks.Solutions;
 
 namespace ESchool.Frontend.Network.HomeAssignments.Endpoints.Homeworks
 {

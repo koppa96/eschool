@@ -14,6 +14,7 @@
       <ProjectReference Include="..\..\libs\ESchool.Libs.Interface\ESchool.Libs.Interface.csproj" />
       <ProjectReference Include="..\..\services\classregister\ESchool.ClassRegister.Interface\ESchool.ClassRegister.Interface.csproj" />
       <ProjectReference Include="..\..\services\homeassignments\ESchool.HomeAssignments.Interface\ESchool.HomeAssignments.Interface.csproj" />
+      <ProjectReference Include="..\..\services\identityprovider\ESchool.IdentityProvider.Interface\ESchool.IdentityProvider.Interface.csproj" />
     </ItemGroup>
 
 </Project>
