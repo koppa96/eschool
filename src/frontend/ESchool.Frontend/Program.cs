@@ -39,13 +39,13 @@ namespace ESchool.Frontend
                         JsonSerializer = new SystemTextJsonSerializer(new JsonSerializerOptions()),
                         BeforeCallAsync = call =>
                         {
-                            var tsc = new TaskCompletionSource();
+                            var tcs = new TaskCompletionSource();
                             authService.AccessToken.Take(1).Subscribe(token =>
                             {
                                 call.Request.Headers.Add("Authorization", $"Bearer {token}");
-                                tsc.SetResult();
+                                tcs.SetResult();
                             });
-                            return tsc.Task;
+                            return tcs.Task;
                         }
                     }
                 };
