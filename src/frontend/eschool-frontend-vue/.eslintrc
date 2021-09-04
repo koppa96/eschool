@@ -15,6 +15,7 @@
       {
       "allowExpressions": true
       }
-    ]
+    ],
+    "import/named": "off"
   }
 }
