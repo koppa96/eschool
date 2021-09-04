@@ -1,32 +1,22 @@
 {
   "name": "eschool-frontend-vue",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
-    "serve": "vite preview"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "pkce": "^1.0.0-beta2",
-    "vue": "^3.2.6",
-    "vue-router": "^4.0.11"
+    "core-js": "^3.6.5",
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0-0"
   },
   "devDependencies": {
-    "@antfu/eslint-config-vue": "^0.7.0",
-    "@types/axios": "^0.14.0",
-    "@typescript-eslint/eslint-plugin": "^4.30.0",
-    "@typescript-eslint/parser": "^4.30.0",
-    "@vitejs/plugin-vue": "^1.6.0",
-    "@vue/compiler-sfc": "^3.2.6",
-    "@vue/eslint-config-typescript": "^7.0.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-vue-typescript-eslint": "^1.1.7",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-vue": "^7.17.0",
-    "typescript": "^4.3.2",
-    "vite": "^2.5.2",
-    "vue-tsc": "^0.2.2"
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "typescript": "~4.1.5"
   }
 }
