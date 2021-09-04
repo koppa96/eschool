@@ -31,12 +31,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import Sidebar from '@/core/components/Sidebar.vue'
+import { authService } from '@/core/auth'
 
 const leftDrawerOpen = ref(false)
 
 function toggleLeftDrawer(): void {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
+
+onMounted(() => {
+  if (!authService.accessToken) {
+    authService.initiateAuthCodeFlow()
+    return
+  }
+
+  const tokenParts: string[] = authService.accessToken.split('.')
+  if (tokenParts.length !== 3) {
+    authService.initiateAuthCodeFlow()
+    return
+  }
+
+  const { exp } = JSON.parse(atob(tokenParts[1]))
+  const expirationDate = new Date(exp * 1000)
+  const now = new Date()
+
+  if (expirationDate < now) {
+    authService.initiateAuthCodeFlow()
+  }
+})
 </script>

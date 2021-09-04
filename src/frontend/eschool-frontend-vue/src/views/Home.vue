@@ -27,6 +27,7 @@ const tokenData = ref('')
 const silentRenewStatus = ref('')
 
 function login(): void {
+  authService.codePair = null
   authService.initiateAuthCodeFlow()
 }
 

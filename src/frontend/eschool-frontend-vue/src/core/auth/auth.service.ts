@@ -14,12 +14,52 @@ interface TokenResponse {
 
 const CODE_PAIR_KEY = 'codePair'
 const TOKENS_KEY = 'tokens'
+const TENANT_ID_KEY = 'tenantId'
 
 export class AuthService {
   private isSilentRefreshing = false
-  private tenantId: string | null = null
-  private tokens: TokenResponse | null = null
-  private codePair: CodePair | null = null
+  private _tenantId: string | null = null
+  private _tokens: TokenResponse | null = null
+  private _codePair: CodePair | null = null
+
+  get tenantId(): string | null {
+    return this._tenantId
+  }
+
+  set tenantId(value: string | null) {
+    this._tenantId = value
+    if (value === null) {
+      sessionStorage.removeItem(TENANT_ID_KEY)
+    } else {
+      sessionStorage.setItem(TENANT_ID_KEY, JSON.stringify(value))
+    }
+  }
+
+  get tokens(): TokenResponse | null {
+    return this._tokens
+  }
+
+  set tokens(value: TokenResponse | null) {
+    this._tokens = value
+    if (value === null) {
+      sessionStorage.removeItem(TOKENS_KEY)
+    } else {
+      sessionStorage.setItem(TOKENS_KEY, JSON.stringify(value))
+    }
+  }
+
+  get codePair(): CodePair | null {
+    return this._codePair
+  }
+
+  set codePair(value: CodePair | null) {
+    this._codePair = value
+    if (value === null) {
+      sessionStorage.removeItem(CODE_PAIR_KEY)
+    } else {
+      sessionStorage.setItem(CODE_PAIR_KEY, JSON.stringify(value))
+    }
+  }
 
   get accessToken(): string | null {
     return this.tokens && this.tokens.access_token
@@ -30,12 +70,14 @@ export class AuthService {
     private serverConfig: ServerConfig
   ) {
     const tokensInSessionStorage = sessionStorage.getItem(TOKENS_KEY)
-    if (tokensInSessionStorage !== null)
-      this.tokens = JSON.parse(tokensInSessionStorage)
+    if (tokensInSessionStorage !== null) {
+      this._tokens = JSON.parse(tokensInSessionStorage)
+    }
 
     const codePairInSessionStorage = sessionStorage.getItem(CODE_PAIR_KEY)
-    if (codePairInSessionStorage !== null)
-      this.codePair = JSON.parse(codePairInSessionStorage)
+    if (codePairInSessionStorage !== null) {
+      this._codePair = JSON.parse(codePairInSessionStorage)
+    }
   }
 
   private createAuthorizeState(silentRefresh: boolean): AuthorizeState {
@@ -60,8 +102,12 @@ export class AuthService {
   }
 
   initiateAuthCodeFlow(): void {
+    if (this.codePair) {
+      return
+    }
+
     const { codePair, url } = this.createAuthorizeState(false)
-    sessionStorage.setItem(CODE_PAIR_KEY, JSON.stringify(codePair))
+    this.codePair = codePair
     window.location.href = url
   }
 
@@ -69,8 +115,9 @@ export class AuthService {
     authCode: string,
     silentRenew: boolean
   ): Promise<void> {
-    if (this.codePair === null)
+    if (this.codePair === null) {
       throw new Error('The code pair can not be null.')
+    }
 
     const params = new URLSearchParams()
     params.append('client_id', this.clientConfig.clientId)
@@ -79,9 +126,11 @@ export class AuthService {
     params.append('code', authCode)
     params.append('code_verifier', this.codePair.codeVerifier)
 
-    if (silentRenew)
+    if (silentRenew) {
       params.append('redirect_uri', this.clientConfig.silentRefreshRedirectUri)
-    else params.append('redirect_uri', this.clientConfig.postLoginRedirectUri)
+    } else {
+      params.append('redirect_uri', this.clientConfig.postLoginRedirectUri)
+    }
 
     const { data } = await axios.default.post<TokenResponse>(
       this.serverConfig.tokenUrl,
@@ -94,8 +143,7 @@ export class AuthService {
     )
 
     this.tokens = data
-    sessionStorage.removeItem(CODE_PAIR_KEY)
-    sessionStorage.setItem(TOKENS_KEY, JSON.stringify(this.tokens))
+    this.codePair = null
   }
 
   initiateLogout(): void {
@@ -135,7 +183,6 @@ export class AuthService {
 
       const { codePair, url } = this.createAuthorizeState(true)
       this.codePair = codePair
-      sessionStorage.setItem(CODE_PAIR_KEY, JSON.stringify(codePair))
       iframe.src = url
 
       return new Promise<boolean>((resolve, reject) => {
