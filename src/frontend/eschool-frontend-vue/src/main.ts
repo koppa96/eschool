@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
+import { Quasar } from 'quasar' 
 import App from './App.vue'
 import router from './router'
-import { Quasar } from 'quasar'
 // @ts-ignore
 import quasarUserOptions from './quasar-user-options'
 
