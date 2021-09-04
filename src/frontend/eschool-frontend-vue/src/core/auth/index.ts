@@ -6,9 +6,9 @@ const clientConfig: ClientConfig = {
   responseType: 'code',
   scope:
     'openid profile user_role testingapi.readwrite classregisterapi.readwrite homeassignmentsapi.readwrite identityproviderapi.readwrite',
-  postLoginRedirectUri: 'http://localhost:3000/login-redirect',
-  postLogoutRedirectUri: 'http://localhost:3000/logout-redirect',
-  silentRefreshRedirectUri: 'http://localhost:3000/silent-refresh.html'
+  postLoginRedirectUri: 'http://localhost:8080/login-redirect',
+  postLogoutRedirectUri: 'http://localhost:8080/logout-redirect',
+  silentRefreshRedirectUri: 'http://localhost:8080/silent-refresh.html'
 }
 
 const serverConfig: ServerConfig = {

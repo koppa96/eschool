@@ -16,6 +16,7 @@
       "allowExpressions": true
       }
     ],
-    "import/named": "off"
+    "import/named": "off",
+    "curly": [2, "all"]
   }
 }

@@ -14,11 +14,11 @@ const routes: RouteRecordRaw[] = [
     component: Home
   },
   {
-    path: '/oauth/login-redirect',
+    path: '/login-redirect',
     component: LoginRedirect
   },
   {
-    path: '/oauth/logout-redirect',
+    path: '/logout-redirect',
     component: LogoutRedirect
   }
 ]

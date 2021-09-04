@@ -4,10 +4,13 @@
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
+        <q-avatar size="xl" icon="school"></q-avatar>
+
         <q-toolbar-title>
-          <q-avatar size="xl" icon="school"></q-avatar>
           ESchool
         </q-toolbar-title>
+
+        <q-btn flat round icon="lock_open"></q-btn>
       </q-toolbar>
     </q-header>
 
