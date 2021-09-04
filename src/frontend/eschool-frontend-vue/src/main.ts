@@ -1,21 +1,25 @@
 import { createApp } from 'vue'
-import App from './App.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import App from './App.vue'
 import HelloWorld from './components/HelloWorld.vue'
-import LoginRedirect from './components/LoginRedirect.vue'
+import { LoginRedirect, LogoutRedirect } from './core/core.module'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/hello-world',
-      component: HelloWorld,
+      path: '/',
+      component: HelloWorld
     },
     {
-      path: '/login-redirect',
-      component: LoginRedirect,
+      path: '/oauth/login-redirect',
+      component: LoginRedirect
     },
-  ],
+    {
+      path: '/oauth/logout-redirect',
+      component: LogoutRedirect
+    }
+  ]
 })
 
 createApp(App).use(router).mount('#app')
