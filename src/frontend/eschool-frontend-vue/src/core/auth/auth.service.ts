@@ -1,16 +1,6 @@
 import { create, CodePair } from 'pkce'
-import * as axios from 'axios'
-import { ClientConfig, ServerConfig } from './auth.model'
-
-interface AuthorizeState {
-  url: string
-  codePair: CodePair
-}
-
-interface TokenResponse {
-  access_token: string
-  id_token: string
-}
+import axios from 'axios'
+import { AuthorizeState, ClientConfig, JwtToken, ServerConfig, TokenResponse } from './auth.model'
 
 const CODE_PAIR_KEY = 'codePair'
 const TOKENS_KEY = 'tokens'
@@ -61,7 +51,7 @@ export class AuthService {
     }
   }
 
-  get accessToken(): string | null {
+  get accessToken(): JwtToken | null {
     return this.tokens && this.tokens.access_token
   }
 
@@ -132,7 +122,7 @@ export class AuthService {
       params.append('redirect_uri', this.clientConfig.postLoginRedirectUri)
     }
 
-    const { data } = await axios.default.post<TokenResponse>(
+    const { data } = await axios.post<TokenResponse>(
       this.serverConfig.tokenUrl,
       params.toString(),
       {
@@ -148,7 +138,7 @@ export class AuthService {
 
   initiateLogout(): void {
     const params = new URLSearchParams()
-    params.append('id_token_hint', this.tokens?.id_token ?? '')
+    params.append('id_token_hint', this.tokens?.id_token.value ?? '')
     params.append(
       'post_logout_redirect_uri',
       this.clientConfig.postLogoutRedirectUri

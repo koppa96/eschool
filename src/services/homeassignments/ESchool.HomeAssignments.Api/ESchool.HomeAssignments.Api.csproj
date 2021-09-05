@@ -21,6 +21,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NSwag.AspNetCore" Version="13.11.1" />
+    <PackageReference Include="NSwag.MSBuild" Version="13.11.1" />
     <PackageReference Include="Polly" Version="7.2.2" />
   </ItemGroup>
 
@@ -30,4 +31,8 @@
     <ProjectReference Include="..\ESchool.HomeAssignments.Application\ESchool.HomeAssignments.Application.csproj" />
   </ItemGroup>
 
+  <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == Debug">
+    <Exec Command="$(NSwagExe_Net50) run nswag.json" />
+  </Target>
+  
 </Project>

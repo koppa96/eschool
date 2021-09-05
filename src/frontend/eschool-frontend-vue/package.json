@@ -10,6 +10,7 @@
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.3",
     "core-js": "^3.6.5",
+    "linq-extensions": "^1.0.4",
     "pkce": "^1.0.0-beta2",
     "quasar": "^2.0.0",
     "vue": "^3.0.0",

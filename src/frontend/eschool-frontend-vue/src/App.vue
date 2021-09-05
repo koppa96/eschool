@@ -34,6 +34,8 @@
 import { onMounted, ref } from 'vue'
 import Sidebar from '@/core/components/Sidebar.vue'
 import { authService } from '@/core/auth'
+import { createClient } from '@/shared/api'
+import { FilesClient } from '@/shared/generated-clients/home-assignments'
 
 const leftDrawerOpen = ref(false)
 
@@ -42,23 +44,12 @@ function toggleLeftDrawer(): void {
 }
 
 onMounted(() => {
-  if (!authService.accessToken) {
-    authService.initiateAuthCodeFlow()
-    return
-  }
+  // if (!authService.accessToken || authService.accessToken.expired) {
+  //   authService.initiateAuthCodeFlow()
+  // }
 
-  const tokenParts: string[] = authService.accessToken.split('.')
-  if (tokenParts.length !== 3) {
-    authService.initiateAuthCodeFlow()
-    return
-  }
+  const client = createClient(FilesClient)
 
-  const { exp } = JSON.parse(atob(tokenParts[1]))
-  const expirationDate = new Date(exp * 1000)
-  const now = new Date()
-
-  if (expirationDate < now) {
-    authService.initiateAuthCodeFlow()
-  }
+  console.log(client)
 })
 </script>

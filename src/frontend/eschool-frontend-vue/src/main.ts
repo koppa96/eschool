@@ -7,6 +7,8 @@ import quasarUserOptions from './quasar-user-options'
 import Home from '@/views/Home.vue'
 import LoginRedirect from '@/core/auth/components/LoginRedirect.vue'
 import LogoutRedirect from '@/core/auth/components/LogoutRedirect.vue'
+import axios from 'axios'
+import { AppConfiguration } from './core/config'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -28,4 +30,13 @@ const router = createRouter({
   routes
 })
 
-createApp(App).use(Quasar, quasarUserOptions).use(router).mount('#app')
+axios.get('config.json').then(({ data }) => {
+  AppConfiguration.value = data
+
+  createApp(App)
+    .use(Quasar, quasarUserOptions)
+    .use(router)
+    .mount('#app')
+})
+
+

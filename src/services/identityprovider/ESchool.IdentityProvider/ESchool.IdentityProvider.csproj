@@ -21,6 +21,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.11.1" />
+    <PackageReference Include="NSwag.MSBuild" Version="13.11.1" />
     <PackageReference Include="Polly" Version="7.2.1" />
   </ItemGroup>
 
@@ -29,5 +30,9 @@
     <ProjectReference Include="..\..\..\libs\ESchool.Libs.Outbox.AspNetCore\ESchool.Libs.Outbox.AspNetCore.csproj" />
     <ProjectReference Include="..\ESchool.IdentityProvider.Application\ESchool.IdentityProvider.Application.csproj" />
   </ItemGroup>
+
+  <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == Debug">
+    <Exec Command="$(NSwagExe_Net50) run nswag.json" />
+  </Target>
   
 </Project>
