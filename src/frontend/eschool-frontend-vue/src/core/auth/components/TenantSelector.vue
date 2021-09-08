@@ -1,29 +1,60 @@
 <template>
-  <div class="flex items-center">
+  <div>
     <q-select
       class="vw-25"
       outlined
+      label="Iskola választás"
       :model-value="selectedTenant"
       :options="tenants"
       option-label="name"
       option-value="id"
       :loading="loading"
+      bg-color="white"
       @update:model-value="changeTenant($event)"
     />
-    <q-btn :disable="isInDefault" @click="changeDefault()">
-      Beállítás alapértelmezettként
-    </q-btn>
+    <q-dialog v-model="showDialog" @hide="dialogClosed()">
+      <q-card>
+        <q-card-section class="row no-wrap">
+          <q-avatar
+            class="q-mr-md"
+            icon="priority_high"
+            color="primary"
+            text-color="white"
+          />
+          <span class="flex-shrink">
+            Ön iskolanézetet készül váltani. Győződjön meg róla hogy minden
+            módosítása mentésre került!
+          </span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            @click="dialogResult = false"
+            flat
+            label="Mégse"
+            color="primary"
+            v-close-popup
+          />
+          <q-btn
+            @click="dialogResult = true"
+            flat
+            label="Iskolaváltás"
+            color="primary"
+            v-close-popup
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
 import { filterNotNull } from '@/core/utils/rxjs-operators'
-import { computed, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { distinctUntilChanged, map, takeUntil } from 'rxjs'
 import { useAuthService } from '..'
 import {
-  DefaultTenantIdSetCommand,
   TenantListResponse,
   UsersClient
 } from '@/shared/generated-clients/identity-provider'
@@ -33,13 +64,13 @@ import { createClient } from '@/shared/api'
 const tenants = ref<TenantListResponse[]>([])
 const selectedTenant = ref<TenantListResponse | null>(null)
 const loading = ref(true)
-const defaultTenant = ref<TenantListResponse | null>(null)
-const isInDefault = computed(
-  () => selectedTenant.value?.id === defaultTenant.value?.id
-)
+const showDialog = ref(false)
+const dialogResult = ref<boolean | null>(null)
+let nextTenant: TenantListResponse | null = null
 
 const authService = useAuthService()
 const unmounted = useObservableLifecycle(onUnmounted)
+const mounted = useObservableLifecycle(onMounted)
 const client = createClient(UsersClient)
 
 authService.tokens$
@@ -54,34 +85,33 @@ authService.tokens$
     const userData = await client.getMe()
 
     tenants.value = userData.tenants ?? []
+
     selectedTenant.value =
       tenants.value.find(x => x.id === tokenData.tenant_id) ?? null
-    defaultTenant.value =
-      tenants.value.find(x => x.id === userData.defaultTenantId) ?? null
 
     loading.value = false
   })
 
 function changeTenant(selectedTenant: TenantListResponse) {
-  authService.tenantId = selectedTenant.id
+  showDialog.value = true
+  nextTenant = selectedTenant
 }
 
-async function changeDefault() {
-  if (selectedTenant.value) {
-    const userData = await client.setDefaultTenant(
-      new DefaultTenantIdSetCommand({
-        defaultTenantId: selectedTenant.value.id
-      })
-    )
-
-    defaultTenant.value =
-      userData.tenants?.find(x => x.id === userData.defaultTenantId) ?? null
+function dialogClosed() {
+  if (dialogResult.value) {
+    authService.tenantId = nextTenant?.id ?? null
+    loading.value = true
   }
+  dialogResult.value = null
 }
 </script>
 
 <style scoped lang="scss">
 .vw-25 {
   width: 25vw;
+}
+
+.flex-shrink {
+  flex-shrink: 1;
 }
 </style>

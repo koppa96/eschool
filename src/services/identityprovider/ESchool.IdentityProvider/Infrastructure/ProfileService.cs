@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
 using ESchool.Libs.Domain;
 using ESchool.Libs.Domain.Enums;
@@ -15,12 +16,14 @@ namespace ESchool.IdentityProvider.Infrastructure
     public class ProfileService : IProfileService
     {
         private readonly UserManager<User> userManager;
+        private readonly IdentityProviderContext dbContext;
 
-        public ProfileService(UserManager<User> userManager)
+        public ProfileService(UserManager<User> userManager, IdentityProviderContext dbContext)
         {
             this.userManager = userManager;
+            this.dbContext = dbContext;
         }
-        
+
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             var userId = Guid.Parse(context.Subject.Claims.Single(x => x.Type == "sub").Value);
@@ -36,9 +39,11 @@ namespace ESchool.IdentityProvider.Infrastructure
 
             if (user.GlobalRole == GlobalRoleType.TenantUser)
             {
+                TenantUser tenantUser = null;
+
                 if (string.IsNullOrEmpty(tenantId))
                 {
-                    TenantUser tenantUser = null;
+
                     if (user.DefaultTenantId.HasValue)
                     {
                         tenantUser = user.TenantUsers.Single(x => x.TenantId == user.DefaultTenantId.Value);
@@ -48,23 +53,23 @@ namespace ESchool.IdentityProvider.Infrastructure
                         tenantUser = user.TenantUsers.First();
                     }
 
-                    if (tenantUser != null)
-                    {
-                        context.IssuedClaims.Add(new Claim(Constants.ClaimTypes.TenantId, tenantUser.TenantId.ToString()));
-                        context.IssuedClaims.AddRange(tenantUser.TenantUserRoles
-                            .Select(x => new Claim(Constants.ClaimTypes.TenantRoles, x.TenantRole.ToString())));
-                    }
+                    context.IssuedClaims.Add(new Claim(Constants.ClaimTypes.TenantId, tenantUser.TenantId.ToString()));
+                    context.IssuedClaims.AddRange(tenantUser.TenantUserRoles
+                        .Select(x => new Claim(Constants.ClaimTypes.TenantRoles, x.TenantRole.ToString())));
                 }
                 else
                 {
                     var tenantIdGuid = Guid.Parse(tenantId);
-                    var tenantUser = user.TenantUsers.SingleOrDefault(x => x.TenantId == tenantIdGuid);
+                    tenantUser = user.TenantUsers.SingleOrDefault(x => x.TenantId == tenantIdGuid);
                     if (tenantUser != null)
                     {
                         context.IssuedClaims.Add(new Claim(Constants.ClaimTypes.TenantId, tenantId));
                         context.IssuedClaims.AddRange(tenantUser.TenantUserRoles.Select(x => new Claim(Constants.ClaimTypes.TenantRoles, x.TenantRole.ToString())));
                     }
                 }
+
+                user.DefaultTenant = tenantUser.Tenant;
+                await dbContext.SaveChangesAsync();
             }
         }
 

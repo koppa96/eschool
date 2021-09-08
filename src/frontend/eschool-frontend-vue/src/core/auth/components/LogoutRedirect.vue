@@ -8,6 +8,6 @@ const authService = useAuthService()
 
 onMounted(() => {
   authService.onPostLogout()
-  router.push('/')
+  authService.initiateAuthCodeFlow()
 })
 </script>

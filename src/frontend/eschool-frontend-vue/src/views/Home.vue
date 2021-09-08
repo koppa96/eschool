@@ -16,14 +16,12 @@
         Silent renew
       </q-btn>
     </div>
-    <TenantSelector />
   </q-page>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAuthService } from '@/core/auth'
-import TenantSelector from '@/core/auth/components/TenantSelector.vue'
 
 const tokenData = ref('')
 const silentRenewStatus = ref('')

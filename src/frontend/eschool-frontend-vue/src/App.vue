@@ -10,7 +10,16 @@
           ESchool
         </q-toolbar-title>
 
-        <q-btn flat round icon="lock_open"></q-btn>
+        <TenantSelector class="q-my-sm" />
+
+        <q-btn
+          class="q-mx-sm"
+          flat
+          icon="lock_open"
+          @click="authService.initiateLogout()"
+        >
+          Kijelentkezés
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -33,14 +42,21 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import Sidebar from '@/core/components/Sidebar.vue'
+import TenantSelector from '@/core/auth/components/TenantSelector.vue'
+import { useAuthService } from '@/core/auth'
+import { isExpired } from '@/core/auth/utils/token.utils'
 
 const leftDrawerOpen = ref(false)
+
+const authService = useAuthService()
 
 function toggleLeftDrawer(): void {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 
 onMounted(() => {
-  // redirect to login if not logged in
+  if (!authService.accessToken || isExpired(authService.accessToken)) {
+    authService.initiateAuthCodeFlow()
+  }
 })
 </script>

@@ -49,13 +49,5 @@ namespace ESchool.IdentityProvider.Controllers
         {
             return mediator.Send(new UserGetQuery { Id = identityService.GetCurrentUserId() }, cancellationToken);
         }
-
-        [HttpPatch("me")]
-        [Authorize(PolicyNames.AnyRole)]
-        public Task<UserDetailsResponse> SetDefaultTenant([FromBody] DefaultTenantIdSetCommand command,
-            CancellationToken cancellationToken)
-        {
-            return mediator.Send(command, cancellationToken);
-        }
     }
 }
