@@ -61,8 +61,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.Tools.TenantLogin",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{B74216F3-9E6A-4AED-9DB3-1CE0279D6740}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "docker-compose", "docker-compose.dcproj", "{BCDC48F8-A500-4994-989B-F4BE8855C6FC}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proto", "Proto", "{9E63BC66-0279-44B4-9385-D400A68A52E8}"
 	ProjectSection(SolutionItems) = preProject
 		src\proto\classregister.proto = src\proto\classregister.proto
@@ -80,17 +78,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.IdentityProvider.In
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{5DFE6EDF-3A6A-4B32-91DA-D927177F60BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.Frontend", "src\frontend\ESchool.Frontend\ESchool.Frontend.csproj", "{A73CF61D-01AB-4454-B309-E2A7429CE804}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.Frontend", "src\frontend\ESchool.Frontend\ESchool.Frontend.csproj", "{A73CF61D-01AB-4454-B309-E2A7429CE804}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.Frontend.Network", "src\frontend\ESchool.Frontend.Network\ESchool.Frontend.Network.csproj", "{E6F8A44F-2CC6-4908-BD59-E58CAE8D7C9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.Frontend.Network", "src\frontend\ESchool.Frontend.Network\ESchool.Frontend.Network.csproj", "{E6F8A44F-2CC6-4908-BD59-E58CAE8D7C9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.Libs.Interface", "src\libs\ESchool.Libs.Interface\ESchool.Libs.Interface.csproj", "{7AE66188-CB08-46B6-A493-E71F32998950}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.Libs.Interface", "src\libs\ESchool.Libs.Interface\ESchool.Libs.Interface.csproj", "{7AE66188-CB08-46B6-A493-E71F32998950}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.ClassRegister.SharedDomain", "src\services\classregister\ESchool.ClassRegister.SharedDomain\ESchool.ClassRegister.SharedDomain.csproj", "{2408D90F-4347-455B-986B-904311A47470}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.ClassRegister.SharedDomain", "src\services\classregister\ESchool.ClassRegister.SharedDomain\ESchool.ClassRegister.SharedDomain.csproj", "{2408D90F-4347-455B-986B-904311A47470}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.HomeAssignments.Interface", "src\services\homeassignments\ESchool.HomeAssignments.Interface\ESchool.HomeAssignments.Interface.csproj", "{D07D4553-3E0A-4FF0-9FD7-309C00FEA2E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.HomeAssignments.Interface", "src\services\homeassignments\ESchool.HomeAssignments.Interface\ESchool.HomeAssignments.Interface.csproj", "{D07D4553-3E0A-4FF0-9FD7-309C00FEA2E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.HomeAssignments.SharedDomain", "src\services\homeassignments\ESchool.HomeAssignments.SharedDomain\ESchool.HomeAssignments.SharedDomain.csproj", "{67A8A54D-3599-4184-98B5-6CEE7C7CC05E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESchool.HomeAssignments.SharedDomain", "src\services\homeassignments\ESchool.HomeAssignments.SharedDomain\ESchool.HomeAssignments.SharedDomain.csproj", "{67A8A54D-3599-4184-98B5-6CEE7C7CC05E}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{17099085-3372-4891-99DF-F6DA4B2AFE91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -178,10 +178,6 @@ Global
 		{A2850E7A-F44A-4FFE-8F5C-9869FDF5B820}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2850E7A-F44A-4FFE-8F5C-9869FDF5B820}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2850E7A-F44A-4FFE-8F5C-9869FDF5B820}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BCDC48F8-A500-4994-989B-F4BE8855C6FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BCDC48F8-A500-4994-989B-F4BE8855C6FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BCDC48F8-A500-4994-989B-F4BE8855C6FC}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{BCDC48F8-A500-4994-989B-F4BE8855C6FC}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{4C0B9AA6-ECA1-4680-A26C-0F24BBFAF77F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C0B9AA6-ECA1-4680-A26C-0F24BBFAF77F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C0B9AA6-ECA1-4680-A26C-0F24BBFAF77F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -222,6 +218,10 @@ Global
 		{67A8A54D-3599-4184-98B5-6CEE7C7CC05E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67A8A54D-3599-4184-98B5-6CEE7C7CC05E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67A8A54D-3599-4184-98B5-6CEE7C7CC05E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17099085-3372-4891-99DF-F6DA4B2AFE91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17099085-3372-4891-99DF-F6DA4B2AFE91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17099085-3372-4891-99DF-F6DA4B2AFE91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17099085-3372-4891-99DF-F6DA4B2AFE91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -252,7 +252,6 @@ Global
 		{9E2772C7-F237-4C52-AC33-CF720C0CCB03} = {8B32FBF8-1B4B-4EAD-8AB0-1D4B7A9A760C}
 		{61F4DDFE-8F48-4D60-91EC-890F82816C44} = {8B32FBF8-1B4B-4EAD-8AB0-1D4B7A9A760C}
 		{A2850E7A-F44A-4FFE-8F5C-9869FDF5B820} = {FEE307E9-5D30-4AB1-9745-8DFA7FE2B7FB}
-		{BCDC48F8-A500-4994-989B-F4BE8855C6FC} = {B74216F3-9E6A-4AED-9DB3-1CE0279D6740}
 		{4C0B9AA6-ECA1-4680-A26C-0F24BBFAF77F} = {A46DE01A-2F1E-47DC-AEEC-B88B0B8B8DE2}
 		{09BF7165-C15B-4728-B883-DFEB3BB1D83F} = {A46DE01A-2F1E-47DC-AEEC-B88B0B8B8DE2}
 		{A46DE01A-2F1E-47DC-AEEC-B88B0B8B8DE2} = {54C08D05-C5A5-4648-B88C-4ED83A585D54}
