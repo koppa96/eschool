@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.IdentityProvider.Interface.Features.Users;
+using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Domain.Services;
 using ESchool.Libs.Interface.Response;
 using MediatR;
@@ -43,10 +44,18 @@ namespace ESchool.IdentityProvider.Controllers
         }
 
         [HttpGet("me")]
-        [Authorize("Default")]
+        [Authorize(PolicyNames.AnyRole)]
         public Task<UserDetailsResponse> GetMe(CancellationToken cancellationToken)
         {
             return mediator.Send(new UserGetQuery { Id = identityService.GetCurrentUserId() }, cancellationToken);
+        }
+
+        [HttpPatch("me")]
+        [Authorize(PolicyNames.AnyRole)]
+        public Task<UserDetailsResponse> SetDefaultTenant(DefaultTenantIdSetCommand command,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(command, cancellationToken);
         }
     }
 }
