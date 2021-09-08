@@ -1,6 +1,8 @@
 <template>
   <div class="flex items-center">
     <q-select
+      class="vw-25"
+      outlined
       :model-value="selectedTenant"
       :options="tenants"
       option-label="name"
@@ -29,10 +31,12 @@ import { getData } from '../utils/token.utils'
 import { createClient } from '@/shared/api'
 
 const tenants = ref<TenantListResponse[]>([])
-const selectedTenant = ref<string | null>(null)
+const selectedTenant = ref<TenantListResponse | null>(null)
 const loading = ref(true)
-const defaultTenant = ref<string | null>(null)
-const isInDefault = computed(() => selectedTenant.value === defaultTenant.value)
+const defaultTenant = ref<TenantListResponse | null>(null)
+const isInDefault = computed(
+  () => selectedTenant.value?.id === defaultTenant.value?.id
+)
 
 const authService = useAuthService()
 const unmounted = useObservableLifecycle(onUnmounted)
@@ -50,24 +54,34 @@ authService.tokens$
     const userData = await client.getMe()
 
     tenants.value = userData.tenants ?? []
-    selectedTenant.value = tokenData.tenant_id
-    defaultTenant.value = userData.defaultTenantId ?? null
+    selectedTenant.value =
+      tenants.value.find(x => x.id === tokenData.tenant_id) ?? null
+    defaultTenant.value =
+      tenants.value.find(x => x.id === userData.defaultTenantId) ?? null
 
     loading.value = false
   })
 
-function changeTenant(selectedTenantId: string) {
-  authService.tenantId = selectedTenantId
-  authService.silentRefresh()
+function changeTenant(selectedTenant: TenantListResponse) {
+  authService.tenantId = selectedTenant.id
 }
 
-function changeDefault() {
+async function changeDefault() {
   if (selectedTenant.value) {
-    client.setDefaultTenant(
+    const userData = await client.setDefaultTenant(
       new DefaultTenantIdSetCommand({
-        defaultTenantId: selectedTenant.value
+        defaultTenantId: selectedTenant.value.id
       })
     )
+
+    defaultTenant.value =
+      userData.tenants?.find(x => x.id === userData.defaultTenantId) ?? null
   }
 }
 </script>
+
+<style scoped lang="scss">
+.vw-25 {
+  width: 25vw;
+}
+</style>

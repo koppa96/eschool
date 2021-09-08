@@ -133,6 +133,10 @@ export class AuthService {
       params.append('redirect_uri', this.clientConfig.postLoginRedirectUri)
     }
 
+    if (this.tenantId) {
+      params.append('tenant_id', this.tenantId)
+    }
+
     const { data } = await axios.post<TokenResponse>(
       this.serverConfig.tokenUrl,
       params.toString(),
