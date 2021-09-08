@@ -16,15 +16,18 @@
         Silent renew
       </q-btn>
     </div>
+    <TenantSelector />
   </q-page>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { authService } from '@/core/auth'
+import { useAuthService } from '@/core/auth'
+import TenantSelector from '@/core/auth/components/TenantSelector.vue'
 
 const tokenData = ref('')
 const silentRenewStatus = ref('')
+const authService = useAuthService()
 
 function login(): void {
   authService.codePair = null
@@ -44,7 +47,7 @@ function getTokenData(): void {
   }
 }
 
-async function silentRenew(): void {
+async function silentRenew(): Promise<void> {
   silentRenewStatus.value = 'Silent renew folyamatban'
   try {
     const result = await authService.silentRefresh()

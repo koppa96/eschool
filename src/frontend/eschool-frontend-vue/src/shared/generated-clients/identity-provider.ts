@@ -659,6 +659,57 @@ export class UsersClient {
         }
         return Promise.resolve<UserDetailsResponse>(<any>null);
     }
+
+    setDefaultTenant(command: DefaultTenantIdSetCommand , cancelToken?: CancelToken | undefined): Promise<UserDetailsResponse> {
+        let url_ = this.baseUrl + "/api/Users/me";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "PATCH",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processSetDefaultTenant(_response);
+        });
+    }
+
+    protected processSetDefaultTenant(response: AxiosResponse): Promise<UserDetailsResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = UserDetailsResponse.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<UserDetailsResponse>(<any>null);
+    }
 }
 
 export class PagedListResponseOfTenantListResponse implements IPagedListResponseOfTenantListResponse {
@@ -1135,6 +1186,42 @@ export class UserCreateCommand implements IUserCreateCommand {
 export interface IUserCreateCommand {
     email: string | undefined;
     globalRole: GlobalRoleType;
+}
+
+export class DefaultTenantIdSetCommand implements IDefaultTenantIdSetCommand {
+    defaultTenantId!: string;
+
+    constructor(data?: IDefaultTenantIdSetCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.defaultTenantId = _data["defaultTenantId"];
+        }
+    }
+
+    static fromJS(data: any): DefaultTenantIdSetCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new DefaultTenantIdSetCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["defaultTenantId"] = this.defaultTenantId;
+        return data; 
+    }
+}
+
+export interface IDefaultTenantIdSetCommand {
+    defaultTenantId: string;
 }
 
 export class ApiException extends Error {

@@ -33,10 +33,6 @@
     <ProjectReference Include="..\ESchool.ClassRegister.Application\ESchool.ClassRegister.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dtos" />
-  </ItemGroup>
-
   <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == Debug">
     <Exec Command="$(NSwagExe_Net50) run nswag.json" />
   </Target>
