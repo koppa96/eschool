@@ -1040,6 +1040,7 @@ export enum TenantRoleType {
 export class UserDetailsResponse implements IUserDetailsResponse {
     id!: string;
     email!: string | undefined;
+    defaultTenantId!: string | undefined;
     globalRoleType!: GlobalRoleType;
     tenants!: TenantListResponse[] | undefined;
 
@@ -1056,6 +1057,7 @@ export class UserDetailsResponse implements IUserDetailsResponse {
         if (_data) {
             this.id = _data["id"];
             this.email = _data["email"];
+            this.defaultTenantId = _data["defaultTenantId"];
             this.globalRoleType = _data["globalRoleType"];
             if (Array.isArray(_data["tenants"])) {
                 this.tenants = [] as any;
@@ -1076,6 +1078,7 @@ export class UserDetailsResponse implements IUserDetailsResponse {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["email"] = this.email;
+        data["defaultTenantId"] = this.defaultTenantId;
         data["globalRoleType"] = this.globalRoleType;
         if (Array.isArray(this.tenants)) {
             data["tenants"] = [];
@@ -1089,6 +1092,7 @@ export class UserDetailsResponse implements IUserDetailsResponse {
 export interface IUserDetailsResponse {
     id: string;
     email: string | undefined;
+    defaultTenantId: string | undefined;
     globalRoleType: GlobalRoleType;
     tenants: TenantListResponse[] | undefined;
 }

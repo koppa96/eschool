@@ -1,3 +1,16 @@
 {
-  "baseUrl": "https://localhost:5001"
+  "baseUrl": "https://localhost:5001",
+  "clientConfig": {
+    "clientId": "test",
+    "responseType": "code",
+    "scope": "openid profile user_role testingapi.readwrite classregisterapi.readwrite homeassignmentsapi.readwrite identityproviderapi.readwrite",
+    "postLoginRedirectUri": "http://localhost:8080/login-redirect",
+    "postLogoutRedirectUri": "http://localhost:8080/logout-redirect",
+    "silentRefreshRedirectUri": "http://localhost:8080/silent-refresh.html"
+  },
+  "serverConfig": {
+    "authorizeUrl": "https://localhost:5301/connect/authorize",
+    "tokenUrl": "https://localhost:5301/connect/token",
+    "endSessionUrl": "https://localhost:5301/connect/endsession"
+  }
 }

@@ -38,5 +38,3 @@ axios.get('config.json').then(({ data }) => {
     .use(router)
     .mount('#app')
 })
-
-

@@ -33,9 +33,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import Sidebar from '@/core/components/Sidebar.vue'
-import { authService } from '@/core/auth'
-import { createClient } from '@/shared/api'
-import { FilesClient } from '@/shared/generated-clients/home-assignments'
 
 const leftDrawerOpen = ref(false)
 
@@ -44,12 +41,6 @@ function toggleLeftDrawer(): void {
 }
 
 onMounted(() => {
-  // if (!authService.accessToken || authService.accessToken.expired) {
-  //   authService.initiateAuthCodeFlow()
-  // }
-
-  const client = createClient(FilesClient)
-
-  console.log(client)
+  // redirect to login if not logged in
 })
 </script>

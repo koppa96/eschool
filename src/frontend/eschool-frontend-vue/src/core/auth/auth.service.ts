@@ -1,6 +1,12 @@
 import { create, CodePair } from 'pkce'
 import axios from 'axios'
-import { AuthorizeState, ClientConfig, JwtToken, ServerConfig, TokenResponse } from './auth.model'
+import {
+  AuthorizeState,
+  ClientConfig,
+  ServerConfig,
+  TokenResponse
+} from './auth.model'
+import { BehaviorSubject, Observable } from 'rxjs'
 
 const CODE_PAIR_KEY = 'codePair'
 const TOKENS_KEY = 'tokens'
@@ -9,7 +15,7 @@ const TENANT_ID_KEY = 'tenantId'
 export class AuthService {
   private isSilentRefreshing = false
   private _tenantId: string | null = null
-  private _tokens: TokenResponse | null = null
+  private _tokens$ = new BehaviorSubject<TokenResponse | null>(null)
   private _codePair: CodePair | null = null
 
   get tenantId(): string | null {
@@ -23,14 +29,19 @@ export class AuthService {
     } else {
       sessionStorage.setItem(TENANT_ID_KEY, JSON.stringify(value))
     }
+    this.silentRefresh()
+  }
+
+  get tokens$(): Observable<TokenResponse | null> {
+    return this._tokens$.asObservable()
   }
 
   get tokens(): TokenResponse | null {
-    return this._tokens
+    return this._tokens$.value
   }
 
   set tokens(value: TokenResponse | null) {
-    this._tokens = value
+    this._tokens$.next(value)
     if (value === null) {
       sessionStorage.removeItem(TOKENS_KEY)
     } else {
@@ -51,7 +62,7 @@ export class AuthService {
     }
   }
 
-  get accessToken(): JwtToken | null {
+  get accessToken(): string | null {
     return this.tokens && this.tokens.access_token
   }
 
@@ -61,7 +72,7 @@ export class AuthService {
   ) {
     const tokensInSessionStorage = sessionStorage.getItem(TOKENS_KEY)
     if (tokensInSessionStorage !== null) {
-      this._tokens = JSON.parse(tokensInSessionStorage)
+      this.tokens = JSON.parse(tokensInSessionStorage)
     }
 
     const codePairInSessionStorage = sessionStorage.getItem(CODE_PAIR_KEY)
@@ -138,7 +149,7 @@ export class AuthService {
 
   initiateLogout(): void {
     const params = new URLSearchParams()
-    params.append('id_token_hint', this.tokens?.id_token.value ?? '')
+    params.append('id_token_hint', this.tokens?.id_token ?? '')
     params.append(
       'post_logout_redirect_uri',
       this.clientConfig.postLogoutRedirectUri
@@ -168,15 +179,16 @@ export class AuthService {
     if (!this.isSilentRefreshing && this.tokens) {
       this.isSilentRefreshing = true
 
-      const iframe = document.querySelector<HTMLIFrameElement>('#silent-refresh-iframe')
-        ?? AuthService.createAndAddSilentRefreshIframe()
+      const iframe =
+        document.querySelector<HTMLIFrameElement>('#silent-refresh-iframe') ??
+        AuthService.createAndAddSilentRefreshIframe()
 
       const { codePair, url } = this.createAuthorizeState(true)
       this.codePair = codePair
       iframe.src = url
 
       return new Promise<boolean>((resolve, reject) => {
-        const eventListener = async(event: Event): Promise<void> => {
+        const eventListener = async (event: Event): Promise<void> => {
           try {
             await this.silentRefreshCallback((event as CustomEvent).detail)
             resolve(true)
