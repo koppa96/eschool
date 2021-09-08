@@ -35,4 +35,8 @@
     <Exec Command="$(NSwagExe_Net50) run nswag.json" />
   </Target>
 
+  <Target Name="ClientFix" AfterTargets="NSwag" Condition="'$(Configuration)' == Debug">
+    <Exec Command="dotnet $(ProjectDir)..\..\..\..\tools\ClientFixer.dll $(ProjectDir)..\..\..\frontend\eschool-frontend-vue\src\shared\generated-clients\testing.ts"/>
+  </Target>
+
 </Project>
