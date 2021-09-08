@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ESchool.IdentityProvider.Domain.Entities.Users;
 using ESchool.Libs.Domain;
+using ESchool.Libs.Domain.Enums;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
@@ -33,12 +34,22 @@ namespace ESchool.IdentityProvider.Infrastructure
             var tenantId = context.ValidatedRequest.Raw.Get(Constants.ClaimTypes.TenantId);
             context.IssuedClaims.Add(new Claim(Constants.ClaimTypes.GlobalRole, user.GlobalRole.ToString()));
 
-            if (string.IsNullOrEmpty(tenantId))
+            if (string.IsNullOrEmpty(tenantId) && user.GlobalRole == GlobalRoleType.TenantUser)
             {
+                TenantUser tenantUser = null;
                 if (user.DefaultTenantId.HasValue)
                 {
-                    context.IssuedClaims.Add(new Claim(Constants.ClaimTypes.TenantId, user.DefaultTenantId.ToString()));
-                    context.IssuedClaims.AddRange(user.TenantUsers.Single(x => x.TenantId == user.DefaultTenantId).TenantUserRoles
+                    tenantUser = user.TenantUsers.Single(x => x.TenantId == user.DefaultTenantId.Value);
+                }
+                else if (user.TenantUsers.Any())
+                {
+                    tenantUser = user.TenantUsers.First();
+                }
+
+                if (tenantUser != null)
+                {
+                    context.IssuedClaims.Add(new Claim(Constants.ClaimTypes.TenantId, tenantUser.TenantId.ToString()));
+                    context.IssuedClaims.AddRange(tenantUser.TenantUserRoles
                         .Select(x => new Claim(Constants.ClaimTypes.TenantRoles, x.TenantRole.ToString())));
                 }
             }
