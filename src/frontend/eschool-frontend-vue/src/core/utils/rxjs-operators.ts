@@ -7,7 +7,7 @@ export function filterNotNull<T>(): (
     return new Observable(subscriber => {
       const subscription = source.subscribe({
         next(value) {
-          if (notNull(value)) {
+          if (value !== null) {
             subscriber.next(value)
           }
         },

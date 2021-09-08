@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import { Quasar } from 'quasar' 
+import { Quasar } from 'quasar'
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import App from './App.vue'
 // @ts-ignore
@@ -9,6 +9,7 @@ import LoginRedirect from '@/core/auth/components/LoginRedirect.vue'
 import LogoutRedirect from '@/core/auth/components/LogoutRedirect.vue'
 import axios from 'axios'
 import { AppConfiguration } from './core/config'
+import { setUpAxiosInterceptors } from '@/shared/api'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -32,6 +33,7 @@ const router = createRouter({
 
 axios.get('config.json').then(({ data }) => {
   AppConfiguration.value = data
+  setUpAxiosInterceptors()
 
   createApp(App)
     .use(Quasar, quasarUserOptions)

@@ -34,33 +34,36 @@ namespace ESchool.IdentityProvider.Infrastructure
             var tenantId = context.ValidatedRequest.Raw.Get(Constants.ClaimTypes.TenantId);
             context.IssuedClaims.Add(new Claim(Constants.ClaimTypes.GlobalRole, user.GlobalRole.ToString()));
 
-            if (string.IsNullOrEmpty(tenantId) && user.GlobalRole == GlobalRoleType.TenantUser)
+            if (user.GlobalRole == GlobalRoleType.TenantUser)
             {
-                TenantUser tenantUser = null;
-                if (user.DefaultTenantId.HasValue)
+                if (string.IsNullOrEmpty(tenantId))
                 {
-                    tenantUser = user.TenantUsers.Single(x => x.TenantId == user.DefaultTenantId.Value);
-                }
-                else if (user.TenantUsers.Any())
-                {
-                    tenantUser = user.TenantUsers.First();
-                }
+                    TenantUser tenantUser = null;
+                    if (user.DefaultTenantId.HasValue)
+                    {
+                        tenantUser = user.TenantUsers.Single(x => x.TenantId == user.DefaultTenantId.Value);
+                    }
+                    else if (user.TenantUsers.Any())
+                    {
+                        tenantUser = user.TenantUsers.First();
+                    }
 
-                if (tenantUser != null)
-                {
-                    context.IssuedClaims.Add(new Claim(Constants.ClaimTypes.TenantId, tenantUser.TenantId.ToString()));
-                    context.IssuedClaims.AddRange(tenantUser.TenantUserRoles
-                        .Select(x => new Claim(Constants.ClaimTypes.TenantRoles, x.TenantRole.ToString())));
+                    if (tenantUser != null)
+                    {
+                        context.IssuedClaims.Add(new Claim(Constants.ClaimTypes.TenantId, tenantUser.TenantId.ToString()));
+                        context.IssuedClaims.AddRange(tenantUser.TenantUserRoles
+                            .Select(x => new Claim(Constants.ClaimTypes.TenantRoles, x.TenantRole.ToString())));
+                    }
                 }
-            }
-            else
-            {
-                var tenantIdGuid = Guid.Parse(tenantId);
-                var tenantUser = user.TenantUsers.SingleOrDefault(x => x.TenantId == tenantIdGuid);
-                if (tenantUser != null)
+                else
                 {
-                    context.IssuedClaims.Add(new Claim(Constants.ClaimTypes.TenantId, tenantId));
-                    context.IssuedClaims.AddRange(tenantUser.TenantUserRoles.Select(x => new Claim(Constants.ClaimTypes.TenantRoles, x.TenantRole.ToString())));
+                    var tenantIdGuid = Guid.Parse(tenantId);
+                    var tenantUser = user.TenantUsers.SingleOrDefault(x => x.TenantId == tenantIdGuid);
+                    if (tenantUser != null)
+                    {
+                        context.IssuedClaims.Add(new Claim(Constants.ClaimTypes.TenantId, tenantId));
+                        context.IssuedClaims.AddRange(tenantUser.TenantUserRoles.Select(x => new Claim(Constants.ClaimTypes.TenantRoles, x.TenantRole.ToString())));
+                    }
                 }
             }
         }

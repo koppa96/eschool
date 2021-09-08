@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios'
+import axios, { AxiosInstance, AxiosStatic } from 'axios'
 import * as homeAssignmentsClients from '@/shared/generated-clients/home-assignments'
 import * as classRegisterClients from '@/shared/generated-clients/class-register'
 import * as identityProviderClients from '@/shared/generated-clients/identity-provider'
@@ -7,21 +7,6 @@ import { AppConfiguration } from '@/core/config'
 import 'linq-extensions'
 import { useAuthService } from '@/core/auth'
 import { isExpired } from '@/core/auth/utils/token.utils'
-
-axios.interceptors.request.use(config => {
-  const authService = useAuthService()
-  if (authService.accessToken && !isExpired(authService.accessToken)) {
-    return {
-      ...config,
-      headers: {
-        ...config.headers,
-        Authorization: `Bearer ${authService.accessToken}`
-      }
-    }
-  }
-
-  return config
-})
 
 export type ClientConstructor<TClient = any> = {
   new (baseUrl?: string, instance?: AxiosInstance): TClient
@@ -67,4 +52,21 @@ export function createClient<TClient>(
   }
 
   return new clientType(AppConfiguration.value.baseUrl + baseUrl, axios)
+}
+
+export function setUpAxiosInterceptors() {
+  axios.interceptors.request.use(config => {
+    const authService = useAuthService()
+    if (authService.accessToken && !isExpired(authService.accessToken)) {
+      return {
+        ...config,
+        headers: {
+          ...config.headers,
+          Authorization: `Bearer ${authService.accessToken}`
+        }
+      }
+    }
+
+    return config
+  })
 }
