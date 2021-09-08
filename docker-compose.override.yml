@@ -23,7 +23,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=Server=eschool.postgres;Database=ClassRegisterDb;User Id=postgres;Password=Password123;
       - ConnectionStrings__MasterDbConnection=Server=eschool.postgres;Database=ClassRegister_MasterDb;User Id=postgres;Password=Password123;
-      - ConnectionStrings__ConnectionStringTemplate=eschool.postgres;Database=ClassRegisterDb_{0};User Id=postgres;Password=Password123;
+      - ConnectionStrings__ConnectionStringTemplate=Server=eschool.postgres;Database=ClassRegisterDb_{0};User Id=postgres;Password=Password123;
       - RabbitMQ__Host=amqp://eschool.rabbitmq
       - Authentication__Authority=http://eschool.identityprovider
       - Authentication__Audience=classregister-api
@@ -44,7 +44,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=Server=eschool.postgres;Database=HomeAssignmentsDb;User Id=postgres;Password=Password123;
       - ConnectionStrings__MasterDbConnection=Server=eschool.postgres;Database=HomeAssignments_MasterDb;User Id=postgres;Password=Password123;
-      - ConnectionStrings__ConnectionStringTemplate=eschool.postgres;Database=HomeAssignments_{0};User Id=postgres;Password=Password123;
+      - ConnectionStrings__ConnectionStringTemplate=Server=eschool.postgres;Database=HomeAssignments_{0};User Id=postgres;Password=Password123;
       - RabbitMQ__Host=amqp://eschool.rabbitmq
       - Authentication__Authority=http://eschool.identityprovider
       - Authentication__Audience=homeassignments-api
@@ -64,8 +64,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ConnectionStrings__DefaultConnection=Server=eschool.postgres;Database=IdentityProviderDb;User Id=postgres;Password=Password123;
-      - ConnectionStrings__MasterDbConnection=Server=eschool.postgres;Database=IdentityProvider_MasterDb;User Id=postgres;Password=Password123;
-      - ConnectionStrings__ConnectionStringTemplate=eschool.postgres;Database=IdentityProviderDb_{0};User Id=postgres;Password=Password123;
       - KESTREL__Certificates__Default__Path=/app/cert/idp.pfx
       - KESTREL__Certificates__Default__Password=Password123
       - RabbitMQ__Host=amqp://eschool.rabbitmq
@@ -90,7 +88,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=Server=eschool.postgres;Database=TestingDb;User Id=postgres;Password=Password123;
       - ConnectionStrings__MasterDbConnection=Server=eschool.postgres;Database=Testing_MasterDb;User Id=postgres;Password=Password123;
-      - ConnectionStrings__ConnectionStringTemplate=eschool.postgres;Database=Testing_{0};User Id=postgres;Password=Password123;
+      - ConnectionStrings__ConnectionStringTemplate=Server=eschool.postgres;Database=Testing_{0};User Id=postgres;Password=Password123;
       - Authentication__Authority=http://eschool.identityprovider
       - Authentication__Audience=testing-api
       - Authentication__IdentityProviderUri=https://localhost:5301
