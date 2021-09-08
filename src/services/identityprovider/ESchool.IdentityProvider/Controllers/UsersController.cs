@@ -52,7 +52,7 @@ namespace ESchool.IdentityProvider.Controllers
 
         [HttpPatch("me")]
         [Authorize(PolicyNames.AnyRole)]
-        public Task<UserDetailsResponse> SetDefaultTenant(DefaultTenantIdSetCommand command,
+        public Task<UserDetailsResponse> SetDefaultTenant([FromBody] DefaultTenantIdSetCommand command,
             CancellationToken cancellationToken)
         {
             return mediator.Send(command, cancellationToken);

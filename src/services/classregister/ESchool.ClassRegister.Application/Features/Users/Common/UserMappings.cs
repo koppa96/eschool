@@ -22,10 +22,20 @@ namespace ESchool.ClassRegister.Application.Features.Users.Common
                 .ConstructUsing(student => new StudentDeletedEvent());
 
             CreateMap<Teacher, TenantUserRoleCreatedEvent>()
-                .ConstructUsing(teacher => new TeacherCreatedEvent());
+                .ConstructUsing(teacher => new TeacherCreatedEvent
+                {
+                    Id = teacher.Id,
+                    Name = teacher.User.Name,
+                    UserId = teacher.UserId
+                });
 
             CreateMap<Student, TenantUserRoleCreatedEvent>()
-                .ConstructUsing(student => new StudentCreatedEvent());
+                .ConstructUsing(student => new StudentCreatedEvent
+                {
+                    Id = student.Id,
+                    Name = student.User.Name,
+                    UserId = student.UserId
+                });
         }
     }
 }
