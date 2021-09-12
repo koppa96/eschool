@@ -10,7 +10,8 @@ namespace ESchool.IdentityProvider.Application.Mappings
         public UserMappings()
         {
             CreateMap<User, UserDetailsResponse>()
-                .ForMember(x => x.Tenants, o => o.MapFrom(x => x.TenantUsers.Select(u => u.Tenant)));
+                .ForMember(x => x.Tenants, o => o.MapFrom(x => x.TenantUsers.Select(u => u.Tenant)))
+                .ForMember(x => x.GlobalRoleType, o => o.MapFrom(x => x.GlobalRole));
 
             CreateMap<User, UserListResponse>();
         }

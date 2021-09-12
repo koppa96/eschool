@@ -38,7 +38,7 @@
   </Target>
 
   <Target Name="ClientFix" AfterTargets="NSwag" Condition="'$(Configuration)' == Debug">
-    <Exec Command="dotnet $(ProjectDir)..\..\..\..\tools\ClientFixer.dll $(ProjectDir)..\..\..\frontend\eschool-frontend-vue\src\shared\generated-clients\class-register.ts"/>
+    <Exec Command="dotnet $(ProjectDir)../../../../tools/ClientFixer.dll $(ProjectDir)../../../frontend/eschool-frontend-vue/src/shared/generated-clients/class-register.ts"/>
   </Target>
   
 </Project>

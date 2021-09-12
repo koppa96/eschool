@@ -1,7 +1,14 @@
 import { ClientConfig, ServerConfig } from '../auth/auth.model'
 
+export interface BaseUrlConfig {
+  classRegister: string
+  homeAssignments: string
+  identityProvider: string
+  testing: string
+}
+
 export interface AppConfigurationValue {
-  baseUrl: string
+  baseUrl: BaseUrlConfig
   clientConfig: ClientConfig
   serverConfig: ServerConfig
 }

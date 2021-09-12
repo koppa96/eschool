@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
 import { filterNotNull } from '@/core/utils/rxjs-operators'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
 import { distinctUntilChanged, map, takeUntil } from 'rxjs'
 import { useAuthService } from '..'
 import {
@@ -70,7 +70,6 @@ let nextTenant: TenantListResponse | null = null
 
 const authService = useAuthService()
 const unmounted = useObservableLifecycle(onUnmounted)
-const mounted = useObservableLifecycle(onMounted)
 const client = createClient(UsersClient)
 
 authService.tokens$

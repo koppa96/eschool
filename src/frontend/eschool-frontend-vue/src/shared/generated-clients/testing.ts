@@ -2029,7 +2029,7 @@ export abstract class TaskAnswerResponse implements ITaskAnswerResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
+            this.id = _data["Id"];
         }
     }
 
@@ -2040,7 +2040,7 @@ export abstract class TaskAnswerResponse implements ITaskAnswerResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
+        data["Id"] = this.id;
         return data; 
     }
 }
@@ -2063,7 +2063,7 @@ export abstract class TaskAnswerCreateEditCommand implements ITaskAnswerCreateEd
 
     init(_data?: any) {
         if (_data) {
-            this.taskId = _data["taskId"];
+            this.taskId = _data["TaskId"];
         }
     }
 
@@ -2074,7 +2074,7 @@ export abstract class TaskAnswerCreateEditCommand implements ITaskAnswerCreateEd
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["taskId"] = this.taskId;
+        data["TaskId"] = this.taskId;
         return data; 
     }
 }
@@ -2103,15 +2103,15 @@ export class TestAnswerDetailsResponse implements ITestAnswerDetailsResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.student = _data["student"] ? UserRoleListResponse.fromJS(_data["student"]) : <any>undefined;
-            this.started = _data["started"] ? new Date(_data["started"].toString()) : <any>undefined;
-            this.closed = _data["closed"] ? new Date(_data["closed"].toString()) : <any>undefined;
-            this.points = _data["points"];
-            this.hasBeenCorrected = _data["hasBeenCorrected"];
-            if (Array.isArray(_data["tasks"])) {
+            this.id = _data["Id"];
+            this.student = _data["Student"] ? UserRoleListResponse.fromJS(_data["Student"]) : <any>undefined;
+            this.started = _data["Started"] ? new Date(_data["Started"].toString()) : <any>undefined;
+            this.closed = _data["Closed"] ? new Date(_data["Closed"].toString()) : <any>undefined;
+            this.points = _data["Points"];
+            this.hasBeenCorrected = _data["HasBeenCorrected"];
+            if (Array.isArray(_data["Tasks"])) {
                 this.tasks = [] as any;
-                for (let item of _data["tasks"])
+                for (let item of _data["Tasks"])
                     this.tasks!.push(TaskStatus.fromJS(item));
             }
         }
@@ -2126,16 +2126,16 @@ export class TestAnswerDetailsResponse implements ITestAnswerDetailsResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["student"] = this.student ? this.student.toJSON() : <any>undefined;
-        data["started"] = this.started ? this.started.toISOString() : <any>undefined;
-        data["closed"] = this.closed ? this.closed.toISOString() : <any>undefined;
-        data["points"] = this.points;
-        data["hasBeenCorrected"] = this.hasBeenCorrected;
+        data["Id"] = this.id;
+        data["Student"] = this.student ? this.student.toJSON() : <any>undefined;
+        data["Started"] = this.started ? this.started.toISOString() : <any>undefined;
+        data["Closed"] = this.closed ? this.closed.toISOString() : <any>undefined;
+        data["Points"] = this.points;
+        data["HasBeenCorrected"] = this.hasBeenCorrected;
         if (Array.isArray(this.tasks)) {
-            data["tasks"] = [];
+            data["Tasks"] = [];
             for (let item of this.tasks)
-                data["tasks"].push(item.toJSON());
+                data["Tasks"].push(item.toJSON());
         }
         return data; 
     }
@@ -2166,8 +2166,8 @@ export class UserRoleListResponse implements IUserRoleListResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
+            this.id = _data["Id"];
+            this.name = _data["Name"];
         }
     }
 
@@ -2180,8 +2180,8 @@ export class UserRoleListResponse implements IUserRoleListResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
+        data["Id"] = this.id;
+        data["Name"] = this.name;
         return data; 
     }
 }
@@ -2206,8 +2206,8 @@ export class TaskStatus implements ITaskStatus {
 
     init(_data?: any) {
         if (_data) {
-            this.taskId = _data["taskId"];
-            this.taskAnswerId = _data["taskAnswerId"];
+            this.taskId = _data["TaskId"];
+            this.taskAnswerId = _data["TaskAnswerId"];
         }
     }
 
@@ -2220,8 +2220,8 @@ export class TaskStatus implements ITaskStatus {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["taskId"] = this.taskId;
-        data["taskAnswerId"] = this.taskAnswerId;
+        data["TaskId"] = this.taskId;
+        data["TaskAnswerId"] = this.taskAnswerId;
         return data; 
     }
 }
@@ -2246,8 +2246,8 @@ export class TestTaskListResponse implements ITestTaskListResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.description = _data["description"];
+            this.id = _data["Id"];
+            this.description = _data["Description"];
         }
     }
 
@@ -2260,8 +2260,8 @@ export class TestTaskListResponse implements ITestTaskListResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["description"] = this.description;
+        data["Id"] = this.id;
+        data["Description"] = this.description;
         return data; 
     }
 }
@@ -2288,10 +2288,10 @@ export abstract class TestTaskEditorResponse implements ITestTaskEditorResponse 
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.description = _data["description"];
-            this.pointValue = _data["pointValue"];
-            this.incorrectAnswerPointValue = _data["incorrectAnswerPointValue"];
+            this.id = _data["Id"];
+            this.description = _data["Description"];
+            this.pointValue = _data["PointValue"];
+            this.incorrectAnswerPointValue = _data["IncorrectAnswerPointValue"];
         }
     }
 
@@ -2302,10 +2302,10 @@ export abstract class TestTaskEditorResponse implements ITestTaskEditorResponse 
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["description"] = this.description;
-        data["pointValue"] = this.pointValue;
-        data["incorrectAnswerPointValue"] = this.incorrectAnswerPointValue;
+        data["Id"] = this.id;
+        data["Description"] = this.description;
+        data["PointValue"] = this.pointValue;
+        data["IncorrectAnswerPointValue"] = this.incorrectAnswerPointValue;
         return data; 
     }
 }
@@ -2334,10 +2334,10 @@ export abstract class TestTaskCreateEditCommand implements ITestTaskCreateEditCo
 
     init(_data?: any) {
         if (_data) {
-            this.testId = _data["testId"];
-            this.description = _data["description"];
-            this.pointValue = _data["pointValue"];
-            this.incorrectAnswerPointValue = _data["incorrectAnswerPointValue"];
+            this.testId = _data["TestId"];
+            this.description = _data["Description"];
+            this.pointValue = _data["PointValue"];
+            this.incorrectAnswerPointValue = _data["IncorrectAnswerPointValue"];
         }
     }
 
@@ -2348,10 +2348,10 @@ export abstract class TestTaskCreateEditCommand implements ITestTaskCreateEditCo
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["testId"] = this.testId;
-        data["description"] = this.description;
-        data["pointValue"] = this.pointValue;
-        data["incorrectAnswerPointValue"] = this.incorrectAnswerPointValue;
+        data["TestId"] = this.testId;
+        data["Description"] = this.description;
+        data["PointValue"] = this.pointValue;
+        data["IncorrectAnswerPointValue"] = this.incorrectAnswerPointValue;
         return data; 
     }
 }
@@ -2380,12 +2380,12 @@ export class PagedListResponseOfTestAnswerListResponse implements IPagedListResp
 
     init(_data?: any) {
         if (_data) {
-            this.pageSize = _data["pageSize"];
-            this.pageIndex = _data["pageIndex"];
-            this.totalCount = _data["totalCount"];
-            if (Array.isArray(_data["items"])) {
+            this.pageSize = _data["PageSize"];
+            this.pageIndex = _data["PageIndex"];
+            this.totalCount = _data["TotalCount"];
+            if (Array.isArray(_data["Items"])) {
                 this.items = [] as any;
-                for (let item of _data["items"])
+                for (let item of _data["Items"])
                     this.items!.push(TestAnswerListResponse.fromJS(item));
             }
         }
@@ -2400,13 +2400,13 @@ export class PagedListResponseOfTestAnswerListResponse implements IPagedListResp
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["pageSize"] = this.pageSize;
-        data["pageIndex"] = this.pageIndex;
-        data["totalCount"] = this.totalCount;
+        data["PageSize"] = this.pageSize;
+        data["PageIndex"] = this.pageIndex;
+        data["TotalCount"] = this.totalCount;
         if (Array.isArray(this.items)) {
-            data["items"] = [];
+            data["Items"] = [];
             for (let item of this.items)
-                data["items"].push(item.toJSON());
+                data["Items"].push(item.toJSON());
         }
         return data; 
     }
@@ -2435,9 +2435,9 @@ export class TestAnswerListResponse implements ITestAnswerListResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.student = _data["student"] ? UserRoleListResponse.fromJS(_data["student"]) : <any>undefined;
-            this.hasBeenCorrected = _data["hasBeenCorrected"];
+            this.id = _data["Id"];
+            this.student = _data["Student"] ? UserRoleListResponse.fromJS(_data["Student"]) : <any>undefined;
+            this.hasBeenCorrected = _data["HasBeenCorrected"];
         }
     }
 
@@ -2450,9 +2450,9 @@ export class TestAnswerListResponse implements ITestAnswerListResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["student"] = this.student ? this.student.toJSON() : <any>undefined;
-        data["hasBeenCorrected"] = this.hasBeenCorrected;
+        data["Id"] = this.id;
+        data["Student"] = this.student ? this.student.toJSON() : <any>undefined;
+        data["HasBeenCorrected"] = this.hasBeenCorrected;
         return data; 
     }
 }
@@ -2482,12 +2482,12 @@ export class TestDetailsResponse implements ITestDetailsResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.scheduledStart = _data["scheduledStart"] ? new Date(_data["scheduledStart"].toString()) : <any>undefined;
-            this.scheduledLength = _data["scheduledLength"];
-            this.startedAt = _data["startedAt"] ? new Date(_data["startedAt"].toString()) : <any>undefined;
-            this.closedAt = _data["closedAt"] ? new Date(_data["closedAt"].toString()) : <any>undefined;
+            this.id = _data["Id"];
+            this.name = _data["Name"];
+            this.scheduledStart = _data["ScheduledStart"] ? new Date(_data["ScheduledStart"].toString()) : <any>undefined;
+            this.scheduledLength = _data["ScheduledLength"];
+            this.startedAt = _data["StartedAt"] ? new Date(_data["StartedAt"].toString()) : <any>undefined;
+            this.closedAt = _data["ClosedAt"] ? new Date(_data["ClosedAt"].toString()) : <any>undefined;
         }
     }
 
@@ -2500,12 +2500,12 @@ export class TestDetailsResponse implements ITestDetailsResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["scheduledStart"] = this.scheduledStart ? this.scheduledStart.toISOString() : <any>undefined;
-        data["scheduledLength"] = this.scheduledLength;
-        data["startedAt"] = this.startedAt ? this.startedAt.toISOString() : <any>undefined;
-        data["closedAt"] = this.closedAt ? this.closedAt.toISOString() : <any>undefined;
+        data["Id"] = this.id;
+        data["Name"] = this.name;
+        data["ScheduledStart"] = this.scheduledStart ? this.scheduledStart.toISOString() : <any>undefined;
+        data["ScheduledLength"] = this.scheduledLength;
+        data["StartedAt"] = this.startedAt ? this.startedAt.toISOString() : <any>undefined;
+        data["ClosedAt"] = this.closedAt ? this.closedAt.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -2537,15 +2537,15 @@ export class TestCreateCommand implements ITestCreateCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.name = _data["name"];
-            this.scheduledStart = _data["scheduledStart"] ? new Date(_data["scheduledStart"].toString()) : <any>undefined;
-            this.scheduledLengthInMinutes = _data["scheduledLengthInMinutes"];
-            if (Array.isArray(_data["studentIds"])) {
+            this.name = _data["Name"];
+            this.scheduledStart = _data["ScheduledStart"] ? new Date(_data["ScheduledStart"].toString()) : <any>undefined;
+            this.scheduledLengthInMinutes = _data["ScheduledLengthInMinutes"];
+            if (Array.isArray(_data["StudentIds"])) {
                 this.studentIds = [] as any;
-                for (let item of _data["studentIds"])
+                for (let item of _data["StudentIds"])
                     this.studentIds!.push(item);
             }
-            this.classSchoolYearSubjectId = _data["classSchoolYearSubjectId"];
+            this.classSchoolYearSubjectId = _data["ClassSchoolYearSubjectId"];
         }
     }
 
@@ -2558,15 +2558,15 @@ export class TestCreateCommand implements ITestCreateCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["scheduledStart"] = this.scheduledStart ? this.scheduledStart.toISOString() : <any>undefined;
-        data["scheduledLengthInMinutes"] = this.scheduledLengthInMinutes;
+        data["Name"] = this.name;
+        data["ScheduledStart"] = this.scheduledStart ? this.scheduledStart.toISOString() : <any>undefined;
+        data["ScheduledLengthInMinutes"] = this.scheduledLengthInMinutes;
         if (Array.isArray(this.studentIds)) {
-            data["studentIds"] = [];
+            data["StudentIds"] = [];
             for (let item of this.studentIds)
-                data["studentIds"].push(item);
+                data["StudentIds"].push(item);
         }
-        data["classSchoolYearSubjectId"] = this.classSchoolYearSubjectId;
+        data["ClassSchoolYearSubjectId"] = this.classSchoolYearSubjectId;
         return data; 
     }
 }
@@ -2596,12 +2596,12 @@ export class TestEditCommand implements ITestEditCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.name = _data["name"];
-            this.scheduledStart = _data["scheduledStart"] ? new Date(_data["scheduledStart"].toString()) : <any>undefined;
-            this.scheduledLengthInMinutes = _data["scheduledLengthInMinutes"];
-            if (Array.isArray(_data["studentIds"])) {
+            this.name = _data["Name"];
+            this.scheduledStart = _data["ScheduledStart"] ? new Date(_data["ScheduledStart"].toString()) : <any>undefined;
+            this.scheduledLengthInMinutes = _data["ScheduledLengthInMinutes"];
+            if (Array.isArray(_data["StudentIds"])) {
                 this.studentIds = [] as any;
-                for (let item of _data["studentIds"])
+                for (let item of _data["StudentIds"])
                     this.studentIds!.push(item);
             }
         }
@@ -2616,13 +2616,13 @@ export class TestEditCommand implements ITestEditCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["scheduledStart"] = this.scheduledStart ? this.scheduledStart.toISOString() : <any>undefined;
-        data["scheduledLengthInMinutes"] = this.scheduledLengthInMinutes;
+        data["Name"] = this.name;
+        data["ScheduledStart"] = this.scheduledStart ? this.scheduledStart.toISOString() : <any>undefined;
+        data["ScheduledLengthInMinutes"] = this.scheduledLengthInMinutes;
         if (Array.isArray(this.studentIds)) {
-            data["studentIds"] = [];
+            data["StudentIds"] = [];
             for (let item of this.studentIds)
-                data["studentIds"].push(item);
+                data["StudentIds"].push(item);
         }
         return data; 
     }
@@ -2652,10 +2652,10 @@ export class TestTaskDetailsResponse implements ITestTaskDetailsResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.description = _data["description"];
-            this.pointValue = _data["pointValue"];
-            this.incorrectAnswerPointValue = _data["incorrectAnswerPointValue"];
+            this.id = _data["Id"];
+            this.description = _data["Description"];
+            this.pointValue = _data["PointValue"];
+            this.incorrectAnswerPointValue = _data["IncorrectAnswerPointValue"];
         }
     }
 
@@ -2668,10 +2668,10 @@ export class TestTaskDetailsResponse implements ITestTaskDetailsResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["description"] = this.description;
-        data["pointValue"] = this.pointValue;
-        data["incorrectAnswerPointValue"] = this.incorrectAnswerPointValue;
+        data["Id"] = this.id;
+        data["Description"] = this.description;
+        data["PointValue"] = this.pointValue;
+        data["IncorrectAnswerPointValue"] = this.incorrectAnswerPointValue;
         return data; 
     }
 }
@@ -2700,12 +2700,12 @@ export class PagedListResponseOfTestListResponse implements IPagedListResponseOf
 
     init(_data?: any) {
         if (_data) {
-            this.pageSize = _data["pageSize"];
-            this.pageIndex = _data["pageIndex"];
-            this.totalCount = _data["totalCount"];
-            if (Array.isArray(_data["items"])) {
+            this.pageSize = _data["PageSize"];
+            this.pageIndex = _data["PageIndex"];
+            this.totalCount = _data["TotalCount"];
+            if (Array.isArray(_data["Items"])) {
                 this.items = [] as any;
-                for (let item of _data["items"])
+                for (let item of _data["Items"])
                     this.items!.push(TestListResponse.fromJS(item));
             }
         }
@@ -2720,13 +2720,13 @@ export class PagedListResponseOfTestListResponse implements IPagedListResponseOf
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["pageSize"] = this.pageSize;
-        data["pageIndex"] = this.pageIndex;
-        data["totalCount"] = this.totalCount;
+        data["PageSize"] = this.pageSize;
+        data["PageIndex"] = this.pageIndex;
+        data["TotalCount"] = this.totalCount;
         if (Array.isArray(this.items)) {
-            data["items"] = [];
+            data["Items"] = [];
             for (let item of this.items)
-                data["items"].push(item.toJSON());
+                data["Items"].push(item.toJSON());
         }
         return data; 
     }
@@ -2755,9 +2755,9 @@ export class TestListResponse implements ITestListResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.state = _data["state"];
+            this.id = _data["Id"];
+            this.name = _data["Name"];
+            this.state = _data["State"];
         }
     }
 
@@ -2770,9 +2770,9 @@ export class TestListResponse implements ITestListResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["state"] = this.state;
+        data["Id"] = this.id;
+        data["Name"] = this.name;
+        data["State"] = this.state;
         return data; 
     }
 }
@@ -2784,9 +2784,9 @@ export interface ITestListResponse {
 }
 
 export enum TestState {
-    HasNotStarted = 0,
-    InProgress = 1,
-    Finished = 2,
+    HasNotStarted = "HasNotStarted",
+    InProgress = "InProgress",
+    Finished = "Finished",
 }
 
 export class ApiException extends Error {

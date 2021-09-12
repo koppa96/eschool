@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
@@ -27,6 +28,7 @@ using ESchool.Libs.AspNetCore.Middlewares;
 using ESchool.Libs.Outbox;
 using ESchool.Libs.Outbox.AspNetCore.Extensions;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
+using NJsonSchema.Generation;
 
 namespace ESchool.IdentityProvider
 {
@@ -79,7 +81,12 @@ namespace ESchool.IdentityProvider
 
             services.AddAutoMapper(Assembly.Load("ESchool.IdentityProvider.Application"));
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false));
+                });
+            
             services.AddRazorPages();
 
             services.AddMediatR(Assembly.Load("ESchool.IdentityProvider.Application"));
@@ -88,6 +95,9 @@ namespace ESchool.IdentityProvider
             {
                 config.Title = "ESchool Identity Provider API";
                 config.Description = "The REST API documentation of the Identity Provider microservice.";
+#pragma warning disable 618
+                config.DefaultEnumHandling = EnumHandling.String;
+#pragma warning restore 618
 
                 config.AddSecurity("OAuth2", new OpenApiSecurityScheme
                 {

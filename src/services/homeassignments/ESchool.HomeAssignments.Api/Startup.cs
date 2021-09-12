@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using ESchool.ClassRegister.Grpc;
 using ESchool.HomeAssignments.Api.Infrastructure;
 using ESchool.HomeAssignments.Domain;
@@ -21,6 +22,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NJsonSchema.Generation;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
@@ -48,7 +50,11 @@ namespace ESchool.HomeAssignments.Api
                 options.UseNpgsql(Configuration.GetConnectionString("MasterDbConnection"), config =>
                     config.MigrationsAssembly(typeof(HomeAssignmentsContext).Assembly.GetName().Name)));
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
 
             var authConfig = new AuthConfiguration();
             Configuration.GetSection("Authentication").Bind(authConfig);
@@ -95,6 +101,9 @@ namespace ESchool.HomeAssignments.Api
             {
                 config.Title = "ESchool Home Assigments API";
                 config.Description = "The REST API documentation of the Home Assignments microservice.";
+#pragma warning disable 618
+                config.DefaultEnumHandling = EnumHandling.String;
+#pragma warning restore 618
 
                 config.AddSecurity("OAuth2", new OpenApiSecurityScheme
                 {

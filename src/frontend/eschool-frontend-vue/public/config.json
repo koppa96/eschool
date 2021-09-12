@@ -1,5 +1,10 @@
 {
-  "baseUrl": "http://localhost:5000",
+  "baseUrl": {
+    "classRegister": "https://localhost:5101",
+    "homeAssignments": "https://localhost:5201",
+    "identityProvider": "https://localhost:5301",
+    "testing": "https://localhost:5401"
+  },
   "clientConfig": {
     "clientId": "test",
     "responseType": "code",

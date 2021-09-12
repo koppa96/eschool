@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosStatic } from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import * as homeAssignmentsClients from '@/shared/generated-clients/home-assignments'
 import * as classRegisterClients from '@/shared/generated-clients/class-register'
 import * as identityProviderClients from '@/shared/generated-clients/identity-provider'
@@ -13,45 +13,60 @@ export type ClientConstructor<TClient = any> = {
 }
 
 interface LookupTableEntry {
-  constructor: unknown
+  constructor: any
   baseUrl: string
 }
 
-const lookupTable = Object.values(homeAssignmentsClients)
+const lookupTableDefinition = Object.values(homeAssignmentsClients)
   .select<LookupTableEntry>(constructor => ({
     constructor,
-    baseUrl: '/home-assignments'
+    baseUrl: AppConfiguration.value.baseUrl.homeAssignments
   }))
   .appendMany(
     Object.values(classRegisterClients).select<LookupTableEntry>(
-      constructor => ({ constructor, baseUrl: '/class-register' })
+      constructor => ({
+        constructor,
+        baseUrl: AppConfiguration.value.baseUrl.classRegister
+      })
     )
   )
   .appendMany(
     Object.values(identityProviderClients).select<LookupTableEntry>(
-      constructor => ({ constructor, baseUrl: '/identity-provider' })
+      constructor => ({
+        constructor,
+        baseUrl: AppConfiguration.value.baseUrl.identityProvider
+      })
     )
   )
   .appendMany(
     Object.values(testingClients).select<LookupTableEntry>(constructor => ({
       constructor,
-      baseUrl: '/testing'
+      baseUrl: AppConfiguration.value.baseUrl.testing
     }))
   )
-  .toMap(
-    entry => entry.constructor,
-    entry => entry.baseUrl
-  )
+
+let lookupTable: Map<ClientConstructor, string> | undefined
+
+function getLookupTable() {
+  if (!lookupTable) {
+    lookupTable = lookupTableDefinition.toMap(
+      x => x.constructor,
+      x => x.baseUrl
+    )
+  }
+
+  return lookupTable
+}
 
 export function createClient<TClient>(
   clientType: ClientConstructor<TClient>
 ): TClient {
-  const baseUrl = lookupTable.get(clientType)
+  const baseUrl = getLookupTable().get(clientType)
   if (!baseUrl) {
     throw new Error('The client is not registered.')
   }
 
-  return new clientType(AppConfiguration.value.baseUrl + baseUrl, axios)
+  return new clientType(baseUrl, axios)
 }
 
 export function setUpAxiosInterceptors() {

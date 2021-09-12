@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using ESchool.ClassRegister.Domain;
 using ESchool.IdentityProvider.Interface.DefaultHandlers.Extensions;
 using ESchool.Libs.AspNetCore.Configuration;
@@ -19,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NJsonSchema.Generation;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
@@ -56,7 +59,12 @@ namespace ESchool.ClassRegister.Api
                 config.AddPublishFilter<AuthDataSetterPublishFilter>();
             });
             
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
+            
             services.AddGrpc();
 
             services.AddMediatR(Assembly.Load("ESchool.ClassRegister.Application"))
@@ -73,6 +81,9 @@ namespace ESchool.ClassRegister.Api
             {
                 config.Title = "ESchool Class Register API";
                 config.Description = "The REST API documentation of the Class Register microservice.";
+#pragma warning disable 618
+                config.DefaultEnumHandling = EnumHandling.String;
+#pragma warning restore 618
 
                 config.AddSecurity("OAuth2", new OpenApiSecurityScheme
                 {

@@ -1329,10 +1329,10 @@ export class HomeworkSolutionResponse implements IHomeworkSolutionResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.turnInDate = _data["turnInDate"] ? new Date(_data["turnInDate"].toString()) : <any>undefined;
-            this.review = _data["review"] ? HomeworkReviewResponse.fromJS(_data["review"]) : <any>undefined;
-            this.student = _data["student"] ? UserRoleListResponse.fromJS(_data["student"]) : <any>undefined;
+            this.id = _data["Id"];
+            this.turnInDate = _data["TurnInDate"] ? new Date(_data["TurnInDate"].toString()) : <any>undefined;
+            this.review = _data["Review"] ? HomeworkReviewResponse.fromJS(_data["Review"]) : <any>undefined;
+            this.student = _data["Student"] ? UserRoleListResponse.fromJS(_data["Student"]) : <any>undefined;
         }
     }
 
@@ -1345,10 +1345,10 @@ export class HomeworkSolutionResponse implements IHomeworkSolutionResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["turnInDate"] = this.turnInDate ? this.turnInDate.toISOString() : <any>undefined;
-        data["review"] = this.review ? this.review.toJSON() : <any>undefined;
-        data["student"] = this.student ? this.student.toJSON() : <any>undefined;
+        data["Id"] = this.id;
+        data["TurnInDate"] = this.turnInDate ? this.turnInDate.toISOString() : <any>undefined;
+        data["Review"] = this.review ? this.review.toJSON() : <any>undefined;
+        data["Student"] = this.student ? this.student.toJSON() : <any>undefined;
         return data; 
     }
 }
@@ -1380,13 +1380,13 @@ export class HomeworkReviewResponse implements IHomeworkReviewResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.comment = _data["comment"];
-            this.outcome = _data["outcome"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.createdBy = _data["createdBy"] ? UserRoleListResponse.fromJS(_data["createdBy"]) : <any>undefined;
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"] ? UserRoleListResponse.fromJS(_data["lastModifiedBy"]) : <any>undefined;
+            this.id = _data["Id"];
+            this.comment = _data["Comment"];
+            this.outcome = _data["Outcome"];
+            this.createdAt = _data["CreatedAt"] ? new Date(_data["CreatedAt"].toString()) : <any>undefined;
+            this.createdBy = _data["CreatedBy"] ? UserRoleListResponse.fromJS(_data["CreatedBy"]) : <any>undefined;
+            this.lastModifiedAt = _data["LastModifiedAt"] ? new Date(_data["LastModifiedAt"].toString()) : <any>undefined;
+            this.lastModifiedBy = _data["LastModifiedBy"] ? UserRoleListResponse.fromJS(_data["LastModifiedBy"]) : <any>undefined;
         }
     }
 
@@ -1399,13 +1399,13 @@ export class HomeworkReviewResponse implements IHomeworkReviewResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["comment"] = this.comment;
-        data["outcome"] = this.outcome;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy ? this.lastModifiedBy.toJSON() : <any>undefined;
+        data["Id"] = this.id;
+        data["Comment"] = this.comment;
+        data["Outcome"] = this.outcome;
+        data["CreatedAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["CreatedBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["LastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["LastModifiedBy"] = this.lastModifiedBy ? this.lastModifiedBy.toJSON() : <any>undefined;
         return data; 
     }
 }
@@ -1421,8 +1421,8 @@ export interface IHomeworkReviewResponse {
 }
 
 export enum HomeworkReviewOutcome {
-    Accepted = 0,
-    Rejected = 1,
+    Accepted = "Accepted",
+    Rejected = "Rejected",
 }
 
 export class UserRoleListResponse implements IUserRoleListResponse {
@@ -1440,8 +1440,8 @@ export class UserRoleListResponse implements IUserRoleListResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
+            this.id = _data["Id"];
+            this.name = _data["Name"];
         }
     }
 
@@ -1454,8 +1454,8 @@ export class UserRoleListResponse implements IUserRoleListResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
+        data["Id"] = this.id;
+        data["Name"] = this.name;
         return data; 
     }
 }
@@ -1488,16 +1488,16 @@ export class HomeworkDetailsResponse implements IHomeworkDetailsResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.title = _data["title"];
-            this.description = _data["description"];
-            this.deadline = _data["deadline"] ? new Date(_data["deadline"].toString()) : <any>undefined;
-            this.optional = _data["optional"];
-            this.lesson = _data["lesson"] ? LessonListResponse.fromJS(_data["lesson"]) : <any>undefined;
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.createdBy = _data["createdBy"] ? UserRoleListResponse.fromJS(_data["createdBy"]) : <any>undefined;
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"] ? UserRoleListResponse.fromJS(_data["lastModifiedBy"]) : <any>undefined;
+            this.id = _data["Id"];
+            this.title = _data["Title"];
+            this.description = _data["Description"];
+            this.deadline = _data["Deadline"] ? new Date(_data["Deadline"].toString()) : <any>undefined;
+            this.optional = _data["Optional"];
+            this.lesson = _data["Lesson"] ? LessonListResponse.fromJS(_data["Lesson"]) : <any>undefined;
+            this.createdAt = _data["CreatedAt"] ? new Date(_data["CreatedAt"].toString()) : <any>undefined;
+            this.createdBy = _data["CreatedBy"] ? UserRoleListResponse.fromJS(_data["CreatedBy"]) : <any>undefined;
+            this.lastModifiedAt = _data["LastModifiedAt"] ? new Date(_data["LastModifiedAt"].toString()) : <any>undefined;
+            this.lastModifiedBy = _data["LastModifiedBy"] ? UserRoleListResponse.fromJS(_data["LastModifiedBy"]) : <any>undefined;
         }
     }
 
@@ -1510,16 +1510,16 @@ export class HomeworkDetailsResponse implements IHomeworkDetailsResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["title"] = this.title;
-        data["description"] = this.description;
-        data["deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
-        data["optional"] = this.optional;
-        data["lesson"] = this.lesson ? this.lesson.toJSON() : <any>undefined;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy ? this.lastModifiedBy.toJSON() : <any>undefined;
+        data["Id"] = this.id;
+        data["Title"] = this.title;
+        data["Description"] = this.description;
+        data["Deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
+        data["Optional"] = this.optional;
+        data["Lesson"] = this.lesson ? this.lesson.toJSON() : <any>undefined;
+        data["CreatedAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["CreatedBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["LastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["LastModifiedBy"] = this.lastModifiedBy ? this.lastModifiedBy.toJSON() : <any>undefined;
         return data; 
     }
 }
@@ -1552,8 +1552,8 @@ export class LessonListResponse implements ILessonListResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.title = _data["title"];
+            this.id = _data["Id"];
+            this.title = _data["Title"];
         }
     }
 
@@ -1566,8 +1566,8 @@ export class LessonListResponse implements ILessonListResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["title"] = this.title;
+        data["Id"] = this.id;
+        data["Title"] = this.title;
         return data; 
     }
 }
@@ -1595,11 +1595,11 @@ export class HomeworkCreateCommand implements IHomeworkCreateCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.lessonId = _data["lessonId"];
-            this.title = _data["title"];
-            this.description = _data["description"];
-            this.optional = _data["optional"];
-            this.deadline = _data["deadline"] ? new Date(_data["deadline"].toString()) : <any>undefined;
+            this.lessonId = _data["LessonId"];
+            this.title = _data["Title"];
+            this.description = _data["Description"];
+            this.optional = _data["Optional"];
+            this.deadline = _data["Deadline"] ? new Date(_data["Deadline"].toString()) : <any>undefined;
         }
     }
 
@@ -1612,11 +1612,11 @@ export class HomeworkCreateCommand implements IHomeworkCreateCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["lessonId"] = this.lessonId;
-        data["title"] = this.title;
-        data["description"] = this.description;
-        data["optional"] = this.optional;
-        data["deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
+        data["LessonId"] = this.lessonId;
+        data["Title"] = this.title;
+        data["Description"] = this.description;
+        data["Optional"] = this.optional;
+        data["Deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -1646,10 +1646,10 @@ export class HomeworkEditCommand implements IHomeworkEditCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.title = _data["title"];
-            this.description = _data["description"];
-            this.optional = _data["optional"];
-            this.deadline = _data["deadline"] ? new Date(_data["deadline"].toString()) : <any>undefined;
+            this.title = _data["Title"];
+            this.description = _data["Description"];
+            this.optional = _data["Optional"];
+            this.deadline = _data["Deadline"] ? new Date(_data["Deadline"].toString()) : <any>undefined;
         }
     }
 
@@ -1662,10 +1662,10 @@ export class HomeworkEditCommand implements IHomeworkEditCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["title"] = this.title;
-        data["description"] = this.description;
-        data["optional"] = this.optional;
-        data["deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
+        data["Title"] = this.title;
+        data["Description"] = this.description;
+        data["Optional"] = this.optional;
+        data["Deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -1694,12 +1694,12 @@ export class PagedListResponseOfHomeworkSolutionListResponse implements IPagedLi
 
     init(_data?: any) {
         if (_data) {
-            this.pageSize = _data["pageSize"];
-            this.pageIndex = _data["pageIndex"];
-            this.totalCount = _data["totalCount"];
-            if (Array.isArray(_data["items"])) {
+            this.pageSize = _data["PageSize"];
+            this.pageIndex = _data["PageIndex"];
+            this.totalCount = _data["TotalCount"];
+            if (Array.isArray(_data["Items"])) {
                 this.items = [] as any;
-                for (let item of _data["items"])
+                for (let item of _data["Items"])
                     this.items!.push(HomeworkSolutionListResponse.fromJS(item));
             }
         }
@@ -1714,13 +1714,13 @@ export class PagedListResponseOfHomeworkSolutionListResponse implements IPagedLi
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["pageSize"] = this.pageSize;
-        data["pageIndex"] = this.pageIndex;
-        data["totalCount"] = this.totalCount;
+        data["PageSize"] = this.pageSize;
+        data["PageIndex"] = this.pageIndex;
+        data["TotalCount"] = this.totalCount;
         if (Array.isArray(this.items)) {
-            data["items"] = [];
+            data["Items"] = [];
             for (let item of this.items)
-                data["items"].push(item.toJSON());
+                data["Items"].push(item.toJSON());
         }
         return data; 
     }
@@ -1750,10 +1750,10 @@ export class HomeworkSolutionListResponse implements IHomeworkSolutionListRespon
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.student = _data["student"] ? UserRoleListResponse.fromJS(_data["student"]) : <any>undefined;
-            this.turnInDate = _data["turnInDate"] ? new Date(_data["turnInDate"].toString()) : <any>undefined;
-            this.reviewed = _data["reviewed"];
+            this.id = _data["Id"];
+            this.student = _data["Student"] ? UserRoleListResponse.fromJS(_data["Student"]) : <any>undefined;
+            this.turnInDate = _data["TurnInDate"] ? new Date(_data["TurnInDate"].toString()) : <any>undefined;
+            this.reviewed = _data["Reviewed"];
         }
     }
 
@@ -1766,10 +1766,10 @@ export class HomeworkSolutionListResponse implements IHomeworkSolutionListRespon
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["student"] = this.student ? this.student.toJSON() : <any>undefined;
-        data["turnInDate"] = this.turnInDate ? this.turnInDate.toISOString() : <any>undefined;
-        data["reviewed"] = this.reviewed;
+        data["Id"] = this.id;
+        data["Student"] = this.student ? this.student.toJSON() : <any>undefined;
+        data["TurnInDate"] = this.turnInDate ? this.turnInDate.toISOString() : <any>undefined;
+        data["Reviewed"] = this.reviewed;
         return data; 
     }
 }
@@ -1796,8 +1796,8 @@ export class Body implements IBody {
 
     init(_data?: any) {
         if (_data) {
-            this.outcome = _data["outcome"];
-            this.comment = _data["comment"];
+            this.outcome = _data["Outcome"];
+            this.comment = _data["Comment"];
         }
     }
 
@@ -1810,8 +1810,8 @@ export class Body implements IBody {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["outcome"] = this.outcome;
-        data["comment"] = this.comment;
+        data["Outcome"] = this.outcome;
+        data["Comment"] = this.comment;
         return data; 
     }
 }
@@ -1838,12 +1838,12 @@ export class PagedListResponseOfStudentHomeworkListResponse implements IPagedLis
 
     init(_data?: any) {
         if (_data) {
-            this.pageSize = _data["pageSize"];
-            this.pageIndex = _data["pageIndex"];
-            this.totalCount = _data["totalCount"];
-            if (Array.isArray(_data["items"])) {
+            this.pageSize = _data["PageSize"];
+            this.pageIndex = _data["PageIndex"];
+            this.totalCount = _data["TotalCount"];
+            if (Array.isArray(_data["Items"])) {
                 this.items = [] as any;
-                for (let item of _data["items"])
+                for (let item of _data["Items"])
                     this.items!.push(StudentHomeworkListResponse.fromJS(item));
             }
         }
@@ -1858,13 +1858,13 @@ export class PagedListResponseOfStudentHomeworkListResponse implements IPagedLis
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["pageSize"] = this.pageSize;
-        data["pageIndex"] = this.pageIndex;
-        data["totalCount"] = this.totalCount;
+        data["PageSize"] = this.pageSize;
+        data["PageIndex"] = this.pageIndex;
+        data["TotalCount"] = this.totalCount;
         if (Array.isArray(this.items)) {
-            data["items"] = [];
+            data["Items"] = [];
             for (let item of this.items)
-                data["items"].push(item.toJSON());
+                data["Items"].push(item.toJSON());
         }
         return data; 
     }
@@ -1895,11 +1895,11 @@ export class StudentHomeworkListResponse implements IStudentHomeworkListResponse
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.title = _data["title"];
-            this.deadline = _data["deadline"] ? new Date(_data["deadline"].toString()) : <any>undefined;
-            this.submitted = _data["submitted"];
-            this.optional = _data["optional"];
+            this.id = _data["Id"];
+            this.title = _data["Title"];
+            this.deadline = _data["Deadline"] ? new Date(_data["Deadline"].toString()) : <any>undefined;
+            this.submitted = _data["Submitted"];
+            this.optional = _data["Optional"];
         }
     }
 
@@ -1912,11 +1912,11 @@ export class StudentHomeworkListResponse implements IStudentHomeworkListResponse
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["title"] = this.title;
-        data["deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
-        data["submitted"] = this.submitted;
-        data["optional"] = this.optional;
+        data["Id"] = this.id;
+        data["Title"] = this.title;
+        data["Deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
+        data["Submitted"] = this.submitted;
+        data["Optional"] = this.optional;
         return data; 
     }
 }
@@ -1946,12 +1946,12 @@ export class PagedListResponseOfTeacherHomeworkListResponse implements IPagedLis
 
     init(_data?: any) {
         if (_data) {
-            this.pageSize = _data["pageSize"];
-            this.pageIndex = _data["pageIndex"];
-            this.totalCount = _data["totalCount"];
-            if (Array.isArray(_data["items"])) {
+            this.pageSize = _data["PageSize"];
+            this.pageIndex = _data["PageIndex"];
+            this.totalCount = _data["TotalCount"];
+            if (Array.isArray(_data["Items"])) {
                 this.items = [] as any;
-                for (let item of _data["items"])
+                for (let item of _data["Items"])
                     this.items!.push(TeacherHomeworkListResponse.fromJS(item));
             }
         }
@@ -1966,13 +1966,13 @@ export class PagedListResponseOfTeacherHomeworkListResponse implements IPagedLis
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["pageSize"] = this.pageSize;
-        data["pageIndex"] = this.pageIndex;
-        data["totalCount"] = this.totalCount;
+        data["PageSize"] = this.pageSize;
+        data["PageIndex"] = this.pageIndex;
+        data["TotalCount"] = this.totalCount;
         if (Array.isArray(this.items)) {
-            data["items"] = [];
+            data["Items"] = [];
             for (let item of this.items)
-                data["items"].push(item.toJSON());
+                data["Items"].push(item.toJSON());
         }
         return data; 
     }
@@ -2004,12 +2004,12 @@ export class TeacherHomeworkListResponse implements ITeacherHomeworkListResponse
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.title = _data["title"];
-            this.deadline = _data["deadline"] ? new Date(_data["deadline"].toString()) : <any>undefined;
-            this.optional = _data["optional"];
-            this.submissions = _data["submissions"];
-            this.reviews = _data["reviews"];
+            this.id = _data["Id"];
+            this.title = _data["Title"];
+            this.deadline = _data["Deadline"] ? new Date(_data["Deadline"].toString()) : <any>undefined;
+            this.optional = _data["Optional"];
+            this.submissions = _data["Submissions"];
+            this.reviews = _data["Reviews"];
         }
     }
 
@@ -2022,12 +2022,12 @@ export class TeacherHomeworkListResponse implements ITeacherHomeworkListResponse
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["title"] = this.title;
-        data["deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
-        data["optional"] = this.optional;
-        data["submissions"] = this.submissions;
-        data["reviews"] = this.reviews;
+        data["Id"] = this.id;
+        data["Title"] = this.title;
+        data["Deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
+        data["Optional"] = this.optional;
+        data["Submissions"] = this.submissions;
+        data["Reviews"] = this.reviews;
         return data; 
     }
 }
