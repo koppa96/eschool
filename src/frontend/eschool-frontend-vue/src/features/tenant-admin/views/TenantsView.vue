@@ -42,6 +42,7 @@ const columns: QTableColumn<TenantListResponse>[] = [
   }
 ]
 
+const showDialog = ref(false)
 const client = createClient(TenantsClient)
 const loading = ref(false)
 const data = ref<TenantListResponse[]>([])
