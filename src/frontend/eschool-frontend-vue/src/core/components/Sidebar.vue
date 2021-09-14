@@ -18,7 +18,13 @@
       label="Rendszeradminisztráció"
       v-if="isGlobalAdmin || isAdministrator"
     >
-      <q-item v-ripple :inset-level="1" clickable v-if="isGlobalAdmin">
+      <q-item
+        v-ripple
+        :inset-level="1"
+        clickable
+        v-if="isGlobalAdmin"
+        to="/tenants"
+      >
         <q-item-section>Iskolák</q-item-section>
       </q-item>
       <q-item v-ripple :inset-level="1" clickable v-if="isGlobalAdmin">

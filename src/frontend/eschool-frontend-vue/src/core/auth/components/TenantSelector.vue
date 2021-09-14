@@ -16,9 +16,9 @@
         <q-item v-bind="scope.itemProps">
           <q-item-section>
             <q-item-label>{{ scope.opt.name }}</q-item-label>
-            <q-item-label caption>{{
-              rolesAsString(scope.opt.tenantRoleTypes)
-            }}</q-item-label>
+            <q-item-label caption>
+              {{ rolesAsString(scope.opt.tenantRoleTypes) }}
+            </q-item-label>
           </q-item-section>
         </q-item>
       </template>

@@ -10,6 +10,7 @@ import LogoutRedirect from '@/core/auth/components/LogoutRedirect.vue'
 import axios from 'axios'
 import { AppConfiguration } from './core/config'
 import { setUpAxiosInterceptors } from '@/shared/api'
+import { tenantAdminRoutes } from '@/features/tenant-admin/tenant-admin.routes'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -23,7 +24,8 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/logout-redirect',
     component: LogoutRedirect
-  }
+  },
+  ...tenantAdminRoutes
 ]
 
 const router = createRouter({
