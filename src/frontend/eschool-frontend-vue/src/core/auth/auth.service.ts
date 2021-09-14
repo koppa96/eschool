@@ -6,7 +6,9 @@ import {
   ServerConfig,
   TokenResponse
 } from './auth.model'
-import { BehaviorSubject, Observable } from 'rxjs'
+import { BehaviorSubject, map, Observable } from 'rxjs'
+import { AccessTokenData } from '@/core/auth/model/token.model'
+import { filterNotNull } from '@/core/utils/rxjs-operators'
 
 const CODE_PAIR_KEY = 'codePair'
 const TOKENS_KEY = 'tokens'
@@ -16,6 +18,7 @@ export class AuthService {
   private isSilentRefreshing = false
   private _tenantId: string | null = null
   private _tokens$ = new BehaviorSubject<TokenResponse | null>(null)
+  private _accessTokenData$ = new BehaviorSubject<AccessTokenData | null>(null)
   private _codePair: CodePair | null = null
 
   get tenantId(): string | null {
@@ -66,6 +69,14 @@ export class AuthService {
     return this.tokens && this.tokens.access_token
   }
 
+  get accessTokenData$(): Observable<AccessTokenData | null> {
+    return this._accessTokenData$.asObservable()
+  }
+
+  get accessTokenData(): AccessTokenData | null {
+    return this._accessTokenData$.value
+  }
+
   constructor(
     private clientConfig: ClientConfig,
     private serverConfig: ServerConfig
@@ -79,6 +90,14 @@ export class AuthService {
     if (codePairInSessionStorage !== null) {
       this._codePair = JSON.parse(codePairInSessionStorage)
     }
+
+    this.tokens$
+      .pipe(
+        map(tokens =>
+          tokens ? new AccessTokenData(tokens.access_token) : null
+        )
+      )
+      .subscribe(this._accessTokenData$)
   }
 
   private createAuthorizeState(silentRefresh: boolean): AuthorizeState {

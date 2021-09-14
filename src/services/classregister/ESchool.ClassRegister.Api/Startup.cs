@@ -63,6 +63,7 @@ namespace ESchool.ClassRegister.Api
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false));
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 });
             
             services.AddGrpc();
@@ -81,9 +82,6 @@ namespace ESchool.ClassRegister.Api
             {
                 config.Title = "ESchool Class Register API";
                 config.Description = "The REST API documentation of the Class Register microservice.";
-#pragma warning disable 618
-                config.DefaultEnumHandling = EnumHandling.String;
-#pragma warning restore 618
 
                 config.AddSecurity("OAuth2", new OpenApiSecurityScheme
                 {

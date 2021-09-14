@@ -44,7 +44,6 @@ import { onMounted, ref } from 'vue'
 import Sidebar from '@/core/components/Sidebar.vue'
 import TenantSelector from '@/core/auth/components/TenantSelector.vue'
 import { useAuthService } from '@/core/auth'
-import { isExpired } from '@/core/auth/utils/token.utils'
 
 const leftDrawerOpen = ref(false)
 
@@ -55,7 +54,7 @@ function toggleLeftDrawer(): void {
 }
 
 onMounted(() => {
-  if (!authService.accessToken || isExpired(authService.accessToken)) {
+  if (!authService.accessTokenData || authService.accessTokenData.expired) {
     authService.initiateAuthCodeFlow()
   }
 })

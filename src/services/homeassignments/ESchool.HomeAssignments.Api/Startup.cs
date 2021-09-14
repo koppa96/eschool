@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using ESchool.ClassRegister.Grpc;
 using ESchool.HomeAssignments.Api.Infrastructure;
@@ -54,6 +55,7 @@ namespace ESchool.HomeAssignments.Api
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false));
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 });
 
             var authConfig = new AuthConfiguration();
@@ -101,9 +103,6 @@ namespace ESchool.HomeAssignments.Api
             {
                 config.Title = "ESchool Home Assigments API";
                 config.Description = "The REST API documentation of the Home Assignments microservice.";
-#pragma warning disable 618
-                config.DefaultEnumHandling = EnumHandling.String;
-#pragma warning restore 618
 
                 config.AddSecurity("OAuth2", new OpenApiSecurityScheme
                 {

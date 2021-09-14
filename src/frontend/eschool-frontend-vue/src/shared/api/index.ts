@@ -6,7 +6,6 @@ import * as testingClients from '@/shared/generated-clients/testing'
 import { AppConfiguration } from '@/core/config'
 import 'linq-extensions'
 import { useAuthService } from '@/core/auth'
-import { isExpired } from '@/core/auth/utils/token.utils'
 
 export type ClientConstructor<TClient = any> = {
   new (baseUrl?: string, instance?: AxiosInstance): TClient
@@ -72,7 +71,7 @@ export function createClient<TClient>(
 export function setUpAxiosInterceptors() {
   axios.interceptors.request.use(config => {
     const authService = useAuthService()
-    if (authService.accessToken && !isExpired(authService.accessToken)) {
+    if (authService.accessToken && !authService.accessTokenData?.expired) {
       return {
         ...config,
         headers: {

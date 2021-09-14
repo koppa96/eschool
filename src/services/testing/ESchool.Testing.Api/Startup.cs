@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Polymorph.Extensions;
 using System.Text.Json.Serialization;
 using ESchool.ClassRegister.Grpc;
@@ -55,6 +56,7 @@ namespace ESchool.Testing.Api
                 {
                     options.JsonSerializerOptions.AddDiscriminatorConverters(Assembly.Load("ESchool.Testing.Application"));
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false));
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 });
 
             var authConfig = new AuthConfiguration();
@@ -91,9 +93,6 @@ namespace ESchool.Testing.Api
             {
                 config.Title = "ESchool Class Register API";
                 config.Description = "The REST API documentation of the Class Register microservice.";
-#pragma warning disable 618
-                config.DefaultEnumHandling = EnumHandling.String;
-#pragma warning restore 618
 
                 config.AddSecurity("OAuth2", new OpenApiSecurityScheme
                 {

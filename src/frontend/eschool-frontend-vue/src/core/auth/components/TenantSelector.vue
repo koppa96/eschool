@@ -11,7 +11,18 @@
       :loading="loading"
       bg-color="white"
       @update:model-value="changeTenant($event)"
-    />
+    >
+      <template v-slot:option="scope">
+        <q-item v-bind="scope.itemProps">
+          <q-item-section>
+            <q-item-label>{{ scope.opt.name }}</q-item-label>
+            <q-item-label caption>{{
+              rolesAsString(scope.opt.tenantRoleTypes)
+            }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </template>
+    </q-select>
     <q-dialog v-model="showDialog" @hide="dialogClosed()">
       <q-card>
         <q-card-section class="row no-wrap">
@@ -52,46 +63,42 @@
 import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
 import { filterNotNull } from '@/core/utils/rxjs-operators'
 import { onUnmounted, ref } from 'vue'
-import { distinctUntilChanged, map, takeUntil } from 'rxjs'
+import { takeUntil } from 'rxjs'
 import { useAuthService } from '..'
 import {
-  TenantListResponse,
+  TenantRoleType,
+  TenantUserListResponse,
   UsersClient
 } from '@/shared/generated-clients/identity-provider'
-import { getData } from '../utils/token.utils'
 import { createClient } from '@/shared/api'
+import { getTenantRoleDisplayName } from '@/core/auth/model/role-display-names'
 
-const tenants = ref<TenantListResponse[]>([])
-const selectedTenant = ref<TenantListResponse | null>(null)
+const tenants = ref<TenantUserListResponse[]>([])
+const selectedTenant = ref<TenantUserListResponse | null>(null)
 const loading = ref(true)
 const showDialog = ref(false)
 const dialogResult = ref<boolean | null>(null)
-let nextTenant: TenantListResponse | null = null
+let nextTenant: TenantUserListResponse | null = null
 
 const authService = useAuthService()
 const unmounted = useObservableLifecycle(onUnmounted)
 const client = createClient(UsersClient)
 
-authService.tokens$
-  .pipe(
-    filterNotNull(),
-    map(tokens => tokens.access_token),
-    distinctUntilChanged(),
-    map(accessToken => getData(accessToken)),
-    takeUntil(unmounted)
-  )
+authService.accessTokenData$
+  .pipe(filterNotNull(), takeUntil(unmounted))
   .subscribe(async tokenData => {
     const userData = await client.getMe()
+    console.log(userData)
 
     tenants.value = userData.tenants ?? []
 
     selectedTenant.value =
-      tenants.value.find(x => x.id === tokenData.tenant_id) ?? null
+      tenants.value.find(x => x.id === tokenData.tenantId) ?? null
 
     loading.value = false
   })
 
-function changeTenant(selectedTenant: TenantListResponse) {
+function changeTenant(selectedTenant: TenantUserListResponse) {
   showDialog.value = true
   nextTenant = selectedTenant
 }
@@ -102,6 +109,10 @@ function dialogClosed() {
     loading.value = true
   }
   dialogResult.value = null
+}
+
+function rolesAsString(roles: TenantRoleType[]) {
+  return roles.map(getTenantRoleDisplayName).join(', ')
 }
 </script>
 
