@@ -54,7 +54,7 @@ namespace ESchool.Testing.Api
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.AddDiscriminatorConverters(Assembly.Load("ESchool.Testing.Application"));
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false));
                 });
 
             var authConfig = new AuthConfiguration();

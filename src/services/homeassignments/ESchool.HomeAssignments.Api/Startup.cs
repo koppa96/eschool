@@ -53,7 +53,7 @@ namespace ESchool.HomeAssignments.Api
             services.AddControllers()
                 .AddJsonOptions(options =>
                 {
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false));
                 });
 
             var authConfig = new AuthConfiguration();
