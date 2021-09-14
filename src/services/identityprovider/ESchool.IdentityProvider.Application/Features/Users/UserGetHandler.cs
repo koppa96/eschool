@@ -23,7 +23,9 @@ namespace ESchool.IdentityProvider.Application.Features.Users
         {
             var user = await context.Users.Include(x => x.TenantUsers)
                     .ThenInclude(x => x.Tenant)
-                .SingleAsync(x => x.Id == request.Id);
+                .Include(x => x.TenantUsers)
+                    .ThenInclude(x => x.TenantUserRoles)
+                .SingleAsync(x => x.Id == request.Id, cancellationToken);
 
             return mapper.Map<UserDetailsResponse>(user);
         }

@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <q-header elevated class="bg-primary text-white">
-      <q-toolbar>
+      <q-toolbar class="q-py-sm">
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
         <q-avatar size="xl" icon="school"></q-avatar>
@@ -10,7 +10,7 @@
           ESchool
         </q-toolbar-title>
 
-        <TenantSelector class="q-my-sm" />
+        <TenantSelector v-if="showTenantSelector" />
 
         <q-btn
           class="q-mx-sm"
@@ -40,14 +40,26 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import Sidebar from '@/core/components/Sidebar.vue'
 import TenantSelector from '@/core/auth/components/TenantSelector.vue'
 import { useAuthService } from '@/core/auth'
+import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
+import { filterNotNull } from '@/core/utils/rxjs-operators'
+import { takeUntil } from 'rxjs'
+import { GlobalRoleType } from '@/shared/generated-clients/identity-provider'
 
 const leftDrawerOpen = ref(false)
 
 const authService = useAuthService()
+const unmounted = useObservableLifecycle(onUnmounted)
+const showTenantSelector = ref(false)
+
+authService.accessTokenData$
+  .pipe(filterNotNull(), takeUntil(unmounted))
+  .subscribe(data => {
+    showTenantSelector.value = data.globalRole === GlobalRoleType.TenantUser
+  })
 
 function toggleLeftDrawer(): void {
   leftDrawerOpen.value = !leftDrawerOpen.value

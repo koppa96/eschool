@@ -88,7 +88,6 @@ authService.accessTokenData$
   .pipe(filterNotNull(), takeUntil(unmounted))
   .subscribe(async tokenData => {
     const userData = await client.getMe()
-    console.log(userData)
 
     tenants.value = userData.tenants ?? []
 
