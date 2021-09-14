@@ -15,6 +15,9 @@
       </template>
     </q-table>
   </q-page>
+  <q-dialog v-model="showDialog">
+    <TenantCreateEdit initial-value="selectedTenant" />
+  </q-dialog>
 </template>
 
 <script setup lang="ts">
@@ -26,6 +29,7 @@ import {
 import { ref } from 'vue'
 import { createClient } from '@/shared/api'
 import { QPagination } from '@/shared/model/q-pagination.model'
+import TenantCreateEdit from '@/features/tenant-admin/components/TenantCreateEdit.vue'
 
 const columns: QTableColumn<TenantListResponse>[] = [
   {
@@ -43,6 +47,7 @@ const columns: QTableColumn<TenantListResponse>[] = [
 ]
 
 const showDialog = ref(false)
+const selectedTenant = ref<TenantListResponse | null>(null)
 const client = createClient(TenantsClient)
 const loading = ref(false)
 const data = ref<TenantListResponse[]>([])
