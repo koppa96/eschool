@@ -11,12 +11,25 @@
     }],
     "brace-style": ["error", "1tbs"],
     "@typescript-eslint/explicit-function-return-type": [
-      "error",
-      {
-      "allowExpressions": true
+      "error", {
+        "allowExpressions": true,
+        "allowTypedFunctionExpressions": true,
+        "allowHigherOrderFunctions": false,
+        "allowDirectConstAssertionInArrowFunctions": false,
+        "allowConciseArrowFunctionExpressionsStartingWithVoid": false
       }
     ],
     "import/named": "off",
-    "curly": [2, "all"]
+    "curly": [2, "all"],
+    "space-before-function-paren": ["error", {
+      "anonymous": "never",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
+    "operator-linebreak": "off",
+    "arrow-parens": ["error", "as-needed"],
+    "@typescript-eslint/indent": "off",
+    "eslint-comments/no-unlimited-disable": "off",
+    "vue/singleline-html-element-content-newline": "off"
   }
 }

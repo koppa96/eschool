@@ -1,35 +1,51 @@
 <template>
   <q-page class="q-pa-lg">
-    <q-table
-      v-model:pagination="pagination"
+    <DataTable
       title="Iskolák"
+      add-button-text="Iskola felvétele"
       :columns="columns"
-      row-key="id"
-      :rows="data"
-      :pagination="pagination"
-      @request="request($event)"
-      :loading="loading"
+      :data-access="
+        (pageSize, pageIndex) => client.getTenants(pageSize, pageIndex)
+      "
+      :refresh$="refreshSubject"
+      @add="createTenant()"
+      @edit="editTenant($event)"
+      @delete="deleteTenant($event)"
+    />
+    <TenantCreateEditDialog
+      ref="createEditDialog"
+      :tenant-to-edit="tenantToEdit"
+      @save="saveTenant($event)"
+    />
+    <ConfirmDialog
+      ref="deleteDialog"
+      negative-button-text="Nem"
+      positive-button-text="Igen"
+      @confirm="deleteTenantConfirmed()"
     >
-      <template v-slot:top-right>
-        <q-btn color="primary" icon="add">Iskola felvétele</q-btn>
-      </template>
-    </q-table>
+      Biztos benne hogy törölni szeretné az iskolát? Ez a művelet
+      visszavonhatatlan.
+    </ConfirmDialog>
   </q-page>
-  <q-dialog v-model="showDialog">
-    <TenantCreateEdit initial-value="selectedTenant" />
-  </q-dialog>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { Subject } from 'rxjs'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
 import {
+  CreateTenantCommand,
+  EditTenantCommand,
+  TenantDetailsResponse,
   TenantListResponse,
   TenantsClient
 } from '@/shared/generated-clients/identity-provider'
-import { ref } from 'vue'
 import { createClient } from '@/shared/api'
-import { QPagination } from '@/shared/model/q-pagination.model'
-import TenantCreateEdit from '@/features/tenant-admin/components/TenantCreateEdit.vue'
+import DataTable from '@/shared/components/DataTable.vue'
+import ConfirmDialog from '@/shared/components/ConfirmDialog.vue'
+import { useNotifications } from '@/core/utils/notifications'
+import TenantCreateEditDialog from '@/features/tenant-admin/components/TenantCreateEditDialog.vue'
+import { Dialog } from '@/core/utils/dialog'
 
 const columns: QTableColumn<TenantListResponse>[] = [
   {
@@ -43,40 +59,65 @@ const columns: QTableColumn<TenantListResponse>[] = [
     label: 'OM azonosító',
     align: 'left',
     field: row => row.omIdentifier
+  },
+  {
+    name: 'actions',
+    label: 'Műveletek',
+    align: 'right',
+    field: ''
   }
 ]
 
-const showDialog = ref(false)
-const selectedTenant = ref<TenantListResponse | null>(null)
+const notifications = useNotifications()
+const createEditDialog = ref<Dialog>(null)
+const deleteDialog = ref<Dialog>(null)
+const tenantToEdit = ref<TenantDetailsResponse | null>(null)
+const tenantToDelete = ref<TenantListResponse | null>(null)
 const client = createClient(TenantsClient)
-const loading = ref(false)
-const data = ref<TenantListResponse[]>([])
-const pagination = ref<QPagination>({
-  page: 1,
-  rowsPerPage: 25,
-  rowsNumber: 0
-})
+const refreshSubject = new Subject<void>()
 
-async function request($event: { pagination: QPagination }) {
-  loading.value = true
+async function saveTenant(
+  $event: CreateTenantCommand | EditTenantCommand
+): Promise<void> {
   try {
-    const response = await client.getTenants(
-      $event.pagination.rowsPerPage,
-      $event.pagination.page - 1
-    )
-
-    data.value = response.items
-
-    pagination.value = {
-      ...$event.pagination,
-      rowsNumber: response.totalCount
+    if ($event instanceof CreateTenantCommand) {
+      await client.createTenant($event)
+    } else {
+      await client.updateTenant($event.id, $event)
     }
+    notifications.success('Sikeres mentés')
+    refreshSubject.next()
+  } catch (err) {
+    notifications.failure('Sikertelen mentés')
   } finally {
-    loading.value = false
+    tenantToEdit.value = null
   }
 }
 
-request({ pagination: pagination.value })
-</script>
+function createTenant(): void {
+  tenantToEdit.value = null
+  createEditDialog.value?.open()
+}
 
-<style scoped></style>
+async function editTenant(tenant: TenantListResponse): Promise<void> {
+  createEditDialog.value?.open()
+  tenantToEdit.value = await client.getTenant(tenant.id)
+}
+
+function deleteTenant(tenant: TenantListResponse): Promise<void> {
+  deleteDialog.value?.open()
+  tenantToDelete.value = tenant
+}
+
+async function deleteTenantConfirmed(): Promise<void> {
+  if (tenantToDelete.value) {
+    try {
+      await client.deleteTenant(tenantToDelete.value.id)
+      notifications.success('Iskola törölve')
+      refreshSubject.next()
+    } catch (err) {
+      notifications.failure('Törlés sikertelen')
+    }
+  }
+}
+</script>

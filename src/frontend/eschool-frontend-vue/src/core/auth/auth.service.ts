@@ -1,14 +1,13 @@
 import { create, CodePair } from 'pkce'
 import axios from 'axios'
+import { BehaviorSubject, map, Observable } from 'rxjs'
 import {
   AuthorizeState,
   ClientConfig,
   ServerConfig,
   TokenResponse
 } from './auth.model'
-import { BehaviorSubject, map, Observable } from 'rxjs'
 import { AccessTokenData } from '@/core/auth/model/token.model'
-import { filterNotNull } from '@/core/utils/rxjs-operators'
 
 const CODE_PAIR_KEY = 'codePair'
 const TOKENS_KEY = 'tokens'

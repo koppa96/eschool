@@ -10,11 +10,11 @@ export interface QPagination {
   /**
    * Page number (1-based)
    */
-  page?: number
+  page: number
   /**
    * How many rows per page? 0 means Infinite
    */
-  rowsPerPage?: number
+  rowsPerPage: number
   /**
    * For server-side fetching only. How many total database rows are there to be added to the table. If set, causes the QTable to emit @request when data is required.
    */

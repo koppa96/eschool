@@ -112,12 +112,12 @@ export class TenantsClient {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 201) {
             const _responseText = response.data;
-            let result200: any = null;
-            let resultData200  = _responseText;
-            result200 = TenantDetailsResponse.fromJS(resultData200);
-            return result200;
+            let result201: any = null;
+            let resultData201  = _responseText;
+            result201 = TenantDetailsResponse.fromJS(resultData201);
+            return result201;
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);

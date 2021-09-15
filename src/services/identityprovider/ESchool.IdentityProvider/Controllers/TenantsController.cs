@@ -6,6 +6,7 @@ using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Interface.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.IdentityProvider.Controllers
@@ -38,6 +39,7 @@ namespace ESchool.IdentityProvider.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<TenantDetailsResponse>> CreateTenant([FromBody] CreateTenantCommand command, CancellationToken cancellationToken)
         {
             var response = await mediator.Send(command, cancellationToken);

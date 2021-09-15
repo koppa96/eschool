@@ -41,12 +41,12 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
+import { takeUntil } from 'rxjs'
 import Sidebar from '@/core/components/Sidebar.vue'
 import TenantSelector from '@/core/auth/components/TenantSelector.vue'
 import { useAuthService } from '@/core/auth'
 import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
 import { filterNotNull } from '@/core/utils/rxjs-operators'
-import { takeUntil } from 'rxjs'
 import { GlobalRoleType } from '@/shared/generated-clients/identity-provider'
 
 const leftDrawerOpen = ref(false)

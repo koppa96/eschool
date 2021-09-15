@@ -14,28 +14,28 @@
     </q-item>
 
     <q-expansion-item
+      v-if="isGlobalAdmin || isAdministrator"
       icon="admin_panel_settings"
       label="Rendszeradminisztráció"
-      v-if="isGlobalAdmin || isAdministrator"
     >
       <q-item
+        v-if="isGlobalAdmin"
         v-ripple
         :inset-level="1"
         clickable
-        v-if="isGlobalAdmin"
         to="/tenants"
       >
         <q-item-section>Iskolák</q-item-section>
       </q-item>
-      <q-item v-ripple :inset-level="1" clickable v-if="isGlobalAdmin">
+      <q-item v-if="isGlobalAdmin" v-ripple :inset-level="1" clickable>
         <q-item-section>Felhasználók</q-item-section>
       </q-item>
-      <q-item v-ripple :inset-level="1" clickable v-if="isAdministrator">
+      <q-item v-if="isAdministrator" v-ripple :inset-level="1" clickable>
         <q-item-section>Iskolám felhasználói</q-item-section>
       </q-item>
     </q-expansion-item>
 
-    <q-expansion-item icon="edit" label="Adminisztráció" v-if="isAdministrator">
+    <q-expansion-item v-if="isAdministrator" icon="edit" label="Adminisztráció">
       <q-item v-ripple :inset-level="1" clickable>
         <q-item-section>Tantárgyak</q-item-section>
       </q-item>
@@ -57,46 +57,46 @@
     </q-expansion-item>
 
     <q-expansion-item
+      v-if="isStudent || isParent || isTeacher"
       icon="description"
       label="Osztálynapló"
-      v-if="isStudent || isParent || isTeacher"
     >
-      <q-item v-ripple :inset-level="1" clickable v-if="isStudent">
+      <q-item v-if="isStudent" v-ripple :inset-level="1" clickable>
         <q-item-section>Órák</q-item-section>
       </q-item>
-      <q-item v-ripple :inset-level="1" clickable v-if="isStudent || isParent">
+      <q-item v-if="isStudent || isParent" v-ripple :inset-level="1" clickable>
         <q-item-section>Jegyek</q-item-section>
       </q-item>
-      <q-item v-ripple :inset-level="1" clickable v-if="isStudent || isParent">
+      <q-item v-if="isStudent || isParent" v-ripple :inset-level="1" clickable>
         <q-item-section>Hiányzások</q-item-section>
       </q-item>
-      <q-item v-ripple :inset-level="1" clickable v-if="isTeacher">
+      <q-item v-if="isTeacher" v-ripple :inset-level="1" clickable>
         <q-item-section>Csoportok</q-item-section>
       </q-item>
     </q-expansion-item>
 
     <q-expansion-item
+      v-if="isTeacher || isStudent"
       icon="home"
       label="Házi feladatok"
-      v-if="isTeacher || isStudent"
     >
-      <q-item v-ripple :inset-level="1" clickable v-if="isStudent">
+      <q-item v-if="isStudent" v-ripple :inset-level="1" clickable>
         <q-item-section>Házi feladatok</q-item-section>
       </q-item>
-      <q-item v-ripple :inset-level="1" clickable v-if="isTeacher">
+      <q-item v-if="isTeacher" v-ripple :inset-level="1" clickable>
         <q-item-section>Csoportok</q-item-section>
       </q-item>
     </q-expansion-item>
 
     <q-expansion-item
+      v-if="isTeacher || isStudent"
       icon="quiz"
       label="Dolgozatok"
-      v-if="isTeacher || isStudent"
     >
-      <q-item v-ripple :inset-level="1" clickable v-if="isStudent">
+      <q-item v-if="isStudent" v-ripple :inset-level="1" clickable>
         <q-item-section>Dolgozatok</q-item-section>
       </q-item>
-      <q-item v-ripple :inset-level="1" clickable v-if="isTeacher">
+      <q-item v-if="isTeacher" v-ripple :inset-level="1" clickable>
         <q-item-section>Csoportok</q-item-section>
       </q-item>
     </q-expansion-item>
@@ -104,15 +104,15 @@
 </template>
 
 <script setup lang="ts">
-import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
 import { computed, onUnmounted, ref } from 'vue'
+import { takeUntil } from 'rxjs'
+import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
 import { useAuthService } from '@/core/auth'
 import {
   GlobalRoleType,
   TenantRoleType
 } from '@/shared/generated-clients/identity-provider'
 import { filterNotNull } from '@/core/utils/rxjs-operators'
-import { takeUntil } from 'rxjs'
 
 const unmounted = useObservableLifecycle(onUnmounted)
 const authService = useAuthService()

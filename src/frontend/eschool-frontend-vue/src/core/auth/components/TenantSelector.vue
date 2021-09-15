@@ -12,7 +12,7 @@
       bg-color="white"
       @update:model-value="changeTenant($event)"
     >
-      <template v-slot:option="scope">
+      <template #option="scope">
         <q-item v-bind="scope.itemProps">
           <q-item-section>
             <q-item-label>{{ scope.opt.name }}</q-item-label>
@@ -23,48 +23,24 @@
         </q-item>
       </template>
     </q-select>
-    <q-dialog v-model="showDialog" @hide="dialogClosed()">
-      <q-card>
-        <q-card-section class="row no-wrap">
-          <q-avatar
-            class="q-mr-md"
-            icon="priority_high"
-            color="primary"
-            text-color="white"
-          />
-          <span class="flex-shrink">
-            Ön iskolanézetet készül váltani. Győződjön meg róla hogy minden
-            módosítása mentésre került!
-          </span>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn
-            @click="dialogResult = false"
-            flat
-            label="Mégse"
-            color="primary"
-            v-close-popup
-          />
-          <q-btn
-            @click="dialogResult = true"
-            flat
-            label="Iskolaváltás"
-            color="primary"
-            v-close-popup
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+    <ConfirmDialog
+      ref="confirmDialog"
+      positive-button-text="Iskolaváltás"
+      negative-button-text="Mégsem"
+      @confirm="switchTenant()"
+    >
+      Ön iskolanézetet készül váltani. Győződjön meg róla hogy minden módosítása
+      mentésre került!
+    </ConfirmDialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
-import { filterNotNull } from '@/core/utils/rxjs-operators'
 import { onUnmounted, ref } from 'vue'
 import { takeUntil } from 'rxjs'
 import { useAuthService } from '..'
+import { filterNotNull } from '@/core/utils/rxjs-operators'
+import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
 import {
   TenantRoleType,
   TenantUserListResponse,
@@ -72,12 +48,13 @@ import {
 } from '@/shared/generated-clients/identity-provider'
 import { createClient } from '@/shared/api'
 import { getTenantRoleDisplayName } from '@/core/auth/model/role-display-names'
+import ConfirmDialog from '@/shared/components/ConfirmDialog.vue'
+import { Dialog } from '@/core/utils/dialog'
 
+const confirmDialog = ref<Dialog>(null)
 const tenants = ref<TenantUserListResponse[]>([])
 const selectedTenant = ref<TenantUserListResponse | null>(null)
 const loading = ref(true)
-const showDialog = ref(false)
-const dialogResult = ref<boolean | null>(null)
 let nextTenant: TenantUserListResponse | null = null
 
 const authService = useAuthService()
@@ -97,20 +74,17 @@ authService.accessTokenData$
     loading.value = false
   })
 
-function changeTenant(selectedTenant: TenantUserListResponse) {
-  showDialog.value = true
+function changeTenant(selectedTenant: TenantUserListResponse): void {
+  confirmDialog.value?.open()
   nextTenant = selectedTenant
 }
 
-function dialogClosed() {
-  if (dialogResult.value) {
-    authService.tenantId = nextTenant?.id ?? null
-    loading.value = true
-  }
-  dialogResult.value = null
+function switchTenant(): void {
+  authService.tenantId = nextTenant?.id ?? null
+  loading.value = true
 }
 
-function rolesAsString(roles: TenantRoleType[]) {
+function rolesAsString(roles: TenantRoleType[]): string {
   return roles.map(getTenantRoleDisplayName).join(', ')
 }
 </script>

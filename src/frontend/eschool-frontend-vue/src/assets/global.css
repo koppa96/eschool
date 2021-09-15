@@ -1,3 +1,11 @@
 .material-icons {
     font-family: "Material Icons Outlined", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
+
+.vw-25 {
+    width: 25vw !important;
+}
+
+.vw-50 {
+    width: 50vw !important;
+}

@@ -1,4 +1,4 @@
-export interface QTableColumn<TItem> {
+export interface QTableColumn<TItem = any> {
   /**
    * Unique id, identifies column, (used by pagination.sortBy, 'body-cell-[name]' slot, ...)
    */

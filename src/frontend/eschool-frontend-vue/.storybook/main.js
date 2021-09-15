@@ -19,5 +19,9 @@ module.exports = {
     })
 
     return config
+  },
+  typescript: {
+    check: false,
+    checkOptions: {}
   }
 }

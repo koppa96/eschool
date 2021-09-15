@@ -46,7 +46,7 @@ const lookupTableDefinition = Object.values(homeAssignmentsClients)
 
 let lookupTable: Map<ClientConstructor, string> | undefined
 
-function getLookupTable() {
+function getLookupTable(): Map<ClientConstructor | string> {
   if (!lookupTable) {
     lookupTable = lookupTableDefinition.toMap(
       x => x.constructor,
@@ -65,10 +65,11 @@ export function createClient<TClient>(
     throw new Error('The client is not registered.')
   }
 
+  // eslint-disable-next-line new-cap
   return new clientType(baseUrl, axios)
 }
 
-export function setUpAxiosInterceptors() {
+export function setUpAxiosInterceptors(): void {
   axios.interceptors.request.use(config => {
     const authService = useAuthService()
     if (authService.accessToken && !authService.accessTokenData?.expired) {

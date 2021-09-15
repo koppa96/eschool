@@ -1,8 +1,8 @@
+import { isArray } from 'lodash-es'
 import {
   GlobalRoleType,
   TenantRoleType
 } from '@/shared/generated-clients/identity-provider'
-import { isArray } from 'lodash-es'
 
 export class AccessTokenData {
   expiration: Date
