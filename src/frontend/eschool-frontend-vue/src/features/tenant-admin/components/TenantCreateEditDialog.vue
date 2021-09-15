@@ -61,7 +61,7 @@ import {
 } from '@/core/utils/validation-functions'
 
 const props = defineProps<{
-  tenantToEdit: TenantDetailsResponse
+  tenantToEdit?: TenantDetailsResponse
 }>()
 
 const emit = defineEmits<{

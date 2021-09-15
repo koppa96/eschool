@@ -1,8 +1,6 @@
 import { Story } from '@storybook/vue3'
-import { ref } from 'vue'
-import TenantCreateEdit from '@/features/tenant-admin/components/TenantCreateEditDialog.vue'
+import TenantCreateEditDialog from '@/features/tenant-admin/components/TenantCreateEditDialog.vue'
 import { TenantDetailsResponse } from '@/shared/generated-clients/identity-provider'
-import { Dialog } from '@/core/utils/dialog'
 
 interface Props {
   tenantToEdit: TenantDetailsResponse
@@ -10,7 +8,7 @@ interface Props {
 
 export default {
   title: 'TenantAdmin/TenantCreateEdit',
-  component: TenantCreateEdit,
+  component: TenantCreateEditDialog,
   argTypes: {
     onSave: {},
     onCancel: {}
@@ -18,15 +16,14 @@ export default {
 }
 
 const Template: Story<Props> = args => ({
-  components: { TenantCreateEdit },
+  components: { TenantCreateEditDialog },
   setup() {
-    const dialog = ref<Dialog>()
-
-    function showDialog(): void {
-      dialog.value?.open()
+    return { args }
+  },
+  methods: {
+    showDialog() {
+      this.$refs.dialog.open()
     }
-
-    return { args, showDialog }
   },
   template:
     '<div style="width: 800px"> <TenantCreateEditDialog ref="dialog" v-bind="args" /> <q-btn color="primary" @click="showDialog()">Megjelenítés</q-btn> </div>'
