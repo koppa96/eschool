@@ -7,6 +7,7 @@
     :rows="data"
     :pagination="pagination"
     :loading="loading"
+    :flat="flat"
     @request="request($event)"
   >
     <template #top-right>
@@ -16,8 +17,16 @@
     </template>
     <template #body-cell-actions="props">
       <q-td :props="props">
+        <q-btn
+          dense
+          round
+          flat
+          icon="visibility"
+          @click="emit('viewDetails', props.row)"
+        />
         <q-btn dense round flat icon="edit" @click="emit('edit', props.row)" />
         <q-btn
+          color="negative"
           dense
           round
           flat
@@ -42,6 +51,7 @@ const props = withDefaults(
     addButtonText?: string
     columns: QTableColumn
     rowKey?: string
+    flat?: boolean
     dataAccess: (
       pageSize: number,
       pageIndex: number
@@ -59,6 +69,7 @@ const emit = defineEmits<{
   (event: 'add'): void
   (event: 'edit', item: unknown): void
   (event: 'delete', item: unknown): void
+  (event: 'viewDetails', item: unknown): void
 }>()
 
 let subscription: Subscription | undefined

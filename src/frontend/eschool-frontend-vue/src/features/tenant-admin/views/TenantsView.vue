@@ -1,6 +1,7 @@
 <template>
-  <q-page class="q-pa-lg">
+  <q-page class="q-pa-lg flex column">
     <DataTable
+      class="table"
       title="Iskolák"
       add-button-text="Iskola felvétele"
       :columns="columns"
@@ -8,6 +9,7 @@
         (pageSize, pageIndex) => client.getTenants(pageSize, pageIndex)
       "
       :refresh$="refreshSubject"
+      @viewDetails="navigateToDetails($event)"
       @add="createTenant()"
       @edit="editTenant($event)"
       @delete="deleteTenant($event)"
@@ -32,6 +34,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Subject } from 'rxjs'
+import { useRouter } from 'vue-router'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
 import {
   CreateTenantCommand,
@@ -68,9 +71,10 @@ const columns: QTableColumn<TenantListResponse>[] = [
   }
 ]
 
+const router = useRouter()
 const notifications = useNotifications()
-const createEditDialog = ref<Dialog>(null)
-const deleteDialog = ref<Dialog>(null)
+const createEditDialog = ref<Dialog>()
+const deleteDialog = ref<Dialog>()
 const tenantToEdit = ref<TenantDetailsResponse | null>(null)
 const tenantToDelete = ref<TenantListResponse | null>(null)
 const client = createClient(TenantsClient)
@@ -104,7 +108,7 @@ async function editTenant(tenant: TenantListResponse): Promise<void> {
   tenantToEdit.value = await client.getTenant(tenant.id)
 }
 
-function deleteTenant(tenant: TenantListResponse): Promise<void> {
+function deleteTenant(tenant: TenantListResponse): void {
   deleteDialog.value?.open()
   tenantToDelete.value = tenant
 }
@@ -120,4 +124,15 @@ async function deleteTenantConfirmed(): Promise<void> {
     }
   }
 }
+
+function navigateToDetails(tenant: TenantListResponse): void {
+  router.push(`/tenants/${tenant.id}`)
+}
 </script>
+
+<style scoped>
+.table {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+</style>

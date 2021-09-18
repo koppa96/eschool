@@ -33,7 +33,7 @@ const router = createRouter({
   routes
 })
 
-axios.get('config.json').then(({ data }) => {
+axios.get('/config.json').then(({ data }) => {
   AppConfiguration.value = data
   setUpAxiosInterceptors()
 

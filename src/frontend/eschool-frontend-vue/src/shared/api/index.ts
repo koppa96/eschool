@@ -46,7 +46,7 @@ const lookupTableDefinition = Object.values(homeAssignmentsClients)
 
 let lookupTable: Map<ClientConstructor, string> | undefined
 
-function getLookupTable(): Map<ClientConstructor | string> {
+function getLookupTable(): Map<ClientConstructor, string> {
   if (!lookupTable) {
     lookupTable = lookupTableDefinition.toMap(
       x => x.constructor,
