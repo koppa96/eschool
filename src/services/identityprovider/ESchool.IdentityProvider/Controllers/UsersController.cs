@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.IdentityProvider.Interface.Features.Users;
@@ -23,6 +24,14 @@ namespace ESchool.IdentityProvider.Controllers
         {
             this.mediator = mediator;
             this.identityService = identityService;
+        }
+
+        [HttpGet("search")]
+        [Authorize(PolicyNames.TenantAdministrator)]
+        public Task<List<UserListResponse>> SearchUsers(string name, CancellationToken cancellationToken)
+        {
+            var query = new UserSearchQuery { Name = name };
+            return mediator.Send(query, cancellationToken);
         }
 
         [HttpGet]
