@@ -4,7 +4,7 @@ using ESchool.Libs.Interface.Query;
 
 namespace ESchool.IdentityProvider.Interface.Features.TenantUsers
 {
-    public class TenantUserListQuery : PagedListQuery<UserListResponse>
+    public class TenantUserListQuery : PagedListQuery<TenantUserListResponse>
     {
         public Guid TenantId { get; set; }
     }

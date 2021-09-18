@@ -59,6 +59,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
                 existingUser = new ClassRegisterUser
                 {
                     Id = context.Message.UserId,
+                    Name = context.Message.Name,
                     Email = context.Message.Email,
                     UserRoles = new List<ClassRegisterUserRole>()
                 };
@@ -66,6 +67,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
             }
             else
             {
+                existingUser.Name = context.Message.Name;
                 existingUser.Email = context.Message.Email;
             }
 

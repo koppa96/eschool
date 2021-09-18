@@ -286,7 +286,7 @@ export class TenantUserClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getTenantUsers(tenantId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfUserListResponse> {
+    getTenantUsers(tenantId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfTenantUserListResponse> {
         let url_ = this.baseUrl + "/api/tenants/{tenantId}/users?";
         if (tenantId === undefined || tenantId === null)
             throw new Error("The parameter 'tenantId' must be defined.");
@@ -321,7 +321,7 @@ export class TenantUserClient {
         });
     }
 
-    protected processGetTenantUsers(response: AxiosResponse): Promise<PagedListResponseOfUserListResponse> {
+    protected processGetTenantUsers(response: AxiosResponse): Promise<PagedListResponseOfTenantUserListResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -335,13 +335,13 @@ export class TenantUserClient {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            result200 = PagedListResponseOfUserListResponse.fromJS(resultData200);
+            result200 = PagedListResponseOfTenantUserListResponse.fromJS(resultData200);
             return result200;
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<PagedListResponseOfUserListResponse>(<any>null);
+        return Promise.resolve<PagedListResponseOfTenantUserListResponse>(<any>null);
     }
 
     createTenantUser(tenantId: string, userId: string, tenantRoleTypes: TenantRoleType[] , cancelToken?: CancelToken | undefined): Promise<void> {
@@ -925,6 +925,163 @@ export interface IEditTenantCommand {
     headMaster: string | undefined;
 }
 
+export class PagedListResponseOfTenantUserListResponse implements IPagedListResponseOfTenantUserListResponse {
+    pageSize!: number;
+    pageIndex!: number;
+    totalCount!: number;
+    items!: TenantUserListResponse[] | undefined;
+
+    constructor(data?: IPagedListResponseOfTenantUserListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageSize = _data["pageSize"];
+            this.pageIndex = _data["pageIndex"];
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(TenantUserListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedListResponseOfTenantUserListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedListResponseOfTenantUserListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageSize"] = this.pageSize;
+        data["pageIndex"] = this.pageIndex;
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedListResponseOfTenantUserListResponse {
+    pageSize: number;
+    pageIndex: number;
+    totalCount: number;
+    items: TenantUserListResponse[] | undefined;
+}
+
+export class UserListResponse implements IUserListResponse {
+    id!: string;
+    name!: string | undefined;
+    email!: string | undefined;
+    globalRole!: GlobalRoleType;
+
+    constructor(data?: IUserListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.email = _data["email"];
+            this.globalRole = _data["globalRole"];
+        }
+    }
+
+    static fromJS(data: any): UserListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["email"] = this.email;
+        data["globalRole"] = this.globalRole;
+        return data; 
+    }
+}
+
+export interface IUserListResponse {
+    id: string;
+    name: string | undefined;
+    email: string | undefined;
+    globalRole: GlobalRoleType;
+}
+
+export class TenantUserListResponse extends UserListResponse implements ITenantUserListResponse {
+    tenantRoleTypes!: TenantRoleType[] | undefined;
+
+    constructor(data?: ITenantUserListResponse) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["tenantRoleTypes"])) {
+                this.tenantRoleTypes = [] as any;
+                for (let item of _data["tenantRoleTypes"])
+                    this.tenantRoleTypes!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): TenantUserListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new TenantUserListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.tenantRoleTypes)) {
+            data["tenantRoleTypes"] = [];
+            for (let item of this.tenantRoleTypes)
+                data["tenantRoleTypes"].push(item);
+        }
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ITenantUserListResponse extends IUserListResponse {
+    tenantRoleTypes: TenantRoleType[] | undefined;
+}
+
+export enum TenantRoleType {
+    Administrator = "Administrator",
+    Teacher = "Teacher",
+    Student = "Student",
+    Parent = "Parent",
+}
+
+export enum GlobalRoleType {
+    TenantUser = "TenantUser",
+    TenantAdministrator = "TenantAdministrator",
+}
+
 export class PagedListResponseOfUserListResponse implements IPagedListResponseOfUserListResponse {
     pageSize!: number;
     pageIndex!: number;
@@ -981,68 +1138,12 @@ export interface IPagedListResponseOfUserListResponse {
     items: UserListResponse[] | undefined;
 }
 
-export class UserListResponse implements IUserListResponse {
-    id!: string;
-    email!: string | undefined;
-    globalRole!: GlobalRoleType;
-
-    constructor(data?: IUserListResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.email = _data["email"];
-            this.globalRole = _data["globalRole"];
-        }
-    }
-
-    static fromJS(data: any): UserListResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserListResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["email"] = this.email;
-        data["globalRole"] = this.globalRole;
-        return data; 
-    }
-}
-
-export interface IUserListResponse {
-    id: string;
-    email: string | undefined;
-    globalRole: GlobalRoleType;
-}
-
-export enum GlobalRoleType {
-    TenantUser = "TenantUser",
-    TenantAdministrator = "TenantAdministrator",
-}
-
-export enum TenantRoleType {
-    Administrator = "Administrator",
-    Teacher = "Teacher",
-    Student = "Student",
-    Parent = "Parent",
-}
-
 export class UserDetailsResponse implements IUserDetailsResponse {
     id!: string;
     email!: string | undefined;
     defaultTenantId!: string | undefined;
     globalRoleType!: GlobalRoleType;
-    tenants!: TenantUserListResponse[] | undefined;
+    tenants!: UserTenantListResponse[] | undefined;
 
     constructor(data?: IUserDetailsResponse) {
         if (data) {
@@ -1062,7 +1163,7 @@ export class UserDetailsResponse implements IUserDetailsResponse {
             if (Array.isArray(_data["tenants"])) {
                 this.tenants = [] as any;
                 for (let item of _data["tenants"])
-                    this.tenants!.push(TenantUserListResponse.fromJS(item));
+                    this.tenants!.push(UserTenantListResponse.fromJS(item));
             }
         }
     }
@@ -1094,13 +1195,13 @@ export interface IUserDetailsResponse {
     email: string | undefined;
     defaultTenantId: string | undefined;
     globalRoleType: GlobalRoleType;
-    tenants: TenantUserListResponse[] | undefined;
+    tenants: UserTenantListResponse[] | undefined;
 }
 
-export class TenantUserListResponse extends TenantListResponse implements ITenantUserListResponse {
+export class UserTenantListResponse extends TenantListResponse implements IUserTenantListResponse {
     tenantRoleTypes!: TenantRoleType[] | undefined;
 
-    constructor(data?: ITenantUserListResponse) {
+    constructor(data?: IUserTenantListResponse) {
         super(data);
     }
 
@@ -1115,9 +1216,9 @@ export class TenantUserListResponse extends TenantListResponse implements ITenan
         }
     }
 
-    static fromJS(data: any): TenantUserListResponse {
+    static fromJS(data: any): UserTenantListResponse {
         data = typeof data === 'object' ? data : {};
-        let result = new TenantUserListResponse();
+        let result = new UserTenantListResponse();
         result.init(data);
         return result;
     }
@@ -1134,11 +1235,12 @@ export class TenantUserListResponse extends TenantListResponse implements ITenan
     }
 }
 
-export interface ITenantUserListResponse extends ITenantListResponse {
+export interface IUserTenantListResponse extends ITenantListResponse {
     tenantRoleTypes: TenantRoleType[] | undefined;
 }
 
 export class UserCreateCommand implements IUserCreateCommand {
+    name!: string | undefined;
     email!: string | undefined;
     globalRole!: GlobalRoleType;
 
@@ -1153,6 +1255,7 @@ export class UserCreateCommand implements IUserCreateCommand {
 
     init(_data?: any) {
         if (_data) {
+            this.name = _data["name"];
             this.email = _data["email"];
             this.globalRole = _data["globalRole"];
         }
@@ -1167,6 +1270,7 @@ export class UserCreateCommand implements IUserCreateCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
         data["email"] = this.email;
         data["globalRole"] = this.globalRole;
         return data; 
@@ -1174,6 +1278,7 @@ export class UserCreateCommand implements IUserCreateCommand {
 }
 
 export interface IUserCreateCommand {
+    name: string | undefined;
     email: string | undefined;
     globalRole: GlobalRoleType;
 }

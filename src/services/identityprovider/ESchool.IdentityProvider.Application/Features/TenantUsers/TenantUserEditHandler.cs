@@ -54,6 +54,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             {
                 UserId = tenantUser.UserId,
                 TenantId = tenantId,
+                Name = tenantUser.User.Name,
                 Email = tenantUser.User.Email,
                 TenantRoles = tenantUser.TenantUserRoles.Select(x => x.TenantRole)
                     .ToList()

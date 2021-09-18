@@ -27,6 +27,7 @@ namespace ESchool.IdentityProvider.Application.Features.Users
             var user = new User
             {
                 UserName = request.Email,
+                Name = request.Name,
                 Email = request.Email,
                 GlobalRole = request.GlobalRole
             };

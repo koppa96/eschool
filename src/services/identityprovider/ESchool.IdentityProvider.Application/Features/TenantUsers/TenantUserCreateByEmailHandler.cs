@@ -78,6 +78,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             await publisher.PublishAsync(new TenantUserCreatedOrEditedEvent
             {
                 UserId = user.Id,
+                Name = user.Name,
                 Email = user.Email,
                 TenantId = tenantId,
                 TenantRoles = request.Roles.ToList()

@@ -35,7 +35,8 @@ namespace ESchool.IdentityProvider
                     {
                         var defaultAdmin = new User
                         {
-                            UserName = configuration.GetValue<string>("DefaultTenantAdministrator:UserName"),
+                            UserName = configuration.GetValue<string>("DefaultTenantAdministrator:Email"),
+                            Name = "Teszt Admin",
                             Email = configuration.GetValue<string>("DefaultTenantAdministrator:Email"),
                             GlobalRole = GlobalRoleType.TenantAdministrator
                         };

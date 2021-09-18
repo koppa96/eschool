@@ -1,12 +1,14 @@
 <template>
   <q-page class="q-pa-lg">
-    <q-card class="q-pa-md">
+    <q-card>
       <TenantDetailsHeader
+        class="q-pa-md"
         :name="tenant.name"
         @edit="openEditDialog()"
         @delete="openDeleteDialog()"
       />
-      <TenantDetailsGrid :model-value="tenant" />
+      <TenantDetailsGrid class="q-pa-md" :model-value="tenant" />
+      <TenantUserList class="q-mt-md" :tenant-id="tenantId" />
     </q-card>
   </q-page>
 </template>
@@ -27,6 +29,7 @@ import {
 import { useNotifications } from '@/core/utils/notifications'
 import TenantDetailsHeader from '@/features/tenant-admin/components/TenantDetailsHeader.vue'
 import TenantDetailsGrid from '@/features/tenant-admin/components/TenantDetailsGrid.vue'
+import TenantUserList from '@/features/tenant-admin/components/TenantUserList.vue'
 
 const quasar = useQuasar()
 const notifications = useNotifications()
@@ -35,6 +38,7 @@ const router = useRouter()
 const tenantsClient = createClient(TenantsClient)
 const tenantUsersClient = createClient(TenantUserClient)
 
+const tenantId = route.params.id
 const tenant = ref<TenantDetailsResponse>(new TenantDetailsResponse())
 
 async function loadData(): Promise<void> {

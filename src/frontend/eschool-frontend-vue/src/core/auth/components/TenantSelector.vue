@@ -35,15 +35,15 @@ import { filterNotNull } from '@/core/utils/rxjs-operators'
 import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
 import {
   TenantRoleType,
-  TenantUserListResponse,
+  UserTenantListResponse,
   UsersClient
 } from '@/shared/generated-clients/identity-provider'
 import { createClient } from '@/shared/api'
 import { getTenantRoleDisplayName } from '@/core/auth/model/role-display-names'
 import ConfirmDialog from '@/shared/components/ConfirmDialog.vue'
 
-const tenants = ref<TenantUserListResponse[]>([])
-const selectedTenant = ref<TenantUserListResponse | null>(null)
+const tenants = ref<UserTenantListResponse[]>([])
+const selectedTenant = ref<UserTenantListResponse | null>(null)
 const loading = ref(true)
 
 const quasar = useQuasar()

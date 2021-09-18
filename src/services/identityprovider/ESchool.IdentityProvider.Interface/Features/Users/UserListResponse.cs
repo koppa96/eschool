@@ -6,6 +6,7 @@ namespace ESchool.IdentityProvider.Interface.Features.Users
     public class UserListResponse
     {
         public Guid Id { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
         public GlobalRoleType GlobalRole { get; set; }
     }

@@ -26,7 +26,7 @@ namespace ESchool.IdentityProvider.Controllers
         }
         
         [HttpGet]
-        public Task<PagedListResponse<UserListResponse>> GetTenantUsers(Guid tenantId, [FromQuery] int pageSize, [FromQuery] int pageIndex, CancellationToken cancellationToken)
+        public Task<PagedListResponse<TenantUserListResponse>> GetTenantUsers(Guid tenantId, [FromQuery] int pageSize, [FromQuery] int pageIndex, CancellationToken cancellationToken)
         {
             return mediator.Send(new TenantUserListQuery
             {
