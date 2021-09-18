@@ -12,5 +12,10 @@ export const tenantAdminRoutes: RouteRecordRaw[] = [
       import(
         /* webpackChunkName: "tenant-admin" */ './views/TenantDetailsView.vue'
       )
+  },
+  {
+    path: '/users',
+    component: () =>
+      import(/* webpackChunkName: "tenant-admin" */ './views/UsersView.vue')
   }
 ]

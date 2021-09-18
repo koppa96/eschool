@@ -27,7 +27,13 @@
       >
         <q-item-section>Iskolák</q-item-section>
       </q-item>
-      <q-item v-if="isGlobalAdmin" v-ripple :inset-level="1" clickable>
+      <q-item
+        v-if="isGlobalAdmin"
+        v-ripple
+        :inset-level="1"
+        clickable
+        to="/users"
+      >
         <q-item-section>Felhasználók</q-item-section>
       </q-item>
       <q-item v-if="isAdministrator" v-ripple :inset-level="1" clickable>

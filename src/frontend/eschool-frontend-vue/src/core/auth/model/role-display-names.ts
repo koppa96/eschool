@@ -24,3 +24,34 @@ export function getTenantRoleDisplayName(tenantRole: TenantRoleType): string {
       return 'Tanár'
   }
 }
+
+export interface EnumSelectListItem<TEnum> {
+  value: TEnum
+  label: string
+}
+
+export const GLOBAL_ROLES: GlobalRoleType[] = [
+  GlobalRoleType.TenantUser,
+  GlobalRoleType.TenantAdministrator
+]
+
+export const TENANT_ROLES: TenantRoleType[] = [
+  TenantRoleType.Administrator,
+  TenantRoleType.Teacher,
+  TenantRoleType.Student,
+  TenantRoleType.Parent
+]
+
+export const GLOBAL_ROLES_SELECT: EnumSelectListItem<
+  GlobalRoleType
+>[] = GLOBAL_ROLES.map(role => ({
+  value: role,
+  label: getGlobalRoleDisplayName(role)
+}))
+
+export const TENANT_ROLES_SELECT: EnumSelectListItem<
+  TenantRoleType
+>[] = TENANT_ROLES.map(role => ({
+  value: role,
+  label: getTenantRoleDisplayName(role)
+}))
