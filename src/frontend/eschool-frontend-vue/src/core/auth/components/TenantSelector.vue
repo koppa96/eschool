@@ -23,21 +23,13 @@
         </q-item>
       </template>
     </q-select>
-    <ConfirmDialog
-      ref="confirmDialog"
-      positive-button-text="Iskolaváltás"
-      negative-button-text="Mégsem"
-      @confirm="switchTenant()"
-    >
-      Ön iskolanézetet készül váltani. Győződjön meg róla hogy minden módosítása
-      mentésre került!
-    </ConfirmDialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onUnmounted, ref } from 'vue'
 import { takeUntil } from 'rxjs'
+import { useQuasar } from 'quasar'
 import { useAuthService } from '..'
 import { filterNotNull } from '@/core/utils/rxjs-operators'
 import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
@@ -49,14 +41,12 @@ import {
 import { createClient } from '@/shared/api'
 import { getTenantRoleDisplayName } from '@/core/auth/model/role-display-names'
 import ConfirmDialog from '@/shared/components/ConfirmDialog.vue'
-import { Dialog } from '@/core/utils/dialog'
 
-const confirmDialog = ref<Dialog>(null)
 const tenants = ref<TenantUserListResponse[]>([])
 const selectedTenant = ref<TenantUserListResponse | null>(null)
 const loading = ref(true)
-let nextTenant: TenantUserListResponse | null = null
 
+const quasar = useQuasar()
 const authService = useAuthService()
 const unmounted = useObservableLifecycle(onUnmounted)
 const client = createClient(UsersClient)
@@ -75,13 +65,19 @@ authService.accessTokenData$
   })
 
 function changeTenant(selectedTenant: TenantUserListResponse): void {
-  confirmDialog.value?.open()
-  nextTenant = selectedTenant
-}
-
-function switchTenant(): void {
-  authService.tenantId = nextTenant?.id ?? null
-  loading.value = true
+  quasar
+    .dialog({
+      component: ConfirmDialog,
+      componentProps: {
+        text:
+          'Ön iskolanézetet készül váltani. Győződjön meg róla hogy minden módosítása mentésre került!',
+        positiveButtonText: 'Iskolaváltás'
+      }
+    })
+    .onOk(() => {
+      authService.tenantId = selectedTenant.id
+      loading.value = true
+    })
 }
 
 function rolesAsString(roles: TenantRoleType[]): string {

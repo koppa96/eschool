@@ -1,6 +1,6 @@
 <template>
-  <q-dialog :model-value="isOpen">
-    <q-card>
+  <q-dialog ref="dialogRef" @hide="onDialogHide()">
+    <q-card class="q-dialog-plugin">
       <q-card-section class="row no-wrap">
         <q-avatar
           class="q-mr-md"
@@ -9,18 +9,24 @@
           text-color="white"
         />
         <span class="flex-shrink">
-          <slot></slot>
+          {{ text }}
         </span>
       </q-card-section>
 
       <q-card-actions align="right">
-        <q-btn v-close-popup flat :label="negativeButtonText" color="primary" />
+        <q-btn
+          v-close-popup
+          flat
+          :label="negativeButtonText"
+          color="primary"
+          @click="onDialogCancel()"
+        />
         <q-btn
           v-close-popup
           flat
           :label="positiveButtonText"
           color="primary"
-          @click="emit('confirm')"
+          @click="onDialogOK()"
         />
       </q-card-actions>
     </q-card>
@@ -28,10 +34,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useDialogPluginComponent } from 'quasar'
+
+const {
+  dialogRef,
+  onDialogHide,
+  onDialogOK,
+  onDialogCancel
+} = useDialogPluginComponent()
 
 const props = withDefaults(
   defineProps<{
+    text: string
     negativeButtonText?: string
     positiveButtonText?: string
   }>(),
@@ -41,17 +55,5 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits<{
-  (event: 'confirm'): void
-}>()
-
-defineExpose({
-  open
-})
-
-const isOpen = ref(false)
-
-function open(): void {
-  isOpen.value = true
-}
+const emit = defineEmits(useDialogPluginComponent.emits)
 </script>

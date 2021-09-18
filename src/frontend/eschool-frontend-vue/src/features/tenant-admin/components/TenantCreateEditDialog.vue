@@ -1,8 +1,8 @@
 <template>
-  <q-dialog v-model="isOpen">
+  <q-dialog ref="dialogRef" @hide="onDialogHide()">
     <q-card class="q-pa-lg vw-50">
       <h4 class="q-mt-sm q-mb-md">Iskola {{ operation }}</h4>
-      <q-form greedy @submit="save()">
+      <q-form greedy @submit="onDialogOK(data)">
         <q-input
           v-model="data.name"
           label="Iskola neve"
@@ -35,7 +35,7 @@
           :rules="rules.headMaster"
         />
         <div class="flex justify-between">
-          <q-btn type="button" flat color="primary" @click="cancel()">
+          <q-btn type="button" flat color="primary" @click="onDialogCancel()">
             Mégse
           </q-btn>
           <q-btn type="submit" color="primary">
@@ -48,7 +48,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useDialogPluginComponent } from 'quasar'
 import {
   CreateTenantCommand,
   EditTenantCommand,
@@ -59,27 +60,27 @@ import {
   omIdentifier,
   required
 } from '@/core/utils/validation-functions'
+import { Rules } from '@/shared/model/rules'
 
 const props = defineProps<{
   tenantToEdit?: TenantDetailsResponse
 }>()
 
-const emit = defineEmits<{
-  (event: 'save', data: CreateTenantCommand | EditTenantCommand): void
-  (event: 'cancel'): void
-}>()
+const emit = defineEmits(useDialogPluginComponent.emits)
 
-defineExpose({
-  open
-})
+const {
+  dialogRef,
+  onDialogHide,
+  onDialogOK,
+  onDialogCancel
+} = useDialogPluginComponent()
 
-const isOpen = ref(false)
 const operation = ref('rögzítése')
 const data = ref<CreateTenantCommand | EditTenantCommand>(
   new CreateTenantCommand()
 )
 
-const rules = {
+const rules: Rules<CreateTenantCommand | EditTenantCommand> = {
   name: [required],
   address: [required],
   officialEmailAddress: [required, emailAddress],
@@ -87,21 +88,7 @@ const rules = {
   headMaster: [required]
 }
 
-function open(): void {
-  isOpen.value = true
-}
-
-function save(): void {
-  isOpen.value = false
-  emit('save', data.value)
-}
-
-function cancel(): void {
-  isOpen.value = false
-  emit('cancel')
-}
-
-function fillForm(): void {
+onMounted(() => {
   if (props.tenantToEdit) {
     operation.value = 'szerkesztése'
     data.value = new EditTenantCommand({
@@ -111,23 +98,5 @@ function fillForm(): void {
     operation.value = 'rögzítése'
     data.value = new CreateTenantCommand()
   }
-}
-
-onMounted(() => {
-  fillForm()
 })
-
-watch(
-  () => props.tenantToEdit,
-  () => fillForm()
-)
-
-watch(
-  () => props.modelValue,
-  () => {
-    if (props.modelValue && !props.tenantToEdit) {
-      data.value = new CreateTenantCommand()
-    }
-  }
-)
 </script>
