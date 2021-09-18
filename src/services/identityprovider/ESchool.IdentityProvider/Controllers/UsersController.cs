@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ESchool.IdentityProvider.Interface.Features.Users;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Domain.Services;
+using ESchool.Libs.Interface.Commands;
 using ESchool.Libs.Interface.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -40,6 +41,30 @@ namespace ESchool.IdentityProvider.Controllers
         [HttpPost]
         public Task<UserDetailsResponse> CreateUser([FromBody] UserCreateCommand command, CancellationToken cancellationToken)
         {
+            return mediator.Send(command, cancellationToken);
+        }
+
+        [HttpPut("{id}")]
+        public Task<UserDetailsResponse> EditUser(Guid id, [FromBody] UserEditCommand command,
+            CancellationToken cancellationToken)
+        {
+            var editCommand = new EditCommand<UserEditCommand, UserDetailsResponse>
+            {
+                Id = id,
+                InnerCommand = command
+            };
+
+            return mediator.Send(editCommand, cancellationToken);
+        }
+
+        [HttpDelete("{id}")]
+        public Task DeleteUser(Guid id, CancellationToken cancellationToken)
+        {
+            var command = new UserDeleteCommand
+            {
+                Id = id
+            };
+            
             return mediator.Send(command, cancellationToken);
         }
 
