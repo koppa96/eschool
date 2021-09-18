@@ -26,6 +26,7 @@ namespace ESchool.IdentityProvider.Controllers
         }
 
         [HttpGet]
+        [Authorize(PolicyNames.TenantAdministrator)]
         public Task<PagedListResponse<UserListResponse>> ListUsers([FromQuery] UserListQuery query,
             CancellationToken cancellationToken)
         {
@@ -33,18 +34,21 @@ namespace ESchool.IdentityProvider.Controllers
         }
         
         [HttpGet("{id}")]
+        [Authorize(PolicyNames.TenantAdministrator)]
         public Task<UserDetailsResponse> GetUser(Guid id, CancellationToken cancellationToken)
         {
             return mediator.Send(new UserGetQuery { Id = id }, cancellationToken);
         }
 
         [HttpPost]
+        [Authorize(PolicyNames.TenantAdministrator)]
         public Task<UserDetailsResponse> CreateUser([FromBody] UserCreateCommand command, CancellationToken cancellationToken)
         {
             return mediator.Send(command, cancellationToken);
         }
 
         [HttpPut("{id}")]
+        [Authorize(PolicyNames.TenantAdministrator)]
         public Task<UserDetailsResponse> EditUser(Guid id, [FromBody] UserEditCommand command,
             CancellationToken cancellationToken)
         {
@@ -58,6 +62,7 @@ namespace ESchool.IdentityProvider.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(PolicyNames.TenantAdministrator)]
         public Task DeleteUser(Guid id, CancellationToken cancellationToken)
         {
             var command = new UserDeleteCommand

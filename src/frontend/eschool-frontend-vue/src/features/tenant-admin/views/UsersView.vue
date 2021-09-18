@@ -7,6 +7,7 @@
       :columns="columns"
       :data-access="fetchData"
       :refresh$="refreshSubject"
+      :has-details="false"
       @add="createUser()"
       @edit="editUser($event)"
       @delete="deleteUser($event)"
@@ -100,19 +101,25 @@ function editUser(user: UserListResponse): void {
 }
 
 function deleteUser(user: UserListResponse): void {
-  quasar.dialog({
-    component: ConfirmDialog,
-    componentProps: {
-      text:
-        'Biztos benne hogy törölni szeretné a felhasználót? Ez a művelet visszavonhatatlan.',
-      positiveButtonText: 'Igen',
-      negativeButtonText: 'Nem'
-    }
-  }).onOk(async () => {
-    try {
-      await client
-    }
-  })
+  quasar
+    .dialog({
+      component: ConfirmDialog,
+      componentProps: {
+        text:
+          'Biztos benne hogy törölni szeretné a felhasználót? Ez a művelet visszavonhatatlan.',
+        positiveButtonText: 'Igen',
+        negativeButtonText: 'Nem'
+      }
+    })
+    .onOk(async () => {
+      try {
+        await client.deleteUser(user.id)
+        notifications.success('Sikeres törlés')
+        refreshSubject.next()
+      } catch (err) {
+        notifications.failure('Sikertelen törlés')
+      }
+    })
 }
 
 function fetchData(

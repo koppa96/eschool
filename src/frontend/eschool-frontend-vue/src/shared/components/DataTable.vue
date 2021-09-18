@@ -18,6 +18,7 @@
     <template #body-cell-actions="props">
       <q-td :props="props">
         <q-btn
+          v-if="hasDetails"
           dense
           round
           flat
@@ -57,11 +58,13 @@ const props = withDefaults(
       pageIndex: number
     ) => Promise<PagedListResponse>
     refresh$: Observable<void>
+    hasDetails?: boolean
   }>(),
   {
     title: 'Cím',
     addButtonText: 'Hozzáadás',
-    rowKey: 'id'
+    rowKey: 'id',
+    hasDetails: true
   }
 )
 

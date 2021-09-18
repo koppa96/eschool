@@ -13,24 +13,26 @@
           v-model="data.email"
           label="E-mail címe"
           outlined
-          :rules="rules.address"
+          :rules="rules.email"
         />
         <q-select
           v-model="data.globalRole"
           outlined
           label="Szerepkör"
           :options="globalRoles"
-          option-label="name"
+          option-label="label"
           option-value="value"
+          :rules="rules.globalRole"
+          emit-value
         />
-        <q-card-actions align="right">
+        <div class="flex justify-between">
           <q-btn type="button" flat color="primary" @click="onDialogCancel()">
             Mégse
           </q-btn>
           <q-btn type="submit" color="primary">
             Mentés
           </q-btn>
-        </q-card-actions>
+        </div>
       </q-form>
     </q-card>
   </q-dialog>
