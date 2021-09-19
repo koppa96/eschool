@@ -22,8 +22,7 @@ import {
   TenantRoleType,
   TenantUserClient,
   TenantUserListResponse,
-  UsersClient,
-  UserTenantListResponse
+  UsersClient
 } from '@/shared/generated-clients/identity-provider'
 import { getTenantRoleDisplayName } from '@/core/auth/model/role-display-names'
 import { PagedListResponse } from '@/shared/model/paged-list-response'
@@ -108,7 +107,6 @@ function editTenantUser(user: TenantUserListResponse): void {
       }
     })
     .onOk(async (data: { id: string; tenantRoleTypes: TenantRoleType[] }) => {
-      console.log(data)
       try {
         await client.createOrUpdateTenantUser(
           props.tenantId,
