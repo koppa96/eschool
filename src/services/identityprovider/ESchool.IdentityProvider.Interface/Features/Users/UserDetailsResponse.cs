@@ -8,6 +8,7 @@ namespace ESchool.IdentityProvider.Interface.Features.Users
     public class UserDetailsResponse
     {
         public Guid Id { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
         public Guid? DefaultTenantId { get; set; }
         public GlobalRoleType GlobalRoleType { get; set; }

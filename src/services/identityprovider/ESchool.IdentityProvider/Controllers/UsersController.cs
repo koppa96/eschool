@@ -27,7 +27,7 @@ namespace ESchool.IdentityProvider.Controllers
         }
 
         [HttpGet("search")]
-        [Authorize(PolicyNames.TenantAdministrator)]
+        [Authorize(PolicyNames.AdministratorOrTenantAdministrator)]
         public Task<List<UserListResponse>> SearchUsers(string name, CancellationToken cancellationToken)
         {
             var query = new UserSearchQuery { Name = name };

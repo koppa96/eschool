@@ -62,6 +62,15 @@ namespace ESchool.Libs.AspNetCore.Extensions
                 options.AddTenantUserPolicy(TenantRoleType.Parent);
                 options.AddTenantUserPolicy(TenantRoleType.Teacher);
                 options.AddTenantUserPolicy(TenantRoleType.Student);
+                
+                options.AddPolicy(PolicyNames.AdministratorOrTenantAdministrator, policy =>
+                    policy.RequireAuthenticatedUser()
+                        .RequireAssertion(context =>
+                            context.User.HasClaim(
+                                Constants.ClaimTypes.GlobalRole, GlobalRoleType.TenantAdministrator.ToString()) ||
+                            context.User.HasClaim(
+                                Constants.ClaimTypes.TenantRoles, TenantRoleType.Administrator.ToString()))
+                        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
 
                 options.AddPolicy(PolicyNames.AnyRole, policy => policy.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));

@@ -1296,6 +1296,7 @@ export interface IPagedListResponseOfUserListResponse {
 
 export class UserDetailsResponse implements IUserDetailsResponse {
     id!: string;
+    name!: string | undefined;
     email!: string | undefined;
     defaultTenantId!: string | undefined;
     globalRoleType!: GlobalRoleType;
@@ -1313,6 +1314,7 @@ export class UserDetailsResponse implements IUserDetailsResponse {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.name = _data["name"];
             this.email = _data["email"];
             this.defaultTenantId = _data["defaultTenantId"];
             this.globalRoleType = _data["globalRoleType"];
@@ -1334,6 +1336,7 @@ export class UserDetailsResponse implements IUserDetailsResponse {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["name"] = this.name;
         data["email"] = this.email;
         data["defaultTenantId"] = this.defaultTenantId;
         data["globalRoleType"] = this.globalRoleType;
@@ -1348,6 +1351,7 @@ export class UserDetailsResponse implements IUserDetailsResponse {
 
 export interface IUserDetailsResponse {
     id: string;
+    name: string | undefined;
     email: string | undefined;
     defaultTenantId: string | undefined;
     globalRoleType: GlobalRoleType;

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.IdentityProvider.Interface.Features.Tenants;
+using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Interface.Response;
 using MediatR;
@@ -11,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.IdentityProvider.Controllers
 {
-    [Authorize(nameof(GlobalRoleType.TenantAdministrator))]
     [Route("api/[controller]")]
     [ApiController]
     public class TenantsController : ControllerBase
@@ -24,12 +24,14 @@ namespace ESchool.IdentityProvider.Controllers
         }
 
         [HttpGet]
+        [Authorize(nameof(GlobalRoleType.TenantAdministrator))]
         public Task<PagedListResponse<TenantListResponse>> GetTenants([FromQuery] TenantListQuery query, CancellationToken cancellationToken)
         {
             return mediator.Send(query, cancellationToken);
         }
 
         [HttpGet("{id}")]
+        [Authorize(PolicyNames.AdministratorOrTenantAdministrator)]
         public Task<TenantDetailsResponse> GetTenant(Guid id, CancellationToken cancellationToken)
         {
             return mediator.Send(new GetTenantQuery
@@ -39,6 +41,7 @@ namespace ESchool.IdentityProvider.Controllers
         }
 
         [HttpPost]
+        [Authorize(nameof(GlobalRoleType.TenantAdministrator))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<TenantDetailsResponse>> CreateTenant([FromBody] CreateTenantCommand command, CancellationToken cancellationToken)
         {
@@ -47,12 +50,14 @@ namespace ESchool.IdentityProvider.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(PolicyNames.AdministratorOrTenantAdministrator)]
         public Task<TenantDetailsResponse> UpdateTenant([FromBody] EditTenantCommand command, CancellationToken cancellationToken)
         {
             return mediator.Send(command, cancellationToken);
         }
 
         [HttpDelete("{id}")]
+        [Authorize(nameof(GlobalRoleType.TenantAdministrator))]
         public Task DeleteTenant(Guid id, CancellationToken cancellationToken)
         {
             return mediator.Send(new DeleteTenantCommand { TenantId = id }, cancellationToken);
