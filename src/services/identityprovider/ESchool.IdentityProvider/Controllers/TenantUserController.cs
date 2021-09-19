@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.IdentityProvider.Interface.Features.TenantUsers;
 using ESchool.IdentityProvider.Interface.Features.Users;
+using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Interface.Query;
 using ESchool.Libs.Interface.Response;
@@ -13,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.IdentityProvider.Controllers
 {
-    [Authorize(nameof(GlobalRoleType.TenantAdministrator))]
+    [Authorize(PolicyNames.AdministratorOrTenantAdministrator)]
     [Route("api/tenants/{tenantId}/users")]
     [ApiController]
     public class TenantUserController : ControllerBase
