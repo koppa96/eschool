@@ -4,7 +4,7 @@
       class="vw-25"
       outlined
       label="Iskola választás"
-      :model-value="selectedTenant"
+      :model-value="modelValue"
       :options="tenants"
       option-label="name"
       option-value="id"
@@ -27,44 +27,32 @@
 </template>
 
 <script setup lang="ts">
-import { onUnmounted, ref } from 'vue'
-import { takeUntil } from 'rxjs'
 import { useQuasar } from 'quasar'
-import { useAuthService } from '..'
-import { filterNotNull } from '@/core/utils/rxjs-operators'
-import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
 import {
   TenantRoleType,
-  UserTenantListResponse,
-  UsersClient
+  UserTenantListResponse
 } from '@/shared/generated-clients/identity-provider'
-import { createClient } from '@/shared/api'
 import { getTenantRoleDisplayName } from '@/core/auth/model/role-display-names'
 import ConfirmDialog from '@/shared/components/ConfirmDialog.vue'
 
-const tenants = ref<UserTenantListResponse[]>([])
-const selectedTenant = ref<UserTenantListResponse | null>(null)
-const loading = ref(true)
+const props = withDefaults(
+  defineProps<{
+    tenants: UserTenantListResponse[]
+    modelValue: UserTenantListResponse
+    loading?: boolean
+  }>(),
+  {
+    loading: false
+  }
+)
+
+const emit = defineEmits<{
+  (event: 'update:modelValue', value: UserTenantListResponse): void
+}>()
 
 const quasar = useQuasar()
-const authService = useAuthService()
-const unmounted = useObservableLifecycle(onUnmounted)
-const client = createClient(UsersClient)
 
-authService.accessTokenData$
-  .pipe(filterNotNull(), takeUntil(unmounted))
-  .subscribe(async tokenData => {
-    const userData = await client.getMe()
-
-    tenants.value = userData.tenants ?? []
-
-    selectedTenant.value =
-      tenants.value.find(x => x.id === tokenData.tenantId) ?? null
-
-    loading.value = false
-  })
-
-function changeTenant(selectedTenant: TenantUserListResponse): void {
+function changeTenant(selectedTenant: UserTenantListResponse): void {
   quasar
     .dialog({
       component: ConfirmDialog,
@@ -75,8 +63,7 @@ function changeTenant(selectedTenant: TenantUserListResponse): void {
       }
     })
     .onOk(() => {
-      authService.tenantId = selectedTenant.id
-      loading.value = true
+      emit('update:modelValue', selectedTenant)
     })
 }
 

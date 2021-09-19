@@ -169,6 +169,23 @@ export class AuthService {
     this.codePair = null
   }
 
+  setUpAutomaticSilentRefresh(refreshIntervalInSeconds: number): void {
+    setInterval(async () => {
+      try {
+        const result = await this.silentRefresh()
+        if (result) {
+          // eslint-disable-next-line no-console
+          console.log('Silent refresh succeeded')
+        } else {
+          // eslint-disable-next-line no-console
+          console.log('Silent refresh could not start')
+        }
+      } catch (err) {
+        console.error('Silent refresh failed.', err)
+      }
+    }, refreshIntervalInSeconds * 1000)
+  }
+
   initiateLogout(): void {
     const params = new URLSearchParams()
     params.append('id_token_hint', this.tokens?.id_token ?? '')
@@ -198,7 +215,7 @@ export class AuthService {
   }
 
   silentRefresh(): Promise<boolean> {
-    if (!this.isSilentRefreshing && this.tokens) {
+    if (!this.isSilentRefreshing && this.tokens && !this.codePair) {
       this.isSilentRefreshing = true
 
       const iframe =

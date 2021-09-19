@@ -10,7 +10,13 @@
           ESchool
         </q-toolbar-title>
 
-        <TenantSelector v-if="showTenantSelector" />
+        <TenantSelector
+          v-if="showTenantSelector"
+          :tenants="tenants"
+          :model-value="selectedTenant"
+          :loading="loading"
+          @update:modelValue="changeTenant($event)"
+        />
 
         <q-item>
           <q-item-section side>
@@ -62,7 +68,8 @@ import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
 import { filterNotNull } from '@/core/utils/rxjs-operators'
 import {
   GlobalRoleType,
-  UsersClient
+  UsersClient,
+  UserTenantListResponse
 } from '@/shared/generated-clients/identity-provider'
 import { createClient } from '@/shared/api'
 import { getGlobalRoleDisplayName } from '@/core/auth/model/role-display-names'
@@ -73,25 +80,40 @@ const client = createClient(UsersClient)
 const authService = useAuthService()
 const unmounted = useObservableLifecycle(onUnmounted)
 const showTenantSelector = ref(false)
+const tenants = ref<UserTenantListResponse[]>([])
+const selectedTenant = ref<UserTenantListResponse | undefined>(undefined)
 const userName = ref('')
 const globalRole = ref('')
+const loading = ref(true)
 
 authService.accessTokenData$
   .pipe(filterNotNull(), takeUntil(unmounted))
   .subscribe(async data => {
     showTenantSelector.value = data.globalRole === GlobalRoleType.TenantUser
     const details = await client.getMe()
+    tenants.value = details.tenants ?? []
+    selectedTenant.value = tenants.value.find(
+      tenant => tenant.id === data.tenantId
+    )
     userName.value = details.name ?? ''
     globalRole.value = getGlobalRoleDisplayName(details.globalRoleType)
+    loading.value = false
   })
 
 function toggleLeftDrawer(): void {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 
+function changeTenant(tenant: UserTenantListResponse): void {
+  authService.tenantId = tenant.id
+  loading.value = true
+}
+
 onMounted(() => {
   if (!authService.accessTokenData || authService.accessTokenData.expired) {
     authService.initiateAuthCodeFlow()
   }
+
+  authService.setUpAutomaticSilentRefresh(600)
 })
 </script>
