@@ -27,7 +27,7 @@ namespace ESchool.Libs.AspNetCore.Extensions
         {
             services.AddHttpContextAccessor();
             services.AddTransient<IIdentityService, IdentityService>();
-            services.AddTransient<MessagingIdentityService>();
+            services.AddScoped<MessagingIdentityService>();
 
             return services;
         }
