@@ -60,12 +60,14 @@ const props = withDefaults(
     ) => Promise<PagedListResponse>
     refresh$: Observable<void>
     hasDetails?: boolean
+    editable?: boolean
   }>(),
   {
     title: 'Cím',
     addButtonText: 'Hozzáadás',
     rowKey: 'id',
-    hasDetails: true
+    hasDetails: true,
+    editable: true
   }
 )
 

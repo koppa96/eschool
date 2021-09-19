@@ -48,7 +48,7 @@
     </q-expansion-item>
 
     <q-expansion-item v-if="isAdministrator" icon="edit" label="Adminisztráció">
-      <q-item v-ripple :inset-level="1" clickable>
+      <q-item v-ripple :inset-level="1" clickable to="/subjects">
         <q-item-section>Tantárgyak</q-item-section>
       </q-item>
       <q-item v-ripple :inset-level="1" clickable>
