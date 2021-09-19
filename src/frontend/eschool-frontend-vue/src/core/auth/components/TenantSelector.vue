@@ -33,7 +33,6 @@ import {
   UserTenantListResponse
 } from '@/shared/generated-clients/identity-provider'
 import { getTenantRoleDisplayName } from '@/core/auth/model/role-display-names'
-import ConfirmDialog from '@/shared/components/ConfirmDialog.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -55,12 +54,11 @@ const quasar = useQuasar()
 function changeTenant(selectedTenant: UserTenantListResponse): void {
   quasar
     .dialog({
-      component: ConfirmDialog,
-      componentProps: {
-        text:
-          'Ön iskolanézetet készül váltani. Győződjön meg róla hogy minden módosítása mentésre került!',
-        positiveButtonText: 'Iskolaváltás'
-      }
+      title: 'Megerősítés szükséges',
+      message:
+        'Ön iskolanézetet készül váltani. Győződjön meg róla hogy minden módosítása mentésre került!',
+      cancel: true,
+      ok: 'Iskolaváltás'
     })
     .onOk(() => {
       emit('update:modelValue', selectedTenant)

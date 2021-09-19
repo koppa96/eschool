@@ -9,3 +9,8 @@
 .vw-50 {
     width: 50vw !important;
 }
+
+.full-page-table {
+    flex-grow: 1;
+    flex-shrink: 1;
+}

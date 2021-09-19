@@ -19,7 +19,6 @@ import { ref } from 'vue'
 import { isString } from 'lodash-es'
 import { useQuasar } from 'quasar'
 import TenantCreateEditDialog from '../components/TenantCreateEditDialog.vue'
-import ConfirmDialog from '@/shared/components/ConfirmDialog.vue'
 import { createClient } from '@/shared/api'
 import {
   EditTenantCommand,
@@ -81,13 +80,11 @@ function openEditDialog(): void {
 function openDeleteDialog(): void {
   quasar
     .dialog({
-      component: ConfirmDialog,
-      componentProps: {
-        text:
-          'Biztos benne hogy törölni szeretné az iskolát? Ez a művelet visszavonhatatlan.',
-        positiveButtonText: 'Igen',
-        negativeButtonText: 'Nem'
-      }
+      title: 'Megerősítés szükséges',
+      message:
+        'Biztos benne hogy törölni szeretné az iskolát? Ez a művelet visszavonhatatlan.',
+      cancel: 'Nem',
+      ok: 'Igen'
     })
     .onOk(async () => {
       try {

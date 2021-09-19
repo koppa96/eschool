@@ -28,7 +28,6 @@ import { getTenantRoleDisplayName } from '@/core/auth/model/role-display-names'
 import { PagedListResponse } from '@/shared/model/paged-list-response'
 import { createClient } from '@/shared/api'
 import { useNotifications } from '@/core/utils/notifications'
-import ConfirmDialog from '@/shared/components/ConfirmDialog.vue'
 
 const props = defineProps<{
   tenantId: string
@@ -118,13 +117,11 @@ function editTenantUser(user: TenantUserListResponse): void {
 function deleteTenantUser(user: TenantUserListResponse): void {
   quasar
     .dialog({
-      component: ConfirmDialog,
-      componentProps: {
-        text:
-          'Biztos benne hogy törölni szeretné a felhasználót? Ez a művelet visszavonhatatlan.',
-        positiveButtonText: 'Igen',
-        negativeButtonText: 'Nem'
-      }
+      title: 'Megerősítés szükséges',
+      message:
+        'Biztos benne hogy törölni szeretné a felhasználót? Ez a művelet visszavonhatatlan.',
+      cancel: 'Nem',
+      ok: 'Igen'
     })
     .onOk(async () => {
       try {

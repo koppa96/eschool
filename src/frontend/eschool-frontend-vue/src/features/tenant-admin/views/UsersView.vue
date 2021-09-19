@@ -31,7 +31,6 @@ import DataTable from '@/shared/components/DataTable.vue'
 import { PagedListResponse } from '@/shared/model/paged-list-response'
 import { createClient } from '@/shared/api'
 import { useNotifications } from '@/core/utils/notifications'
-import ConfirmDialog from '@/shared/components/ConfirmDialog.vue'
 
 const columns: QTableColumn<UserListResponse>[] = [
   {
@@ -97,13 +96,11 @@ function editUser(user: UserListResponse): void {
 function deleteUser(user: UserListResponse): void {
   quasar
     .dialog({
-      component: ConfirmDialog,
-      componentProps: {
-        text:
-          'Biztos benne hogy törölni szeretné a felhasználót? Ez a művelet visszavonhatatlan.',
-        positiveButtonText: 'Igen',
-        negativeButtonText: 'Nem'
-      }
+      title: 'Megerősítés szükséges',
+      message:
+        'Biztos benne hogy törölni szeretné a felhasználót? Ez a művelet visszavonhatatlan.',
+      cancel: 'Nem',
+      ok: 'Igen'
     })
     .onOk(async () => {
       try {

@@ -28,7 +28,6 @@ import {
 } from '@/shared/generated-clients/identity-provider'
 import { createClient } from '@/shared/api'
 import DataTable from '@/shared/components/DataTable.vue'
-import ConfirmDialog from '@/shared/components/ConfirmDialog.vue'
 import { useNotifications } from '@/core/utils/notifications'
 import TenantCreateEditDialog from '@/features/tenant-admin/components/TenantCreateEditDialog.vue'
 import { PagedListResponse } from '@/shared/model/paged-list-response'
@@ -93,13 +92,11 @@ async function editTenant(tenant: TenantListResponse): Promise<void> {
 function deleteTenant(tenant: TenantListResponse): void {
   quasar
     .dialog({
-      component: ConfirmDialog,
-      componentProps: {
-        text:
-          'Biztos benne hogy törölni szeretné az iskolát? Ez a művelet visszavonhatatlan.',
-        positiveButtonText: 'Igen',
-        negativeButtonText: 'Nem'
-      }
+      title: 'Megerősítés szükséges',
+      message:
+        'Biztos benne hogy törölni szeretné az iskolát? Ez a művelet visszavonhatatlan.',
+      cancel: 'Nem',
+      ok: 'Igen'
     })
     .onOk(async () => {
       try {

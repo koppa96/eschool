@@ -36,9 +36,11 @@
           class="q-mx-sm"
           flat
           round
-          icon="lock_open"
+          icon="lock"
           @click="authService.initiateLogout()"
-        />
+        >
+          <q-tooltip>Kijelentkezés</q-tooltip>
+        </q-btn>
       </q-toolbar>
     </q-header>
 
