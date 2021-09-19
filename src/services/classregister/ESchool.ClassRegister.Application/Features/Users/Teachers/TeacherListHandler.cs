@@ -23,18 +23,11 @@ namespace ESchool.ClassRegister.Application.Features.Users.Teachers
             this.configurationProvider = configurationProvider;
         }
         
-        public async Task<List<UserRoleListResponse>> Handle(TeacherListQuery request, CancellationToken cancellationToken)
+        public Task<List<UserRoleListResponse>> Handle(TeacherListQuery request, CancellationToken cancellationToken)
         {
-            var userRoles = await context.UserRoles.ToListAsync(cancellationToken);
-            var teachers = await context.Teachers.Include(x => x.User).ToListAsync(cancellationToken);
-            
-            return teachers.Where(x => x.User.Name.ToLower().Contains(request.SearchText.ToLower()))
-                .Select(x => new UserRoleListResponse
-                {
-                    Id = x.Id,
-                    Name = x.User.Name
-                })
-                .ToList();
+            return context.Teachers.Where(x => x.User.Name.ToLower().Contains(request.SearchText.ToLower()))
+                .ProjectTo<UserRoleListResponse>(configurationProvider)
+                .ToListAsync(cancellationToken);
         }
     }
 }

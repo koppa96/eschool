@@ -13,6 +13,7 @@
           map-options
           outlined
           label="Tanár neve"
+          :rules="rules.teacherId"
           @filter="filterTeachers"
         />
         <div class="flex justify-between">
