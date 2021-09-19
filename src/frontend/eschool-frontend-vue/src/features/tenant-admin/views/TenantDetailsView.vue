@@ -22,6 +22,7 @@ import TenantCreateEditDialog from '../components/TenantCreateEditDialog.vue'
 import ConfirmDialog from '@/shared/components/ConfirmDialog.vue'
 import { createClient } from '@/shared/api'
 import {
+  EditTenantCommand,
   TenantDetailsResponse,
   TenantsClient,
   TenantUserClient
@@ -55,9 +56,9 @@ function openEditDialog(): void {
         tenantToEdit: tenant.value
       }
     })
-    .onOk(async () => {
+    .onOk(async (data: EditTenantCommand) => {
       try {
-        tenant.value = await tenantsClient.updateTenant($event.id, $event)
+        tenant.value = await tenantsClient.updateTenant(data.id, data)
         notifications.success('Sikeres mentés')
       } catch (err) {
         notifications.failure('Sikertelen mentés')

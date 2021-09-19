@@ -36,16 +36,17 @@ namespace ESchool.IdentityProvider.Controllers
             }, cancellationToken);
         }
 
-        [HttpPost("{userId}")]
-        public Task CreateTenantUser(Guid tenantId, Guid userId, [FromBody] List<TenantRoleType> tenantRoleTypes, CancellationToken cancellationToken)
+        [HttpPut("{userId}")]
+        public Task CreateOrUpdateTenantUser(Guid tenantId, Guid userId, [FromBody] List<TenantRoleType> tenantRoleTypes, CancellationToken cancellationToken)
         {
-            return mediator.Send(new TenantUserCreateByIdCommand
+            return mediator.Send(new TenantUserCreateOrUpdateByIdCommand
             {
                 TenantId = tenantId,
                 UserId = userId,
                 TenantRoleTypes = tenantRoleTypes
             }, cancellationToken);
         }
+        
 
         [HttpDelete("{userId}")]
         public Task DeleteTenantUser(Guid tenantId, Guid userId, CancellationToken cancellationToken)

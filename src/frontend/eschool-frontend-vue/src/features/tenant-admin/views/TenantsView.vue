@@ -77,7 +77,7 @@ function createTenant(): void {
     })
 }
 
-async function editTenant(tenant: TenantListResponse): void {
+async function editTenant(tenant: TenantListResponse): Promise<void> {
   const details = await client.getTenant(tenant.id)
   quasar
     .dialog({

@@ -344,7 +344,7 @@ export class TenantUserClient {
         return Promise.resolve<PagedListResponseOfTenantUserListResponse>(<any>null);
     }
 
-    createTenantUser(tenantId: string, userId: string, tenantRoleTypes: TenantRoleType[] , cancelToken?: CancelToken | undefined): Promise<void> {
+    createOrUpdateTenantUser(tenantId: string, userId: string, tenantRoleTypes: TenantRoleType[] , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/tenants/{tenantId}/users/{userId}";
         if (tenantId === undefined || tenantId === null)
             throw new Error("The parameter 'tenantId' must be defined.");
@@ -358,7 +358,7 @@ export class TenantUserClient {
 
         let options_ = <AxiosRequestConfig>{
             data: content_,
-            method: "POST",
+            method: "PUT",
             url: url_,
             headers: {
                 "Content-Type": "application/json",
@@ -373,11 +373,11 @@ export class TenantUserClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCreateTenantUser(_response);
+            return this.processCreateOrUpdateTenantUser(_response);
         });
     }
 
-    protected processCreateTenantUser(response: AxiosResponse): Promise<void> {
+    protected processCreateOrUpdateTenantUser(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -455,6 +455,62 @@ export class UsersClient {
     constructor(baseUrl?: string, instance?: AxiosInstance) {
         this.instance = instance ? instance : axios.create();
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    searchUsers(name: string | null | undefined , cancelToken?: CancelToken | undefined): Promise<UserListResponse[]> {
+        let url_ = this.baseUrl + "/api/Users/search?";
+        if (name !== undefined && name !== null)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processSearchUsers(_response);
+        });
+    }
+
+    protected processSearchUsers(response: AxiosResponse): Promise<UserListResponse[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(UserListResponse.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<UserListResponse[]>(<any>null);
     }
 
     listUsers(pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfUserListResponse> {

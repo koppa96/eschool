@@ -24,6 +24,7 @@
           option-value="value"
           :rules="rules.globalRole"
           emit-value
+          map-options
         />
         <div class="flex justify-between">
           <q-btn type="button" flat color="primary" @click="onDialogCancel()">

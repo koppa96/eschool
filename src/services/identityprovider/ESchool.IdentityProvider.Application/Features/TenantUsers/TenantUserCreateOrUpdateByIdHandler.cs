@@ -13,37 +13,47 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.IdentityProvider.Application.Features.TenantUsers
 {
-    public class TenantUserCreateByIdHandler : IRequestHandler<TenantUserCreateByIdCommand, TenantUserDetailsResponse>
+    public class TenantUserCreateOrUpdateByIdHandler : IRequestHandler<TenantUserCreateOrUpdateByIdCommand, TenantUserDetailsResponse>
     {
         private readonly IdentityProviderContext context;
         private readonly IEventPublisher publisher;
 
-        public TenantUserCreateByIdHandler(IdentityProviderContext context, IEventPublisher publisher)
+        public TenantUserCreateOrUpdateByIdHandler(IdentityProviderContext context, IEventPublisher publisher)
         {
             this.context = context;
             this.publisher = publisher;
         }
 
-        public async Task<TenantUserDetailsResponse> Handle(TenantUserCreateByIdCommand request,
+        public async Task<TenantUserDetailsResponse> Handle(TenantUserCreateOrUpdateByIdCommand request,
             CancellationToken cancellationToken)
         {
             var user = await context.Users.Include(x => x.TenantUsers)
                 .ThenInclude(x => x.TenantUserRoles)
                 .SingleAsync(x => x.Id == request.UserId, cancellationToken);
 
-            if (user.TenantUsers.Any(x => x.TenantId == request.TenantId))
-                throw new InvalidOperationException("The user is already the member of this tenant.");
-
-            context.TenantUsers.Add(new TenantUser
+            var existingTenantUser = user.TenantUsers.SingleOrDefault(x => x.TenantId == request.TenantId);
+            if (existingTenantUser == null)
             {
-                TenantId = request.TenantId,
-                UserId = user.Id,
-                TenantUserRoles = request.TenantRoleTypes.Select(x => new TenantUserRole
+                context.TenantUsers.Add(new TenantUser
                 {
+                    TenantId = request.TenantId,
+                    UserId = user.Id,
+                    TenantUserRoles = request.TenantRoleTypes.Select(x => new TenantUserRole
+                    {
+                        TenantRole = x
+                    }).ToList()
+                });
+            }
+            else
+            {
+                context.TenantUserRoles.RemoveRange(existingTenantUser.TenantUserRoles);
+                context.TenantUserRoles.AddRange(request.TenantRoleTypes.Select(x => new TenantUserRole
+                {
+                    TenantUser = existingTenantUser,
                     TenantRole = x
-                }).ToList()
-            });
-
+                }));
+            }
+            
             await publisher.PublishAsync(new TenantUserCreatedOrEditedEvent
             {
                 UserId = user.Id,
