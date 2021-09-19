@@ -2,12 +2,13 @@
   <q-table
     v-model:pagination="pagination"
     :title="title"
-    :columns="columns"
+    :columns="columnsWithActions"
     :row-key="rowKey"
     :rows="data"
     :pagination="pagination"
     :loading="loading"
     :flat="flat"
+    @row-click="rowClicked"
     @request="request($event)"
   >
     <template #top-right>
@@ -40,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { Observable, Subscription } from 'rxjs'
 import { QPagination } from '@/shared/model/q-pagination.model'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
@@ -50,7 +51,7 @@ const props = withDefaults(
   defineProps<{
     title?: string
     addButtonText?: string
-    columns: QTableColumn
+    columns: QTableColumn[]
     rowKey?: string
     flat?: boolean
     dataAccess: (
@@ -83,6 +84,21 @@ const pagination = ref<QPagination>({
   rowsPerPage: 25,
   rowsNumber: 0
 })
+const columnsWithActions = computed(() => {
+  return [
+    ...props.columns,
+    {
+      name: 'actions',
+      label: 'Műveletek',
+      align: 'right',
+      field: ''
+    }
+  ]
+})
+
+function rowClicked(event: PointerEvent, row: any): void {
+  emit('viewDetails', row)
+}
 
 async function request($event: { pagination: QPagination }): Promise<void> {
   loading.value = true

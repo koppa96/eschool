@@ -52,12 +52,6 @@ const columns: QTableColumn<TenantUserListResponse>[] = [
     label: 'Felhasználó szerepkörei',
     align: 'left',
     field: row => rolesAsString(row.tenantRoleTypes)
-  },
-  {
-    name: 'actions',
-    label: 'Műveletek',
-    align: 'right',
-    field: ''
   }
 ]
 

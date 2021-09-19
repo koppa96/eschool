@@ -5,9 +5,7 @@
       title="Iskolák"
       add-button-text="Iskola felvétele"
       :columns="columns"
-      :data-access="
-        (pageSize, pageIndex) => client.getTenants(pageSize, pageIndex)
-      "
+      :data-access="fetchData"
       :refresh$="refreshSubject"
       @viewDetails="navigateToDetails($event)"
       @add="createTenant()"
@@ -33,6 +31,7 @@ import DataTable from '@/shared/components/DataTable.vue'
 import ConfirmDialog from '@/shared/components/ConfirmDialog.vue'
 import { useNotifications } from '@/core/utils/notifications'
 import TenantCreateEditDialog from '@/features/tenant-admin/components/TenantCreateEditDialog.vue'
+import { PagedListResponse } from '@/shared/model/paged-list-response'
 
 const columns: QTableColumn<TenantListResponse>[] = [
   {
@@ -46,12 +45,6 @@ const columns: QTableColumn<TenantListResponse>[] = [
     label: 'OM azonosító',
     align: 'left',
     field: row => row.omIdentifier
-  },
-  {
-    name: 'actions',
-    label: 'Műveletek',
-    align: 'right',
-    field: ''
   }
 ]
 
@@ -117,6 +110,13 @@ function deleteTenant(tenant: TenantListResponse): void {
         notifications.failure('Törlés sikertelen')
       }
     })
+}
+
+function fetchData(
+  pageSize: number,
+  pageIndex: number
+): Promise<PagedListResponse> {
+  return client.getTenants(pageSize, pageIndex)
 }
 
 function navigateToDetails(tenant: TenantListResponse): void {

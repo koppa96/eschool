@@ -51,12 +51,6 @@ const columns: QTableColumn<UserListResponse>[] = [
     label: 'Szerepkör',
     align: 'left',
     field: row => getGlobalRoleDisplayName(row.globalRole)
-  },
-  {
-    name: 'actions',
-    label: 'Műveletek',
-    align: 'right',
-    field: ''
   }
 ]
 

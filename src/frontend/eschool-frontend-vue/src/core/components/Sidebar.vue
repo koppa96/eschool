@@ -1,6 +1,6 @@
 <template>
   <q-list>
-    <q-item v-ripple clickable>
+    <q-item v-ripple clickable to="/">
       <q-item-section avatar>
         <q-icon name="home" />
       </q-item-section>
