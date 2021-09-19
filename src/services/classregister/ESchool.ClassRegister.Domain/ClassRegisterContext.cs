@@ -69,7 +69,7 @@ namespace ESchool.ClassRegister.Domain
             base.OnModelCreating(modelBuilder);
             
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            modelBuilder.AddGlobalQueryFilter<ISoftDelete>(x => x.IsDeleted);
+            modelBuilder.AddGlobalQueryFilter<ISoftDelete>(x => !x.IsDeleted);
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
