@@ -2364,6 +2364,64 @@ export class SubjectsClient {
         return Promise.resolve<SubjectDetailsResponse>(<any>null);
     }
 
+    getTeachers(subjectId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfUserRoleListResponse> {
+        let url_ = this.baseUrl + "/api/subjects/{subjectId}/teachers?";
+        if (subjectId === undefined || subjectId === null)
+            throw new Error("The parameter 'subjectId' must be defined.");
+        url_ = url_.replace("{subjectId}", encodeURIComponent("" + subjectId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetTeachers(_response);
+        });
+    }
+
+    protected processGetTeachers(response: AxiosResponse): Promise<PagedListResponseOfUserRoleListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PagedListResponseOfUserRoleListResponse.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PagedListResponseOfUserRoleListResponse>(<any>null);
+    }
+
     assignTeacherToSubject(subjectId: string, teacherId: string , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/subjects/{subjectId}/teachers/{teacherId}";
         if (subjectId === undefined || subjectId === null)
@@ -2519,18 +2577,10 @@ export class TeachersClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    listTeachers(searchText: string | null | undefined, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfUserRoleListResponse> {
+    listTeachers(searchText: string | null | undefined , cancelToken?: CancelToken | undefined): Promise<UserRoleListResponse[]> {
         let url_ = this.baseUrl + "/api/teachers?";
         if (searchText !== undefined && searchText !== null)
             url_ += "SearchText=" + encodeURIComponent("" + searchText) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (pageIndex === null)
-            throw new Error("The parameter 'pageIndex' cannot be null.");
-        else if (pageIndex !== undefined)
-            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <AxiosRequestConfig>{
@@ -2553,7 +2603,7 @@ export class TeachersClient {
         });
     }
 
-    protected processListTeachers(response: AxiosResponse): Promise<PagedListResponseOfUserRoleListResponse> {
+    protected processListTeachers(response: AxiosResponse): Promise<UserRoleListResponse[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2567,13 +2617,20 @@ export class TeachersClient {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            result200 = PagedListResponseOfUserRoleListResponse.fromJS(resultData200);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(UserRoleListResponse.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
             return result200;
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<PagedListResponseOfUserRoleListResponse>(<any>null);
+        return Promise.resolve<UserRoleListResponse[]>(<any>null);
     }
 }
 
@@ -5518,7 +5575,6 @@ export interface IPagedListResponseOfSubjectListResponse {
 export class SubjectDetailsResponse implements ISubjectDetailsResponse {
     id!: string;
     name!: string | undefined;
-    teachers!: UserRoleListResponse[] | undefined;
 
     constructor(data?: ISubjectDetailsResponse) {
         if (data) {
@@ -5533,11 +5589,6 @@ export class SubjectDetailsResponse implements ISubjectDetailsResponse {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
-            if (Array.isArray(_data["teachers"])) {
-                this.teachers = [] as any;
-                for (let item of _data["teachers"])
-                    this.teachers!.push(UserRoleListResponse.fromJS(item));
-            }
         }
     }
 
@@ -5552,11 +5603,6 @@ export class SubjectDetailsResponse implements ISubjectDetailsResponse {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
-        if (Array.isArray(this.teachers)) {
-            data["teachers"] = [];
-            for (let item of this.teachers)
-                data["teachers"].push(item.toJSON());
-        }
         return data; 
     }
 }
@@ -5564,7 +5610,6 @@ export class SubjectDetailsResponse implements ISubjectDetailsResponse {
 export interface ISubjectDetailsResponse {
     id: string;
     name: string | undefined;
-    teachers: UserRoleListResponse[] | undefined;
 }
 
 export class SubjectCreateCommand implements ISubjectCreateCommand {
