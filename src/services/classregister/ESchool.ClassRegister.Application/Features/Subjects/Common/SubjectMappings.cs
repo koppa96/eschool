@@ -9,8 +9,9 @@ namespace ESchool.ClassRegister.Application.Features.Subjects.Common
     {
         public SubjectMappings()
         {
-            CreateMap<Subject, SubjectDetailsResponse>()
-                .ForMember(x => x.Teachers, o => o.MapFrom(x => x.SubjectTeachers.Select(st => st.Teacher)));
+            CreateMap<Subject, SubjectDetailsResponse>();
+
+            CreateMap<Subject, SubjectListResponse>();
         }
     }
 }

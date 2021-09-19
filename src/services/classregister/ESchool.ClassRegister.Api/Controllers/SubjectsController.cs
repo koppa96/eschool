@@ -6,6 +6,7 @@ using ESchool.ClassRegister.Interface.Features.Subjects;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Interface.Commands;
 using ESchool.Libs.Interface.Response;
+using ESchool.Libs.Interface.Response.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,20 @@ namespace ESchool.ClassRegister.Api.Controllers
             CancellationToken cancellationToken)
         {
             return mediator.Send(command, cancellationToken);
+        }
+
+        [HttpGet("{subjectId}/teachers")]
+        public Task<PagedListResponse<UserRoleListResponse>> GetTeachers(Guid subjectId,
+            int pageSize,
+            int pageIndex,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(new SubjectTeacherListQuery
+            {
+                PageSize = pageSize == 0 ? 25 : pageSize,
+                PageIndex = pageIndex,
+                SubjectId = subjectId
+            }, cancellationToken);
         }
 
         [HttpPost("{subjectId}/teachers/{teacherId}")]

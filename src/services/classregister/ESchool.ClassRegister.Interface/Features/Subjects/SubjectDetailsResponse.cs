@@ -9,6 +9,5 @@ namespace ESchool.ClassRegister.Interface.Features.Subjects
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public List<UserRoleListResponse> Teachers { get; set; }
     }
 }
