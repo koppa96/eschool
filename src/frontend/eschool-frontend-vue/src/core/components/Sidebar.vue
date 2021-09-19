@@ -36,7 +36,13 @@
       >
         <q-item-section>Felhasználók</q-item-section>
       </q-item>
-      <q-item v-if="isAdministrator" v-ripple :inset-level="1" clickable>
+      <q-item
+        v-if="isAdministrator"
+        v-ripple
+        :inset-level="1"
+        clickable
+        to="/my-tenant"
+      >
         <q-item-section>Iskolám felhasználói</q-item-section>
       </q-item>
     </q-expansion-item>

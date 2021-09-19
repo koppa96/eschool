@@ -31,7 +31,9 @@ import { useNotifications } from '@/core/utils/notifications'
 import TenantDetailsHeader from '@/features/tenant-admin/components/TenantDetailsHeader.vue'
 import TenantDetailsGrid from '@/features/tenant-admin/components/TenantDetailsGrid.vue'
 import TenantUserList from '@/features/tenant-admin/components/TenantUserList.vue'
+import { useAuthService } from '@/core/auth'
 
+const authService = useAuthService()
 const quasar = useQuasar()
 const notifications = useNotifications()
 const route = useRoute()
@@ -39,13 +41,23 @@ const router = useRouter()
 const tenantsClient = createClient(TenantsClient)
 const tenantUsersClient = createClient(TenantUserClient)
 
-const tenantId = route.params.id
+const tenantId = resolveTenantId()
 const tenant = ref<TenantDetailsResponse>(new TenantDetailsResponse())
 
-async function loadData(): Promise<void> {
+function resolveTenantId(): string {
   if (isString(route.params.id)) {
-    tenant.value = await tenantsClient.getTenant(route.params.id)
+    return route.params.id
+  } else {
+    const tokenData = authService.accessTokenData
+    if (tokenData?.tenantId) {
+      return tokenData.tenantId
+    }
   }
+  throw new Error('Failed to resolve the tenant id')
+}
+
+async function loadData(): Promise<void> {
+  tenant.value = await tenantsClient.getTenant(tenantId)
 }
 
 function openEditDialog(): void {

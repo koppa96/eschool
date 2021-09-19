@@ -12,14 +12,27 @@
 
         <TenantSelector v-if="showTenantSelector" />
 
+        <q-item>
+          <q-item-section side>
+            <q-avatar rounded size="48px">
+              <q-icon name="person" color="white" size="lg" />
+            </q-avatar>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ userName }}</q-item-label>
+            <q-item-label caption class="text-white">
+              {{ globalRole }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+
         <q-btn
           class="q-mx-sm"
           flat
+          round
           icon="lock_open"
           @click="authService.initiateLogout()"
-        >
-          Kijelentkezés
-        </q-btn>
+        />
       </q-toolbar>
     </q-header>
 
@@ -47,18 +60,29 @@ import TenantSelector from '@/core/auth/components/TenantSelector.vue'
 import { useAuthService } from '@/core/auth'
 import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
 import { filterNotNull } from '@/core/utils/rxjs-operators'
-import { GlobalRoleType } from '@/shared/generated-clients/identity-provider'
+import {
+  GlobalRoleType,
+  UsersClient
+} from '@/shared/generated-clients/identity-provider'
+import { createClient } from '@/shared/api'
+import { getGlobalRoleDisplayName } from '@/core/auth/model/role-display-names'
 
 const leftDrawerOpen = ref(false)
 
+const client = createClient(UsersClient)
 const authService = useAuthService()
 const unmounted = useObservableLifecycle(onUnmounted)
 const showTenantSelector = ref(false)
+const userName = ref('')
+const globalRole = ref('')
 
 authService.accessTokenData$
   .pipe(filterNotNull(), takeUntil(unmounted))
-  .subscribe(data => {
+  .subscribe(async data => {
     showTenantSelector.value = data.globalRole === GlobalRoleType.TenantUser
+    const details = await client.getMe()
+    userName.value = details.name ?? ''
+    globalRole.value = getGlobalRoleDisplayName(details.globalRoleType)
   })
 
 function toggleLeftDrawer(): void {
