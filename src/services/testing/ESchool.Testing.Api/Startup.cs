@@ -127,6 +127,14 @@ namespace ESchool.Testing.Api
             });
 
             services.AddMemoryCache();
+            
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy => policy.WithOrigins(Configuration.GetSection("AllowedCorsOrigins").Get<string[]>())
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -138,7 +146,8 @@ namespace ESchool.Testing.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
+            app.UseCors();
             app.UseOpenApi();
             app.UseSwaggerUi3(config =>
             {
