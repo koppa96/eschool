@@ -21,7 +21,7 @@ namespace ESchool.ClassRegister.Application.Features.Classes
 
         protected override IQueryable<Class> Filter(IQueryable<Class> entities, ClassListQuery query)
         {
-            return entities.Where(x => query.IncludeFinishedClasses || x.DidFinish);
+            return entities.Where(x => query.IncludeFinishedClasses || !x.DidFinish);
         }
 
         protected override IOrderedQueryable<Class> Order(IQueryable<Class> entities)

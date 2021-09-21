@@ -9,6 +9,7 @@ namespace ESchool.ClassRegister.Application.Features.SchoolYears.Common
         public SchoolYearMappings()
         {
             CreateMap<SchoolYear, SchoolYearDetailsResponse>();
+            CreateMap<SchoolYear, SchoolYearListResponse>();
         }
     }
 }

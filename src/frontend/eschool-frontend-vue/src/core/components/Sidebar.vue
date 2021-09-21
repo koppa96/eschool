@@ -51,7 +51,7 @@
       <q-item v-ripple :inset-level="1" clickable to="/subjects">
         <q-item-section>Tantárgyak</q-item-section>
       </q-item>
-      <q-item v-ripple :inset-level="1" clickable>
+      <q-item v-ripple :inset-level="1" clickable to="/classes">
         <q-item-section>Osztályok</q-item-section>
       </q-item>
       <q-item v-ripple :inset-level="1" clickable to="/class-types">

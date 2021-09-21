@@ -12,9 +12,11 @@
     @request="request($event)"
   >
     <template #top-right>
-      <q-btn color="primary" icon="add" @click="emit('add')">
-        {{ addButtonText }}
-      </q-btn>
+      <slot name="top-right">
+        <q-btn color="primary" icon="add" @click="emit('add')">
+          {{ addButtonText }}
+        </q-btn>
+      </slot>
     </template>
     <template #body-cell-actions="props">
       <q-td :props="props">
