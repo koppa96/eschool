@@ -4476,6 +4476,7 @@ export class ClassTypeDetailsResponse implements IClassTypeDetailsResponse {
     id!: string;
     name!: string | undefined;
     description!: string | undefined;
+    startingGrade!: number;
 
     constructor(data?: IClassTypeDetailsResponse) {
         if (data) {
@@ -4491,6 +4492,7 @@ export class ClassTypeDetailsResponse implements IClassTypeDetailsResponse {
             this.id = _data["id"];
             this.name = _data["name"];
             this.description = _data["description"];
+            this.startingGrade = _data["startingGrade"];
         }
     }
 
@@ -4506,6 +4508,7 @@ export class ClassTypeDetailsResponse implements IClassTypeDetailsResponse {
         data["id"] = this.id;
         data["name"] = this.name;
         data["description"] = this.description;
+        data["startingGrade"] = this.startingGrade;
         return data; 
     }
 }
@@ -4514,6 +4517,7 @@ export interface IClassTypeDetailsResponse {
     id: string;
     name: string | undefined;
     description: string | undefined;
+    startingGrade: number;
 }
 
 export class ClassTypeCreateCommand implements IClassTypeCreateCommand {

@@ -7,5 +7,6 @@ namespace ESchool.ClassRegister.Interface.Features.ClassTypes
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public int StartingGrade { get; set; }
     }
 }

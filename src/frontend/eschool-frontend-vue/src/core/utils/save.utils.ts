@@ -1,18 +1,24 @@
 import { useNotifications } from '@/core/utils/notifications'
 
+export type SaveFunction = (...args: any[]) => Promise<any>
+export type SaveWrapperFunction = (func: SaveFunction) => SaveFunction
+
 export interface StatusNotificationConfig {
   successText: string
   failureText: string
 }
 
+export interface SaveDeleteFunctionPair {
+  save: SaveWrapperFunction
+  deletion: SaveWrapperFunction
+}
+
 export function withNotifications(
   config?: StatusNotificationConfig
-): (
-  func: (...args: any[]) => Promise<any>
-) => (...args: any[]) => Promise<any> {
+): SaveWrapperFunction {
   const notifications = useNotifications()
-  return (func: (...args: any[]) => Promise<any>) => {
-    return async (...args: any[]) => {
+  return (func: SaveFunction) => {
+    return async (...args) => {
       try {
         await func(...args)
         notifications.success(config?.successText ?? 'Sikeres mentés')
@@ -21,5 +27,15 @@ export function withNotifications(
         throw err
       }
     }
+  }
+}
+
+export function withSaveAndDeleteNotifications(): SaveDeleteFunctionPair {
+  return {
+    save: withNotifications(),
+    deletion: withNotifications({
+      successText: 'Törlés sikeres',
+      failureText: 'Törlés sikertelen'
+    })
   }
 }

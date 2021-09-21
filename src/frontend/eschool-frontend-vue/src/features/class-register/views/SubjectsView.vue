@@ -113,5 +113,3 @@ function navigateToDetails(subject: SubjectListResponse): void {
   router.push(`/subjects/${subject.id}`)
 }
 </script>
-
-<style scoped></style>

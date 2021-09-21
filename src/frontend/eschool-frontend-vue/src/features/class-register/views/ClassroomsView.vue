@@ -29,8 +29,7 @@ import {
 } from '@/shared/generated-clients/class-register'
 import { PagedListResponse } from '@/shared/model/paged-list-response'
 import { createClient } from '@/shared/api'
-import { useNotifications } from '@/core/utils/notifications'
-import { withNotifications } from '@/core/utils/save.utils'
+import { withSaveAndDeleteNotifications } from '@/core/utils/save.utils'
 
 const columns: QTableColumn<ClassroomListResponse>[] = [
   {
@@ -41,12 +40,7 @@ const columns: QTableColumn<ClassroomListResponse>[] = [
   }
 ]
 
-const save = withNotifications()
-const delet = withNotifications({
-  successText: 'Sikeres törlés',
-  failureText: 'Sikertelen törlés'
-})
-
+const { save, deletion } = withSaveAndDeleteNotifications()
 const quasar = useQuasar()
 const client = createClient(ClassroomsClient)
 const refreshSubject = new Subject<void>()
@@ -82,6 +76,7 @@ function editClassroom(classroom: ClassroomListResponse): void {
     .onOk(
       save(async (data: ClassroomEditCommand) => {
         await client.editClassroom(classroom.id, data)
+        refreshSubject.next()
       })
     )
 }
@@ -95,8 +90,9 @@ function deleteClassroom(classroom: ClassroomListResponse): void {
       cancel: 'Nem'
     })
     .onOk(
-      delet(async () => {
+      deletion(async () => {
         await client.deleteClassroom(classroom.id)
+        refreshSubject.next()
       })
     )
 }

@@ -54,7 +54,7 @@
       <q-item v-ripple :inset-level="1" clickable>
         <q-item-section>Osztályok</q-item-section>
       </q-item>
-      <q-item v-ripple :inset-level="1" clickable>
+      <q-item v-ripple :inset-level="1" clickable to="/class-types">
         <q-item-section>Tagozatok</q-item-section>
       </q-item>
       <q-item v-ripple :inset-level="1" clickable>

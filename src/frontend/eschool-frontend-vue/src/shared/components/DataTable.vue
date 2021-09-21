@@ -41,11 +41,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
-import { Observable, Subscription } from 'rxjs'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { Observable, Subscription, takeUntil } from 'rxjs'
 import { QPagination } from '@/shared/model/q-pagination.model'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
 import { PagedListResponse } from '@/shared/model/paged-list-response'
+import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
 
 const props = withDefaults(
   defineProps<{
@@ -79,6 +80,7 @@ const emit = defineEmits<{
 }>()
 
 let subscription: Subscription | undefined
+const unmounted = useObservableLifecycle(onUnmounted)
 const data = ref<unknown[]>([])
 const loading = ref(false)
 const pagination = ref<QPagination>({
@@ -125,9 +127,9 @@ request({ pagination: pagination.value })
 
 onMounted(() => {
   if (props.refresh$) {
-    subscription = props.refresh$.subscribe(() =>
-      request({ pagination: pagination.value })
-    )
+    subscription = props.refresh$
+      .pipe(takeUntil(unmounted))
+      .subscribe(() => request({ pagination: pagination.value }))
   }
 })
 
@@ -139,9 +141,9 @@ watch(
     }
 
     if (current) {
-      subscription = current.subscribe(() =>
-        request({ pagination: pagination.value })
-      )
+      subscription = current
+        .pipe(takeUntil(unmounted))
+        .subscribe(() => request({ pagination: pagination.value }))
     }
   }
 )
