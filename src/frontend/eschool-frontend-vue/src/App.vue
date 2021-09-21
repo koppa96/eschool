@@ -18,19 +18,11 @@
           @update:modelValue="changeTenant($event)"
         />
 
-        <q-item>
-          <q-item-section side>
-            <q-avatar rounded size="48px">
-              <q-icon name="person" color="white" size="lg" />
-            </q-avatar>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{ userName }}</q-item-label>
-            <q-item-label caption class="text-white">
-              {{ globalRole }}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
+        <UserDisplay
+          :user-name="userName"
+          :global-role="globalRole"
+          :tenant-roles="tenantRoles"
+        />
 
         <q-btn
           class="q-mx-sm"
@@ -61,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { takeUntil } from 'rxjs'
 import Sidebar from '@/core/components/Sidebar.vue'
 import TenantSelector from '@/core/auth/components/TenantSelector.vue'
@@ -70,35 +62,42 @@ import { useObservableLifecycle } from '@/core/utils/observable-lifecycle.util'
 import { filterNotNull } from '@/core/utils/rxjs-operators'
 import {
   GlobalRoleType,
+  TenantRoleType,
   UsersClient,
   UserTenantListResponse
 } from '@/shared/generated-clients/identity-provider'
 import { createClient } from '@/shared/api'
-import { getGlobalRoleDisplayName } from '@/core/auth/model/role-display-names'
+import UserDisplay from '@/core/auth/components/UserDisplay.vue'
 
 const leftDrawerOpen = ref(false)
 
 const client = createClient(UsersClient)
 const authService = useAuthService()
 const unmounted = useObservableLifecycle(onUnmounted)
-const showTenantSelector = ref(false)
 const tenants = ref<UserTenantListResponse[]>([])
 const selectedTenant = ref<UserTenantListResponse | undefined>(undefined)
+const tenantRoles = ref<TenantRoleType[]>([])
+const globalRole = ref<GlobalRoleType>()
 const userName = ref('')
-const globalRole = ref('')
 const loading = ref(true)
+
+const showTenantSelector = computed(
+  () => globalRole.value === GlobalRoleType.TenantUser
+)
 
 authService.accessTokenData$
   .pipe(filterNotNull(), takeUntil(unmounted))
   .subscribe(async data => {
-    showTenantSelector.value = data.globalRole === GlobalRoleType.TenantUser
+    globalRole.value = data.globalRole
+    tenantRoles.value = data.tenantRoles ?? []
+
     const details = await client.getMe()
+    userName.value = details.name!
     tenants.value = details.tenants ?? []
     selectedTenant.value = tenants.value.find(
       tenant => tenant.id === data.tenantId
     )
-    userName.value = details.name ?? ''
-    globalRole.value = getGlobalRoleDisplayName(details.globalRoleType)
+
     loading.value = false
   })
 
