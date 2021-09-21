@@ -60,7 +60,7 @@
       <q-item v-ripple :inset-level="1" clickable>
         <q-item-section>Tanévek</q-item-section>
       </q-item>
-      <q-item v-ripple :inset-level="1" clickable>
+      <q-item v-ripple :inset-level="1" clickable to="/classrooms">
         <q-item-section>Termek</q-item-section>
       </q-item>
       <q-item v-ripple :inset-level="1" clickable>

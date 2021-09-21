@@ -14,5 +14,12 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
       import(
         /* webpackChunkName: "class-register" */ './views/SubjectDetailsView.vue'
       )
+  },
+  {
+    path: '/classrooms',
+    component: () =>
+      import(
+        /* webpackChunkName: "class-register" */ './views/ClassroomsView.vue'
+      )
   }
 ]

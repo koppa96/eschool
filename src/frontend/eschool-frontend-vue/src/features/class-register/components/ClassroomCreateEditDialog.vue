@@ -1,11 +1,11 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide()">
     <q-card class="q-pa-lg vw-50">
-      <h4 class="q-mt-sm q-mb-md">Tantárgy {{ operation }}</h4>
-      <q-form greedy @submit="onDialogOK(data)">
+      <h4 class="q-mt-sm q-mb-md">Tanterem {{ operation }}</h4>
+      <q-form greedy @submit="onSubmit()">
         <q-input
           v-model="data.name"
-          label="Tantárgy neve"
+          label="Tanterem neve"
           outlined
           :rules="rules.name"
         />
@@ -23,18 +23,18 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
 import { useDialogPluginComponent } from 'quasar'
-import { required } from '@/core/utils/validation-functions'
-import { Rules } from '@/shared/model/rules'
+import { onMounted, ref } from 'vue'
 import {
-  SubjectCreateCommand,
-  SubjectEditCommand,
-  SubjectListResponse
+  ClassroomCreateCommand,
+  ClassroomEditCommand,
+  ClassroomListResponse
 } from '@/shared/generated-clients/class-register'
+import { Rules } from '@/shared/model/rules'
+import { required } from '@/core/utils/validation-functions'
 
 const props = defineProps<{
-  subjectToEdit?: SubjectListResponse
+  classroomToEdit?: ClassroomListResponse
 }>()
 
 const emit = defineEmits(useDialogPluginComponent.emits)
@@ -47,23 +47,28 @@ const {
 } = useDialogPluginComponent()
 
 const operation = ref('rögzítése')
-const data = ref<SubjectCreateCommand | SubjectEditCommand>(
-  new SubjectCreateCommand()
+const data = ref<ClassroomCreateCommand | ClassroomEditCommand>(
+  new ClassroomCreateCommand()
 )
 
-const rules: Rules<SubjectCreateCommand | SubjectEditCommand> = {
+const rules: Rules<ClassroomCreateCommand | ClassroomEditCommand> = {
   name: [required]
 }
 
+function onSubmit(): void {
+  onDialogOK(data.value)
+  console.log(data.value)
+}
+
 onMounted(() => {
-  if (props.subjectToEdit) {
+  if (props.classroomToEdit) {
     operation.value = 'szerkesztése'
-    data.value = new SubjectEditCommand({
-      ...props.subjectToEdit
+    data.value = new ClassroomEditCommand({
+      ...props.classroomToEdit
     })
   } else {
     operation.value = 'rögzítése'
-    data.value = new SubjectCreateCommand()
+    data.value = new ClassroomCreateCommand()
   }
 })
 </script>
