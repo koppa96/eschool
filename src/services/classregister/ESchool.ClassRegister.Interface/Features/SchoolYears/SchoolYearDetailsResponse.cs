@@ -12,7 +12,5 @@ namespace ESchool.ClassRegister.Interface.Features.SchoolYears
         public DateTime StartsAt { get; set; }
         public DateTime EndOfFirstHalf { get; set; }
         public DateTime EndsAt { get; set; }
-        
-        public List<ClassListResponse> Classes { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide()">
     <q-card class="q-pa-lg vw-50">
-      <h4 class="q-mt-sm q-mb-md">Osztály rögzítése</h4>
+      <h4 class="q-mt-sm q-mb-md">Osztály szerkesztése</h4>
       <q-form greedy @submit="onDialogOK(data)">
         <q-select
           v-model="data.headTeacherId"

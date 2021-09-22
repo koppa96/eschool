@@ -50,7 +50,7 @@ import { useAutocompletingSubject } from '@/core/utils/observable-lifecycle.util
 import { PagedListResponse } from '@/shared/model/paged-list-response'
 import { createClient } from '@/shared/api'
 import { useLoader } from '@/core/utils/loading.utils'
-import { withSaveAndDeleteNotifications } from '@/core/utils/save.utils'
+import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'
 
 const columns: QTableColumn<ClassListResponse>[] = [
   {
@@ -79,7 +79,7 @@ const classTypesClient = createClient(ClassTypesClient)
 const schoolYearsClient = createClient(SchoolYearsClient)
 const load = useLoader()
 const { dialog } = useQuasar()
-const { save, deletion } = withSaveAndDeleteNotifications()
+const { save, deletion } = useSaveAndDeleteNotifications()
 
 function updateIncludeFinished(value: boolean): void {
   includeFinished.value = value

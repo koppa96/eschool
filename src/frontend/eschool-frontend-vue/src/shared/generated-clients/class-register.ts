@@ -979,6 +979,64 @@ export class ClassSchoolYearsClient {
         }
         return Promise.resolve<void>(<any>null);
     }
+
+    listClassesInSchoolYear(schoolYearId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfClassListResponse> {
+        let url_ = this.baseUrl + "/api/school-years/{schoolYearId}/classes?";
+        if (schoolYearId === undefined || schoolYearId === null)
+            throw new Error("The parameter 'schoolYearId' must be defined.");
+        url_ = url_.replace("{schoolYearId}", encodeURIComponent("" + schoolYearId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processListClassesInSchoolYear(_response);
+        });
+    }
+
+    protected processListClassesInSchoolYear(response: AxiosResponse): Promise<PagedListResponseOfClassListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PagedListResponseOfClassListResponse.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PagedListResponseOfClassListResponse>(<any>null);
+    }
 }
 
 export class ClassTypesClient {
@@ -5014,7 +5072,6 @@ export class SchoolYearDetailsResponse implements ISchoolYearDetailsResponse {
     startsAt!: Date;
     endOfFirstHalf!: Date;
     endsAt!: Date;
-    classes!: ClassListResponse[] | undefined;
 
     constructor(data?: ISchoolYearDetailsResponse) {
         if (data) {
@@ -5032,11 +5089,6 @@ export class SchoolYearDetailsResponse implements ISchoolYearDetailsResponse {
             this.startsAt = _data["startsAt"] ? new Date(_data["startsAt"].toString()) : <any>undefined;
             this.endOfFirstHalf = _data["endOfFirstHalf"] ? new Date(_data["endOfFirstHalf"].toString()) : <any>undefined;
             this.endsAt = _data["endsAt"] ? new Date(_data["endsAt"].toString()) : <any>undefined;
-            if (Array.isArray(_data["classes"])) {
-                this.classes = [] as any;
-                for (let item of _data["classes"])
-                    this.classes!.push(ClassListResponse.fromJS(item));
-            }
         }
     }
 
@@ -5054,11 +5106,6 @@ export class SchoolYearDetailsResponse implements ISchoolYearDetailsResponse {
         data["startsAt"] = this.startsAt ? this.startsAt.toISOString() : <any>undefined;
         data["endOfFirstHalf"] = this.endOfFirstHalf ? this.endOfFirstHalf.toISOString() : <any>undefined;
         data["endsAt"] = this.endsAt ? this.endsAt.toISOString() : <any>undefined;
-        if (Array.isArray(this.classes)) {
-            data["classes"] = [];
-            for (let item of this.classes)
-                data["classes"].push(item.toJSON());
-        }
         return data; 
     }
 }
@@ -5069,7 +5116,6 @@ export interface ISchoolYearDetailsResponse {
     startsAt: Date;
     endOfFirstHalf: Date;
     endsAt: Date;
-    classes: ClassListResponse[] | undefined;
 }
 
 export class SchoolYearCreateCommand implements ISchoolYearCreateCommand {

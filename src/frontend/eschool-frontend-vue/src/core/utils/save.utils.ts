@@ -30,7 +30,7 @@ export function withNotifications(
   }
 }
 
-export function withSaveAndDeleteNotifications(): SaveDeleteFunctionPair {
+export function useSaveAndDeleteNotifications(): SaveDeleteFunctionPair {
   return {
     save: withNotifications(),
     deletion: withNotifications({

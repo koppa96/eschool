@@ -8,6 +8,7 @@
       :data-access="fetchData"
       :refresh$="refreshSubject"
       @add="createSchoolYear()"
+      @viewDetails="navigateToDetails($event)"
       @edit="editSchoolYear($event)"
       @delete="deleteSchoolYear($event)"
     />
@@ -16,6 +17,7 @@
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 import SchoolYearCreateEditDialog from '../components/SchoolYearCreateEditDialog.vue'
 import DataTable from '@/shared/components/DataTable.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
@@ -28,7 +30,7 @@ import {
 import { useAutocompletingSubject } from '@/core/utils/observable-lifecycle.util'
 import { PagedListResponse } from '@/shared/model/paged-list-response'
 import { createClient } from '@/shared/api'
-import { withSaveAndDeleteNotifications } from '@/core/utils/save.utils'
+import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'
 import { useLoader } from '@/core/utils/loading.utils'
 
 const columns: QTableColumn<SchoolYearListResponse>[] = [
@@ -42,8 +44,9 @@ const columns: QTableColumn<SchoolYearListResponse>[] = [
 const refreshSubject = useAutocompletingSubject()
 const client = createClient(SchoolYearsClient)
 const quasar = useQuasar()
-const { save, deletion } = withSaveAndDeleteNotifications()
+const { save, deletion } = useSaveAndDeleteNotifications()
 const load = useLoader()
+const router = useRouter()
 
 function fetchData(
   pageSize: number,
@@ -98,5 +101,9 @@ function deleteSchoolYear(schoolYear: SchoolYearListResponse): void {
         refreshSubject.next()
       })
     )
+}
+
+function navigateToDetails(schoolYear: SchoolYearListResponse): void {
+  router.push(`/school-years/${schoolYear.id}`)
 }
 </script>

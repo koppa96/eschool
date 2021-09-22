@@ -29,7 +29,7 @@ import {
 } from '@/shared/generated-clients/class-register'
 import { createClient } from '@/shared/api'
 import { PagedListResponse } from '@/shared/model/paged-list-response'
-import { withSaveAndDeleteNotifications } from '@/core/utils/save.utils'
+import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'
 import { useLoader } from '@/core/utils/loading.utils'
 
 const columns: QTableColumn<ClassTypeListResponse>[] = [
@@ -41,7 +41,7 @@ const columns: QTableColumn<ClassTypeListResponse>[] = [
   }
 ]
 
-const { save, deletion } = withSaveAndDeleteNotifications()
+const { save, deletion } = useSaveAndDeleteNotifications()
 const quasar = useQuasar()
 const client = createClient(ClassTypesClient)
 const refreshSubject = new Subject<void>()
