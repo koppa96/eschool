@@ -1,7 +1,7 @@
 <template>
-  <q-page class="q-pa-lg flex column">
+  <q-page>
     <DataTable
-      class="full-page-table"
+      class="absolute-full q-ma-lg"
       title="Tanévek"
       add-button-text="Tanév felvétele"
       :columns="columns"

@@ -1,6 +1,6 @@
 <template>
-  <q-page class="q-pa-lg">
-    <q-card>
+  <q-page>
+    <q-card class="absolute-full q-ma-lg">
       <DetailsHeader
         class="q-pa-md"
         :name="`${schoolYear.displayName} tanév`"

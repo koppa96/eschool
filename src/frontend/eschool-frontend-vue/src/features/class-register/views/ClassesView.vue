@@ -1,7 +1,7 @@
 <template>
-  <q-page class="q-pa-lg flex column">
+  <q-page padding>
     <DataTable
-      class="full-page-table"
+      class="absolute-full q-ma-lg"
       title="Osztályok"
       :columns="columns"
       :data-access="fetchData"
