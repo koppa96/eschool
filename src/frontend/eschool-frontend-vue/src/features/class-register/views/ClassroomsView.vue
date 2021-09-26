@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page>
     <DataTable
       class="absolute-full q-ma-lg"
       title="Tantermek"
