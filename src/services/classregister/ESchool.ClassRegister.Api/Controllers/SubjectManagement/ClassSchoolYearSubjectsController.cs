@@ -28,7 +28,6 @@ namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
         [HttpGet]
         public Task<PagedListResponse<SubjectListResponse>> ListClassSchoolYearSubjects(Guid schoolYearId,
             Guid classId,
-            Guid subjectId,
             [FromQuery] int pageIndex,
             [FromQuery] int pageSize,
             CancellationToken cancellationToken)
@@ -38,7 +37,6 @@ namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
             {
                 SchoolYearId = schoolYearId,
                 ClassId = classId,
-                SubjectId = subjectId,
                 PageIndex = pageIndex,
                 PageSize = pageSize == 0 ? PagedListQuery.DefaultPageSize : pageSize
             }, cancellationToken);

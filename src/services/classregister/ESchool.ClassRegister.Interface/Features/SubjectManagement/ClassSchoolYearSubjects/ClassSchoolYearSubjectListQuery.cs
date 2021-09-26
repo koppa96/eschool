@@ -8,6 +8,5 @@ namespace ESchool.ClassRegister.Interface.Features.SubjectManagement.ClassSchool
     {
         public Guid ClassId { get; set; }
         public Guid SchoolYearId { get; set; }
-        public Guid SubjectId { get; set; }
     }
 }

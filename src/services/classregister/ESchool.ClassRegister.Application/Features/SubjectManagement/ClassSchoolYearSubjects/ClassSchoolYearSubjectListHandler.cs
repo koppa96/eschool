@@ -16,8 +16,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassScho
 
         protected override IQueryable<ClassSchoolYearSubject> Filter(IQueryable<ClassSchoolYearSubject> entities, ClassSchoolYearSubjectListQuery query)
         {
-            return entities.Where(x => x.SubjectId == query.SubjectId &&
-                                       x.ClassSchoolYear.ClassId == query.ClassId &&
+            return entities.Where(x => x.ClassSchoolYear.ClassId == query.ClassId &&
                                        x.ClassSchoolYear.SchoolYearId == query.SchoolYearId);
         }
 
