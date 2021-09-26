@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-card class="absolute-full q-ma-lg">
+    <q-card class="absolute-full q-ma-lg flex column">
       <DetailsHeader
         class="q-pa-md"
         :name="`${schoolYear.displayName} tanév`"
@@ -8,7 +8,7 @@
         @delete="openDeleteDialog()"
       />
       <DetailsGrid class="q-pa-md" :model-value="detailsGridData" />
-      <ClassSchoolYearList :school-year-id="schoolYearId" />
+      <ClassSchoolYearList :school-year-id="schoolYearId" class="fill-card" />
     </q-card>
   </q-page>
 </template>
@@ -129,3 +129,9 @@ function openDeleteDialog(): void {
 
 loadData()
 </script>
+
+<style scoped>
+.fill-card {
+  flex-grow: 1;
+}
+</style>

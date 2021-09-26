@@ -27,6 +27,18 @@
           </q-btn>
         </div>
       </template>
+      <template #actions="{ row }">
+        <q-btn dense round flat icon="lock" @click="lockClass(row)" />
+        <q-btn dense round flat icon="edit" @click="editClass(row)" />
+        <q-btn
+          color="negative"
+          dense
+          round
+          flat
+          icon="delete"
+          @click="deleteClass(row)"
+        />
+      </template>
     </DataTable>
   </q-page>
 </template>
@@ -51,6 +63,8 @@ import { PagedListResponse } from '@/shared/model/paged-list-response'
 import { createClient } from '@/shared/api'
 import { useLoader } from '@/core/utils/loading.utils'
 import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'
+import { displayClass } from '@/core/utils/display-helpers'
+import { useConfirmDialog } from '@/core/utils/dialogs'
 
 const columns: QTableColumn<ClassListResponse>[] = [
   {
@@ -80,6 +94,7 @@ const schoolYearsClient = createClient(SchoolYearsClient)
 const load = useLoader()
 const { dialog } = useQuasar()
 const { save, deletion } = useSaveAndDeleteNotifications()
+const confirm = useConfirmDialog()
 
 function updateIncludeFinished(value: boolean): void {
   includeFinished.value = value
@@ -130,17 +145,29 @@ async function editClass(_class: ClassListResponse): Promise<void> {
   )
 }
 
-function deleteClass(_class: ClassListResponse): void {
-  dialog({
-    title: 'Megerősítés szükséges',
-    message: `Biztosan törölni szeretné a ${_class.grade}. ${_class.classType?.name} osztályt?`,
-    ok: 'Igen',
-    cancel: 'Nem'
-  }).onOk(
-    deletion(async () => {
+async function deleteClass(_class: ClassListResponse): Promise<void> {
+  const result = await confirm(
+    `Biztosan törölni szeretné a ${displayClass(_class)} osztályt?`
+  )
+
+  if (result) {
+    await deletion(async () => {
       await client.deleteClass(_class.id)
       refreshSubject.next()
-    })
+    })()
+  }
+}
+
+async function lockClass(_class: ClassListResponse): Promise<void> {
+  const result = await confirm(
+    `Biztos benne, hogy szeretné lezárni a ${_class.classType} osztályt?`
   )
+
+  if (result) {
+    await save(async () => {
+      await client.closeClass(_class.id)
+      refreshSubject.next()
+    })()
+  }
 }
 </script>
