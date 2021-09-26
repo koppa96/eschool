@@ -1,3 +1,5 @@
+import { IClassListResponse } from '@/shared/generated-clients/class-register'
+
 export function dateToString(date: any): string {
   const _date = new Date(date)
   if (isNaN(_date.getTime())) {
@@ -5,4 +7,8 @@ export function dateToString(date: any): string {
   }
 
   return _date.toLocaleDateString('hu-HU')
+}
+
+export function displayClass(_class: IClassListResponse): string {
+  return `${_class.grade}. ${_class.classType?.name}`
 }

@@ -5,8 +5,8 @@
     :columns="columns"
     :data-access="fetchData"
     :refresh$="refreshSubject"
-    :has-details="false"
     :editable="false"
+    @viewDetails="navigateToDetails($event)"
     @add="createClassSchoolYear()"
     @delete="deleteClassSchoolYear($event)"
   />
@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 import ClassSchoolYearCreateDialog from './ClassSchoolYearCreateDialog.vue'
 import DataTable from '@/shared/components/DataTable.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
@@ -52,6 +53,7 @@ const columns: QTableColumn<ClassListResponse>[] = [
   }
 ]
 
+const router = useRouter()
 const notifications = useNotifications()
 const quasar = useQuasar()
 const client = createClient(ClassSchoolYearsClient)
@@ -93,6 +95,10 @@ function deleteClassSchoolYear(_class: ClassListResponse): void {
         refreshSubject.next()
       })
     )
+}
+
+function navigateToDetails(_class: ClassListResponse): void {
+  router.push(`/school-years/${props.schoolYearId}/classes/${_class.id}`)
 }
 </script>
 

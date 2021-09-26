@@ -1,13 +1,13 @@
 import { useQuasar } from 'quasar'
 
 export function useLoader(): <T>(func: () => Promise<T>) => Promise<T> {
-  const quasar = useQuasar()
+  const { loading } = useQuasar()
   return async (func: () => Promise<any>) => {
-    quasar.loading.show({
+    loading.show({
       delay: 400
     })
     const result = await func()
-    quasar.loading.hide()
+    loading.hide()
     return result
   }
 }

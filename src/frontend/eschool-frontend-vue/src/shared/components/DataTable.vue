@@ -20,23 +20,31 @@
     </template>
     <template #body-cell-actions="props">
       <q-td :props="props">
-        <q-btn
-          v-if="hasDetails"
-          dense
-          round
-          flat
-          icon="visibility"
-          @click="emit('viewDetails', props.row)"
-        />
-        <q-btn dense round flat icon="edit" @click="emit('edit', props.row)" />
-        <q-btn
-          color="negative"
-          dense
-          round
-          flat
-          icon="delete"
-          @click="emit('delete', props.row)"
-        />
+        <slot name="actions" :row="props.row">
+          <q-btn
+            v-if="hasDetails"
+            dense
+            round
+            flat
+            icon="visibility"
+            @click="emit('viewDetails', props.row)"
+          />
+          <q-btn
+            dense
+            round
+            flat
+            icon="edit"
+            @click="emit('edit', props.row)"
+          />
+          <q-btn
+            color="negative"
+            dense
+            round
+            flat
+            icon="delete"
+            @click="emit('delete', props.row)"
+          />
+        </slot>
       </q-td>
     </template>
   </q-table>

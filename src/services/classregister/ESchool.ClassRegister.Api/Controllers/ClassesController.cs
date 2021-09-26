@@ -78,6 +78,15 @@ namespace ESchool.ClassRegister.Api.Controllers
             }, cancellationToken);
         }
 
+        [HttpPatch("{id}/close")]
+        public Task<ClassDetailsResponse> CloseClass(Guid id, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new ClassFinishCommand
+            {
+                ClassId = id
+            }, cancellationToken);
+        }
+
         [HttpDelete("{id}")]
         public Task DeleteClass(Guid id, CancellationToken cancellationToken)
         {
