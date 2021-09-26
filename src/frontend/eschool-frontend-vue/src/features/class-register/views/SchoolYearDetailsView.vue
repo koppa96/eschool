@@ -86,8 +86,8 @@ const detailsGridData = computed<DetailsGridItem[]>(() => {
 })
 
 function resolveSchoolYearId(): string {
-  if (isString(route.params.id)) {
-    return route.params.id
+  if (isString(route.params.schoolYearId)) {
+    return route.params.schoolYearId
   }
 
   return ''

@@ -5,15 +5,24 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
     path: '/subjects',
     component: () =>
       import(
-        /* webpackChunkName: "class-register" */ './views/SubjectsView.vue'
-      )
-  },
-  {
-    path: '/subjects/:id',
-    component: () =>
-      import(
-        /* webpackChunkName: "class-register" */ './views/SubjectDetailsView.vue'
-      )
+        /* webpackChunkName: "class-register" */ './views/SubjectsLayoutView.vue'
+      ),
+    children: [
+      {
+        path: '',
+        component: () =>
+          import(
+            /* webpackChunkName: "class-register" */ './views/SubjectsView.vue'
+          )
+      },
+      {
+        path: ':id',
+        component: () =>
+          import(
+            /* webpackChunkName: "class-register" */ './views/SubjectDetailsView.vue'
+          )
+      }
+    ]
   },
   {
     path: '/classrooms',
@@ -33,22 +42,40 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
     path: '/school-years',
     component: () =>
       import(
-        /* webpackChunkName: "class-register" */ './views/SchoolYearsView.vue'
-      )
-  },
-  {
-    path: '/school-years/:id',
-    component: () =>
-      import(
-        /* webpackChunkName: "class-register" */ './views/SchoolYearDetailsView.vue'
-      )
-  },
-  {
-    path: '/school-years/:schoolYearId/classes/:classId',
-    component: () =>
-      import(
-        /* webpackChunkName: "class-register" */ './views/ClassSchoolYearDetailsView.vue'
-      )
+        /* webpackChunkName: "class-register" */ './views/SchoolYearLayoutView.vue'
+      ),
+    children: [
+      {
+        path: '',
+        component: () =>
+          import(
+            /* webpackChunkName: "class-register" */ './views/SchoolYearsView.vue'
+          )
+      },
+      {
+        path: ':schoolYearId',
+        component: () =>
+          import(
+            /* webpackChunkName: "class-register" */ './views/ClassSchoolYearLayoutView.vue'
+          ),
+        children: [
+          {
+            path: '',
+            component: () =>
+              import(
+                /* webpackChunkName: "class-register" */ './views/SchoolYearDetailsView.vue'
+              )
+          },
+          {
+            path: 'classes/:classId',
+            component: () =>
+              import(
+                /* webpackChunkName: "class-register" */ './views/ClassSchoolYearDetailsView.vue'
+              )
+          }
+        ]
+      }
+    ]
   },
   {
     path: '/classes',

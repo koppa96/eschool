@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { takeUntil } from 'rxjs'
 import { useRoute } from 'vue-router'
 import Sidebar from '@/core/components/Sidebar.vue'
@@ -82,7 +82,6 @@ const tenantRoles = ref<TenantRoleType[]>([])
 const globalRole = ref<GlobalRoleType>()
 const userName = ref('')
 const loading = ref(true)
-const route = useRoute()
 const load = useLoader()
 
 const showTenantSelector = computed(
@@ -115,18 +114,8 @@ function changeTenant(tenant: UserTenantListResponse): void {
 }
 
 onMounted(async () => {
-  if (
-    !route.query.code &&
-    (!authService.accessTokenData || authService.accessTokenData.expired)
-  ) {
-    try {
-      const result = await load(() => authService.silentRefresh())
-      if (!result) {
-        authService.initiateAuthCodeFlow()
-      }
-    } catch (err) {
-      authService.initiateAuthCodeFlow()
-    }
+  if (!authService.accessTokenData || authService.accessTokenData.expired) {
+    authService.initiateAuthCodeFlow()
   }
 
   authService.setUpAutomaticSilentRefresh(600)

@@ -31,8 +31,8 @@ export class AuthService {
       sessionStorage.removeItem(TENANT_ID_KEY)
     } else {
       sessionStorage.setItem(TENANT_ID_KEY, JSON.stringify(value))
+      this.silentRefresh()
     }
-    this.silentRefresh()
   }
 
   get tokens$(): Observable<TokenResponse | null> {
@@ -57,6 +57,7 @@ export class AuthService {
   }
 
   set codePair(value: CodePair | null) {
+    console.trace()
     this._codePair = value
     if (value === null) {
       sessionStorage.removeItem(CODE_PAIR_KEY)
