@@ -12,6 +12,7 @@ import { AccessTokenData } from '@/core/auth/model/token.model'
 const CODE_PAIR_KEY = 'codePair'
 const TOKENS_KEY = 'tokens'
 const TENANT_ID_KEY = 'tenantId'
+const SILENT_RENEW_TIMEOUT = 10000
 
 export class AuthService {
   private isSilentRefreshing = false
@@ -215,7 +216,7 @@ export class AuthService {
   }
 
   silentRefresh(): Promise<boolean> {
-    if (!this.isSilentRefreshing && this.tokens && !this.codePair) {
+    if (!this.isSilentRefreshing && !this.codePair) {
       this.isSilentRefreshing = true
 
       const iframe =
@@ -227,6 +228,11 @@ export class AuthService {
       iframe.src = url
 
       return new Promise<boolean>((resolve, reject) => {
+        setTimeout(() => {
+          reject(new Error('Silent renew timed out'))
+          this.codePair = null
+        }, SILENT_RENEW_TIMEOUT)
+
         const eventListener = async (event: Event): Promise<void> => {
           try {
             await this.silentRefreshCallback((event as CustomEvent).detail)

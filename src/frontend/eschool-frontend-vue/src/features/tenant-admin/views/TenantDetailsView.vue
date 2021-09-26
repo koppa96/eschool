@@ -1,6 +1,6 @@
 <template>
-  <q-page class="q-pa-lg">
-    <q-card>
+  <q-page>
+    <q-card class="absolute-full q-ma-lg flex column">
       <TenantDetailsHeader
         class="q-pa-md"
         :name="tenant.name"
@@ -8,7 +8,7 @@
         @delete="openDeleteDialog()"
       />
       <TenantDetailsGrid class="q-pa-md" :model-value="tenant" />
-      <TenantUserList class="q-mt-md" :tenant-id="tenantId" />
+      <TenantUserList class="q-mt-md fill-card" :tenant-id="tenantId" />
     </q-card>
   </q-page>
 </template>
@@ -100,4 +100,8 @@ function openDeleteDialog(): void {
 loadData()
 </script>
 
-<style scoped></style>
+<style scoped>
+.fill-card {
+  flex-grow: 1;
+}
+</style>

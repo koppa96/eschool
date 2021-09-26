@@ -55,6 +55,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { takeUntil } from 'rxjs'
+import { useRoute } from 'vue-router'
 import Sidebar from '@/core/components/Sidebar.vue'
 import TenantSelector from '@/core/auth/components/TenantSelector.vue'
 import { useAuthService } from '@/core/auth'
@@ -68,6 +69,7 @@ import {
 } from '@/shared/generated-clients/identity-provider'
 import { createClient } from '@/shared/api'
 import UserDisplay from '@/core/auth/components/UserDisplay.vue'
+import { useLoader } from '@/core/utils/loading.utils'
 
 const leftDrawerOpen = ref(false)
 
@@ -80,6 +82,8 @@ const tenantRoles = ref<TenantRoleType[]>([])
 const globalRole = ref<GlobalRoleType>()
 const userName = ref('')
 const loading = ref(true)
+const route = useRoute()
+const load = useLoader()
 
 const showTenantSelector = computed(
   () => globalRole.value === GlobalRoleType.TenantUser
@@ -110,9 +114,19 @@ function changeTenant(tenant: UserTenantListResponse): void {
   loading.value = true
 }
 
-onMounted(() => {
-  if (!authService.accessTokenData || authService.accessTokenData.expired) {
-    authService.initiateAuthCodeFlow()
+onMounted(async () => {
+  if (
+    !route.query.code &&
+    (!authService.accessTokenData || authService.accessTokenData.expired)
+  ) {
+    try {
+      const result = await load(() => authService.silentRefresh())
+      if (!result) {
+        authService.initiateAuthCodeFlow()
+      }
+    } catch (err) {
+      authService.initiateAuthCodeFlow()
+    }
   }
 
   authService.setUpAutomaticSilentRefresh(600)
