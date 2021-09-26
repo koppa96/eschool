@@ -42,6 +42,20 @@ namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
             }, cancellationToken);
         }
 
+        [HttpGet("{subjectId}")]
+        public Task<ClassSchoolYearSubjectDetailsResponse> GetDetails(Guid schoolYearId,
+            Guid classId,
+            Guid subjectId,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(new ClassSchoolYearSubjectQuery
+            {
+                ClassId = classId,
+                SubjectId = subjectId,
+                SchoolYearId = schoolYearId
+            }, cancellationToken);
+        }
+
         [HttpPost("{subjectId}")]
         public Task CreateClassSchoolYearSubject(Guid schoolYearId,
             Guid classId,
