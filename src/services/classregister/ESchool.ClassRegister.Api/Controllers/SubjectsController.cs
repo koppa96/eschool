@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Interface.Features.SubjectManagement.SubjectTeachers;
@@ -55,6 +56,18 @@ namespace ESchool.ClassRegister.Api.Controllers
                 PageSize = pageSize == 0 ? 25 : pageSize,
                 PageIndex = pageIndex,
                 SubjectId = subjectId
+            }, cancellationToken);
+        }
+
+        [HttpGet("{subjectId}/teachers/search")]
+        public Task<List<UserRoleListResponse>> SearchSubjectTeachers(Guid subjectId,
+            string searchText,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(new SubjectTeacherSearchQuery
+            {
+                SubjectId = subjectId,
+                SearchText = searchText
             }, cancellationToken);
         }
 
