@@ -34,6 +34,9 @@
           <q-tooltip>Kijelentkezés</q-tooltip>
         </q-btn>
       </q-toolbar>
+      <q-toolbar inset>
+        <Breadcrumb />
+      </q-toolbar>
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above side="left" elevated>
@@ -70,6 +73,7 @@ import {
 import { createClient } from '@/shared/api'
 import UserDisplay from '@/core/auth/components/UserDisplay.vue'
 import { useLoader } from '@/core/utils/loading.utils'
+import Breadcrumb from '@/core/components/Breadcrumb.vue'
 
 const leftDrawerOpen = ref(false)
 

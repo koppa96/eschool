@@ -57,7 +57,6 @@ export class AuthService {
   }
 
   set codePair(value: CodePair | null) {
-    console.trace()
     this._codePair = value
     if (value === null) {
       sessionStorage.removeItem(CODE_PAIR_KEY)
