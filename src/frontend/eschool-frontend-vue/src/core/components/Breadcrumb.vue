@@ -38,7 +38,7 @@ watch(
 
       let path = item.path
       const params = path.match(paramRegex)
-      if (params?.length > 0) {
+      if (params?.length && params?.length > 0) {
         for (const param of params) {
           const paramValue = route.params[param.substr(1)] as string
           path = path.replace(param, paramValue)
@@ -47,7 +47,7 @@ watch(
 
       const breadCrumbItem: BreadCrumbItem = {
         path,
-        name: null
+        name: ''
       }
 
       const index = items.value.push(breadCrumbItem) - 1

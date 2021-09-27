@@ -19,8 +19,6 @@ export function isRouteMeta(value: any): value is RouteMeta {
   return value.name || value.resolveName
 }
 
-export function isRouteMetaWithName(
-  value: RouteMeta
-): value is RouteMetaWithName {
+export function isRouteMetaWithName(value: any): value is RouteMetaWithName {
   return value.name
 }
