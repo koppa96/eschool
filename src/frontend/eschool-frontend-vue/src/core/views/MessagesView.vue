@@ -3,9 +3,16 @@
     <q-card class="absolute-full q-ma-lg flex column">
       <h4 class="text-left q-my-sm q-pa-md">Üzeneteim</h4>
       <q-separator />
-      <q-tabs v-model="tab" dense>
-        <q-tab name="incoming" label="Bejövő üzenetek" />
-        <q-tab name="sent" label="Kimenő üzenetek" />
+      <q-tabs
+        v-model="tab"
+        dense
+        align="justify"
+        narrow-indicator
+        active-color="primary"
+        indicator-color="primary"
+      >
+        <q-tab name="incoming" label="Bejövő üzenetek" icon="inbox" />
+        <q-tab name="sent" label="Kimenő üzenetek" icon="outbox" />
       </q-tabs>
       <q-separator />
       <q-tab-panels v-model="tab" animated>

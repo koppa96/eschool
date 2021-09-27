@@ -1,6 +1,6 @@
 <template>
   <div class="flex row items-center justify-between q-mb-lg">
-    <h4 class="text-left q-my-sm">{{ name }}</h4>
+    <h6 class="text-left q-my-sm">{{ name }}</h6>
     <div class="flex row">
       <slot name="actions">
         <q-btn
