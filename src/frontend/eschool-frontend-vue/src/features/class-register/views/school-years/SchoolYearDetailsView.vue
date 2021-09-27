@@ -19,9 +19,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import SchoolYearCreateEditDialog from '../../components/SchoolYearCreateEditDialog.vue'
-import { QTableColumn } from '@/shared/model/q-table-column.model'
 import {
-  ClassListResponse,
   ClassSchoolYearsClient,
   SchoolYearDetailsResponse,
   SchoolYearEditCommand,
@@ -34,27 +32,6 @@ import { DetailsGridItem } from '@/shared/model/details-grid.model'
 import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'
 import ClassSchoolYearList from '@/features/class-register/components/ClassSchoolYearList.vue'
 import { dateToString } from '@/core/utils/display-helpers'
-
-const columns: QTableColumn<ClassListResponse>[] = [
-  {
-    name: 'grade',
-    label: 'Évfolyam',
-    align: 'left',
-    field: row => row.grade
-  },
-  {
-    name: 'classType',
-    label: 'Tagozat',
-    align: 'left',
-    field: row => row.classType?.name
-  },
-  {
-    name: 'finishingSchoolYear',
-    label: 'Végzés éve',
-    align: 'left',
-    field: row => row.finishingSchoolYear?.displayName
-  }
-]
 
 const router = useRouter()
 const route = useRoute()

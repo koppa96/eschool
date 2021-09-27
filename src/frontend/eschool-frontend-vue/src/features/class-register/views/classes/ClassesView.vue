@@ -7,8 +7,7 @@
       :data-access="fetchData"
       :refresh$="refreshSubject"
       @add="createClass()"
-      @edit="editClass($event)"
-      @delete="deleteClass($event)"
+      @viewDetails="navigateToDetails($event)"
     >
       <template #top-right>
         <div class="flex items-center">
@@ -28,8 +27,28 @@
         </div>
       </template>
       <template #actions="{ row }">
-        <q-btn dense round flat icon="lock" @click="lockClass(row)" />
-        <q-btn dense round flat icon="edit" @click="editClass(row)" />
+        <q-btn
+          dense
+          round
+          flat
+          icon="visibility"
+          @click.stop="navigateToDetails(row)"
+        >
+          <q-tooltip>Részletek</q-tooltip>
+        </q-btn>
+        <q-btn
+          dense
+          round
+          flat
+          icon="lock"
+          :disable="row.didFinish"
+          @click="lockClass(row)"
+        >
+          <q-tooltip>Lezárás</q-tooltip>
+        </q-btn>
+        <q-btn dense round flat icon="edit" @click="editClass(row)">
+          <q-tooltip>Szerkesztés</q-tooltip>
+        </q-btn>
         <q-btn
           color="negative"
           dense
@@ -37,7 +56,9 @@
           flat
           icon="delete"
           @click="deleteClass(row)"
-        />
+        >
+          <q-tooltip>Törlés</q-tooltip>
+        </q-btn>
       </template>
     </DataTable>
   </q-page>
@@ -46,8 +67,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import ClassCreateDialog from '../components/ClassCreateDialog.vue'
-import ClassEditDialog from '../components/ClassEditDialog.vue'
+import { useRouter } from 'vue-router'
+import ClassCreateDialog from '../../components/ClassCreateDialog.vue'
+import ClassEditDialog from '../../components/ClassEditDialog.vue'
 import DataTable from '@/shared/components/DataTable.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
 import {
@@ -95,6 +117,7 @@ const load = useLoader()
 const { dialog } = useQuasar()
 const { save, deletion } = useSaveAndDeleteNotifications()
 const confirm = useConfirmDialog()
+const router = useRouter()
 
 function updateIncludeFinished(value: boolean): void {
   includeFinished.value = value
@@ -169,5 +192,9 @@ async function lockClass(_class: ClassListResponse): Promise<void> {
       refreshSubject.next()
     })()
   }
+}
+
+function navigateToDetails(_class: ClassListResponse): void {
+  router.push(`/classes/${_class.id}/students`)
 }
 </script>

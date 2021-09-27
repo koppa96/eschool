@@ -1,7 +1,7 @@
 <template>
   <div class="data-grid">
     <div v-for="(item, index) in modelValue" :key="index">
-      <strong>{{ item.name }}: </strong>{{ item.value }}
+      <strong>{{ item.name }}: </strong>{{ item.value ?? '-' }}
     </div>
   </div>
 </template>

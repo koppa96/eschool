@@ -506,6 +506,64 @@ export class ClassesClient {
         return Promise.resolve<void>(<any>null);
     }
 
+    listStudents(id: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfUserRoleListResponse> {
+        let url_ = this.baseUrl + "/api/classes/{id}/students?";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processListStudents(_response);
+        });
+    }
+
+    protected processListStudents(response: AxiosResponse): Promise<PagedListResponseOfUserRoleListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PagedListResponseOfUserRoleListResponse.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PagedListResponseOfUserRoleListResponse>(<any>null);
+    }
+
     assignStudent(classId: string, studentId: string , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/classes/{classId}/students/{studentId}";
         if (classId === undefined || classId === null)
@@ -4382,6 +4440,62 @@ export interface IUserRoleListResponse {
     name: string | undefined;
 }
 
+export class PagedListResponseOfUserRoleListResponse implements IPagedListResponseOfUserRoleListResponse {
+    pageSize!: number;
+    pageIndex!: number;
+    totalCount!: number;
+    items!: UserRoleListResponse[] | undefined;
+
+    constructor(data?: IPagedListResponseOfUserRoleListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageSize = _data["pageSize"];
+            this.pageIndex = _data["pageIndex"];
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(UserRoleListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedListResponseOfUserRoleListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedListResponseOfUserRoleListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageSize"] = this.pageSize;
+        data["pageIndex"] = this.pageIndex;
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedListResponseOfUserRoleListResponse {
+    pageSize: number;
+    pageIndex: number;
+    totalCount: number;
+    items: UserRoleListResponse[] | undefined;
+}
+
 export class ClassCreateCommand implements IClassCreateCommand {
     classTypeId!: string;
     headTeacherId!: string;
@@ -5408,62 +5522,6 @@ export interface ISchoolYearEditCommand {
     startsAt: Date;
     endOfFirstHalf: Date;
     endsAt: Date;
-}
-
-export class PagedListResponseOfUserRoleListResponse implements IPagedListResponseOfUserRoleListResponse {
-    pageSize!: number;
-    pageIndex!: number;
-    totalCount!: number;
-    items!: UserRoleListResponse[] | undefined;
-
-    constructor(data?: IPagedListResponseOfUserRoleListResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pageSize = _data["pageSize"];
-            this.pageIndex = _data["pageIndex"];
-            this.totalCount = _data["totalCount"];
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items!.push(UserRoleListResponse.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): PagedListResponseOfUserRoleListResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedListResponseOfUserRoleListResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pageSize"] = this.pageSize;
-        data["pageIndex"] = this.pageIndex;
-        data["totalCount"] = this.totalCount;
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
-        return data; 
-    }
-}
-
-export interface IPagedListResponseOfUserRoleListResponse {
-    pageSize: number;
-    pageIndex: number;
-    totalCount: number;
-    items: UserRoleListResponse[] | undefined;
 }
 
 export class PagedListResponseOfAbsenceListResponse implements IPagedListResponseOfAbsenceListResponse {

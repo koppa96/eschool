@@ -171,10 +171,38 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
     path: '/classes',
     component: () =>
       import(
-        /* webpackChunkName: "class-register" */ './views/ClassesView.vue'
+        /* webpackChunkName: "class-register" */ './views/classes/ClassesLayoutView.vue'
       ),
     meta: {
       name: 'Osztályok'
-    }
+    },
+    children: [
+      {
+        path: '',
+        component: () =>
+          import(
+            /* webpackChunkName: "class-register" */ './views/classes/ClassesView.vue'
+          )
+      },
+      {
+        path: ':id/students',
+        component: () =>
+          import(
+            /* webpackChunkName: "class-register" */ './views/classes/ClassDetailsView.vue'
+          ),
+        meta: {
+          resolveName: async (route: RouteLocationNormalizedLoaded) => {
+            const client = createClient(ClassesClient)
+
+            if (isString(route.params.id)) {
+              const _class = await client.getClass(route.params.id)
+              return displayClass(_class)
+            }
+
+            return 'Osztály részletei'
+          }
+        }
+      }
+    ]
   }
 ]

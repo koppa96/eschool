@@ -2,12 +2,25 @@
   <div class="flex row items-center justify-between q-mb-lg">
     <h4 class="text-left q-my-sm">{{ name }}</h4>
     <div class="flex row">
-      <q-btn class="q-mr-md" color="primary" icon="edit" @click="emit('edit')">
-        Szerkesztés
-      </q-btn>
-      <q-btn color="negative" icon="delete" @click="emit('delete')">
-        Törlés
-      </q-btn>
+      <slot name="actions">
+        <q-btn
+          v-if="editable"
+          class="q-mr-md"
+          color="primary"
+          icon="edit"
+          @click="emit('edit')"
+        >
+          Szerkesztés
+        </q-btn>
+        <q-btn
+          v-if="deletable"
+          color="negative"
+          icon="delete"
+          @click="emit('delete')"
+        >
+          Törlés
+        </q-btn>
+      </slot>
     </div>
   </div>
 </template>
@@ -16,8 +29,8 @@
 const props = withDefaults(
   defineProps<{
     name?: string
-    canEdit?: boolean
-    canDelete?: boolean
+    editable?: boolean
+    deletable?: boolean
   }>(),
   {
     editable: true,
