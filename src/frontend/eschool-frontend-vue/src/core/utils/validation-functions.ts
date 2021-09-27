@@ -2,6 +2,7 @@ import { isArray } from 'lodash-es'
 
 export type ValidationFunction = (field: any) => boolean | string
 
+export const noValidation: ValidationFunction = () => true
 export const required: ValidationFunction = field => !!field || 'Kötelező'
 export const selectionRequired: ValidationFunction = field =>
   (isArray(field) && field.length > 0) || 'Kötelező'

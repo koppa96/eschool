@@ -49,7 +49,7 @@ function fetchData(
   pageSize: number,
   pageIndex: number
 ): Promise<PagedListResponse> {
-  return client.listClassrooms(pageSize, pageIndex)
+  return client.listClassrooms(null, pageSize, pageIndex)
 }
 
 function createClassroom(): void {

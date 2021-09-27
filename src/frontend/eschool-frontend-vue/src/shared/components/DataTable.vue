@@ -27,23 +27,30 @@
             round
             flat
             icon="visibility"
-            @click="emit('viewDetails', props.row)"
-          />
+            @click.stop="emit('viewDetails', props.row)"
+          >
+            <q-tooltip>Részletek</q-tooltip>
+          </q-btn>
           <q-btn
+            v-if="editable"
             dense
             round
             flat
             icon="edit"
-            @click="emit('edit', props.row)"
-          />
+            @click.stop="emit('edit', props.row)"
+          >
+            <q-tooltip>Szerkesztés</q-tooltip>
+          </q-btn>
           <q-btn
             color="negative"
             dense
             round
             flat
             icon="delete"
-            @click="emit('delete', props.row)"
-          />
+            @click.stop="emit('delete', props.row)"
+          >
+            <q-tooltip>Törlés</q-tooltip>
+          </q-btn>
         </slot>
       </q-td>
     </template>

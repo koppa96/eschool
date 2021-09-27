@@ -42,6 +42,13 @@ namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
                 x.SubjectId = subjectId;
             }), cancellationToken);
         }
+
+        [HttpGet("{lessonId}")]
+        [Authorize(PolicyNames.AnyRole)]
+        public Task<LessonDetailsResponse> GetLesson(Guid lessonId, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new LessonGetQuery { Id = lessonId }, cancellationToken);
+        }
         
         [HttpPost]
         [Authorize(PolicyNames.Administrator)]

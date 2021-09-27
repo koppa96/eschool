@@ -665,8 +665,10 @@ export class ClassroomsClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    listClassrooms(pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfClassroomListResponse> {
+    listClassrooms(searchText: string | null | undefined, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfClassroomListResponse> {
         let url_ = this.baseUrl + "/api/classrooms?";
+        if (searchText !== undefined && searchText !== null)
+            url_ += "SearchText=" + encodeURIComponent("" + searchText) + "&";
         if (pageSize === null)
             throw new Error("The parameter 'pageSize' cannot be null.");
         else if (pageSize !== undefined)
@@ -3133,20 +3135,18 @@ export class ClassSchoolYearSubjectLessonsClient {
         return Promise.resolve<LessonDetailsResponse>(<any>null);
     }
 
-    createAbsence(lessonId: string, studentId: string , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/lessons/{lessonId}/absences/{studentId}";
+    getLesson(lessonId: string , cancelToken?: CancelToken | undefined): Promise<LessonDetailsResponse> {
+        let url_ = this.baseUrl + "/api/lessons/{lessonId}";
         if (lessonId === undefined || lessonId === null)
             throw new Error("The parameter 'lessonId' must be defined.");
         url_ = url_.replace("{lessonId}", encodeURIComponent("" + lessonId));
-        if (studentId === undefined || studentId === null)
-            throw new Error("The parameter 'studentId' must be defined.");
-        url_ = url_.replace("{studentId}", encodeURIComponent("" + studentId));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <AxiosRequestConfig>{
-            method: "POST",
+            method: "GET",
             url: url_,
             headers: {
+                "Accept": "application/json"
             },
             cancelToken
         };
@@ -3158,11 +3158,11 @@ export class ClassSchoolYearSubjectLessonsClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCreateAbsence(_response);
+            return this.processGetLesson(_response);
         });
     }
 
-    protected processCreateAbsence(response: AxiosResponse): Promise<void> {
+    protected processGetLesson(response: AxiosResponse): Promise<LessonDetailsResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -3174,70 +3174,15 @@ export class ClassSchoolYearSubjectLessonsClient {
         }
         if (status === 200) {
             const _responseText = response.data;
-            return Promise.resolve<void>(<any>null);
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = LessonDetailsResponse.fromJS(resultData200);
+            return result200;
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(<any>null);
-    }
-
-    createAbsence2(lessonId: string, studentId: string, schoolYearId: string, classId: string, subjectId: string , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/school-years/{schoolYearId}/classes/{classId}/subjects/{subjectId}/lessons/{lessonId}/absences/{studentId}";
-        if (lessonId === undefined || lessonId === null)
-            throw new Error("The parameter 'lessonId' must be defined.");
-        url_ = url_.replace("{lessonId}", encodeURIComponent("" + lessonId));
-        if (studentId === undefined || studentId === null)
-            throw new Error("The parameter 'studentId' must be defined.");
-        url_ = url_.replace("{studentId}", encodeURIComponent("" + studentId));
-        if (schoolYearId === undefined || schoolYearId === null)
-            throw new Error("The parameter 'schoolYearId' must be defined.");
-        url_ = url_.replace("{schoolYearId}", encodeURIComponent("" + schoolYearId));
-        if (classId === undefined || classId === null)
-            throw new Error("The parameter 'classId' must be defined.");
-        url_ = url_.replace("{classId}", encodeURIComponent("" + classId));
-        if (subjectId === undefined || subjectId === null)
-            throw new Error("The parameter 'subjectId' must be defined.");
-        url_ = url_.replace("{subjectId}", encodeURIComponent("" + subjectId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ = <AxiosRequestConfig>{
-            method: "POST",
-            url: url_,
-            headers: {
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processCreateAbsence2(_response);
-        });
-    }
-
-    protected processCreateAbsence2(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            return Promise.resolve<void>(<any>null);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<void>(<any>null);
+        return Promise.resolve<LessonDetailsResponse>(<any>null);
     }
 
     editLesson(lessonId: string, command: LessonEditCommand , cancelToken?: CancelToken | undefined): Promise<LessonDetailsResponse> {
@@ -3392,6 +3337,65 @@ export class ClassSchoolYearSubjectLessonsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<void>(<any>null);
+    }
+
+    getLesson2(lessonId: string, schoolYearId: string, classId: string, subjectId: string , cancelToken?: CancelToken | undefined): Promise<LessonDetailsResponse> {
+        let url_ = this.baseUrl + "/api/school-years/{schoolYearId}/classes/{classId}/subjects/{subjectId}/lessons/{lessonId}";
+        if (lessonId === undefined || lessonId === null)
+            throw new Error("The parameter 'lessonId' must be defined.");
+        url_ = url_.replace("{lessonId}", encodeURIComponent("" + lessonId));
+        if (schoolYearId === undefined || schoolYearId === null)
+            throw new Error("The parameter 'schoolYearId' must be defined.");
+        url_ = url_.replace("{schoolYearId}", encodeURIComponent("" + schoolYearId));
+        if (classId === undefined || classId === null)
+            throw new Error("The parameter 'classId' must be defined.");
+        url_ = url_.replace("{classId}", encodeURIComponent("" + classId));
+        if (subjectId === undefined || subjectId === null)
+            throw new Error("The parameter 'subjectId' must be defined.");
+        url_ = url_.replace("{subjectId}", encodeURIComponent("" + subjectId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetLesson2(_response);
+        });
+    }
+
+    protected processGetLesson2(response: AxiosResponse): Promise<LessonDetailsResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = LessonDetailsResponse.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<LessonDetailsResponse>(<any>null);
     }
 
     editLesson2(lessonId: string, schoolYearId: string, classId: string, subjectId: string, command: LessonEditCommand , cancelToken?: CancelToken | undefined): Promise<LessonDetailsResponse> {
@@ -3556,6 +3560,113 @@ export class ClassSchoolYearSubjectLessonsClient {
     }
 
     protected processDeleteLesson2(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    createAbsence(lessonId: string, studentId: string , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/lessons/{lessonId}/absences/{studentId}";
+        if (lessonId === undefined || lessonId === null)
+            throw new Error("The parameter 'lessonId' must be defined.");
+        url_ = url_.replace("{lessonId}", encodeURIComponent("" + lessonId));
+        if (studentId === undefined || studentId === null)
+            throw new Error("The parameter 'studentId' must be defined.");
+        url_ = url_.replace("{studentId}", encodeURIComponent("" + studentId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateAbsence(_response);
+        });
+    }
+
+    protected processCreateAbsence(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    createAbsence2(lessonId: string, studentId: string, schoolYearId: string, classId: string, subjectId: string , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/school-years/{schoolYearId}/classes/{classId}/subjects/{subjectId}/lessons/{lessonId}/absences/{studentId}";
+        if (lessonId === undefined || lessonId === null)
+            throw new Error("The parameter 'lessonId' must be defined.");
+        url_ = url_.replace("{lessonId}", encodeURIComponent("" + lessonId));
+        if (studentId === undefined || studentId === null)
+            throw new Error("The parameter 'studentId' must be defined.");
+        url_ = url_.replace("{studentId}", encodeURIComponent("" + studentId));
+        if (schoolYearId === undefined || schoolYearId === null)
+            throw new Error("The parameter 'schoolYearId' must be defined.");
+        url_ = url_.replace("{schoolYearId}", encodeURIComponent("" + schoolYearId));
+        if (classId === undefined || classId === null)
+            throw new Error("The parameter 'classId' must be defined.");
+        url_ = url_.replace("{classId}", encodeURIComponent("" + classId));
+        if (subjectId === undefined || subjectId === null)
+            throw new Error("The parameter 'subjectId' must be defined.");
+        url_ = url_.replace("{subjectId}", encodeURIComponent("" + subjectId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateAbsence2(_response);
+        });
+    }
+
+    protected processCreateAbsence2(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -6053,6 +6164,7 @@ export class LessonEditCommand implements ILessonEditCommand {
     startsAt!: Date;
     endsAt!: Date;
     canceled!: boolean;
+    classroomId!: string;
 
     constructor(data?: ILessonEditCommand) {
         if (data) {
@@ -6070,6 +6182,7 @@ export class LessonEditCommand implements ILessonEditCommand {
             this.startsAt = _data["startsAt"] ? new Date(_data["startsAt"].toString()) : <any>undefined;
             this.endsAt = _data["endsAt"] ? new Date(_data["endsAt"].toString()) : <any>undefined;
             this.canceled = _data["canceled"];
+            this.classroomId = _data["classroomId"];
         }
     }
 
@@ -6087,6 +6200,7 @@ export class LessonEditCommand implements ILessonEditCommand {
         data["startsAt"] = this.startsAt ? this.startsAt.toISOString() : <any>undefined;
         data["endsAt"] = this.endsAt ? this.endsAt.toISOString() : <any>undefined;
         data["canceled"] = this.canceled;
+        data["classroomId"] = this.classroomId;
         return data; 
     }
 }
@@ -6097,6 +6211,7 @@ export interface ILessonEditCommand {
     startsAt: Date;
     endsAt: Date;
     canceled: boolean;
+    classroomId: string;
 }
 
 export class LessonCancellationSetCommand implements ILessonCancellationSetCommand {

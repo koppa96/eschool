@@ -10,5 +10,6 @@ namespace ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons
         public DateTime StartsAt { get; set; }
         public DateTime EndsAt { get; set; }
         public bool Canceled { get; set; }
+        public Guid ClassroomId { get; set; }
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
 {
-    public class LessonGetHandler : IRequestHandler<LessonGetCommand, LessonDetailsResponse>
+    public class LessonGetHandler : IRequestHandler<LessonGetQuery, LessonDetailsResponse>
     {
         private readonly ClassRegisterContext context;
         private readonly IConfigurationProvider configurationProvider;
@@ -23,7 +23,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
             this.configurationProvider = configurationProvider;
         }
         
-        public Task<LessonDetailsResponse> Handle(LessonGetCommand request, CancellationToken cancellationToken)
+        public Task<LessonDetailsResponse> Handle(LessonGetQuery request, CancellationToken cancellationToken)
         {
             return context.Lessons.Where(x => x.Id == request.Id)
                 .ProjectTo<LessonDetailsResponse>(configurationProvider)

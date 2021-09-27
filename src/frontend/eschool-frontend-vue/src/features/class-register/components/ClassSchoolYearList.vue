@@ -84,8 +84,7 @@ function deleteClassSchoolYear(_class: ClassListResponse): void {
   quasar
     .dialog({
       title: 'Megerősítés szükséges',
-      message:
-        'Biztos benne hogy törölni szeretné a felhasználót? Ez a művelet visszavonhatatlan.',
+      message: 'Biztos benne hogy törölni szeretné az osztályt a tanévből?',
       cancel: 'Nem',
       ok: 'Igen'
     })

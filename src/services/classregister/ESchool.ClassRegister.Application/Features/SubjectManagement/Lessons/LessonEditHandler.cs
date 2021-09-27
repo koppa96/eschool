@@ -6,6 +6,7 @@ using AutoMapper;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
+using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Interface.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,12 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
                 !(x.StartsAt > request.InnerCommand.EndsAt || x.EndsAt < request.InnerCommand.StartsAt)))
             {
                 throw new InvalidOperationException("Ebben az időpontban már nem vehető fel óra ennek az osztálynak.");
+            }
+
+            if (request.InnerCommand.ClassroomId != lesson.ClassroomId)
+            {
+                var classRoom = await context.Classrooms.FindOrThrowAsync(request.InnerCommand.ClassroomId);
+                lesson.Classroom = classRoom;
             }
 
             lesson.Title = request.InnerCommand.Title;

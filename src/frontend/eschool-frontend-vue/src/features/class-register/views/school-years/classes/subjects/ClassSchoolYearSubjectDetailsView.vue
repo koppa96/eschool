@@ -3,15 +3,46 @@
     <DataTable
       class="absolute-full q-ma-lg"
       :title="title"
-      add-button-text="Tantárgy felvétele"
+      add-button-text="Óra felvétele"
       :columns="columns"
       :data-access="fetchData"
       :refresh$="refreshSubject"
+      @add="createLesson()"
     >
-      <template #actions>
-        <q-btn dense round flat icon="event_busy" />
-        <q-btn dense round flat icon="edit" />
-        <q-btn color="negative" dense round flat icon="delete" />
+      <template #actions="{ row }">
+        <q-btn
+          v-if="!row.canceled"
+          dense
+          round
+          flat
+          icon="event_busy"
+          @click="postponeLesson(row)"
+        >
+          <q-tooltip>Elhalasztás</q-tooltip>
+        </q-btn>
+        <q-btn
+          v-else
+          dense
+          round
+          flat
+          icon="event_available"
+          @click="organizeLesson(row)"
+        >
+          <q-tooltip>Megtartás</q-tooltip>
+        </q-btn>
+        <q-btn dense round flat icon="edit" @click="editLesson(row)">
+          <q-tooltip>Szerkesztés</q-tooltip>
+        </q-btn>
+        <q-btn
+          color="negative"
+          dense
+          round
+          flat
+          icon="delete"
+          @click="deleteLesson(row)"
+        >
+          <q-tooltip>Törlés</q-tooltip>
+        </q-btn>
       </template>
     </DataTable>
   </q-page>
@@ -21,18 +52,30 @@
 import { isString } from 'lodash-es'
 import { useRoute } from 'vue-router'
 import { computed, ref } from 'vue'
+import { useQuasar } from 'quasar'
+import LessonCreateEditDialog from '../../../../components/LessonCreateEditDialog.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
 import {
   ClassSchoolYearSubjectLessonsClient,
+  LessonCancellationSetCommand,
+  LessonCreateCommandBody,
+  LessonEditCommand,
   LessonListResponse,
   SubjectDetailsResponse,
   SubjectsClient
 } from '@/shared/generated-clients/class-register'
-import { dateToString, yesOrNo } from '@/core/utils/display-helpers'
+import {
+  dateTimeToString,
+  dateToString,
+  yesOrNo
+} from '@/core/utils/display-helpers'
 import { createClient } from '@/shared/api'
 import { useAutocompletingSubject } from '@/core/utils/observable-lifecycle.util'
 import DataTable from '@/shared/components/DataTable.vue'
 import { PagedListResponse } from '@/shared/model/paged-list-response'
+import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'
+import { useConfirmDialog } from '@/core/utils/dialogs'
+import { useLoader } from '@/core/utils/loading.utils'
 
 interface RouteParameters {
   classId: string
@@ -67,6 +110,10 @@ const columns: QTableColumn<LessonListResponse>[] = [
   }
 ]
 
+const load = useLoader()
+const confirm = useConfirmDialog()
+const { dialog } = useQuasar()
+const { save, deletion } = useSaveAndDeleteNotifications()
 const route = useRoute()
 const subjectsClient = createClient(SubjectsClient)
 const client = createClient(ClassSchoolYearSubjectLessonsClient)
@@ -89,7 +136,7 @@ function fetchData(
   pageSize: number,
   pageIndex: number
 ): Promise<PagedListResponse> {
-  return client.listLessons(
+  return client.listLessons2(
     schoolYearId,
     classId,
     subjectId,
@@ -100,6 +147,87 @@ function fetchData(
 
 async function loadData(): Promise<void> {
   subject.value = await subjectsClient.getSubject(subjectId)
+}
+
+function createLesson(): void {
+  dialog({
+    component: LessonCreateEditDialog
+  }).onOk(
+    save(async (data: LessonCreateCommandBody) => {
+      await client.createLesson2(schoolYearId, classId, subjectId, data)
+      refreshSubject.next()
+    })
+  )
+}
+
+async function editLesson(lesson: LessonListResponse): Promise<void> {
+  const details = await load(() => client.getLesson(lesson.id))
+  dialog({
+    component: LessonCreateEditDialog,
+    componentProps: {
+      lessonToEdit: details
+    }
+  }).onOk(
+    save(async (data: LessonEditCommand) => {
+      await client.editLesson(lesson.id, data)
+      refreshSubject.next()
+    })
+  )
+}
+
+async function deleteLesson(lesson: LessonListResponse): Promise<void> {
+  const result = await confirm(
+    `Biztosan törölni szeretné a ${dateTimeToString(
+      lesson.startsAt
+    )} és ${dateTimeToString(lesson.endsAt)} között megtartandó órát?`
+  )
+
+  if (result) {
+    await deletion(async () => {
+      await client.deleteLesson(lesson.id)
+      refreshSubject.next()
+    })()
+  }
+}
+
+async function postponeLesson(lesson: LessonListResponse): Promise<void> {
+  const result = await confirm(
+    `Biztosan szeretné elhalasztani a ${dateTimeToString(
+      lesson.startsAt
+    )} és ${dateTimeToString(lesson.endsAt)} között megtartandó órát?`
+  )
+
+  if (result) {
+    await save(async () => {
+      await client.setLessonCancellation(
+        lesson.id,
+        new LessonCancellationSetCommand({
+          canceled: true
+        })
+      )
+      refreshSubject.next()
+    })()
+  }
+}
+
+async function organizeLesson(lesson: LessonListResponse): Promise<void> {
+  const result = await confirm(
+    `Biztosan szeretné mégis megtartani a ${dateTimeToString(
+      lesson.startsAt
+    )} és ${dateTimeToString(lesson.endsAt)} között megtartandó órát?`
+  )
+
+  if (result) {
+    await save(async () => {
+      await client.setLessonCancellation(
+        lesson.id,
+        new LessonCancellationSetCommand({
+          canceled: false
+        })
+      )
+      refreshSubject.next()
+    })()
+  }
 }
 
 loadData()
