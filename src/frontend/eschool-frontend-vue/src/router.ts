@@ -1,15 +1,16 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Layout from '@/core/components/Layout.vue'
+import LayoutView from '@/core/views/LayoutView.vue'
 import Home from '@/views/Home.vue'
 import LoginRedirect from '@/core/auth/components/LoginRedirect.vue'
 import LogoutRedirect from '@/core/auth/components/LogoutRedirect.vue'
+import MessagesView from '@/core/views/MessagesView.vue'
 import { tenantAdminRoutes } from '@/features/tenant-admin/tenant-admin.routes'
 import { classRegisterRoutes } from '@/features/class-register/class-register.routes'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: Layout,
+    component: LayoutView,
     meta: {
       name: 'ESchool'
     },
@@ -25,6 +26,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'logout-redirect',
         component: LogoutRedirect
+      },
+      {
+        path: 'messages',
+        component: MessagesView
       },
       ...tenantAdminRoutes,
       ...classRegisterRoutes
