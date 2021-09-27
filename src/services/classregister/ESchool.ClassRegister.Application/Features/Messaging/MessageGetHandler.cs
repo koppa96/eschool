@@ -6,6 +6,7 @@ using AutoMapper.QueryableExtensions;
 using ESchool.ClassRegister.Application.Features.Messaging.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Interface.Features.Messaging;
+using ESchool.Libs.Domain.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,19 +15,29 @@ namespace ESchool.ClassRegister.Application.Features.Messaging
     public class MessageGetHandler : IRequestHandler<MessageGetQuery, MessageDetailsResponse>
     {
         private readonly ClassRegisterContext context;
-        private readonly IConfigurationProvider provider;
+        private readonly IIdentityService identityService;
+        private readonly IMapper mapper;
 
-        public MessageGetHandler(ClassRegisterContext context, IConfigurationProvider provider)
+        public MessageGetHandler(ClassRegisterContext context, IMapper mapper, IIdentityService identityService)
         {
             this.context = context;
-            this.provider = provider;
+            this.mapper = mapper;
+            this.identityService = identityService;
         }
         
-        public Task<MessageDetailsResponse> Handle(MessageGetQuery request, CancellationToken cancellationToken)
+        public async Task<MessageDetailsResponse> Handle(MessageGetQuery request, CancellationToken cancellationToken)
         {
-            return context.Messages.Where(x => x.Id == request.Id)
-                .ProjectTo<MessageDetailsResponse>(provider)
-                .SingleAsync(cancellationToken);
+            var message = await context.Messages.Include(x => x.SenderClassRegisterUser)
+                .Include(x => x.ReceiverUserMessages)
+                    .ThenInclude(x => x.ClassRegisterUser)
+                .SingleAsync(x => x.Id == request.Id);
+
+            var currentUserId = identityService.GetCurrentUserId();
+            var receiverUserMessage = message.ReceiverUserMessages.Single(x => x.UserId == currentUserId);
+            receiverUserMessage.IsRead = true;
+            
+            await context.SaveChangesAsync(cancellationToken);
+            return mapper.Map<MessageDetailsResponse>(message);
         }
     }
 }

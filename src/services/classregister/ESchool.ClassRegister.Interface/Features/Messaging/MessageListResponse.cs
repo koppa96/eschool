@@ -9,6 +9,7 @@ namespace ESchool.ClassRegister.Interface.Features.Messaging
         public Guid Id { get; set; }
         public string Subject { get; set; }
         public DateTime SentAt { get; set; }
+        public bool IsRead { get; set; }
         
         public UserRoleListResponse Sender { get; set; }
     }
