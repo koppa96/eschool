@@ -15,7 +15,7 @@
         <q-tab name="sent" label="Kimenő üzenetek" icon="outbox" />
       </q-tabs>
       <q-separator />
-      <q-tab-panels v-model="tab" animated>
+      <q-tab-panels v-model="tab">
         <q-tab-panel name="incoming">
           BEJÖVŐ :)
         </q-tab-panel>
