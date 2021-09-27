@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import Layout from '@/core/components/Layout.vue'
 import Home from '@/views/Home.vue'
 import LoginRedirect from '@/core/auth/components/LoginRedirect.vue'
 import LogoutRedirect from '@/core/auth/components/LogoutRedirect.vue'
@@ -8,18 +9,27 @@ import { classRegisterRoutes } from '@/features/class-register/class-register.ro
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: Home
-  },
-  {
-    path: '/login-redirect',
-    component: LoginRedirect
-  },
-  {
-    path: '/logout-redirect',
-    component: LogoutRedirect
-  },
-  ...tenantAdminRoutes,
-  ...classRegisterRoutes
+    component: Layout,
+    meta: {
+      name: 'ESchool'
+    },
+    children: [
+      {
+        path: '',
+        component: Home
+      },
+      {
+        path: 'login-redirect',
+        component: LoginRedirect
+      },
+      {
+        path: 'logout-redirect',
+        component: LogoutRedirect
+      },
+      ...tenantAdminRoutes,
+      ...classRegisterRoutes
+    ]
+  }
 ]
 
 export const router = createRouter({

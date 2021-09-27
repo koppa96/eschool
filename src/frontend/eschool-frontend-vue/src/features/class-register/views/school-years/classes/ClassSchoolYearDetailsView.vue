@@ -4,10 +4,10 @@
       class="absolute-full q-ma-lg"
       :title="title"
       add-button-text="Tantárgy felvétele"
-      :has-details="false"
       :columns="columns"
       :data-access="fetchData"
       :refresh$="refreshSubject"
+      @viewDetails="navigateToDetails($event)"
       @add="createClassSchoolYearSubject()"
       @edit="editClassSchoolYearSubject($event)"
       @delete="deleteClassSchoolYearSubject($event)"
@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { isString } from 'lodash-es'
 import { useQuasar } from 'quasar'
 import { computed, ref } from 'vue'
@@ -58,6 +58,7 @@ const columns: QTableColumn<SubjectListResponse>[] = [
   }
 ]
 
+const router = useRouter()
 const route = useRoute()
 const { dialog } = useQuasar()
 const load = useLoader()
@@ -168,6 +169,12 @@ function deleteClassSchoolYearSubject(subject: SubjectListResponse): void {
       )
       refreshSubject.next()
     })
+  )
+}
+
+function navigateToDetails(subject: SubjectListResponse): void {
+  router.push(
+    `/school-years/${schoolYearId}/classes/${classId}/subjects/${subject.id}/lessons`
   )
 }
 

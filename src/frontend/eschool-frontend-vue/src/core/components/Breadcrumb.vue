@@ -1,5 +1,5 @@
 <template>
-  <q-breadcrumbs active-color="white">
+  <q-breadcrumbs active-color="white" class="text-blue-grey-2">
     <template #separator>
       <q-icon size="1.5em" name="chevron_right" color="white" />
     </template>

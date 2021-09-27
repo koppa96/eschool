@@ -2,9 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Absences;
+using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons;
 using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Interface.Commands;
+using ESchool.Libs.Interface.Query;
+using ESchool.Libs.Interface.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +25,26 @@ namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
         {
             this.mediator = mediator;
         }
+
+        [HttpGet]
+        [Authorize(PolicyNames.Administrator)]
+        public Task<PagedListResponse<LessonListResponse>> ListLessons(
+            Guid schoolYearId,
+            Guid classId,
+            Guid subjectId,
+            [FromQuery] PagedListQuery query,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(query.ToTypedQuery<AdminLessonListQuery>(x =>
+            {
+                x.SchoolYearId = schoolYearId;
+                x.ClassId = classId;
+                x.SubjectId = subjectId;
+            }), cancellationToken);
+        }
         
         [HttpPost]
+        [Authorize(PolicyNames.Administrator)]
         public Task<LessonDetailsResponse> CreateLesson(
             Guid schoolYearId,
             Guid classId,

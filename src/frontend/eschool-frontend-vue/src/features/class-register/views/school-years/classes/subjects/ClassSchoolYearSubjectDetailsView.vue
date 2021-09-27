@@ -1,9 +1,5 @@
 <template> </template>
 
-<script>
-export default {
-  name: 'ClassSchoolYearSubjectDetailsView'
-}
-</script>
+<script setup lang="ts"></script>
 
 <style scoped></style>
