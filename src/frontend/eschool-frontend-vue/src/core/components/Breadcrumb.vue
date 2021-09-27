@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { RouteLocationMatched, useRoute } from 'vue-router'
 import { ref, watch } from 'vue'
 import {
   BreadCrumbItem,
@@ -26,44 +26,45 @@ const route = useRoute()
 const items = ref<BreadCrumbItem[]>([])
 const paramRegex = /:[a-zA-Z0-9]+/g
 
-watch(
-  () => route.matched,
-  value => {
-    items.value = []
+watch(() => route.matched, updateBreadcrumb)
 
-    for (const item of value) {
-      if (!isRouteMeta(item.meta)) {
-        continue
-      }
+function updateBreadcrumb(value: RouteLocationMatched[]): void {
+  items.value = []
 
-      let path = item.path
-      const params = path.match(paramRegex)
-      if (params?.length && params?.length > 0) {
-        for (const param of params) {
-          const paramValue = route.params[param.substr(1)] as string
-          path = path.replace(param, paramValue)
-        }
-      }
+  for (const item of value) {
+    if (!isRouteMeta(item.meta)) {
+      continue
+    }
 
-      const breadCrumbItem: BreadCrumbItem = {
-        path,
-        name: ''
-      }
-
-      const index = items.value.push(breadCrumbItem) - 1
-      if (isRouteMetaWithName(item.meta)) {
-        breadCrumbItem.name = item.meta.name
-      } else {
-        item.meta.resolveName(route).then(name => {
-          items.value.splice(index, 1, {
-            path,
-            name
-          })
-        })
+    let path = item.path
+    const params = path.match(paramRegex)
+    if (params?.length && params?.length > 0) {
+      for (const param of params) {
+        const paramValue = route.params[param.substr(1)] as string
+        path = path.replace(param, paramValue)
       }
     }
+
+    const breadCrumbItem: BreadCrumbItem = {
+      path,
+      name: ''
+    }
+
+    const index = items.value.push(breadCrumbItem) - 1
+    if (isRouteMetaWithName(item.meta)) {
+      breadCrumbItem.name = item.meta.name
+    } else {
+      item.meta.resolveName(route).then(name => {
+        items.value.splice(index, 1, {
+          path,
+          name
+        })
+      })
+    }
   }
-)
+}
+
+updateBreadcrumb(route.matched)
 </script>
 
 <style scoped></style>
