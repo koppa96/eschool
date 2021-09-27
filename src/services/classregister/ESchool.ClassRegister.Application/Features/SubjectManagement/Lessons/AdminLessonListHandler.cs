@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
+using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
 using ESchool.Libs.Application.Cqrs.Handlers;
@@ -18,7 +19,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
     
     public class AdminLessonListHandler : AutoMapperPagedListHandler<AdminLessonListQuery, Lesson, LessonListResponse>
     {
-        public AdminLessonListHandler(DbContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
+        public AdminLessonListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
         }
 
