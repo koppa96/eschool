@@ -98,7 +98,9 @@ function deleteClassSchoolYear(_class: ClassListResponse): void {
 }
 
 function navigateToDetails(_class: ClassListResponse): void {
-  router.push(`/school-years/${props.schoolYearId}/classes/${_class.id}`)
+  router.push(
+    `/school-years/${props.schoolYearId}/classes/${_class.id}/subjects`
+  )
 }
 </script>
 

@@ -18,7 +18,7 @@ import { isString } from 'lodash-es'
 import { useRoute, useRouter } from 'vue-router'
 import { computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
-import SchoolYearCreateEditDialog from '../components/SchoolYearCreateEditDialog.vue'
+import SchoolYearCreateEditDialog from '../../components/SchoolYearCreateEditDialog.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
 import {
   ClassListResponse,

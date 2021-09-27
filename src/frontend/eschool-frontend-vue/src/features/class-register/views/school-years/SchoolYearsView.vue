@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
-import SchoolYearCreateEditDialog from '../components/SchoolYearCreateEditDialog.vue'
+import SchoolYearCreateEditDialog from '../../components/SchoolYearCreateEditDialog.vue'
 import DataTable from '@/shared/components/DataTable.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
 import {
