@@ -2801,89 +2801,6 @@ export class TeachersClient {
     }
 }
 
-export class ClassSchoolYearLessonsClient {
-    private instance: AxiosInstance;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, instance?: AxiosInstance) {
-        this.instance = instance ? instance : axios.create();
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
-    }
-
-    getLessonsBetween(schoolYearId: string, classId: string, from: Date | undefined, to: Date | undefined, showCanceled: boolean | undefined , cancelToken?: CancelToken | undefined): Promise<LessonListResponse[]> {
-        let url_ = this.baseUrl + "/api/school-years/{schoolYearId}/classes/{classId}/lessons?";
-        if (schoolYearId === undefined || schoolYearId === null)
-            throw new Error("The parameter 'schoolYearId' must be defined.");
-        url_ = url_.replace("{schoolYearId}", encodeURIComponent("" + schoolYearId));
-        if (classId === undefined || classId === null)
-            throw new Error("The parameter 'classId' must be defined.");
-        url_ = url_.replace("{classId}", encodeURIComponent("" + classId));
-        if (from === null)
-            throw new Error("The parameter 'from' cannot be null.");
-        else if (from !== undefined)
-            url_ += "from=" + encodeURIComponent(from ? "" + from.toJSON() : "") + "&";
-        if (to === null)
-            throw new Error("The parameter 'to' cannot be null.");
-        else if (to !== undefined)
-            url_ += "to=" + encodeURIComponent(to ? "" + to.toJSON() : "") + "&";
-        if (showCanceled === null)
-            throw new Error("The parameter 'showCanceled' cannot be null.");
-        else if (showCanceled !== undefined)
-            url_ += "showCanceled=" + encodeURIComponent("" + showCanceled) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ = <AxiosRequestConfig>{
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetLessonsBetween(_response);
-        });
-    }
-
-    protected processGetLessonsBetween(response: AxiosResponse): Promise<LessonListResponse[]> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200  = _responseText;
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(LessonListResponse.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<LessonListResponse[]>(<any>null);
-    }
-}
-
 export class ClassSchoolYearSubjectGradesClient {
     private instance: AxiosInstance;
     private baseUrl: string;
@@ -2968,6 +2885,70 @@ export class ClassSchoolYearSubjectLessonsClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
+    listLessons(schoolYearId: string, classId: string, subjectId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfLessonListResponse> {
+        let url_ = this.baseUrl + "/api/lessons?";
+        if (schoolYearId === undefined || schoolYearId === null)
+            throw new Error("The parameter 'schoolYearId' must be defined.");
+        url_ = url_.replace("{schoolYearId}", encodeURIComponent("" + schoolYearId));
+        if (classId === undefined || classId === null)
+            throw new Error("The parameter 'classId' must be defined.");
+        url_ = url_.replace("{classId}", encodeURIComponent("" + classId));
+        if (subjectId === undefined || subjectId === null)
+            throw new Error("The parameter 'subjectId' must be defined.");
+        url_ = url_.replace("{subjectId}", encodeURIComponent("" + subjectId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processListLessons(_response);
+        });
+    }
+
+    protected processListLessons(response: AxiosResponse): Promise<PagedListResponseOfLessonListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PagedListResponseOfLessonListResponse.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PagedListResponseOfLessonListResponse>(<any>null);
+    }
+
     createLesson(schoolYearId: string, classId: string, subjectId: string, body: LessonCreateCommandBody , cancelToken?: CancelToken | undefined): Promise<LessonDetailsResponse> {
         let url_ = this.baseUrl + "/api/lessons";
         if (schoolYearId === undefined || schoolYearId === null)
@@ -3026,6 +3007,70 @@ export class ClassSchoolYearSubjectLessonsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<LessonDetailsResponse>(<any>null);
+    }
+
+    listLessons2(schoolYearId: string, classId: string, subjectId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfLessonListResponse> {
+        let url_ = this.baseUrl + "/api/school-years/{schoolYearId}/classes/{classId}/subjects/{subjectId}/lessons?";
+        if (schoolYearId === undefined || schoolYearId === null)
+            throw new Error("The parameter 'schoolYearId' must be defined.");
+        url_ = url_.replace("{schoolYearId}", encodeURIComponent("" + schoolYearId));
+        if (classId === undefined || classId === null)
+            throw new Error("The parameter 'classId' must be defined.");
+        url_ = url_.replace("{classId}", encodeURIComponent("" + classId));
+        if (subjectId === undefined || subjectId === null)
+            throw new Error("The parameter 'subjectId' must be defined.");
+        url_ = url_.replace("{subjectId}", encodeURIComponent("" + subjectId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processListLessons2(_response);
+        });
+    }
+
+    protected processListLessons2(response: AxiosResponse): Promise<PagedListResponseOfLessonListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PagedListResponseOfLessonListResponse.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PagedListResponseOfLessonListResponse>(<any>null);
     }
 
     createLesson2(schoolYearId: string, classId: string, subjectId: string, body: LessonCreateCommandBody , cancelToken?: CancelToken | undefined): Promise<LessonDetailsResponse> {
@@ -5820,6 +5865,62 @@ export class GradeListByClassSchoolYearSubjectResponse implements IGradeListByCl
 export interface IGradeListByClassSchoolYearSubjectResponse {
     student: UserRoleListResponse | undefined;
     grades: GradeListResponse[] | undefined;
+}
+
+export class PagedListResponseOfLessonListResponse implements IPagedListResponseOfLessonListResponse {
+    pageSize!: number;
+    pageIndex!: number;
+    totalCount!: number;
+    items!: LessonListResponse[] | undefined;
+
+    constructor(data?: IPagedListResponseOfLessonListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageSize = _data["pageSize"];
+            this.pageIndex = _data["pageIndex"];
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(LessonListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedListResponseOfLessonListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedListResponseOfLessonListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageSize"] = this.pageSize;
+        data["pageIndex"] = this.pageIndex;
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedListResponseOfLessonListResponse {
+    pageSize: number;
+    pageIndex: number;
+    totalCount: number;
+    items: LessonListResponse[] | undefined;
 }
 
 export class LessonDetailsResponse implements ILessonDetailsResponse {

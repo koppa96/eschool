@@ -12,3 +12,7 @@ export function dateToString(date: any): string {
 export function displayClass(_class: IClassListResponse): string {
   return `${_class.grade}. ${_class.classType?.name}`
 }
+
+export function yesOrNo(value: boolean): string {
+  return value ? 'Igen' : 'Nem'
+}
