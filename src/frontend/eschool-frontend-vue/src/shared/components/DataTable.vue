@@ -42,6 +42,7 @@
             <q-tooltip>Szerkesztés</q-tooltip>
           </q-btn>
           <q-btn
+            v-if="deletable"
             color="negative"
             dense
             round
@@ -79,13 +80,15 @@ const props = withDefaults(
     refresh$: Observable<void>
     hasDetails?: boolean
     editable?: boolean
+    deletable?: boolean
   }>(),
   {
     title: 'Cím',
     addButtonText: 'Hozzáadás',
     rowKey: 'id',
     hasDetails: true,
-    editable: true
+    editable: true,
+    deletable: true
   }
 )
 
