@@ -52,7 +52,7 @@ function fetchData(
   pageSize: number,
   pageIndex: number
 ): Promise<PagedListResponse> {
-  return client.listSchoolYears(pageSize, pageIndex)
+  return client.listSchoolYears(null, pageSize, pageIndex)
 }
 
 function createSchoolYear(): void {

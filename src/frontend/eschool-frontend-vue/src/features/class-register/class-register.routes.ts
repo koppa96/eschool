@@ -204,5 +204,24 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
         }
       }
     ]
+  },
+  {
+    path: '/groups',
+    component: () =>
+      import(
+        /* webpackChunkName: "class-register" */ './views/class-subjects/ClassSubjectsLayoutView.vue'
+      ),
+    meta: {
+      name: 'Csoportok'
+    },
+    children: [
+      {
+        path: '',
+        component: () =>
+          import(
+            /* webpackChunkName: "class-register" */ './views/class-subjects/ClassSubjectsView.vue'
+          )
+      }
+    ]
   }
 ]

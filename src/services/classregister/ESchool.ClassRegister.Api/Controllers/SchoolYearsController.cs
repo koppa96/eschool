@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.ClassRegister.Api.Controllers
 {
-    [Authorize(PolicyNames.Administrator)]
     [ApiController]
     [Route("api/school-years")]
     public class SchoolYearsController : ControllerBase
@@ -24,18 +23,21 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(PolicyNames.AnyRole)]
         public Task<PagedListResponse<SchoolYearListResponse>> ListSchoolYears([FromQuery] SchoolYearListQuery query, CancellationToken cancellationToken)
         {
             return mediator.Send(query, cancellationToken);
         }
 
         [HttpGet("{id}")]
+        [Authorize(PolicyNames.AnyRole)]
         public Task<SchoolYearDetailsResponse> GetSchoolYear(Guid id, CancellationToken cancellationToken)
         {
             return mediator.Send(new SchoolYearGetQuery { Id = id }, cancellationToken);
         }
 
         [HttpPost]
+        [Authorize(PolicyNames.Administrator)]
         public Task<SchoolYearDetailsResponse> CreateSchoolYear([FromBody] SchoolYearCreateCommand command,
             CancellationToken cancellationToken)
         {
@@ -43,6 +45,7 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(PolicyNames.Administrator)]
         public Task<SchoolYearDetailsResponse> EditSchoolYear(Guid id, [FromBody] SchoolYearEditCommand command,
             CancellationToken cancellationToken)
         {
@@ -54,6 +57,7 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(PolicyNames.Administrator)]
         public Task DeleteSchoolYear(Guid id, CancellationToken cancellationToken)
         {
             return mediator.Send(new SchoolYearDeleteCommand { Id = id }, cancellationToken);

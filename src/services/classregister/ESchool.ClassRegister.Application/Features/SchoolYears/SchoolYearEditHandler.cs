@@ -25,6 +25,7 @@ namespace ESchool.ClassRegister.Application.Features.SchoolYears
             CancellationToken cancellationToken)
         {
             var schoolYear = await context.SchoolYears.FindOrThrowAsync(request.Id, cancellationToken);
+            schoolYear.Status = request.InnerCommand.Status;
             schoolYear.DisplayName = request.InnerCommand.DisplayName;
             schoolYear.StartsAt = request.InnerCommand.StartsAt;
             schoolYear.EndOfFirstHalf = request.InnerCommand.EndOfFirstHalf;

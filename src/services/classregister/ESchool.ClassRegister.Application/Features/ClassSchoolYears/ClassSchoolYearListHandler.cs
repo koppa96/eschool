@@ -28,7 +28,8 @@ namespace ESchool.ClassRegister.Application.Features.ClassSchoolYears
 
         protected override IOrderedQueryable<Class> Order(IQueryable<Class> entities)
         {
-            return entities.OrderBy(x => x.ClassType.StartingGrade + x.ClassSchoolYears.Count);
+            return entities.OrderBy(x => x.ClassType.StartingGrade + x.ClassSchoolYears.Count)
+                .ThenBy(x => x.ClassType.Name);
         }
     }
 }

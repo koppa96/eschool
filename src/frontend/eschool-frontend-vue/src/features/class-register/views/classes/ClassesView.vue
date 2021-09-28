@@ -42,7 +42,7 @@
           flat
           icon="lock"
           :disable="row.didFinish"
-          @click="lockClass(row)"
+          @click.stop="lockClass(row)"
         >
           <q-tooltip>Lezárás</q-tooltip>
         </q-btn>
@@ -55,7 +55,7 @@
           round
           flat
           icon="delete"
-          @click="deleteClass(row)"
+          @click.stop="deleteClass(row)"
         >
           <q-tooltip>Törlés</q-tooltip>
         </q-btn>
@@ -135,7 +135,7 @@ async function createClass(): Promise<void> {
   const [classTypes, schoolYears] = await load(() =>
     Promise.all([
       classTypesClient.listClassTypes(50, 0),
-      schoolYearsClient.listSchoolYears(50, 0)
+      schoolYearsClient.listSchoolYears(null, 50, 0)
     ])
   )
 

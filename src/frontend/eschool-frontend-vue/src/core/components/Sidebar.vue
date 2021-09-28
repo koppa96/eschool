@@ -63,9 +63,6 @@
       <q-item v-ripple :inset-level="1" clickable to="/classrooms">
         <q-item-section>Termek</q-item-section>
       </q-item>
-      <q-item v-ripple :inset-level="1" clickable>
-        <q-item-section>Órák</q-item-section>
-      </q-item>
     </q-expansion-item>
 
     <q-expansion-item
@@ -82,7 +79,7 @@
       <q-item v-if="isStudent || isParent" v-ripple :inset-level="1" clickable>
         <q-item-section>Hiányzások</q-item-section>
       </q-item>
-      <q-item v-if="isTeacher" v-ripple :inset-level="1" clickable>
+      <q-item v-if="isTeacher" v-ripple :inset-level="1" clickable to="/groups">
         <q-item-section>Csoportok</q-item-section>
       </q-item>
     </q-expansion-item>

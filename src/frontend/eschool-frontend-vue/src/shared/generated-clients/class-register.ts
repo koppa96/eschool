@@ -1864,8 +1864,12 @@ export class SchoolYearsClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    listSchoolYears(pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfSchoolYearListResponse> {
+    listSchoolYears(name: string | null | undefined, status: SchoolYearStatus | null | undefined, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfSchoolYearListResponse> {
         let url_ = this.baseUrl + "/api/school-years?";
+        if (name !== undefined && name !== null)
+            url_ += "Name=" + encodeURIComponent("" + name) + "&";
+        if (status !== undefined && status !== null)
+            url_ += "Status=" + encodeURIComponent("" + status) + "&";
         if (pageSize === null)
             throw new Error("The parameter 'pageSize' cannot be null.");
         else if (pageSize !== undefined)
@@ -4111,6 +4115,75 @@ export class ClassSchoolYearSubjectStudentGradesClient {
     }
 }
 
+export class ClassSubjectsClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    listClassSubjects(schoolYearId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfClassSubjectListResponse> {
+        let url_ = this.baseUrl + "/api/school-years/{schoolYearId}/class-subjects?";
+        if (schoolYearId === undefined || schoolYearId === null)
+            throw new Error("The parameter 'schoolYearId' must be defined.");
+        url_ = url_.replace("{schoolYearId}", encodeURIComponent("" + schoolYearId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processListClassSubjects(_response);
+        });
+    }
+
+    protected processListClassSubjects(response: AxiosResponse): Promise<PagedListResponseOfClassSubjectListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PagedListResponseOfClassSubjectListResponse.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PagedListResponseOfClassSubjectListResponse>(<any>null);
+    }
+}
+
 export class AbsenceStateSetCommand implements IAbsenceStateSetCommand {
     absenceState!: AbsenceState;
 
@@ -4263,6 +4336,7 @@ export interface IClassListResponse {
 export class SchoolYearListResponse implements ISchoolYearListResponse {
     id!: string;
     displayName!: string | undefined;
+    type!: SchoolYearStatus;
 
     constructor(data?: ISchoolYearListResponse) {
         if (data) {
@@ -4277,6 +4351,7 @@ export class SchoolYearListResponse implements ISchoolYearListResponse {
         if (_data) {
             this.id = _data["id"];
             this.displayName = _data["displayName"];
+            this.type = _data["type"];
         }
     }
 
@@ -4291,6 +4366,7 @@ export class SchoolYearListResponse implements ISchoolYearListResponse {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["displayName"] = this.displayName;
+        data["type"] = this.type;
         return data; 
     }
 }
@@ -4298,6 +4374,13 @@ export class SchoolYearListResponse implements ISchoolYearListResponse {
 export interface ISchoolYearListResponse {
     id: string;
     displayName: string | undefined;
+    type: SchoolYearStatus;
+}
+
+export enum SchoolYearStatus {
+    New = "New",
+    Active = "Active",
+    Closed = "Closed",
 }
 
 export class ClassTypeListResponse implements IClassTypeListResponse {
@@ -5160,6 +5243,7 @@ export class MessageListResponse implements IMessageListResponse {
     id!: string;
     subject!: string | undefined;
     sentAt!: Date;
+    isRead!: boolean;
     sender!: UserRoleListResponse | undefined;
 
     constructor(data?: IMessageListResponse) {
@@ -5176,6 +5260,7 @@ export class MessageListResponse implements IMessageListResponse {
             this.id = _data["id"];
             this.subject = _data["subject"];
             this.sentAt = _data["sentAt"] ? new Date(_data["sentAt"].toString()) : <any>undefined;
+            this.isRead = _data["isRead"];
             this.sender = _data["sender"] ? UserRoleListResponse.fromJS(_data["sender"]) : <any>undefined;
         }
     }
@@ -5192,6 +5277,7 @@ export class MessageListResponse implements IMessageListResponse {
         data["id"] = this.id;
         data["subject"] = this.subject;
         data["sentAt"] = this.sentAt ? this.sentAt.toISOString() : <any>undefined;
+        data["isRead"] = this.isRead;
         data["sender"] = this.sender ? this.sender.toJSON() : <any>undefined;
         return data; 
     }
@@ -5201,6 +5287,7 @@ export interface IMessageListResponse {
     id: string;
     subject: string | undefined;
     sentAt: Date;
+    isRead: boolean;
     sender: UserRoleListResponse | undefined;
 }
 
@@ -5379,6 +5466,7 @@ export interface IPagedListResponseOfSchoolYearListResponse {
 export class SchoolYearDetailsResponse implements ISchoolYearDetailsResponse {
     id!: string;
     displayName!: string | undefined;
+    status!: SchoolYearStatus;
     startsAt!: Date;
     endOfFirstHalf!: Date;
     endsAt!: Date;
@@ -5396,6 +5484,7 @@ export class SchoolYearDetailsResponse implements ISchoolYearDetailsResponse {
         if (_data) {
             this.id = _data["id"];
             this.displayName = _data["displayName"];
+            this.status = _data["status"];
             this.startsAt = _data["startsAt"] ? new Date(_data["startsAt"].toString()) : <any>undefined;
             this.endOfFirstHalf = _data["endOfFirstHalf"] ? new Date(_data["endOfFirstHalf"].toString()) : <any>undefined;
             this.endsAt = _data["endsAt"] ? new Date(_data["endsAt"].toString()) : <any>undefined;
@@ -5413,6 +5502,7 @@ export class SchoolYearDetailsResponse implements ISchoolYearDetailsResponse {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["displayName"] = this.displayName;
+        data["status"] = this.status;
         data["startsAt"] = this.startsAt ? this.startsAt.toISOString() : <any>undefined;
         data["endOfFirstHalf"] = this.endOfFirstHalf ? this.endOfFirstHalf.toISOString() : <any>undefined;
         data["endsAt"] = this.endsAt ? this.endsAt.toISOString() : <any>undefined;
@@ -5423,6 +5513,7 @@ export class SchoolYearDetailsResponse implements ISchoolYearDetailsResponse {
 export interface ISchoolYearDetailsResponse {
     id: string;
     displayName: string | undefined;
+    status: SchoolYearStatus;
     startsAt: Date;
     endOfFirstHalf: Date;
     endsAt: Date;
@@ -5478,6 +5569,7 @@ export interface ISchoolYearCreateCommand {
 
 export class SchoolYearEditCommand implements ISchoolYearEditCommand {
     displayName!: string | undefined;
+    status!: SchoolYearStatus;
     startsAt!: Date;
     endOfFirstHalf!: Date;
     endsAt!: Date;
@@ -5494,6 +5586,7 @@ export class SchoolYearEditCommand implements ISchoolYearEditCommand {
     init(_data?: any) {
         if (_data) {
             this.displayName = _data["displayName"];
+            this.status = _data["status"];
             this.startsAt = _data["startsAt"] ? new Date(_data["startsAt"].toString()) : <any>undefined;
             this.endOfFirstHalf = _data["endOfFirstHalf"] ? new Date(_data["endOfFirstHalf"].toString()) : <any>undefined;
             this.endsAt = _data["endsAt"] ? new Date(_data["endsAt"].toString()) : <any>undefined;
@@ -5510,6 +5603,7 @@ export class SchoolYearEditCommand implements ISchoolYearEditCommand {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["displayName"] = this.displayName;
+        data["status"] = this.status;
         data["startsAt"] = this.startsAt ? this.startsAt.toISOString() : <any>undefined;
         data["endOfFirstHalf"] = this.endOfFirstHalf ? this.endOfFirstHalf.toISOString() : <any>undefined;
         data["endsAt"] = this.endsAt ? this.endsAt.toISOString() : <any>undefined;
@@ -5519,6 +5613,7 @@ export class SchoolYearEditCommand implements ISchoolYearEditCommand {
 
 export interface ISchoolYearEditCommand {
     displayName: string | undefined;
+    status: SchoolYearStatus;
     startsAt: Date;
     endOfFirstHalf: Date;
     endsAt: Date;
@@ -6466,6 +6561,102 @@ export interface IClassSchoolYearSubjectGradeCreateDto {
     value: GradeValue;
     description: string | undefined;
     gradeKindId: string;
+}
+
+export class PagedListResponseOfClassSubjectListResponse implements IPagedListResponseOfClassSubjectListResponse {
+    pageSize!: number;
+    pageIndex!: number;
+    totalCount!: number;
+    items!: ClassSubjectListResponse[] | undefined;
+
+    constructor(data?: IPagedListResponseOfClassSubjectListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageSize = _data["pageSize"];
+            this.pageIndex = _data["pageIndex"];
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(ClassSubjectListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedListResponseOfClassSubjectListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedListResponseOfClassSubjectListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageSize"] = this.pageSize;
+        data["pageIndex"] = this.pageIndex;
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedListResponseOfClassSubjectListResponse {
+    pageSize: number;
+    pageIndex: number;
+    totalCount: number;
+    items: ClassSubjectListResponse[] | undefined;
+}
+
+export class ClassSubjectListResponse implements IClassSubjectListResponse {
+    class!: ClassListResponse | undefined;
+    subject!: SubjectListResponse | undefined;
+
+    constructor(data?: IClassSubjectListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.class = _data["class"] ? ClassListResponse.fromJS(_data["class"]) : <any>undefined;
+            this.subject = _data["subject"] ? SubjectListResponse.fromJS(_data["subject"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ClassSubjectListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClassSubjectListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["class"] = this.class ? this.class.toJSON() : <any>undefined;
+        data["subject"] = this.subject ? this.subject.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IClassSubjectListResponse {
+    class: ClassListResponse | undefined;
+    subject: SubjectListResponse | undefined;
 }
 
 export class ApiException extends Error {

@@ -81,6 +81,7 @@ const props = withDefaults(
     hasDetails?: boolean
     editable?: boolean
     deletable?: boolean
+    canAdd?: boolean
   }>(),
   {
     title: 'Cím',
@@ -88,7 +89,8 @@ const props = withDefaults(
     rowKey: 'id',
     hasDetails: true,
     editable: true,
-    deletable: true
+    deletable: true,
+    canAdd: true
   }
 )
 

@@ -1,15 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using AutoMapper;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
 using ESchool.ClassRegister.Interface.Features.SchoolYears;
 using ESchool.Libs.Application.Cqrs.Handlers;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SchoolYears
 {
@@ -18,10 +12,25 @@ namespace ESchool.ClassRegister.Application.Features.SchoolYears
         public SchoolYearListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
         }
-        
+
+        protected override IQueryable<SchoolYear> Filter(IQueryable<SchoolYear> entities, SchoolYearListQuery query)
+        {
+            if (!string.IsNullOrEmpty(query.Name))
+            {
+                return entities.Where(x => x.DisplayName.ToLower().Contains(query.Name.ToLower()));
+            }
+
+            if (query.Status != null)
+            {
+                return entities.Where(x => x.Status == query.Status.Value);
+            }
+
+            return entities;
+        }
+
         protected override IOrderedQueryable<SchoolYear> Order(IQueryable<SchoolYear> entities)
         {
-            return entities.OrderBy(x => x.DisplayName);
+            return entities.OrderByDescending(x => x.StartsAt);
         }
     }
 }
