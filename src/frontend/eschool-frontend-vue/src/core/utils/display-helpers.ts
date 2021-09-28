@@ -27,3 +27,11 @@ export function displayClass(_class: IClassListResponse): string {
 export function yesOrNo(value: boolean): string {
   return value ? 'Igen' : 'Nem'
 }
+
+export function defaultValue(value: any): string {
+  if (value === undefined || value === null) {
+    return '-'
+  }
+
+  return value
+}

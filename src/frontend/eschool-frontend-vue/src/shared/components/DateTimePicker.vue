@@ -4,6 +4,7 @@
     outlined
     :model-value="modelValueString"
     :rules="rules"
+    :disable="disable"
     mask="####-##-## ##:##"
     @update:model-value="emit('update:modelValue', $event)"
   >
@@ -45,11 +46,15 @@ import { date } from 'quasar'
 import { ValidationFunction } from '@/core/utils/validation-functions'
 import formatDate = date.formatDate
 
-const props = defineProps<{
-  modelValue: Date
-  label: string
-  rules?: ValidationFunction[]
-}>()
+const props = withDefaults(
+  defineProps<{
+    modelValue: Date
+    label: string
+    rules?: ValidationFunction[]
+    disable?: boolean
+  }>(),
+  { disable: false }
+)
 
 const emit = defineEmits<{
   (event: 'update:modelValue', value: string): void

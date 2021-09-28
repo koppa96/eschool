@@ -4,6 +4,7 @@
     outlined
     :model-value="modelValueString"
     :rules="rules"
+    :disable="disable"
     mask="####-##-##"
     @update:model-value="emit('update:modelValue', $event)"
   >
@@ -32,11 +33,15 @@ import { ValidationFunction } from '@/core/utils/validation-functions'
 
 const DATE_PART_LENGTH = 10
 
-const props = defineProps<{
-  modelValue: Date
-  label: string
-  rules?: ValidationFunction[]
-}>()
+const props = withDefaults(
+  defineProps<{
+    modelValue: Date
+    label: string
+    rules?: ValidationFunction[]
+    disable?: boolean
+  }>(),
+  { disable: false }
+)
 
 const emit = defineEmits<{
   (event: 'update:modelValue', value: string): void

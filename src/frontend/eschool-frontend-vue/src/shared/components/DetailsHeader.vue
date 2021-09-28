@@ -5,7 +5,6 @@
       <slot name="actions">
         <q-btn
           v-if="editable"
-          class="q-mr-md"
           color="primary"
           icon="edit"
           @click="emit('edit')"
@@ -14,6 +13,7 @@
         </q-btn>
         <q-btn
           v-if="deletable"
+          class="q-ml-md"
           color="negative"
           icon="delete"
           @click="emit('delete')"
