@@ -22,6 +22,7 @@ import SchoolYearCreateEditDialog from '../../components/SchoolYearCreateEditDia
 import DataTable from '@/shared/components/DataTable.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
 import {
+  OrderingDirection,
   SchoolYearCreateCommand,
   SchoolYearEditCommand,
   SchoolYearListResponse,
@@ -52,7 +53,13 @@ function fetchData(
   pageSize: number,
   pageIndex: number
 ): Promise<PagedListResponse> {
-  return client.listSchoolYears(null, pageSize, pageIndex)
+  return client.listSchoolYears(
+    null,
+    null,
+    { DisplayName: OrderingDirection.Ascending },
+    pageSize,
+    pageIndex
+  )
 }
 
 function createSchoolYear(): void {

@@ -4,6 +4,7 @@ using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
 using ESchool.ClassRegister.Interface.Features.SchoolYears;
 using ESchool.Libs.Application.Cqrs.Handlers;
+using ESchool.Libs.Application.Extensions;
 
 namespace ESchool.ClassRegister.Application.Features.SchoolYears
 {
@@ -20,17 +21,19 @@ namespace ESchool.ClassRegister.Application.Features.SchoolYears
                 return entities.Where(x => x.DisplayName.ToLower().Contains(query.Name.ToLower()));
             }
 
-            if (query.Status != null)
+            if (query.Statuses?.Any() == true)
             {
-                return entities.Where(x => x.Status == query.Status.Value);
+                return entities.Where(x => query.Statuses.Contains(x.Status));
             }
 
             return entities;
         }
 
-        protected override IOrderedQueryable<SchoolYear> Order(IQueryable<SchoolYear> entities)
+        protected override IOrderedQueryable<SchoolYear> Order(IQueryable<SchoolYear> entities, SchoolYearListQuery query)
         {
-            return entities.OrderByDescending(x => x.StartsAt);
+            return query.Orderings?.Any() != true
+                ? entities.OrderByDescending(x => x.StartsAt)
+                : entities.OrderBy(query);
         }
     }
 }
