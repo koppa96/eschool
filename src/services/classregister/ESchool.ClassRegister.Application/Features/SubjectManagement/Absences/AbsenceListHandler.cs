@@ -24,7 +24,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Absences
             this.identityService = identityService;
         }
 
-        protected override IOrderedQueryable<Absence> Order(IQueryable<Absence> entities)
+        protected override IOrderedQueryable<Absence> Order(IQueryable<Absence> entities, AbsenceListQuery query)
         {
             return entities.OrderByDescending(x => x.Lesson.StartsAt);
         }

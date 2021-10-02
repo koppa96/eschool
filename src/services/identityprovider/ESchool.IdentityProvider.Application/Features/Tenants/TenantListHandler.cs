@@ -13,7 +13,7 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
         {
         }
         
-        protected override IOrderedQueryable<Tenant> Order(IQueryable<Tenant> entities)
+        protected override IOrderedQueryable<Tenant> Order(IQueryable<Tenant> entities, TenantListQuery query)
         {
             return entities.OrderBy(x => x.Name);
         }

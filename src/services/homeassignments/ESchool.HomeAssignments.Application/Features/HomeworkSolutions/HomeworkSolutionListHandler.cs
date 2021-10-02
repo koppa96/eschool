@@ -20,7 +20,7 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions
             return entities.Where(x => x.HomeworkId == query.HomeworkId && x.TurnInDate != null);
         }
 
-        protected override IOrderedQueryable<HomeworkSolution> Order(IQueryable<HomeworkSolution> entities)
+        protected override IOrderedQueryable<HomeworkSolution> Order(IQueryable<HomeworkSolution> entities, HomeworkSolutionListQuery query)
         {
             return entities.OrderBy(x => x.TurnInDate);
         }

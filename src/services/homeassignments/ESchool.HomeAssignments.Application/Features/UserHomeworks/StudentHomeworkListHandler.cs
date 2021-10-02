@@ -38,7 +38,7 @@ namespace ESchool.HomeAssignments.Application.Features.UserHomeworks
             });
         }
 
-        protected override IOrderedQueryable<Homework> Order(IQueryable<Homework> entities)
+        protected override IOrderedQueryable<Homework> Order(IQueryable<Homework> entities, StudentHomeworkListQuery query)
         {
             return entities.OrderByDescending(x => x.Deadline);
         }

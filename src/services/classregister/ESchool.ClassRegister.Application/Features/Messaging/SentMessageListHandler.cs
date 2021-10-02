@@ -33,7 +33,7 @@ namespace ESchool.ClassRegister.Application.Features.Messaging
             return entities.Where(x => x.SenderClassRegisterUser.Id == currentUserId);
         }
 
-        protected override IOrderedQueryable<Message> Order(IQueryable<Message> entities)
+        protected override IOrderedQueryable<Message> Order(IQueryable<Message> entities, SentMessageListQuery query)
         {
             return entities.OrderByDescending(x => x.SentAt);
         }

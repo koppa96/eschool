@@ -32,7 +32,7 @@ namespace ESchool.Testing.Application.Features.Tests
                                            t.Teacher.UserId == currentUserId));
         }
 
-        protected override IOrderedQueryable<Test> Order(IQueryable<Test> entities)
+        protected override IOrderedQueryable<Test> Order(IQueryable<Test> entities, TestListAsTeacherQuery query)
         {
             return entities.OrderByDescending(x => x.ScheduledStart);
         }

@@ -13,7 +13,7 @@ namespace ESchool.ClassRegister.Application.Features.ClassTypes
         {
         }
         
-        protected override IOrderedQueryable<ClassType> Order(IQueryable<ClassType> entities)
+        protected override IOrderedQueryable<ClassType> Order(IQueryable<ClassType> entities, ClassTypeListQuery query)
         {
             return entities.OrderBy(x => x.Name);
         }

@@ -31,7 +31,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
                 x.ClassSchoolYearSubject.SubjectId == query.SubjectId);
         }
 
-        protected override IOrderedQueryable<Lesson> Order(IQueryable<Lesson> entities)
+        protected override IOrderedQueryable<Lesson> Order(IQueryable<Lesson> entities, AdminLessonListQuery query)
         {
             return entities.OrderBy(x => x.StartsAt);
         }

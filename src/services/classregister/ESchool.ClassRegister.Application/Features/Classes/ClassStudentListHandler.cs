@@ -25,7 +25,7 @@ namespace ESchool.ClassRegister.Application.Features.Classes
             return entities.Where(x => x.ClassId == query.ClassId);
         }
 
-        protected override IOrderedQueryable<Student> Order(IQueryable<Student> entities)
+        protected override IOrderedQueryable<Student> Order(IQueryable<Student> entities, ClassStudentListQuery query)
         {
             return entities.OrderBy(x => x.User.Name);
         }

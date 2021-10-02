@@ -41,7 +41,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             });
         }
 
-        protected override IOrderedQueryable<User> Order(IQueryable<User> entities)
+        protected override IOrderedQueryable<User> Order(IQueryable<User> entities, TenantUserListQuery query)
         {
             return entities.OrderBy(x => x.Name);
         }

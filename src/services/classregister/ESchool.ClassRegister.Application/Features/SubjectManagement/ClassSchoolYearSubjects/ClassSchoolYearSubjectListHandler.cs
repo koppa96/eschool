@@ -29,7 +29,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassScho
             });
         }
 
-        protected override IOrderedQueryable<ClassSchoolYearSubject> Order(IQueryable<ClassSchoolYearSubject> entities)
+        protected override IOrderedQueryable<ClassSchoolYearSubject> Order(IQueryable<ClassSchoolYearSubject> entities, ClassSchoolYearSubjectListQuery query)
         {
             return entities.OrderBy(x => x.Subject.Name);
         }

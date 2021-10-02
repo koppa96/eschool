@@ -26,7 +26,7 @@ namespace ESchool.ClassRegister.Application.Features.ClassSchoolYears
             return entities.Where(x => x.ClassSchoolYears.Any(csy => csy.SchoolYearId == query.SchoolYearId));
         }
 
-        protected override IOrderedQueryable<Class> Order(IQueryable<Class> entities)
+        protected override IOrderedQueryable<Class> Order(IQueryable<Class> entities, ClassSchoolYearListQuery query)
         {
             return entities.OrderBy(x => x.ClassType.StartingGrade + x.ClassSchoolYears.Count)
                 .ThenBy(x => x.ClassType.Name);

@@ -1864,12 +1864,14 @@ export class SchoolYearsClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    listSchoolYears(name: string | null | undefined, status: SchoolYearStatus | null | undefined, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfSchoolYearListResponse> {
+    listSchoolYears(name: string | null | undefined, statuses: SchoolYearStatus[] | null | undefined, orderings: { [key: string]: OrderingDirection; } | null | undefined, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfSchoolYearListResponse> {
         let url_ = this.baseUrl + "/api/school-years?";
         if (name !== undefined && name !== null)
             url_ += "Name=" + encodeURIComponent("" + name) + "&";
-        if (status !== undefined && status !== null)
-            url_ += "Status=" + encodeURIComponent("" + status) + "&";
+        if (statuses !== undefined && statuses !== null)
+            statuses && statuses.forEach(item => { url_ += "Statuses=" + encodeURIComponent("" + item) + "&"; });
+        if (orderings !== undefined && orderings !== null)
+            url_ += "Orderings=" + encodeURIComponent("" + orderings) + "&";
         if (pageSize === null)
             throw new Error("The parameter 'pageSize' cannot be null.");
         else if (pageSize !== undefined)
@@ -4336,7 +4338,7 @@ export interface IClassListResponse {
 export class SchoolYearListResponse implements ISchoolYearListResponse {
     id!: string;
     displayName!: string | undefined;
-    type!: SchoolYearStatus;
+    status!: SchoolYearStatus;
 
     constructor(data?: ISchoolYearListResponse) {
         if (data) {
@@ -4351,7 +4353,7 @@ export class SchoolYearListResponse implements ISchoolYearListResponse {
         if (_data) {
             this.id = _data["id"];
             this.displayName = _data["displayName"];
-            this.type = _data["type"];
+            this.status = _data["status"];
         }
     }
 
@@ -4366,7 +4368,7 @@ export class SchoolYearListResponse implements ISchoolYearListResponse {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["displayName"] = this.displayName;
-        data["type"] = this.type;
+        data["status"] = this.status;
         return data; 
     }
 }
@@ -4374,7 +4376,7 @@ export class SchoolYearListResponse implements ISchoolYearListResponse {
 export interface ISchoolYearListResponse {
     id: string;
     displayName: string | undefined;
-    type: SchoolYearStatus;
+    status: SchoolYearStatus;
 }
 
 export enum SchoolYearStatus {
@@ -5461,6 +5463,11 @@ export interface IPagedListResponseOfSchoolYearListResponse {
     pageIndex: number;
     totalCount: number;
     items: SchoolYearListResponse[] | undefined;
+}
+
+export enum OrderingDirection {
+    Ascending = "Ascending",
+    Descending = "Descending",
 }
 
 export class SchoolYearDetailsResponse implements ISchoolYearDetailsResponse {

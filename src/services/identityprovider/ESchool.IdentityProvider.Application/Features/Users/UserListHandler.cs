@@ -13,7 +13,7 @@ namespace ESchool.IdentityProvider.Application.Features.Users
         {
         }
         
-        protected override IOrderedQueryable<User> Order(IQueryable<User> entities)
+        protected override IOrderedQueryable<User> Order(IQueryable<User> entities, UserListQuery query)
         {
             return entities.OrderBy(x => x.Email);
         }

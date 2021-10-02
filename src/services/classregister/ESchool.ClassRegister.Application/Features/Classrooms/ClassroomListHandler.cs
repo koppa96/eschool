@@ -21,7 +21,7 @@ namespace ESchool.ClassRegister.Application.Features.Classrooms
                 : entities;
         }
 
-        protected override IOrderedQueryable<Classroom> Order(IQueryable<Classroom> entities)
+        protected override IOrderedQueryable<Classroom> Order(IQueryable<Classroom> entities, ClassroomListQuery query)
         {
             return entities.OrderBy(x => x.Name);
         }

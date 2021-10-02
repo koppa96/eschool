@@ -24,7 +24,7 @@ namespace ESchool.ClassRegister.Application.Features.Classes
             return entities.Where(x => query.IncludeFinishedClasses || !x.DidFinish);
         }
 
-        protected override IOrderedQueryable<Class> Order(IQueryable<Class> entities)
+        protected override IOrderedQueryable<Class> Order(IQueryable<Class> entities, ClassListQuery query)
         {
             return entities.OrderBy(x => x.ClassSchoolYears.Count + x.ClassType.StartingGrade - 1)
                 .ThenBy(x => x.ClassType.Name);

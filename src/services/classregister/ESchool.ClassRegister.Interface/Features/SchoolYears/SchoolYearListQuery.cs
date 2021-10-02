@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using ESchool.Libs.Interface.Query;
 
 namespace ESchool.ClassRegister.Interface.Features.SchoolYears
 {
-    public class SchoolYearListQuery : PagedListQuery<SchoolYearListResponse>
+    public class SchoolYearListQuery : OrderedPagedListQuery<SchoolYearListResponse>
     {
         public string Name { get; set; }
-        public SchoolYearStatus? Status { get; set; }
+        public List<SchoolYearStatus> Statuses { get; set; }
     }
 }

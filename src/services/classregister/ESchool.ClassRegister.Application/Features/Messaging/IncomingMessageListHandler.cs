@@ -40,7 +40,7 @@ namespace ESchool.ClassRegister.Application.Features.Messaging
             });
         }
 
-        protected override IOrderedQueryable<Message> Order(IQueryable<Message> entities)
+        protected override IOrderedQueryable<Message> Order(IQueryable<Message> entities, IncomingMessageListQuery query)
         {
             return entities.OrderBy(x => x.SentAt);
         }

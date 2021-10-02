@@ -6,6 +6,6 @@ namespace ESchool.ClassRegister.Interface.Features.SchoolYears
     {
         public Guid Id { get; set; }
         public string DisplayName { get; set; }
-        public SchoolYearStatus Type { get; set; }
+        public SchoolYearStatus Status { get; set; }
     }
 }

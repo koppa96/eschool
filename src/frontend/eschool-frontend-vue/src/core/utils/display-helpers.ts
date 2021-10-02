@@ -1,6 +1,9 @@
 import { isNaN } from 'lodash-es'
 import { date as _ } from 'quasar'
-import { IClassListResponse } from '@/shared/generated-clients/class-register'
+import {
+  IClassListResponse,
+  SchoolYearStatus
+} from '@/shared/generated-clients/class-register'
 
 export function dateToString(date: any): string {
   const _date = new Date(date)
@@ -34,4 +37,17 @@ export function defaultValue(value: any): string {
   }
 
   return value
+}
+
+export function schoolYearStatus(value: SchoolYearStatus): string {
+  switch (value) {
+    case SchoolYearStatus.New:
+      return 'Új'
+    case SchoolYearStatus.Active:
+      return 'Aktív'
+    case SchoolYearStatus.Closed:
+      return 'Lezárt'
+    default:
+      return 'Ismeretlen'
+  }
 }

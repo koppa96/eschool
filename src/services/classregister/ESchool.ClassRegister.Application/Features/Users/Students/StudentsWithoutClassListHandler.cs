@@ -21,7 +21,7 @@ namespace ESchool.ClassRegister.Application.Features.Users.Students
             return entities.Where(x => x.Class == null && x.User.Name.ToLower().Contains(query.SearchText.ToLower()));
         }
 
-        protected override IOrderedQueryable<Student> Order(IQueryable<Student> entities)
+        protected override IOrderedQueryable<Student> Order(IQueryable<Student> entities, StudentsWithoutClassListQuery query)
         {
             return entities.OrderBy(x => x.User.Name);
         }

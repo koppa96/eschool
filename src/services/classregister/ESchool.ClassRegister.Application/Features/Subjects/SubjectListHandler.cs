@@ -15,7 +15,7 @@ namespace ESchool.ClassRegister.Application.Features.Subjects
         {
         }
         
-        protected override IOrderedQueryable<Subject> Order(IQueryable<Subject> entities)
+        protected override IOrderedQueryable<Subject> Order(IQueryable<Subject> entities, SubjectListQuery query)
         {
             return entities.OrderBy(x => x.Name);
         }

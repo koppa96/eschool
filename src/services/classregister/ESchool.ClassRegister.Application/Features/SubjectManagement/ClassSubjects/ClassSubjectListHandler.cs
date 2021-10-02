@@ -43,7 +43,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassSubj
                 x.ClassSchoolYearSubjectTeachers.Any(t => t.Teacher.UserId == currentUserId));
         }
 
-        protected override IOrderedQueryable<ClassSchoolYearSubject> Order(IQueryable<ClassSchoolYearSubject> entities)
+        protected override IOrderedQueryable<ClassSchoolYearSubject> Order(IQueryable<ClassSchoolYearSubject> entities, ClassSubjectListQuery query)
         {
             return entities.OrderBy(x =>
                     x.ClassSchoolYear.Class.ClassType.StartingGrade + x.ClassSchoolYear.Class.ClassSchoolYears.Count)

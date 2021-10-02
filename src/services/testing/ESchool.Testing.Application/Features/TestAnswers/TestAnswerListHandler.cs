@@ -20,7 +20,7 @@ namespace ESchool.Testing.Application.Features.TestAnswers
             return entities.Where(x => x.StudentTest.TestId == query.TestId);
         }
 
-        protected override IOrderedQueryable<TestAnswer> Order(IQueryable<TestAnswer> entities)
+        protected override IOrderedQueryable<TestAnswer> Order(IQueryable<TestAnswer> entities, TestAnswerListQuery query)
         {
             return entities.OrderBy(x => x.StudentTest.Student.User.Name);
         }
