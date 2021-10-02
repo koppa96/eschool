@@ -29,7 +29,18 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
         {
             var lesson = await context.Lessons.Include(x => x.ClassSchoolYearSubject)
                     .ThenInclude(x => x.ClassSchoolYear)
+                        .ThenInclude(x => x.Class)
+                            .ThenInclude(x => x.ClassType)
+                .Include(x => x.ClassSchoolYearSubject)
+                    .ThenInclude(x => x.ClassSchoolYear)
+                        .ThenInclude(x => x.SchoolYear)
+                    .Include(x => x.ClassSchoolYearSubject)
+                    .ThenInclude(x => x.Subject)
                 .Include(x => x.Classroom)
+                .Include(x => x.ClassSchoolYearSubject)
+                    .ThenInclude(x => x.ClassSchoolYear)
+                        .ThenInclude(x => x.Class)
+                            .ThenInclude(x => x.ClassSchoolYears)
                 .SingleAsync(x => x.Id == request.Id, cancellationToken);
 
             var otherLessonsInSchoolYear = await context.Lessons.Where(x =>

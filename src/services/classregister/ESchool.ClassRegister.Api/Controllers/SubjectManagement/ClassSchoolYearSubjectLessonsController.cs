@@ -27,7 +27,7 @@ namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
         }
 
         [HttpGet]
-        [Authorize(PolicyNames.Administrator)]
+        [Authorize(PolicyNames.AnyRole)]
         public Task<PagedListResponse<LessonListResponse>> ListLessons(
             Guid schoolYearId,
             Guid classId,
@@ -80,7 +80,7 @@ namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
         }
 
         [HttpPut("{lessonId}")]
-        [Authorize(PolicyNames.Administrator)]
+        [Authorize(PolicyNames.TeacherOrAdministrator)]
         public Task<LessonDetailsResponse> EditLesson(Guid lessonId, [FromBody] LessonEditCommand command,
             CancellationToken cancellationToken)
         {

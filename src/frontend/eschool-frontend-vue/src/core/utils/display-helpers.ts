@@ -1,6 +1,7 @@
 import { isNaN } from 'lodash-es'
 import { date as _ } from 'quasar'
 import {
+  AbsenceState,
   IClassListResponse,
   SchoolYearStatus
 } from '@/shared/generated-clients/class-register'
@@ -23,7 +24,13 @@ export function dateTimeToString(date: any): string {
   return _.formatDate(_date, 'YYYY. MM. DD. HH:mm')
 }
 
-export function displayClass(_class: IClassListResponse): string {
+export function displayClass(
+  _class: IClassListResponse | undefined
+): string | undefined {
+  if (!_class) {
+    return undefined
+  }
+
   return `${_class.grade}. ${_class.classType?.name}`
 }
 
@@ -47,6 +54,17 @@ export function schoolYearStatus(value: SchoolYearStatus): string {
       return 'Aktív'
     case SchoolYearStatus.Closed:
       return 'Lezárt'
+    default:
+      return 'Ismeretlen'
+  }
+}
+
+export function absenceState(value: AbsenceState): string {
+  switch (value) {
+    case AbsenceState.Unverified:
+      return 'Igazolatlan'
+    case AbsenceState.Verified:
+      return 'Igazolt'
     default:
       return 'Ismeretlen'
   }

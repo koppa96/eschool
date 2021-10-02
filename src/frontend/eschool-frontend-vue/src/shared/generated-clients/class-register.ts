@@ -19,6 +19,131 @@ export class AbsencesClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
+    listLessonAbsences(lessonId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfLessonAbsenceListResponse> {
+        let url_ = this.baseUrl + "/api/absences?";
+        if (lessonId === undefined || lessonId === null)
+            throw new Error("The parameter 'lessonId' must be defined.");
+        url_ = url_.replace("{lessonId}", encodeURIComponent("" + lessonId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processListLessonAbsences(_response);
+        });
+    }
+
+    protected processListLessonAbsences(response: AxiosResponse): Promise<PagedListResponseOfLessonAbsenceListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PagedListResponseOfLessonAbsenceListResponse.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PagedListResponseOfLessonAbsenceListResponse>(<any>null);
+    }
+
+    listLessonAbsences2(lessonId: string, pageSize: number | undefined, pageIndex: number | undefined, schoolYearId: string, classId: string, subjectId: string , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfLessonAbsenceListResponse> {
+        let url_ = this.baseUrl + "/api/school-years/{schoolYearId}/classes/{classId}/subjects/{subjectId}/lessons/{lessonId}/absences?";
+        if (lessonId === undefined || lessonId === null)
+            throw new Error("The parameter 'lessonId' must be defined.");
+        url_ = url_.replace("{lessonId}", encodeURIComponent("" + lessonId));
+        if (schoolYearId === undefined || schoolYearId === null)
+            throw new Error("The parameter 'schoolYearId' must be defined.");
+        url_ = url_.replace("{schoolYearId}", encodeURIComponent("" + schoolYearId));
+        if (classId === undefined || classId === null)
+            throw new Error("The parameter 'classId' must be defined.");
+        url_ = url_.replace("{classId}", encodeURIComponent("" + classId));
+        if (subjectId === undefined || subjectId === null)
+            throw new Error("The parameter 'subjectId' must be defined.");
+        url_ = url_.replace("{subjectId}", encodeURIComponent("" + subjectId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processListLessonAbsences2(_response);
+        });
+    }
+
+    protected processListLessonAbsences2(response: AxiosResponse): Promise<PagedListResponseOfLessonAbsenceListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PagedListResponseOfLessonAbsenceListResponse.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PagedListResponseOfLessonAbsenceListResponse>(<any>null);
+    }
+
     setAbsenceState(absenceId: string, command: AbsenceStateSetCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/absences/{absenceId}";
         if (absenceId === undefined || absenceId === null)
@@ -506,11 +631,13 @@ export class ClassesClient {
         return Promise.resolve<void>(<any>null);
     }
 
-    listStudents(id: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfUserRoleListResponse> {
+    listStudents(id: string, searchText: string | null | undefined, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfUserRoleListResponse> {
         let url_ = this.baseUrl + "/api/classes/{id}/students?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (searchText !== undefined && searchText !== null)
+            url_ += "searchText=" + encodeURIComponent("" + searchText) + "&";
         if (pageSize === null)
             throw new Error("The parameter 'pageSize' cannot be null.");
         else if (pageSize !== undefined)
@@ -4186,6 +4313,151 @@ export class ClassSubjectsClient {
     }
 }
 
+export class PagedListResponseOfLessonAbsenceListResponse implements IPagedListResponseOfLessonAbsenceListResponse {
+    pageSize!: number;
+    pageIndex!: number;
+    totalCount!: number;
+    items!: LessonAbsenceListResponse[] | undefined;
+
+    constructor(data?: IPagedListResponseOfLessonAbsenceListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageSize = _data["pageSize"];
+            this.pageIndex = _data["pageIndex"];
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(LessonAbsenceListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedListResponseOfLessonAbsenceListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedListResponseOfLessonAbsenceListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageSize"] = this.pageSize;
+        data["pageIndex"] = this.pageIndex;
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedListResponseOfLessonAbsenceListResponse {
+    pageSize: number;
+    pageIndex: number;
+    totalCount: number;
+    items: LessonAbsenceListResponse[] | undefined;
+}
+
+export class LessonAbsenceListResponse implements ILessonAbsenceListResponse {
+    id!: string;
+    absenceState!: AbsenceState;
+    student!: UserRoleListResponse | undefined;
+
+    constructor(data?: ILessonAbsenceListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.absenceState = _data["absenceState"];
+            this.student = _data["student"] ? UserRoleListResponse.fromJS(_data["student"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): LessonAbsenceListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new LessonAbsenceListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["absenceState"] = this.absenceState;
+        data["student"] = this.student ? this.student.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface ILessonAbsenceListResponse {
+    id: string;
+    absenceState: AbsenceState;
+    student: UserRoleListResponse | undefined;
+}
+
+export enum AbsenceState {
+    Unverified = "Unverified",
+    Verified = "Verified",
+}
+
+export class UserRoleListResponse implements IUserRoleListResponse {
+    id!: string;
+    name!: string | undefined;
+
+    constructor(data?: IUserRoleListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): UserRoleListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserRoleListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface IUserRoleListResponse {
+    id: string;
+    name: string | undefined;
+}
+
 export class AbsenceStateSetCommand implements IAbsenceStateSetCommand {
     absenceState!: AbsenceState;
 
@@ -4220,11 +4492,6 @@ export class AbsenceStateSetCommand implements IAbsenceStateSetCommand {
 
 export interface IAbsenceStateSetCommand {
     absenceState: AbsenceState;
-}
-
-export enum AbsenceState {
-    Unverified = "Unverified",
-    Verified = "Verified",
 }
 
 export class PagedListResponseOfClassListResponse implements IPagedListResponseOfClassListResponse {
@@ -4483,46 +4750,6 @@ export interface IClassDetailsResponse {
     headTeacher: UserRoleListResponse | undefined;
     startingSchoolYear: SchoolYearListResponse | undefined;
     finishingSchoolYear: SchoolYearListResponse | undefined;
-}
-
-export class UserRoleListResponse implements IUserRoleListResponse {
-    id!: string;
-    name!: string | undefined;
-
-    constructor(data?: IUserRoleListResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-        }
-    }
-
-    static fromJS(data: any): UserRoleListResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserRoleListResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        return data; 
-    }
-}
-
-export interface IUserRoleListResponse {
-    id: string;
-    name: string | undefined;
 }
 
 export class PagedListResponseOfUserRoleListResponse implements IPagedListResponseOfUserRoleListResponse {
@@ -5873,6 +6100,7 @@ export interface IGradeListByStudentResponse {
 export class GradeListResponse implements IGradeListResponse {
     id!: string;
     value!: GradeValue;
+    writtenIn!: Date;
     gradeKind!: GradeKindResponse | undefined;
 
     constructor(data?: IGradeListResponse) {
@@ -5888,6 +6116,7 @@ export class GradeListResponse implements IGradeListResponse {
         if (_data) {
             this.id = _data["id"];
             this.value = _data["value"];
+            this.writtenIn = _data["writtenIn"] ? new Date(_data["writtenIn"].toString()) : <any>undefined;
             this.gradeKind = _data["gradeKind"] ? GradeKindResponse.fromJS(_data["gradeKind"]) : <any>undefined;
         }
     }
@@ -5903,6 +6132,7 @@ export class GradeListResponse implements IGradeListResponse {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["value"] = this.value;
+        data["writtenIn"] = this.writtenIn ? this.writtenIn.toISOString() : <any>undefined;
         data["gradeKind"] = this.gradeKind ? this.gradeKind.toJSON() : <any>undefined;
         return data; 
     }
@@ -5911,6 +6141,7 @@ export class GradeListResponse implements IGradeListResponse {
 export interface IGradeListResponse {
     id: string;
     value: GradeValue;
+    writtenIn: Date;
     gradeKind: GradeKindResponse | undefined;
 }
 
@@ -6470,6 +6701,7 @@ export class GradeDetailsResponse implements IGradeDetailsResponse {
     id!: string;
     gradeValue!: GradeValue;
     description!: string | undefined;
+    writtenIn!: Date;
     gradeKind!: GradeKindResponse | undefined;
     student!: UserRoleListResponse | undefined;
     teacher!: UserRoleListResponse | undefined;
@@ -6489,6 +6721,7 @@ export class GradeDetailsResponse implements IGradeDetailsResponse {
             this.id = _data["id"];
             this.gradeValue = _data["gradeValue"];
             this.description = _data["description"];
+            this.writtenIn = _data["writtenIn"] ? new Date(_data["writtenIn"].toString()) : <any>undefined;
             this.gradeKind = _data["gradeKind"] ? GradeKindResponse.fromJS(_data["gradeKind"]) : <any>undefined;
             this.student = _data["student"] ? UserRoleListResponse.fromJS(_data["student"]) : <any>undefined;
             this.teacher = _data["teacher"] ? UserRoleListResponse.fromJS(_data["teacher"]) : <any>undefined;
@@ -6508,6 +6741,7 @@ export class GradeDetailsResponse implements IGradeDetailsResponse {
         data["id"] = this.id;
         data["gradeValue"] = this.gradeValue;
         data["description"] = this.description;
+        data["writtenIn"] = this.writtenIn ? this.writtenIn.toISOString() : <any>undefined;
         data["gradeKind"] = this.gradeKind ? this.gradeKind.toJSON() : <any>undefined;
         data["student"] = this.student ? this.student.toJSON() : <any>undefined;
         data["teacher"] = this.teacher ? this.teacher.toJSON() : <any>undefined;
@@ -6520,6 +6754,7 @@ export interface IGradeDetailsResponse {
     id: string;
     gradeValue: GradeValue;
     description: string | undefined;
+    writtenIn: Date;
     gradeKind: GradeKindResponse | undefined;
     student: UserRoleListResponse | undefined;
     teacher: UserRoleListResponse | undefined;

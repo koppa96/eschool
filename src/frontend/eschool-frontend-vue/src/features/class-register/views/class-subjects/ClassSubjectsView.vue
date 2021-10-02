@@ -86,7 +86,6 @@ function fetchData(
   pageSize: number,
   pageIndex: number
 ): Promise<PagedListResponse> {
-  console.log(schoolYearId.value)
   if (schoolYearId.value) {
     return client.listClassSubjects(schoolYearId.value, pageSize, pageIndex)
   }
@@ -101,13 +100,13 @@ function fetchData(
 
 function navigateToLessons(classSubject: ClassSubjectListResponse): void {
   router.push(
-    `/groups/${classSubject.subject?.id}/${classSubject.class?.id}/lessons`
+    `/groups/${schoolYearId.value}/${classSubject.class?.id}/${classSubject.subject?.id}/lessons`
   )
 }
 
 function navigateToGrades(classSubject: ClassSubjectListResponse): void {
   router.push(
-    `/groups/${classSubject.subject?.id}/${classSubject.class?.id}/grades`
+    `/groups/${schoolYearId.value}/${classSubject.class?.id}/${classSubject.subject?.id}/grades`
   )
 }
 </script>

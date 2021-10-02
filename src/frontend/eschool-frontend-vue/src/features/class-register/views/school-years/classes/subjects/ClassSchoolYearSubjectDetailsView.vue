@@ -7,9 +7,21 @@
       :columns="columns"
       :data-access="fetchData"
       :refresh$="refreshSubject"
+      :has-details="showDetails"
       @add="createLesson()"
+      @viewDetails="navigateToDetails($event)"
     >
       <template #actions="{ row }">
+        <q-btn
+          v-if="showDetails"
+          dense
+          round
+          flat
+          icon="visibility"
+          @click="navigateToDetails(row)"
+        >
+          <q-tooltip>Részletek</q-tooltip>
+        </q-btn>
         <q-btn
           v-if="!row.canceled"
           dense
@@ -34,6 +46,7 @@
           <q-tooltip>Szerkesztés</q-tooltip>
         </q-btn>
         <q-btn
+          v-if="showDelete"
           color="negative"
           dense
           round
@@ -50,7 +63,7 @@
 
 <script setup lang="ts">
 import { isString } from 'lodash-es'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import LessonCreateEditDialog from '../../../../components/LessonCreateEditDialog.vue'
@@ -76,6 +89,9 @@ import { PagedListResponse } from '@/shared/model/paged-list-response'
 import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'
 import { useConfirmDialog } from '@/core/utils/dialogs'
 import { useLoader } from '@/core/utils/loading.utils'
+import { observableRef } from '@/core/utils/observable-ref'
+import { useAuthService } from '@/core/auth'
+import { TenantRoleType } from '@/shared/generated-clients/identity-provider'
 
 interface RouteParameters {
   classId: string
@@ -120,8 +136,17 @@ const client = createClient(ClassSchoolYearSubjectLessonsClient)
 const { schoolYearId, classId, subjectId } = resolveParameters()
 const refreshSubject = useAutocompletingSubject()
 const subject = ref(new SubjectDetailsResponse())
+const authService = useAuthService()
+const tokenData = observableRef(authService.accessTokenData$)
+const router = useRouter()
 
 const title = computed(() => subject.value.name)
+const showDetails = computed(() =>
+  tokenData.value?.tenantRoles?.includes(TenantRoleType.Teacher)
+)
+const showDelete = computed(() =>
+  tokenData.value?.tenantRoles?.includes(TenantRoleType.Administrator)
+)
 
 function resolveParameters(): RouteParameters {
   const { schoolYearId, classId, subjectId } = route.params
@@ -228,6 +253,10 @@ async function organizeLesson(lesson: LessonListResponse): Promise<void> {
       refreshSubject.next()
     })()
   }
+}
+
+function navigateToDetails(lesson: LessonListResponse): void {
+  router.push(`./lessons/${lesson.id}`)
 }
 
 loadData()

@@ -12,6 +12,7 @@ namespace ESchool.ClassRegister.Interface.Features.Grading.Grades
         public Guid Id { get; set; }
         public GradeValue GradeValue { get; set; }
         public string Description { get; set; }
+        public DateTime WrittenIn { get; set; }
         public GradeKindResponse GradeKind { get; set; }
         public UserRoleListResponse Student { get; set; }
         public UserRoleListResponse Teacher { get; set; }

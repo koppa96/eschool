@@ -221,6 +221,61 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
           import(
             /* webpackChunkName: "class-register" */ './views/class-subjects/ClassSubjectsView.vue'
           )
+      },
+      {
+        path: ':schoolYearId/:classId/:subjectId',
+        component: () =>
+          import(
+            /* webpackChunkName: "class-register" */ './views/class-subjects/ClassSubjectsLayoutView.vue'
+          ),
+        meta: {
+          resolveName: async (route: RouteLocationNormalizedLoaded) => {
+            const schoolYearsClient = createClient(SchoolYearsClient)
+            const classesClient = createClient(ClassesClient)
+            const subjectsClient = createClient(SubjectsClient)
+
+            if (
+              isString(route.params.schoolYearId) &&
+              isString(route.params.classId) &&
+              isString(route.params.subjectId)
+            ) {
+              const [schoolYear, _class, subject] = await Promise.all([
+                schoolYearsClient.getSchoolYear(route.params.schoolYearId),
+                classesClient.getClass(route.params.classId),
+                subjectsClient.getSubject(route.params.subjectId)
+              ])
+
+              return `${displayClass(_class)} - ${subject.name} (${
+                schoolYear.displayName
+              })`
+            }
+
+            return 'Csoport részletei'
+          }
+        },
+        children: [
+          {
+            path: 'lessons',
+            component: () =>
+              import(
+                /* webpackChunkName: "class-register" */ './views/school-years/classes/subjects/ClassSchoolYearSubjectDetailsView.vue'
+              )
+          },
+          {
+            path: 'lessons/:lessonId',
+            component: () =>
+              import(
+                /* webpackChunkName: "class-register" */ './views/class-subjects/class-subject-lessons/LessonDetailsView.vue'
+              )
+          },
+          {
+            path: 'grades',
+            component: () =>
+              import(
+                /* webpackChunkName: "class-register" */ './views/class-subjects/ClassSubjectGradesView.vue'
+              )
+          }
+        ]
       }
     ]
   }

@@ -8,6 +8,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Absences.
         public AbsenceMapping()
         {
             CreateMap<Absence, AbsenceListResponse>();
+            CreateMap<Absence, LessonAbsenceListResponse>();
         }        
     }
 }

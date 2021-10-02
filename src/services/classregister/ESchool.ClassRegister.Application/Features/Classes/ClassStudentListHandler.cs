@@ -11,6 +11,7 @@ namespace ESchool.ClassRegister.Application.Features.Classes
 {
     public class ClassStudentListQuery : PagedListQuery<UserRoleListResponse>
     {
+        public string SearchText { get; set; }
         public Guid ClassId { get; set; }
     }
     
@@ -22,7 +23,9 @@ namespace ESchool.ClassRegister.Application.Features.Classes
 
         protected override IQueryable<Student> Filter(IQueryable<Student> entities, ClassStudentListQuery query)
         {
-            return entities.Where(x => x.ClassId == query.ClassId);
+            return entities.Where(x =>
+                x.ClassId == query.ClassId &&
+                (string.IsNullOrEmpty(query.SearchText) || x.User.Name.ToLower().Contains(query.SearchText.ToLower())));
         }
 
         protected override IOrderedQueryable<Student> Order(IQueryable<Student> entities, ClassStudentListQuery query)

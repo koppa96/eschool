@@ -1,46 +1,56 @@
 <template>
   <DataTable
-    title="Diákok"
-    add-button-text="Diák felvétele"
+    title="Hiányzó diákok"
+    add-button-text="Hiányzás rögzítése"
     :columns="columns"
     :data-access="fetchData"
     :refresh$="refreshSubject"
     :editable="false"
     :has-details="false"
-    @add="assignStudent()"
-    @delete="removeStudent($event)"
+    @add="createAbsence()"
+    @delete="deleteAbsence($event)"
   />
 </template>
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
-import ClassStudentAddDialog from './ClassStudentAddDialog.vue'
+import AbsenceCreateDialog from './AbsenceCreateDialog.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
 import {
-  ClassesClient,
-  UserRoleListResponse
+  AbsencesClient,
+  ClassSchoolYearSubjectLessonsClient,
+  LessonAbsenceListResponse
 } from '@/shared/generated-clients/class-register'
+import { absenceState } from '@/core/utils/display-helpers'
 import { useAutocompletingSubject } from '@/core/utils/observable-lifecycle.util'
-import DataTable from '@/shared/components/DataTable.vue'
 import { PagedListResponse } from '@/shared/model/paged-list-response'
 import { createClient } from '@/shared/api'
 import { useConfirmDialog } from '@/core/utils/dialogs'
 import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'
+import DataTable from '@/shared/components/DataTable.vue'
 
 const props = defineProps<{
+  lessonId: string
   classId: string
 }>()
 
-const columns: QTableColumn<UserRoleListResponse>[] = [
+const columns: QTableColumn<LessonAbsenceListResponse>[] = [
   {
     name: 'name',
     label: 'Diák neve',
     align: 'left',
-    field: row => row.name
+    field: row => row.student?.name
+  },
+  {
+    name: 'status',
+    label: 'Hiányzás állapota',
+    align: 'left',
+    field: row => absenceState(row.absenceState)
   }
 ]
 const refreshSubject = useAutocompletingSubject()
-const client = createClient(ClassesClient)
+const client = createClient(AbsencesClient)
+const lessonsClient = createClient(ClassSchoolYearSubjectLessonsClient)
 const confirm = useConfirmDialog()
 const { save, deletion } = useSaveAndDeleteNotifications()
 const { dialog } = useQuasar()
@@ -49,32 +59,33 @@ function fetchData(
   pageSize: number,
   pageIndex: number
 ): Promise<PagedListResponse> {
-  return client.listStudents(props.classId, null, pageSize, pageIndex)
+  return client.listLessonAbsences(props.lessonId, pageSize, pageIndex)
 }
 
-function assignStudent(): void {
+function createAbsence(): void {
   dialog({
-    component: ClassStudentAddDialog
+    component: AbsenceCreateDialog,
+    componentProps: {
+      classId: props.classId
+    }
   }).onOk(
     save(async (studentId: string) => {
-      await client.assignStudent(props.classId, studentId)
+      await lessonsClient.createAbsence(props.lessonId, studentId)
       refreshSubject.next()
     })
   )
 }
 
-async function removeStudent(student: UserRoleListResponse): Promise<void> {
-  const result = await confirm(
-    `Biztosan el szeretné távolítani ${student.name} diákot az osztályból?`
-  )
+async function deleteAbsence(
+  absence: LessonAbsenceListResponse
+): Promise<void> {
+  const result = await confirm('Biztosan törölni szeretné a hiányzást?')
 
   if (result) {
     await deletion(async () => {
-      await client.removeStudent(props.classId, student.id)
+      await client.deleteAbsence(absence.id)
       refreshSubject.next()
     })()
   }
 }
 </script>
-
-<style scoped></style>

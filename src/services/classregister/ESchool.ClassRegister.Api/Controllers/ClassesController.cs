@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.ClassRegister.Api.Controllers
 {
-    [Authorize(PolicyNames.Administrator)]
     [ApiController]
     [Route("api/classes")]
     public class ClassesController : ControllerBase
@@ -28,6 +27,7 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(PolicyNames.TeacherOrAdministrator)]
         public Task<PagedListResponse<ClassListResponse>> ListClasses(
             [FromQuery] ClassListQuery query, CancellationToken cancellationToken)
         {
@@ -35,6 +35,7 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(PolicyNames.TeacherOrAdministrator)]
         public Task<ClassDetailsResponse> GetClass(Guid id, CancellationToken cancellationToken)
         {
             return mediator.Send(new ClassGetQuery
@@ -44,15 +45,18 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpGet("{id}/students")]
-        public Task<PagedListResponse<UserRoleListResponse>> ListStudents(Guid id, [FromQuery] PagedListQuery query, CancellationToken cancellationToken)
+        [Authorize(PolicyNames.TeacherOrAdministrator)]
+        public Task<PagedListResponse<UserRoleListResponse>> ListStudents(Guid id, string searchText, [FromQuery] PagedListQuery query, CancellationToken cancellationToken)
         {
             return mediator.Send(query.ToTypedQuery<ClassStudentListQuery>(x =>
             {
                 x.ClassId = id;
+                x.SearchText = searchText;
             }), cancellationToken);
         }
 
         [HttpPost]
+        [Authorize(PolicyNames.Administrator)]
         public Task<ClassDetailsResponse> CreateClass([FromBody] ClassCreateCommand command,
             CancellationToken cancellationToken)
         {
@@ -60,6 +64,7 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpPost("{classId}/students/{studentId}")]
+        [Authorize(PolicyNames.Administrator)]
         public Task AssignStudent(Guid classId, Guid studentId, CancellationToken cancellationToken)
         {
             return mediator.Send(new AssignStudentToClassCommand
@@ -70,6 +75,7 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpDelete("{classId}/students/{studentId}")]
+        [Authorize(PolicyNames.Administrator)]
         public Task RemoveStudent(Guid classId, Guid studentId, CancellationToken cancellationToken)
         {
             return mediator.Send(new RemoveStudentFromClassCommand
@@ -79,6 +85,7 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(PolicyNames.Administrator)]
         public Task<ClassDetailsResponse> EditClass(Guid id, [FromBody] ClassEditCommand command,
             CancellationToken cancellationToken)
         {
@@ -90,6 +97,7 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpPatch("{id}/close")]
+        [Authorize(PolicyNames.Administrator)]
         public Task<ClassDetailsResponse> CloseClass(Guid id, CancellationToken cancellationToken)
         {
             return mediator.Send(new ClassFinishCommand
@@ -99,6 +107,7 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(PolicyNames.Administrator)]
         public Task DeleteClass(Guid id, CancellationToken cancellationToken)
         {
             return mediator.Send(new ClassDeleteCommand
