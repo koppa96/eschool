@@ -29,6 +29,11 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Absences
         {
         }
 
+        protected override IQueryable<Absence> Filter(IQueryable<Absence> entities, LessonAbsenceListQuery query)
+        {
+            return entities.Where(x => x.LessonId == query.LessonId);
+        }
+
         protected override IOrderedQueryable<Absence> Order(IQueryable<Absence> entities, LessonAbsenceListQuery query)
         {
             return entities.OrderBy(x => x.Student.User.Name);

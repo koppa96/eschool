@@ -12,6 +12,8 @@
       <LessonAbsenceList
         :lesson-id="lessonId"
         :class-id="classId"
+        :school-year-id="schoolYearId"
+        :subject-id="subjectId"
         class="fill-card"
       />
     </q-card>
@@ -41,11 +43,17 @@ import {
 } from '@/core/utils/display-helpers'
 import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'
 
+interface Params {
+  classId: string
+  schoolYearId: string
+  subjectId: string
+  lessonId: string
+}
+
 const route = useRoute()
 const client = createClient(ClassSchoolYearSubjectLessonsClient)
 const lesson = ref(new LessonDetailsResponse())
-const lessonId = resolveLessonId()
-const classId = resolveClassId()
+const { lessonId, subjectId, classId, schoolYearId } = resolveParams()
 const { dialog } = useQuasar()
 const { save } = useSaveAndDeleteNotifications()
 const title = computed(() => lesson.value.title ?? 'Óra részletei')
@@ -83,20 +91,8 @@ const detailsGridData = computed<DetailsGridItem[]>(() => {
   ]
 })
 
-function resolveLessonId(): string {
-  if (isString(route.params.lessonId)) {
-    return route.params.lessonId
-  }
-
-  return ''
-}
-
-function resolveClassId(): string {
-  if (isString(route.params.classId)) {
-    return route.params.classId
-  }
-
-  return ''
+function resolveParams(): Params {
+  return (route.params as unknown) as Params
 }
 
 function openEditDialog(): void {

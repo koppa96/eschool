@@ -32,6 +32,8 @@ import DataTable from '@/shared/components/DataTable.vue'
 const props = defineProps<{
   lessonId: string
   classId: string
+  schoolYearId: string
+  subjectId: string
 }>()
 
 const columns: QTableColumn<LessonAbsenceListResponse>[] = [
@@ -59,7 +61,14 @@ function fetchData(
   pageSize: number,
   pageIndex: number
 ): Promise<PagedListResponse> {
-  return client.listLessonAbsences(props.lessonId, pageSize, pageIndex)
+  return client.listLessonAbsences2(
+    props.lessonId,
+    pageSize,
+    pageIndex,
+    props.schoolYearId,
+    props.classId,
+    props.subjectId
+  )
 }
 
 function createAbsence(): void {
