@@ -3004,8 +3004,8 @@ export class ClassSchoolYearSubjectGradesClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    listGradesBySubject(schoolYearId: string, classId: string, subjectId: string , cancelToken?: CancelToken | undefined): Promise<GradeListByClassSchoolYearSubjectResponse[]> {
-        let url_ = this.baseUrl + "/api/school-years/{schoolYearId}/classes/{classId}/subjects/{subjectId}/grades";
+    listGradesBySubject(schoolYearId: string, classId: string, subjectId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfGradeListByClassSchoolYearSubjectResponse> {
+        let url_ = this.baseUrl + "/api/school-years/{schoolYearId}/classes/{classId}/subjects/{subjectId}/grades?";
         if (schoolYearId === undefined || schoolYearId === null)
             throw new Error("The parameter 'schoolYearId' must be defined.");
         url_ = url_.replace("{schoolYearId}", encodeURIComponent("" + schoolYearId));
@@ -3015,6 +3015,14 @@ export class ClassSchoolYearSubjectGradesClient {
         if (subjectId === undefined || subjectId === null)
             throw new Error("The parameter 'subjectId' must be defined.");
         url_ = url_.replace("{subjectId}", encodeURIComponent("" + subjectId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <AxiosRequestConfig>{
@@ -3037,7 +3045,7 @@ export class ClassSchoolYearSubjectGradesClient {
         });
     }
 
-    protected processListGradesBySubject(response: AxiosResponse): Promise<GradeListByClassSchoolYearSubjectResponse[]> {
+    protected processListGradesBySubject(response: AxiosResponse): Promise<PagedListResponseOfGradeListByClassSchoolYearSubjectResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -3051,20 +3059,13 @@ export class ClassSchoolYearSubjectGradesClient {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(GradeListByClassSchoolYearSubjectResponse.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = PagedListResponseOfGradeListByClassSchoolYearSubjectResponse.fromJS(resultData200);
             return result200;
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<GradeListByClassSchoolYearSubjectResponse[]>(<any>null);
+        return Promise.resolve<PagedListResponseOfGradeListByClassSchoolYearSubjectResponse>(<any>null);
     }
 }
 
@@ -6319,6 +6320,62 @@ export class SubjectEditCommand implements ISubjectEditCommand {
 
 export interface ISubjectEditCommand {
     name: string | undefined;
+}
+
+export class PagedListResponseOfGradeListByClassSchoolYearSubjectResponse implements IPagedListResponseOfGradeListByClassSchoolYearSubjectResponse {
+    pageSize!: number;
+    pageIndex!: number;
+    totalCount!: number;
+    items!: GradeListByClassSchoolYearSubjectResponse[] | undefined;
+
+    constructor(data?: IPagedListResponseOfGradeListByClassSchoolYearSubjectResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageSize = _data["pageSize"];
+            this.pageIndex = _data["pageIndex"];
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(GradeListByClassSchoolYearSubjectResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedListResponseOfGradeListByClassSchoolYearSubjectResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedListResponseOfGradeListByClassSchoolYearSubjectResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageSize"] = this.pageSize;
+        data["pageIndex"] = this.pageIndex;
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedListResponseOfGradeListByClassSchoolYearSubjectResponse {
+    pageSize: number;
+    pageIndex: number;
+    totalCount: number;
+    items: GradeListByClassSchoolYearSubjectResponse[] | undefined;
 }
 
 export class GradeListByClassSchoolYearSubjectResponse implements IGradeListByClassSchoolYearSubjectResponse {

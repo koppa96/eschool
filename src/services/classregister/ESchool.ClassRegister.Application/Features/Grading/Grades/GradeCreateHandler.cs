@@ -33,10 +33,18 @@ namespace ESchool.ClassRegister.Application.Features.Grading.Grades
                     .ThenInclude(x => x.ClassSchoolYears.Where(x => x.SchoolYearId == request.SchoolYearId))
                         .ThenInclude(x => x.ClassSchoolYearSubjects.Where(x => x.SubjectId == request.SubjectId))
                             .ThenInclude(x => x.ClassSchoolYearSubjectTeachers)
+                .Include(x => x.Class)
+                    .ThenInclude(x => x.ClassSchoolYears.Where(x => x.SchoolYearId == request.SchoolYearId))
+                        .ThenInclude(x => x.ClassSchoolYearSubjects.Where(x => x.SubjectId == request.SubjectId))
+                            .ThenInclude(x => x.Subject)
+                .Include(x => x.User)
                 .SingleAsync(x => x.Id == request.StudentId, cancellationToken);
 
             var classSchoolYearSubject = student.Class.ClassSchoolYears.Single().ClassSchoolYearSubjects.Single();
-            var teacher = await context.Teachers.FindOrThrowAsync(currentUserId, cancellationToken);
+            
+            var teacher = await context.Teachers.Include(x => x.User)
+                .SingleAsync(x => x.UserId == currentUserId, cancellationToken);
+            
             var gradeKind = await context.GradeKinds.FindOrThrowAsync(request.GradeKindId, cancellationToken);
             var grade = new Grade
             {

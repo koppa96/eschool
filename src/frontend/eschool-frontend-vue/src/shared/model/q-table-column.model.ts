@@ -51,4 +51,6 @@ export interface QTableColumn<TItem = any> {
    * Classes to add on header cells of the column
    */
   headerClasses?: string
+
+  [key: string]: any
 }

@@ -229,6 +229,7 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
             /* webpackChunkName: "class-register" */ './views/class-subjects/ClassSubjectsLayoutView.vue'
           ),
         meta: {
+          disabled: true,
           resolveName: async (route: RouteLocationNormalizedLoaded) => {
             const schoolYearsClient = createClient(SchoolYearsClient)
             const classesClient = createClient(ClassesClient)
@@ -258,22 +259,40 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
             path: 'lessons',
             component: () =>
               import(
-                /* webpackChunkName: "class-register" */ './views/school-years/classes/subjects/ClassSchoolYearSubjectDetailsView.vue'
-              )
-          },
-          {
-            path: 'lessons/:lessonId',
-            component: () =>
-              import(
-                /* webpackChunkName: "class-register" */ './views/class-subjects/class-subject-lessons/LessonDetailsView.vue'
-              )
+                /* webpackChunkName: "class-register" */ './views/class-subjects/ClassSubjectsLayoutView.vue'
+              ),
+            meta: {
+              name: 'Tanórák'
+            },
+            children: [
+              {
+                path: '',
+                component: () =>
+                  import(
+                    /* webpackChunkName: "class-register" */ './views/school-years/classes/subjects/ClassSchoolYearSubjectDetailsView.vue'
+                  )
+              },
+              {
+                path: ':lessonId',
+                component: () =>
+                  import(
+                    /* webpackChunkName: "class-register" */ './views/class-subjects/class-subject-lessons/LessonDetailsView.vue'
+                  ),
+                meta: {
+                  name: 'Óra részletei'
+                }
+              }
+            ]
           },
           {
             path: 'grades',
             component: () =>
               import(
                 /* webpackChunkName: "class-register" */ './views/class-subjects/ClassSubjectGradesView.vue'
-              )
+              ),
+            meta: {
+              name: 'Jegyek'
+            }
           }
         ]
       }

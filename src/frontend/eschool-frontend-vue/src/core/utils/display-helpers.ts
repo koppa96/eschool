@@ -2,6 +2,7 @@ import { isNaN } from 'lodash-es'
 import { date as _ } from 'quasar'
 import {
   AbsenceState,
+  GradeValue,
   IClassListResponse,
   SchoolYearStatus
 } from '@/shared/generated-clients/class-register'
@@ -65,6 +66,40 @@ export function absenceState(value: AbsenceState): string {
       return 'Igazolatlan'
     case AbsenceState.Verified:
       return 'Igazolt'
+    default:
+      return 'Ismeretlen'
+  }
+}
+
+export function gradeValueNumber(value: GradeValue): number {
+  switch (value) {
+    case GradeValue.Excellent:
+      return 5
+    case GradeValue.Good:
+      return 4
+    case GradeValue.Fair:
+      return 3
+    case GradeValue.Sufficient:
+      return 2
+    case GradeValue.Fail:
+      return 1
+    default:
+      return 0
+  }
+}
+
+export function gradeValue(value: GradeValue): string {
+  switch (value) {
+    case GradeValue.Excellent:
+      return 'Jeles'
+    case GradeValue.Good:
+      return 'Jó'
+    case GradeValue.Fair:
+      return 'Közepes'
+    case GradeValue.Sufficient:
+      return 'Elégséges'
+    case GradeValue.Fail:
+      return 'Elégtelen'
     default:
       return 'Ismeretlen'
   }

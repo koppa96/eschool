@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.ClassRegister.Api.Controllers
 {
-    [Authorize(PolicyNames.Administrator)]
     [ApiController]
     [Route("api/grade-kinds")]
     public class GradeKindsController : ControllerBase
@@ -23,12 +22,14 @@ namespace ESchool.ClassRegister.Api.Controllers
             this.mediator = mediator;
         }
 
+        [Authorize(PolicyNames.AnyRole)]
         [HttpGet]
         public Task<List<GradeKindResponse>> ListGradeKinds(CancellationToken cancellationToken)
         {
             return mediator.Send(new GradeKindListQuery(), cancellationToken);
         }
 
+        [Authorize(PolicyNames.Administrator)]
         [HttpPost]
         public Task<GradeKindResponse> CreateGradeKind(
             [FromBody] GradeKindCreateCommand command,
@@ -37,6 +38,7 @@ namespace ESchool.ClassRegister.Api.Controllers
             return mediator.Send(command, cancellationToken);
         }
 
+        [Authorize(PolicyNames.Administrator)]
         [HttpPut("{gradeKindId}")]
         public Task<GradeKindResponse> EditGradeKind(
             Guid gradeKindId,
@@ -50,6 +52,7 @@ namespace ESchool.ClassRegister.Api.Controllers
             }, cancellationToken);
         }
 
+        [Authorize(PolicyNames.Administrator)]
         [HttpDelete("{gradeKindId}")]
         public Task DeleteGradeKind(Guid gradeKindId, CancellationToken cancellationToken)
         {

@@ -9,6 +9,7 @@
       :key="item.path"
       :label="item.name"
       :to="item.path"
+      :disable="item.disabled"
     />
   </q-breadcrumbs>
 </template>
@@ -47,7 +48,8 @@ function updateBreadcrumb(value: RouteLocationMatched[]): void {
 
     const breadCrumbItem: BreadCrumbItem = {
       path,
-      name: ''
+      name: '',
+      disabled: !!item.meta.disabled
     }
 
     const index = items.value.push(breadCrumbItem) - 1
@@ -57,7 +59,8 @@ function updateBreadcrumb(value: RouteLocationMatched[]): void {
       item.meta.resolveName(route).then(name => {
         items.value.splice(index, 1, {
           path,
-          name
+          name,
+          disabled: breadCrumbItem.disabled
         })
       })
     }
