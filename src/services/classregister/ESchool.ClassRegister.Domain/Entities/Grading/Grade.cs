@@ -2,10 +2,11 @@
 using ESchool.ClassRegister.Domain.Entities.Users;
 using System;
 using ESchool.ClassRegister.SharedDomain.Enums;
+using ESchool.Libs.Domain.Interfaces;
 
 namespace ESchool.ClassRegister.Domain.Entities.Grading
 {
-    public class Grade
+    public class Grade : IEntity
     {
         public Guid Id { get; set; }
 

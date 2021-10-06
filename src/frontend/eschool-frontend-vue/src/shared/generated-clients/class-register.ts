@@ -1759,6 +1759,167 @@ export class GradeKindsClient {
     }
 }
 
+export class GradesClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getGradeDetails(gradeId: string , cancelToken?: CancelToken | undefined): Promise<GradeDetailsResponse> {
+        let url_ = this.baseUrl + "/api/grades/{gradeId}";
+        if (gradeId === undefined || gradeId === null)
+            throw new Error("The parameter 'gradeId' must be defined.");
+        url_ = url_.replace("{gradeId}", encodeURIComponent("" + gradeId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetGradeDetails(_response);
+        });
+    }
+
+    protected processGetGradeDetails(response: AxiosResponse): Promise<GradeDetailsResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = GradeDetailsResponse.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<GradeDetailsResponse>(<any>null);
+    }
+
+    editGrade(gradeId: string, commandBody: GradeEditCommand , cancelToken?: CancelToken | undefined): Promise<GradeDetailsResponse> {
+        let url_ = this.baseUrl + "/api/grades/{gradeId}";
+        if (gradeId === undefined || gradeId === null)
+            throw new Error("The parameter 'gradeId' must be defined.");
+        url_ = url_.replace("{gradeId}", encodeURIComponent("" + gradeId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = commandBody;
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processEditGrade(_response);
+        });
+    }
+
+    protected processEditGrade(response: AxiosResponse): Promise<GradeDetailsResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = GradeDetailsResponse.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<GradeDetailsResponse>(<any>null);
+    }
+
+    deleteGrade(gradeId: string , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/grades/{gradeId}";
+        if (gradeId === undefined || gradeId === null)
+            throw new Error("The parameter 'gradeId' must be defined.");
+        url_ = url_.replace("{gradeId}", encodeURIComponent("" + gradeId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processDeleteGrade(_response);
+        });
+    }
+
+    protected processDeleteGrade(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+}
+
 export class MessagesClient {
     private instance: AxiosInstance;
     private baseUrl: string;
@@ -5413,6 +5574,166 @@ export interface IGradeKindEditCommand {
     averageMultiplier: number;
 }
 
+export class GradeDetailsResponse implements IGradeDetailsResponse {
+    id!: string;
+    gradeValue!: GradeValue;
+    description!: string | undefined;
+    writtenIn!: Date;
+    gradeKind!: GradeKindResponse | undefined;
+    student!: UserRoleListResponse | undefined;
+    teacher!: UserRoleListResponse | undefined;
+    subject!: SubjectListResponse | undefined;
+
+    constructor(data?: IGradeDetailsResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.gradeValue = _data["gradeValue"];
+            this.description = _data["description"];
+            this.writtenIn = _data["writtenIn"] ? new Date(_data["writtenIn"].toString()) : <any>undefined;
+            this.gradeKind = _data["gradeKind"] ? GradeKindResponse.fromJS(_data["gradeKind"]) : <any>undefined;
+            this.student = _data["student"] ? UserRoleListResponse.fromJS(_data["student"]) : <any>undefined;
+            this.teacher = _data["teacher"] ? UserRoleListResponse.fromJS(_data["teacher"]) : <any>undefined;
+            this.subject = _data["subject"] ? SubjectListResponse.fromJS(_data["subject"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GradeDetailsResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GradeDetailsResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["gradeValue"] = this.gradeValue;
+        data["description"] = this.description;
+        data["writtenIn"] = this.writtenIn ? this.writtenIn.toISOString() : <any>undefined;
+        data["gradeKind"] = this.gradeKind ? this.gradeKind.toJSON() : <any>undefined;
+        data["student"] = this.student ? this.student.toJSON() : <any>undefined;
+        data["teacher"] = this.teacher ? this.teacher.toJSON() : <any>undefined;
+        data["subject"] = this.subject ? this.subject.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IGradeDetailsResponse {
+    id: string;
+    gradeValue: GradeValue;
+    description: string | undefined;
+    writtenIn: Date;
+    gradeKind: GradeKindResponse | undefined;
+    student: UserRoleListResponse | undefined;
+    teacher: UserRoleListResponse | undefined;
+    subject: SubjectListResponse | undefined;
+}
+
+export enum GradeValue {
+    Fail = "Fail",
+    Sufficient = "Sufficient",
+    Fair = "Fair",
+    Good = "Good",
+    Excellent = "Excellent",
+}
+
+export class SubjectListResponse implements ISubjectListResponse {
+    id!: string;
+    name!: string | undefined;
+
+    constructor(data?: ISubjectListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): SubjectListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new SubjectListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface ISubjectListResponse {
+    id: string;
+    name: string | undefined;
+}
+
+export class GradeEditCommand implements IGradeEditCommand {
+    value!: GradeValue;
+    description!: string | undefined;
+    gradeKindId!: string;
+    writtenIn!: Date;
+
+    constructor(data?: IGradeEditCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.value = _data["value"];
+            this.description = _data["description"];
+            this.gradeKindId = _data["gradeKindId"];
+            this.writtenIn = _data["writtenIn"] ? new Date(_data["writtenIn"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GradeEditCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new GradeEditCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        data["description"] = this.description;
+        data["gradeKindId"] = this.gradeKindId;
+        data["writtenIn"] = this.writtenIn ? this.writtenIn.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IGradeEditCommand {
+    value: GradeValue;
+    description: string | undefined;
+    gradeKindId: string;
+    writtenIn: Date;
+}
+
 export class PagedListResponseOfMessageListResponse implements IPagedListResponseOfMessageListResponse {
     pageSize!: number;
     pageIndex!: number;
@@ -6010,46 +6331,6 @@ export interface ILessonListResponse {
     canceled: boolean;
 }
 
-export class SubjectListResponse implements ISubjectListResponse {
-    id!: string;
-    name!: string | undefined;
-
-    constructor(data?: ISubjectListResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-        }
-    }
-
-    static fromJS(data: any): SubjectListResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new SubjectListResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        return data; 
-    }
-}
-
-export interface ISubjectListResponse {
-    id: string;
-    name: string | undefined;
-}
-
 export class GradeListByStudentResponse implements IGradeListByStudentResponse {
     subject!: SubjectListResponse | undefined;
     grades!: GradeListResponse[] | undefined;
@@ -6144,14 +6425,6 @@ export interface IGradeListResponse {
     value: GradeValue;
     writtenIn: Date;
     gradeKind: GradeKindResponse | undefined;
-}
-
-export enum GradeValue {
-    Fail = "Fail",
-    Sufficient = "Sufficient",
-    Fair = "Fair",
-    Good = "Good",
-    Excellent = "Excellent",
 }
 
 export class PagedListResponseOfSubjectListResponse implements IPagedListResponseOfSubjectListResponse {
@@ -6754,74 +7027,11 @@ export interface IClassSchoolYearSubjectDetailsResponse {
     teachers: UserRoleListResponse[] | undefined;
 }
 
-export class GradeDetailsResponse implements IGradeDetailsResponse {
-    id!: string;
-    gradeValue!: GradeValue;
-    description!: string | undefined;
-    writtenIn!: Date;
-    gradeKind!: GradeKindResponse | undefined;
-    student!: UserRoleListResponse | undefined;
-    teacher!: UserRoleListResponse | undefined;
-    subject!: SubjectListResponse | undefined;
-
-    constructor(data?: IGradeDetailsResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.gradeValue = _data["gradeValue"];
-            this.description = _data["description"];
-            this.writtenIn = _data["writtenIn"] ? new Date(_data["writtenIn"].toString()) : <any>undefined;
-            this.gradeKind = _data["gradeKind"] ? GradeKindResponse.fromJS(_data["gradeKind"]) : <any>undefined;
-            this.student = _data["student"] ? UserRoleListResponse.fromJS(_data["student"]) : <any>undefined;
-            this.teacher = _data["teacher"] ? UserRoleListResponse.fromJS(_data["teacher"]) : <any>undefined;
-            this.subject = _data["subject"] ? SubjectListResponse.fromJS(_data["subject"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): GradeDetailsResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new GradeDetailsResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["gradeValue"] = this.gradeValue;
-        data["description"] = this.description;
-        data["writtenIn"] = this.writtenIn ? this.writtenIn.toISOString() : <any>undefined;
-        data["gradeKind"] = this.gradeKind ? this.gradeKind.toJSON() : <any>undefined;
-        data["student"] = this.student ? this.student.toJSON() : <any>undefined;
-        data["teacher"] = this.teacher ? this.teacher.toJSON() : <any>undefined;
-        data["subject"] = this.subject ? this.subject.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-export interface IGradeDetailsResponse {
-    id: string;
-    gradeValue: GradeValue;
-    description: string | undefined;
-    writtenIn: Date;
-    gradeKind: GradeKindResponse | undefined;
-    student: UserRoleListResponse | undefined;
-    teacher: UserRoleListResponse | undefined;
-    subject: SubjectListResponse | undefined;
-}
-
 export class ClassSchoolYearSubjectGradeCreateDto implements IClassSchoolYearSubjectGradeCreateDto {
     value!: GradeValue;
     description!: string | undefined;
     gradeKindId!: string;
+    writtenIn!: Date;
 
     constructor(data?: IClassSchoolYearSubjectGradeCreateDto) {
         if (data) {
@@ -6837,6 +7047,7 @@ export class ClassSchoolYearSubjectGradeCreateDto implements IClassSchoolYearSub
             this.value = _data["value"];
             this.description = _data["description"];
             this.gradeKindId = _data["gradeKindId"];
+            this.writtenIn = _data["writtenIn"] ? new Date(_data["writtenIn"].toString()) : <any>undefined;
         }
     }
 
@@ -6852,6 +7063,7 @@ export class ClassSchoolYearSubjectGradeCreateDto implements IClassSchoolYearSub
         data["value"] = this.value;
         data["description"] = this.description;
         data["gradeKindId"] = this.gradeKindId;
+        data["writtenIn"] = this.writtenIn ? this.writtenIn.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -6860,6 +7072,7 @@ export interface IClassSchoolYearSubjectGradeCreateDto {
     value: GradeValue;
     description: string | undefined;
     gradeKindId: string;
+    writtenIn: Date;
 }
 
 export class PagedListResponseOfClassSubjectListResponse implements IPagedListResponseOfClassSubjectListResponse {

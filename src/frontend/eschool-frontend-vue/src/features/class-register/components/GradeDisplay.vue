@@ -4,14 +4,22 @@
     @click="showDetails = true"
   >
     <transition name="fade">
-      <q-card v-if="showDetails" class="absolute z-top q-pa-md grade-card">
+      <q-card v-if="showDetails" class="absolute q-pa-md grade-card">
         <div class="flex justify-between items-center q-mb-sm">
           <h6 class="q-my-none">Részletek</h6>
           <div class="flex">
-            <q-btn dense round flat icon="edit" size="sm">
+            <q-btn dense round flat icon="edit" size="sm" @click="emit('edit')">
               <q-tooltip>Szerkesztés</q-tooltip>
             </q-btn>
-            <q-btn dense round flat icon="delete" color="negative" size="sm">
+            <q-btn
+              dense
+              round
+              flat
+              icon="delete"
+              color="negative"
+              size="sm"
+              @click="emit('delete')"
+            >
               <q-tooltip>Törlés</q-tooltip>
             </q-btn>
             <q-btn
@@ -54,10 +62,14 @@ const props = defineProps<{
   grade: GradeListResponse
 }>()
 
+const emit = defineEmits<{
+  (event: 'edit'): void
+  (event: 'delete'): void
+}>()
+
 const showDetails = ref(false)
 
 function closeDetails(): void {
-  console.log('closeDetails')
   showDetails.value = false
 }
 </script>
@@ -76,7 +88,13 @@ function closeDetails(): void {
     width: 250px;
     top: 20px;
     left: -50%;
+    z-index: 1;
   }
+}
+
+.fade-enter-to,
+.fade-leave {
+  opacity: 1;
 }
 
 .fade-enter-active,

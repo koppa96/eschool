@@ -11,6 +11,11 @@
       :loading="loading"
       @request="request($event)"
     >
+      <template #top-right>
+        <q-btn color="primary" icon="add" @click="createGrade()">
+          Jegy felvétele
+        </q-btn>
+      </template>
       <template #body="props">
         <q-tr :props="props">
           <q-td key="name" :props="props">
@@ -21,7 +26,20 @@
               v-for="grade in item.field(props.row)"
               :key="grade.id"
               :grade="grade"
+              @edit="editGrade(grade)"
+              @delete="deleteGrade(grade)"
             />
+          </q-td>
+          <q-td key="actions" :props="props">
+            <q-btn
+              dense
+              round
+              flat
+              icon="add"
+              @click.stop="createGrade(props.row.student)"
+            >
+              <q-tooltip>Jegy felvétele</q-tooltip>
+            </q-btn>
           </q-td>
         </q-tr>
       </template>
@@ -32,11 +50,19 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useQuasar } from 'quasar'
 import GradeDisplay from '../../components/GradeDisplay.vue'
+import GradeCreateEditDialog from '../../components/GradeCreateEditDialog.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
 import {
+  ClassSchoolYearSubjectGradeCreateDto,
   ClassSchoolYearSubjectGradesClient,
+  ClassSchoolYearSubjectStudentGradesClient,
+  GradeEditCommand,
+  GradeKindsClient,
   GradeListByClassSchoolYearSubjectResponse,
+  GradeListResponse,
+  GradesClient,
   SchoolYearDetailsResponse,
   SchoolYearsClient,
   UserRoleListResponse
@@ -45,6 +71,10 @@ import { createClient } from '@/shared/api'
 import { dateMonthMap } from '@/core/utils/date-month-mapping'
 import { useAutocompletingSubject } from '@/core/utils/observable-lifecycle.util'
 import { QPagination } from '@/shared/model/q-pagination.model'
+import { useConfirmDialog } from '@/core/utils/dialogs'
+import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'
+import { useLoader } from '@/core/utils/loading.utils'
+import { GradeCreateEditDialogResult } from '@/features/class-register/models/grade-create-edit-dialog-result'
 
 interface Params {
   classId: string
@@ -57,6 +87,10 @@ interface Row {
   [key: string]: any
 }
 
+const { dialog } = useQuasar()
+const load = useLoader()
+const confirm = useConfirmDialog()
+const { save, deletion } = useSaveAndDeleteNotifications()
 const columns = ref<QTableColumn<Row>[]>([])
 const gradeColumns = ref<QTableColumn<Row>[]>([])
 const route = useRoute()
@@ -64,6 +98,11 @@ const schoolYear = ref(new SchoolYearDetailsResponse())
 const { schoolYearId, classId, subjectId } = resolveParams()
 const schoolYearsClient = createClient(SchoolYearsClient)
 const gradesClient = createClient(ClassSchoolYearSubjectGradesClient)
+const client = createClient(GradesClient)
+const gradeKindsClient = createClient(GradeKindsClient)
+const studentGradesClient = createClient(
+  ClassSchoolYearSubjectStudentGradesClient
+)
 const refreshSubject = useAutocompletingSubject()
 const data = ref<Row[]>([])
 const loading = ref(false)
@@ -116,6 +155,74 @@ async function loadData(): Promise<void> {
   await request({ pagination: pagination.value })
 }
 
+async function createGrade(student?: UserRoleListResponse): Promise<void> {
+  const gradeKinds = await load(() => gradeKindsClient.listGradeKinds())
+
+  dialog({
+    component: GradeCreateEditDialog,
+    componentProps: {
+      gradeKinds,
+      classId,
+      student
+    }
+  }).onOk(
+    save(async (result: GradeCreateEditDialogResult) => {
+      await studentGradesClient.createGrade(
+        schoolYearId,
+        classId,
+        subjectId,
+        result.studentId,
+        new ClassSchoolYearSubjectGradeCreateDto({
+          ...result,
+          writtenIn: new Date(result.writtenIn)
+        })
+      )
+      await request({ pagination: pagination.value })
+    })
+  )
+}
+
+async function editGrade(grade: GradeListResponse): Promise<void> {
+  const [details, gradeKinds] = await load(() =>
+    Promise.all([
+      client.getGradeDetails(grade.id),
+      gradeKindsClient.listGradeKinds()
+    ])
+  )
+
+  dialog({
+    component: GradeCreateEditDialog,
+    componentProps: {
+      gradeToEdit: details,
+      gradeKinds,
+      classId,
+      student: details.student
+    }
+  }).onOk(
+    save(async (result: GradeCreateEditDialogResult) => {
+      await client.editGrade(
+        grade.id,
+        new GradeEditCommand({
+          ...result,
+          writtenIn: new Date(result.writtenIn)
+        })
+      )
+      await request({ pagination: pagination.value })
+    })
+  )
+}
+
+async function deleteGrade(grade: GradeListResponse): Promise<void> {
+  const result = await confirm('Biztosan törölni szeretné a jegyet?')
+
+  if (result) {
+    await deletion(async () => {
+      await client.deleteGrade(grade.id)
+      await request({ pagination: pagination.value })
+    })()
+  }
+}
+
 async function request($event: { pagination: QPagination }): Promise<void> {
   loading.value = true
   try {
@@ -127,9 +234,7 @@ async function request($event: { pagination: QPagination }): Promise<void> {
       $event.pagination.page - 1
     )
 
-    const szutyok = response.items?.map(toRow) ?? []
-    console.log(szutyok)
-    data.value = szutyok
+    data.value = response.items?.map(toRow) ?? []
 
     pagination.value = {
       ...$event.pagination,
@@ -156,8 +261,6 @@ function toRow(item: GradeListByClassSchoolYearSubjectResponse): Row {
   }
   return result
 }
-
-function createGrade(student?: UserRoleListResponse): void {}
 
 loadData()
 </script>

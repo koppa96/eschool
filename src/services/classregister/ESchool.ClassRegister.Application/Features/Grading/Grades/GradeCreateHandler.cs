@@ -54,7 +54,7 @@ namespace ESchool.ClassRegister.Application.Features.Grading.Grades
                 ClassSchoolYearSubject = classSchoolYearSubject,
                 Student = student,
                 Teacher = teacher,
-                WrittenIn = DateTime.Now
+                WrittenIn = request.WrittenIn
             };
 
             context.Grades.Add(grade);
