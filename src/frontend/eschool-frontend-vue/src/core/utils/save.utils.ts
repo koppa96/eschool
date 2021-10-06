@@ -1,4 +1,5 @@
 import { useNotifications } from '@/core/utils/notifications'
+import { IProblemDetails } from '@/shared/generated-clients/class-register'
 
 export type SaveFunction = (...args: any[]) => Promise<any>
 export type SaveWrapperFunction = (func: SaveFunction) => SaveFunction
@@ -23,8 +24,9 @@ export function withNotifications(
         await func(...args)
         notifications.success(config?.successText ?? 'Sikeres mentés')
       } catch (err) {
-        console.log(err)
-        notifications.failure(config?.failureText ?? 'Sikertelen mentés')
+        notifications.failure(
+          (err as any).detail ?? config?.failureText ?? 'Sikertelen mentés'
+        )
         throw err
       }
     }
