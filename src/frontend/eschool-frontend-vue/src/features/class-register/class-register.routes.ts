@@ -286,13 +286,35 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: 'grades',
-    component: () =>
-      import(
-        /* webpackChunkName: "class-register" */ './views/StudentGradesView.vue'
-      ),
+    path: '/student/subjects',
+    component: LayoutComponent,
     meta: {
-      name: 'Jegyek'
-    }
+      name: 'Tantárgyak'
+    },
+    children: [
+      {
+        path: '',
+        component: () =>
+          import(
+            /* webpackChunkName: "class-register" */ './views/student/StudentSubjectListView.vue'
+          )
+      },
+      {
+        path: ':subjectId',
+        component: LayoutComponent,
+        meta: {
+          resolveName: async (route: RouteLocationNormalizedLoaded) => {
+            const client = createClient(SubjectsClient)
+
+            if (isString(route.params.subjectId)) {
+              const subject = await client.getSubject(route.params.subjectId)
+              return subject.name
+            }
+
+            return 'Tantárgy részletei'
+          }
+        }
+      }
+    ]
   }
 ]

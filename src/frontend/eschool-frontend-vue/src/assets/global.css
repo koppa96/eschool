@@ -10,6 +10,10 @@
     width: 50vw !important;
 }
 
+.vw-20 {
+    width: 20vw !important;
+}
+
 .full-page-table {
     flex-grow: 1;
     flex-shrink: 1;

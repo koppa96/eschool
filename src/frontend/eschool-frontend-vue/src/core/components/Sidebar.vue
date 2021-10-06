@@ -81,9 +81,9 @@
         v-ripple
         :inset-level="1"
         clickable
-        to="/grades"
+        to="/student/subjects"
       >
-        <q-item-section>Jegyek</q-item-section>
+        <q-item-section>Tantárgyak</q-item-section>
       </q-item>
       <q-item v-if="isStudent || isParent" v-ripple :inset-level="1" clickable>
         <q-item-section>Hiányzások</q-item-section>

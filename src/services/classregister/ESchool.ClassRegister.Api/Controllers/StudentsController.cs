@@ -60,12 +60,14 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpGet("related")]
+        [Authorize(PolicyNames.StudentOrParent)]
         public Task<List<UserRoleListResponse>> GetRelatedStudents(CancellationToken cancellationToken)
         {
             return mediator.Send(new RelatedStudentListQuery(), cancellationToken);
         }
 
         [HttpGet("{studentId}/school-years")]
+        [Authorize(PolicyNames.StudentOrParent)]
         public Task<List<SchoolYearListResponse>> GetStudentSchoolYears(Guid studentId,
             CancellationToken cancellationToken)
         {
@@ -76,6 +78,7 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpGet("{studentId}/school-years/${schoolYearId}/subjects")]
+        [Authorize(PolicyNames.StudentOrParent)]
         public Task<PagedListResponse<SubjectListResponse>> GetStudentSubjectsInSchoolYear(Guid studentId,
             Guid schoolYearId, [FromQuery] PagedListQuery query, CancellationToken cancellationToken)
         {
@@ -87,7 +90,8 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpGet("{studentId}/school-years/${schoolYearId}/subjects/${subjectId}/grades")]
-        public Task<PagedListResponse<GradeListByStudentResponse>> ListGrades(
+        [Authorize(PolicyNames.StudentOrParent)]
+        public Task<PagedListResponse<GradeListResponse>> ListGrades(
             Guid studentId,
             Guid schoolYearId,
             Guid subjectId,

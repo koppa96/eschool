@@ -12,6 +12,9 @@ namespace ESchool.ClassRegister.Application.Features.Grading.Grades.Common
                 .ForMember(x => x.Subject, o => o.MapFrom(x => x.ClassSchoolYearSubject.Subject))
                 .ForMember(x => x.GradeValue, o => o.MapFrom(x => x.Value))
                 .ForMember(x => x.GradeKind, o => o.MapFrom(x => x.Kind));
+
+            CreateMap<Grade, GradeListResponse>()
+                .ForMember(x => x.GradeKind, o => o.MapFrom(x => x.Kind));
         }
     }
 }
