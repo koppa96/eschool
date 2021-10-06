@@ -39,6 +39,7 @@ namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
                 SubjectId = subjectId,
                 Description = dto.Description,
                 GradeKindId = dto.GradeKindId,
+                WrittenIn = dto.WrittenIn,
                 Value = dto.Value
             }, cancellationToken);
         }

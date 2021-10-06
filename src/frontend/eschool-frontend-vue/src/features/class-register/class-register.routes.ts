@@ -7,14 +7,12 @@ import {
   SubjectsClient
 } from '@/shared/generated-clients/class-register'
 import { displayClass } from '@/core/utils/display-helpers'
+import LayoutComponent from '@/core/components/LayoutComponent.vue'
 
 export const classRegisterRoutes: RouteRecordRaw[] = [
   {
     path: '/subjects',
-    component: () =>
-      import(
-        /* webpackChunkName: "class-register" */ './views/SubjectsLayoutView.vue'
-      ),
+    component: LayoutComponent,
     meta: {
       name: 'Tantárgyak'
     },
@@ -69,10 +67,7 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
   },
   {
     path: '/school-years',
-    component: () =>
-      import(
-        /* webpackChunkName: "class-register" */ './views/school-years/SchoolYearLayoutView.vue'
-      ),
+    component: LayoutComponent,
     meta: {
       name: 'Tanévek'
     },
@@ -86,10 +81,7 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
       },
       {
         path: ':schoolYearId',
-        component: () =>
-          import(
-            /* webpackChunkName: "class-register" */ './views/school-years/classes/ClassSchoolYearLayoutView.vue'
-          ),
+        component: LayoutComponent,
         meta: {
           resolveName: async (route: RouteLocationNormalizedLoaded) => {
             const client = createClient(SchoolYearsClient)
@@ -114,10 +106,7 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
           },
           {
             path: 'classes/:classId/subjects',
-            component: () =>
-              import(
-                /* webpackChunkName: "class-register" */ './views/school-years/classes/subjects/ClassSchoolYearSubjectLayoutView.vue'
-              ),
+            component: LayoutComponent,
             meta: {
               resolveName: async (route: RouteLocationNormalizedLoaded) => {
                 const classesClient = createClient(ClassesClient)
@@ -169,10 +158,7 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
   },
   {
     path: '/classes',
-    component: () =>
-      import(
-        /* webpackChunkName: "class-register" */ './views/classes/ClassesLayoutView.vue'
-      ),
+    component: LayoutComponent,
     meta: {
       name: 'Osztályok'
     },
@@ -207,10 +193,7 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
   },
   {
     path: '/groups',
-    component: () =>
-      import(
-        /* webpackChunkName: "class-register" */ './views/class-subjects/ClassSubjectsLayoutView.vue'
-      ),
+    component: LayoutComponent,
     meta: {
       name: 'Csoportok'
     },
@@ -224,10 +207,7 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
       },
       {
         path: ':schoolYearId/:classId/:subjectId',
-        component: () =>
-          import(
-            /* webpackChunkName: "class-register" */ './views/class-subjects/ClassSubjectsLayoutView.vue'
-          ),
+        component: LayoutComponent,
         meta: {
           disabled: true,
           resolveName: async (route: RouteLocationNormalizedLoaded) => {
@@ -257,10 +237,7 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
         children: [
           {
             path: 'lessons',
-            component: () =>
-              import(
-                /* webpackChunkName: "class-register" */ './views/class-subjects/ClassSubjectsLayoutView.vue'
-              ),
+            component: LayoutComponent,
             meta: {
               name: 'Tanórák'
             },

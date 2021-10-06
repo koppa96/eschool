@@ -38,6 +38,7 @@ namespace ESchool.ClassRegister.Application.Features.Grading.Grades
             grade.Value = request.InnerCommand.Value;
             grade.Description = request.InnerCommand.Description;
             grade.Kind = gradeKind;
+            grade.WrittenIn = request.InnerCommand.WrittenIn;
 
             await context.SaveChangesAsync(cancellationToken);
             return mapper.Map<GradeDetailsResponse>(grade);
