@@ -12,8 +12,7 @@ namespace ESchool.ClassRegister.Api.Controllers
 {
     [Authorize(PolicyNames.Administrator)]
     [Route("api/teachers")]
-    [ApiController]
-    public class TeachersController : ControllerBase
+    public class TeachersController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

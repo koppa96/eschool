@@ -56,6 +56,16 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/grade-kinds',
+    component: () =>
+      import(
+        /* webpackChunkName: "class-register" */ './views/GradeKindsView.vue'
+      ),
+    meta: {
+      name: 'Jegytípusok'
+    }
+  },
+  {
     path: '/class-types',
     component: () =>
       import(

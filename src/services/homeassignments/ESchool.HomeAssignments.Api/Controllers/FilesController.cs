@@ -16,8 +16,7 @@ namespace ESchool.HomeAssignments.Api.Controllers
     [Route("api/homeworks/{homeworkId}/solutions/{solutionId}/files")]
     [Route("api/solutions/{solutionId}/files")]
     [Route("api/files")]
-    [ApiController]
-    public class FilesController : ControllerBase
+    public class FilesController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

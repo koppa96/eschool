@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.Libs.AspNetCore;
 using ESchool.Testing.Application.Features.TestAnswers;
 using ESchool.Testing.Application.Features.TestAnswers.Common;
 using ESchool.Testing.Interface.Features.TestAnswers;
@@ -11,7 +12,7 @@ namespace ESchool.Testing.Api.Controllers
 {
     [Route("api/tests/{testId}/answers/{answerId}")]
     [Route("api/test-answers/{answerId}")]
-    public class TestAnswersController : ControllerBase
+    public class TestAnswersController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

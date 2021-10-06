@@ -11,9 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.HomeAssignments.Api.Controllers
 {
-    [ApiController]
     [Route("api/school-years/{schoolYearId}")]
-    public class UserHomeworksController : ControllerBase
+    public class UserHomeworksController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

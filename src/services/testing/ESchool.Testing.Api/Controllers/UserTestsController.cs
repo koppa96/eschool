@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Interface.Query;
 using ESchool.Libs.Interface.Response;
@@ -12,8 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ESchool.Testing.Api.Controllers
 {
     [Route("api")]
-    [ApiController]
-    public class UserTestsController : ControllerBase
+    public class UserTestsController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

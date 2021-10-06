@@ -16,8 +16,7 @@ namespace ESchool.IdentityProvider.Controllers
 {
     [Authorize(PolicyNames.AdministratorOrTenantAdministrator)]
     [Route("api/tenants/{tenantId}/users")]
-    [ApiController]
-    public class TenantUserController : ControllerBase
+    public class TenantUserController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

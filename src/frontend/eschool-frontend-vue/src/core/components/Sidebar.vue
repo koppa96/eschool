@@ -63,6 +63,9 @@
       <q-item v-ripple :inset-level="1" clickable to="/classrooms">
         <q-item-section>Termek</q-item-section>
       </q-item>
+      <q-item v-ripple :inset-level="1" clickable to="/grade-kinds">
+        <q-item-section>Jegytípusok</q-item-section>
+      </q-item>
     </q-expansion-item>
 
     <q-expansion-item

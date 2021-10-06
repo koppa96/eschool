@@ -11,9 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
 {
-    [ApiController]
     [Route("api/school-years/{schoolYearId}/classes/{classId}/subjects/{subjectId}/students/{studentId}/grades")]
-    public class ClassSchoolYearSubjectStudentGradesController : ControllerBase
+    public class ClassSchoolYearSubjectStudentGradesController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

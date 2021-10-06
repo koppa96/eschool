@@ -13,8 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ESchool.IdentityProvider.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class TenantsController : ControllerBase
+    public class TenantsController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

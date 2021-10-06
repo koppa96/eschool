@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.Libs.AspNetCore;
 using ESchool.Testing.Application.Features.TaskAnswers;
 using ESchool.Testing.Application.Features.TaskAnswers.Common;
 using ESchool.Testing.Application.Features.TaskAnswers.CreateEdit;
@@ -13,7 +14,7 @@ namespace ESchool.Testing.Api.Controllers
     [Route("api/tests/{testId}/answers/{answerId}/taks-answers")]
     [Route("api/test-answers/{answerId}/task-answers")]
     [Route("api/task-answers")]
-    public class TaskAnswersController : ControllerBase
+    public class TaskAnswersController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

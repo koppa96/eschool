@@ -18,8 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ESchool.Testing.Api.Controllers
 {
     [Route("api/tests")]
-    [ApiController]
-    public class TestsController : ControllerBase
+    public class TestsController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

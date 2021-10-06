@@ -11,9 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace ESchool.ClassRegister.Api.Controllers
 {
     [Authorize(PolicyNames.AnyRole)]
-    [ApiController]
     [Route("api/messages")]
-    public class MessagesController : ControllerBase
+    public class MessagesController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

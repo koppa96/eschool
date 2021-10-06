@@ -14,8 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ESchool.IdentityProvider.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
         private readonly IIdentityService identityService;

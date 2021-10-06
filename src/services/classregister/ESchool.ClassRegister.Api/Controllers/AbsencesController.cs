@@ -12,10 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.ClassRegister.Api.Controllers
 {
-    [ApiController]
     [Route("api/absences")]
     [Route("api/school-years/{schoolYearId}/classes/{classId}/subjects/{subjectId}/lessons/{lessonId}/absences")]
-    public class AbsencesController : ControllerBase
+    public class AbsencesController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

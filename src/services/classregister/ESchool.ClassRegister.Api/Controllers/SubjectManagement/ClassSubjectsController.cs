@@ -13,8 +13,7 @@ namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
 {
     [Authorize(PolicyNames.Teacher)]
     [Route("api/school-years/{schoolYearId}/class-subjects")]
-    [ApiController]
-    public class ClassSubjectsController : ControllerBase
+    public class ClassSubjectsController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

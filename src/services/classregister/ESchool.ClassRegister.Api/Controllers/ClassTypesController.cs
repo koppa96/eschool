@@ -12,9 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace ESchool.ClassRegister.Api.Controllers
 {
     [Authorize(PolicyNames.Administrator)]
-    [ApiController]
     [Route("api/class-types")]
-    public class ClassTypesController : ControllerBase
+    public class ClassTypesController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

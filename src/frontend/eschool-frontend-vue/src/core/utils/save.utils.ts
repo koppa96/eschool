@@ -23,6 +23,7 @@ export function withNotifications(
         await func(...args)
         notifications.success(config?.successText ?? 'Sikeres mentés')
       } catch (err) {
+        console.log(err)
         notifications.failure(config?.failureText ?? 'Sikertelen mentés')
         throw err
       }
