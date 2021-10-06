@@ -28,6 +28,8 @@ namespace ESchool.Libs.AspNetCore.Middlewares
             }
             catch (Exception e)
             {
+                logger.LogError(e, "Unhandled exception caught");
+                
                 if (e is InvalidOperationException or ArgumentException)
                 {
                     context.Response.StatusCode = 400;

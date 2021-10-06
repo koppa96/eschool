@@ -1,16 +1,16 @@
 ﻿using System.Linq;
+using AutoMapper;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.Grading;
-using ESchool.ClassRegister.Interface.Features.Grading.GradeKinds;
 using ESchool.ClassRegister.Interface.Features.Grading.Grades;
-using ESchool.ClassRegister.Interface.Features.Subjects;
 using ESchool.Libs.Application.Cqrs.Handlers;
 
 namespace ESchool.ClassRegister.Application.Features.Grading.Grades
 {
-    public class GradeListByStudentHandler : PagedListHandler<GradeListByStudentQuery, Grade, GradeListByStudentResponse>
+    public class GradeListByStudentHandler : AutoMapperPagedListHandler<GradeListByStudentQuery, Grade, GradeListResponse>
     {
-        public GradeListByStudentHandler(ClassRegisterContext context) : base(context)
+        public GradeListByStudentHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider)
+            : base(context, configurationProvider)
         {
         }
 
@@ -24,32 +24,7 @@ namespace ESchool.ClassRegister.Application.Features.Grading.Grades
 
         protected override IOrderedQueryable<Grade> Order(IQueryable<Grade> entities, GradeListByStudentQuery query)
         {
-            return entities.OrderBy(x => x.ClassSchoolYearSubject.Subject.Name);
-        }
-
-        protected override IQueryable<GradeListByStudentResponse> Map(IQueryable<Grade> entities, GradeListByStudentQuery query)
-        {
-            return entities.GroupBy(x => x.ClassSchoolYearSubject.Subject)
-                .Select(x => new GradeListByStudentResponse
-                {
-                    Subject = new SubjectListResponse
-                    {
-                        Id = x.Key.Id,
-                        Name = x.Key.Name
-                    },
-                    Grades = x.Select(g => new GradeListResponse
-                        {
-                            Id = g.Id,
-                            Value = g.Value,
-                            GradeKind = new GradeKindResponse
-                            {
-                                Id = g.Kind.Id,
-                                Name = g.Kind.Name,
-                                AverageMultiplier = g.Kind.AverageMultiplier
-                            }
-                        })
-                        .ToList()
-                });
+            return entities.OrderByDescending(x => x.WrittenIn);
         }
     }
 }

@@ -88,6 +88,13 @@ namespace ESchool.Libs.AspNetCore.Extensions
                     .RequireAssertion(context =>
                         context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Teacher.ToString()) ||
                         context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Student.ToString())));
+                
+                options.AddPolicy(PolicyNames.StudentOrParent, policy => policy.RequireAuthenticatedUser()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireClaim(Constants.ClaimTypes.TenantId)
+                    .RequireAssertion(context =>
+                        context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Parent.ToString()) ||
+                        context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Student.ToString())));
 
                 options.AddPolicy("Default", policy => policy.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));

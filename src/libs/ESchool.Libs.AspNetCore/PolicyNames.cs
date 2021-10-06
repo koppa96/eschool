@@ -13,5 +13,6 @@ namespace ESchool.Libs.AspNetCore
         public const string TeacherOrStudent = nameof(TeacherOrStudent);
         public const string AnyRole = nameof(AnyRole);
         public const string AdministratorOrTenantAdministrator = nameof(AdministratorOrTenantAdministrator);
+        public const string StudentOrParent = nameof(StudentOrParent);
     }
 }

@@ -40,7 +40,8 @@ namespace ESchool.ClassRegister.Application.Features.Students
             
             if (identityService.IsInRole(TenantRoleType.Student))
             {
-                students.Add(await context.Students.SingleAsync(x => x.UserId == currentUserId, cancellationToken));
+                students.Add(await context.Students.Include(x => x.User)
+                    .SingleAsync(x => x.UserId == currentUserId, cancellationToken));
             }
 
             if (identityService.IsInRole(TenantRoleType.Parent))
@@ -48,6 +49,7 @@ namespace ESchool.ClassRegister.Application.Features.Students
                 var studentsOfParent = await context.Parents
                     .Where(x => x.UserId == currentUserId)
                     .SelectMany(x => x.StudentParents.Select(x => x.Student))
+                    .Include(x => x.User)
                     .ToListAsync(cancellationToken);
 
                 students.AddRange(studentsOfParent);
