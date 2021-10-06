@@ -76,7 +76,13 @@
       <q-item v-if="isStudent" v-ripple :inset-level="1" clickable>
         <q-item-section>Órák</q-item-section>
       </q-item>
-      <q-item v-if="isStudent || isParent" v-ripple :inset-level="1" clickable>
+      <q-item
+        v-if="isStudent || isParent"
+        v-ripple
+        :inset-level="1"
+        clickable
+        to="/grades"
+      >
         <q-item-section>Jegyek</q-item-section>
       </q-item>
       <q-item v-if="isStudent || isParent" v-ripple :inset-level="1" clickable>

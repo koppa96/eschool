@@ -42,6 +42,7 @@ namespace ESchool.ClassRegister.Domain
         public DbSet<SubjectTeacher> SubjectTeachers { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Administrator> Administrators { get; set; }
+        public DbSet<Parent> Parents { get; set; }
         public DbSet<ClassRegisterUserRole> UserRoles { get; set; }
         public DbSet<ClassRegisterUser> Users { get; set; }
         public DbSet<ClassSchoolYearSubjectTeacher> ClassSchoolYearSubjectTeachers { get; set; }

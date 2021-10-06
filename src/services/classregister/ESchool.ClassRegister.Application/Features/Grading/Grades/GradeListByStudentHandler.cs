@@ -1,42 +1,35 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.Grading.GradeKinds.Common;
-using ESchool.ClassRegister.Application.Features.Subjects;
+﻿using System.Linq;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Domain.Entities.Grading;
 using ESchool.ClassRegister.Interface.Features.Grading.GradeKinds;
 using ESchool.ClassRegister.Interface.Features.Grading.Grades;
 using ESchool.ClassRegister.Interface.Features.Subjects;
-using ESchool.Libs.Domain.Enums;
-using ESchool.Libs.Domain.Extensions;
-using ESchool.Libs.Domain.Services;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using ESchool.Libs.Application.Cqrs.Handlers;
 
 namespace ESchool.ClassRegister.Application.Features.Grading.Grades
 {
-    public class GradeListByStudentHandler : IRequestHandler<GradeListByStudentQuery, List<GradeListByStudentResponse>>
+    public class GradeListByStudentHandler : PagedListHandler<GradeListByStudentQuery, Grade, GradeListByStudentResponse>
     {
-        private readonly ClassRegisterContext context;
-
-        public GradeListByStudentHandler(ClassRegisterContext context)
+        public GradeListByStudentHandler(ClassRegisterContext context) : base(context)
         {
-            this.context = context;
         }
 
-        public async Task<List<GradeListByStudentResponse>> Handle(GradeListByStudentQuery request,
-            CancellationToken cancellationToken)
+        protected override IQueryable<Grade> Filter(IQueryable<Grade> entities, GradeListByStudentQuery query)
         {
-            var grades = await context.Grades.Include(x => x.ClassSchoolYearSubject)
-                    .ThenInclude(x => x.Subject)
-                .Include(x => x.Kind)
-                .Where(x =>
-                    x.StudentId == request.StudentId &&
-                    x.ClassSchoolYearSubject.ClassSchoolYear.SchoolYearId == request.SchoolYearId)
-                .ToListAsync(cancellationToken);
+            return entities.Where(x =>
+                x.Student.Id == query.StudentId &&
+                x.ClassSchoolYearSubject.SubjectId == query.SubjectId &&
+                x.ClassSchoolYearSubject.ClassSchoolYear.SchoolYearId == query.SchoolYearId);
+        }
 
-            return grades.GroupBy(x => x.ClassSchoolYearSubject.Subject)
+        protected override IOrderedQueryable<Grade> Order(IQueryable<Grade> entities, GradeListByStudentQuery query)
+        {
+            return entities.OrderBy(x => x.ClassSchoolYearSubject.Subject.Name);
+        }
+
+        protected override IQueryable<GradeListByStudentResponse> Map(IQueryable<Grade> entities, GradeListByStudentQuery query)
+        {
+            return entities.GroupBy(x => x.ClassSchoolYearSubject.Subject)
                 .Select(x => new GradeListByStudentResponse
                 {
                     Subject = new SubjectListResponse
@@ -56,8 +49,7 @@ namespace ESchool.ClassRegister.Application.Features.Grading.Grades
                             }
                         })
                         .ToList()
-                })
-                .ToList();
+                });
         }
     }
 }

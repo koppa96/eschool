@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.ClassRegister.Application.Features.Students;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Absences;
 using ESchool.ClassRegister.Interface.Features.Grading.Grades;
+using ESchool.ClassRegister.Interface.Features.SchoolYears;
+using ESchool.ClassRegister.Interface.Features.Subjects;
 using ESchool.ClassRegister.Interface.Features.Users;
 using ESchool.ClassRegister.Interface.Features.Users.Students;
 using ESchool.Libs.AspNetCore;
@@ -56,10 +59,39 @@ namespace ESchool.ClassRegister.Api.Controllers
             }, cancellationToken);
         }
 
-        [HttpGet("{studentId}/grades")]
-        public Task<List<GradeListByStudentResponse>> ListGrades(
+        [HttpGet("related")]
+        public Task<List<UserRoleListResponse>> GetRelatedStudents(CancellationToken cancellationToken)
+        {
+            return mediator.Send(new RelatedStudentListQuery(), cancellationToken);
+        }
+
+        [HttpGet("{studentId}/school-years")]
+        public Task<List<SchoolYearListResponse>> GetStudentSchoolYears(Guid studentId,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(new StudentSchoolYearListQuery
+            {
+                StudentId = studentId
+            }, cancellationToken);
+        }
+
+        [HttpGet("{studentId}/school-years/${schoolYearId}/subjects")]
+        public Task<PagedListResponse<SubjectListResponse>> GetStudentSubjectsInSchoolYear(Guid studentId,
+            Guid schoolYearId, [FromQuery] PagedListQuery query, CancellationToken cancellationToken)
+        {
+            return mediator.Send(query.ToTypedQuery<StudentSubjectListQuery>(x =>
+            {
+                x.StudentId = studentId;
+                x.SchoolYearId = schoolYearId;
+            }), cancellationToken);
+        }
+
+        [HttpGet("{studentId}/school-years/${schoolYearId}/subjects/${subjectId}/grades")]
+        public Task<PagedListResponse<GradeListByStudentResponse>> ListGrades(
             Guid studentId,
-            [FromQuery] Guid schoolYearId,
+            Guid schoolYearId,
+            Guid subjectId,
+            [FromQuery] PagedListQuery query,
             CancellationToken cancellationToken)
         {
             if (schoolYearId == default)
@@ -67,11 +99,12 @@ namespace ESchool.ClassRegister.Api.Controllers
                 throw new ArgumentOutOfRangeException(nameof(schoolYearId), "A tanév megadása kötelező.");
             }
             
-            return mediator.Send(new GradeListByStudentQuery
+            return mediator.Send(query.ToTypedQuery<GradeListByStudentQuery>(x =>
             {
-                StudentId = studentId,
-                SchoolYearId = schoolYearId
-            }, cancellationToken);
+                x.StudentId = studentId;
+                x.StudentId = subjectId;
+                x.SchoolYearId = schoolYearId;
+            }), cancellationToken);
         }
     }
 }

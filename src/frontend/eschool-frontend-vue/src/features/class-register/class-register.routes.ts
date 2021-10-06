@@ -284,5 +284,15 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
         ]
       }
     ]
+  },
+  {
+    path: 'grades',
+    component: () =>
+      import(
+        /* webpackChunkName: "class-register" */ './views/StudentGradesView.vue'
+      ),
+    meta: {
+      name: 'Jegyek'
+    }
   }
 ]
