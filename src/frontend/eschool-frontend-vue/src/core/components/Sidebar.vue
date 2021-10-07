@@ -85,7 +85,13 @@
       >
         <q-item-section>Tantárgyak</q-item-section>
       </q-item>
-      <q-item v-if="isStudent || isParent" v-ripple :inset-level="1" clickable>
+      <q-item
+        v-if="isStudent || isParent"
+        v-ripple
+        :inset-level="1"
+        clickable
+        to="/student/absences"
+      >
         <q-item-section>Hiányzások</q-item-section>
       </q-item>
       <q-item v-if="isTeacher" v-ripple :inset-level="1" clickable to="/groups">

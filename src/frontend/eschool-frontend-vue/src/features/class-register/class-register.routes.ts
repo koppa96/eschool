@@ -339,5 +339,15 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
         ]
       }
     ]
+  },
+  {
+    path: 'student/absences',
+    component: () =>
+      import(
+        /* webpackChunName: "class-register" */ './views/student/StudentAbsencesView.vue'
+      ),
+    meta: {
+      name: 'Hiányzások'
+    }
   }
 ]

@@ -47,11 +47,6 @@ namespace ESchool.ClassRegister.Api.Controllers
             [FromQuery] int pageSize,
             CancellationToken cancellationToken)
         {
-            if (schoolYearId == default)
-            {
-                throw new ArgumentOutOfRangeException(nameof(schoolYearId), "A tanév megadása kötelező!");
-            }
-
             return mediator.Send(new AbsenceListQuery
             {
                 StudentId = studentId,

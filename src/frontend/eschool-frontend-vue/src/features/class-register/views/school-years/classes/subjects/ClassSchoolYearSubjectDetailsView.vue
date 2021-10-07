@@ -18,7 +18,7 @@
           round
           flat
           icon="visibility"
-          @click="navigateToDetails(row)"
+          @click.stop="navigateToDetails(row)"
         >
           <q-tooltip>Részletek</q-tooltip>
         </q-btn>
@@ -28,7 +28,7 @@
           round
           flat
           icon="event_busy"
-          @click="postponeLesson(row)"
+          @click.stop="postponeLesson(row)"
         >
           <q-tooltip>Elhalasztás</q-tooltip>
         </q-btn>
@@ -38,7 +38,7 @@
           round
           flat
           icon="event_available"
-          @click="organizeLesson(row)"
+          @click.stop="organizeLesson(row)"
         >
           <q-tooltip>Megtartás</q-tooltip>
         </q-btn>
@@ -52,7 +52,7 @@
           round
           flat
           icon="delete"
-          @click="deleteLesson(row)"
+          @click.stop="deleteLesson(row)"
         >
           <q-tooltip>Törlés</q-tooltip>
         </q-btn>
