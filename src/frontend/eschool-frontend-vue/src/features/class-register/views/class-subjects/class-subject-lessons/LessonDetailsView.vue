@@ -7,8 +7,13 @@
         :deletable="false"
         @edit="openEditDialog()"
       />
-      <pre class="q-px-md description">{{ lesson.description }}</pre>
-      <DetailsGrid class="q-pa-md" :model-value="detailsGridData" />
+      <q-expansion-item default-opened>
+        <template #header>
+          <h6 class="q-my-none">Részletek</h6>
+        </template>
+        <pre class="q-px-md description">{{ lesson.description }}</pre>
+        <DetailsGrid class="q-pa-md" :model-value="detailsGridData" />
+      </q-expansion-item>
       <LessonAbsenceList
         :lesson-id="lessonId"
         :class-id="classId"

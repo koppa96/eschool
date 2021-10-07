@@ -60,7 +60,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { Observable, Subscription, takeUntil } from 'rxjs'
+import { EMPTY, Observable, Subscription, takeUntil } from 'rxjs'
 import { QPagination } from '@/shared/model/q-pagination.model'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
 import { PagedListResponse } from '@/shared/model/paged-list-response'
@@ -77,7 +77,7 @@ const props = withDefaults(
       pageSize: number,
       pageIndex: number
     ) => Promise<PagedListResponse>
-    refresh$: Observable<void>
+    refresh$?: Observable<void>
     hasDetails?: boolean
     editable?: boolean
     deletable?: boolean

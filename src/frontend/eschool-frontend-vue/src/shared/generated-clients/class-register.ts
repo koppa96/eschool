@@ -3893,7 +3893,7 @@ export class StudentsClient {
     }
 
     listGrades(studentId: string, schoolYearId: string, subjectId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfGradeListResponse> {
-        let url_ = this.baseUrl + "/api/students/{studentId}/school-years/${schoolYearId}/subjects/${subjectId}/grades?";
+        let url_ = this.baseUrl + "/api/students/{studentId}/school-years/{schoolYearId}/subjects/{subjectId}/grades?";
         if (studentId === undefined || studentId === null)
             throw new Error("The parameter 'studentId' must be defined.");
         url_ = url_.replace("{studentId}", encodeURIComponent("" + studentId));
@@ -3978,6 +3978,94 @@ export class StudentsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<PagedListResponseOfGradeListResponse>(<any>null);
+    }
+
+    listLessons(studentId: string, schoolYearId: string, subjectId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfLessonListResponse> {
+        let url_ = this.baseUrl + "/api/students/{studentId}/school-years/{schoolYearId}/subjects/{subjectId}/lessons?";
+        if (studentId === undefined || studentId === null)
+            throw new Error("The parameter 'studentId' must be defined.");
+        url_ = url_.replace("{studentId}", encodeURIComponent("" + studentId));
+        if (schoolYearId === undefined || schoolYearId === null)
+            throw new Error("The parameter 'schoolYearId' must be defined.");
+        url_ = url_.replace("{schoolYearId}", encodeURIComponent("" + schoolYearId));
+        if (subjectId === undefined || subjectId === null)
+            throw new Error("The parameter 'subjectId' must be defined.");
+        url_ = url_.replace("{subjectId}", encodeURIComponent("" + subjectId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processListLessons(_response);
+        });
+    }
+
+    protected processListLessons(response: AxiosResponse): Promise<PagedListResponseOfLessonListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PagedListResponseOfLessonListResponse.fromJS(resultData200);
+            return result200;
+        } else if (status === 400) {
+            const _responseText = response.data;
+            let result400: any = null;
+            let resultData400  = _responseText;
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 403) {
+            const _responseText = response.data;
+            let result403: any = null;
+            let resultData403  = _responseText;
+            result403 = ProblemDetails.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PagedListResponseOfLessonListResponse>(<any>null);
     }
 }
 
@@ -8640,6 +8728,7 @@ export interface IPagedListResponseOfGradeListResponse {
 
 export class GradeListResponse implements IGradeListResponse {
     id!: string;
+    description!: string | undefined;
     value!: GradeValue;
     writtenIn!: Date;
     gradeKind!: GradeKindResponse | undefined;
@@ -8656,6 +8745,7 @@ export class GradeListResponse implements IGradeListResponse {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.description = _data["description"];
             this.value = _data["value"];
             this.writtenIn = _data["writtenIn"] ? new Date(_data["writtenIn"].toString()) : <any>undefined;
             this.gradeKind = _data["gradeKind"] ? GradeKindResponse.fromJS(_data["gradeKind"]) : <any>undefined;
@@ -8672,6 +8762,7 @@ export class GradeListResponse implements IGradeListResponse {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["description"] = this.description;
         data["value"] = this.value;
         data["writtenIn"] = this.writtenIn ? this.writtenIn.toISOString() : <any>undefined;
         data["gradeKind"] = this.gradeKind ? this.gradeKind.toJSON() : <any>undefined;
@@ -8681,9 +8772,66 @@ export class GradeListResponse implements IGradeListResponse {
 
 export interface IGradeListResponse {
     id: string;
+    description: string | undefined;
     value: GradeValue;
     writtenIn: Date;
     gradeKind: GradeKindResponse | undefined;
+}
+
+export class PagedListResponseOfLessonListResponse implements IPagedListResponseOfLessonListResponse {
+    pageSize!: number;
+    pageIndex!: number;
+    totalCount!: number;
+    items!: LessonListResponse[] | undefined;
+
+    constructor(data?: IPagedListResponseOfLessonListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageSize = _data["pageSize"];
+            this.pageIndex = _data["pageIndex"];
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(LessonListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedListResponseOfLessonListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedListResponseOfLessonListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageSize"] = this.pageSize;
+        data["pageIndex"] = this.pageIndex;
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedListResponseOfLessonListResponse {
+    pageSize: number;
+    pageIndex: number;
+    totalCount: number;
+    items: LessonListResponse[] | undefined;
 }
 
 export class SubjectDetailsResponse implements ISubjectDetailsResponse {
@@ -8900,62 +9048,6 @@ export class GradeListByClassSchoolYearSubjectResponse implements IGradeListByCl
 export interface IGradeListByClassSchoolYearSubjectResponse {
     student: UserRoleListResponse | undefined;
     grades: GradeListResponse[] | undefined;
-}
-
-export class PagedListResponseOfLessonListResponse implements IPagedListResponseOfLessonListResponse {
-    pageSize!: number;
-    pageIndex!: number;
-    totalCount!: number;
-    items!: LessonListResponse[] | undefined;
-
-    constructor(data?: IPagedListResponseOfLessonListResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pageSize = _data["pageSize"];
-            this.pageIndex = _data["pageIndex"];
-            this.totalCount = _data["totalCount"];
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items!.push(LessonListResponse.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): PagedListResponseOfLessonListResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedListResponseOfLessonListResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pageSize"] = this.pageSize;
-        data["pageIndex"] = this.pageIndex;
-        data["totalCount"] = this.totalCount;
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
-        return data; 
-    }
-}
-
-export interface IPagedListResponseOfLessonListResponse {
-    pageSize: number;
-    pageIndex: number;
-    totalCount: number;
-    items: LessonListResponse[] | undefined;
 }
 
 export class LessonDetailsResponse implements ILessonDetailsResponse {

@@ -51,6 +51,7 @@ namespace ESchool.ClassRegister.Application.Features.Grading.Grades
                     {
                         Id = g.Id,
                         Value = g.Value,
+                        Description = g.Description,
                         WrittenIn = g.WrittenIn,
                         GradeKind = new GradeKindResponse
                         {

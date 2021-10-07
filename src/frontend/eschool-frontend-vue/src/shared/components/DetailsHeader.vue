@@ -1,5 +1,5 @@
 <template>
-  <div class="flex row items-center justify-between q-mb-lg">
+  <div class="flex row items-center justify-between">
     <h5 class="text-left q-my-sm">{{ name }}</h5>
     <div class="flex row">
       <slot name="actions">

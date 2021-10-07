@@ -4,8 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Students;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Absences;
+using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons;
 using ESchool.ClassRegister.Interface.Features.Grading.Grades;
 using ESchool.ClassRegister.Interface.Features.SchoolYears;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
 using ESchool.ClassRegister.Interface.Features.Subjects;
 using ESchool.ClassRegister.Interface.Features.Users;
 using ESchool.ClassRegister.Interface.Features.Users.Students;
@@ -77,7 +79,7 @@ namespace ESchool.ClassRegister.Api.Controllers
             }, cancellationToken);
         }
 
-        [HttpGet("{studentId}/school-years/${schoolYearId}/subjects")]
+        [HttpGet("{studentId}/school-years/{schoolYearId}/subjects")]
         [Authorize(PolicyNames.StudentOrParent)]
         public Task<PagedListResponse<SubjectListResponse>> GetStudentSubjectsInSchoolYear(Guid studentId,
             Guid schoolYearId, [FromQuery] PagedListQuery query, CancellationToken cancellationToken)
@@ -89,7 +91,7 @@ namespace ESchool.ClassRegister.Api.Controllers
             }), cancellationToken);
         }
 
-        [HttpGet("{studentId}/school-years/${schoolYearId}/subjects/${subjectId}/grades")]
+        [HttpGet("{studentId}/school-years/{schoolYearId}/subjects/{subjectId}/grades")]
         [Authorize(PolicyNames.StudentOrParent)]
         public Task<PagedListResponse<GradeListResponse>> ListGrades(
             Guid studentId,
@@ -98,16 +100,28 @@ namespace ESchool.ClassRegister.Api.Controllers
             [FromQuery] PagedListQuery query,
             CancellationToken cancellationToken)
         {
-            if (schoolYearId == default)
-            {
-                throw new ArgumentOutOfRangeException(nameof(schoolYearId), "A tanév megadása kötelező.");
-            }
-            
             return mediator.Send(query.ToTypedQuery<GradeListByStudentQuery>(x =>
             {
                 x.StudentId = studentId;
-                x.StudentId = subjectId;
                 x.SchoolYearId = schoolYearId;
+                x.SubjectId = subjectId;
+            }), cancellationToken);
+        }
+
+        [HttpGet("{studentId}/school-years/{schoolYearId}/subjects/{subjectId}/lessons")]
+        [Authorize(PolicyNames.StudentOrParent)]
+        public Task<PagedListResponse<LessonListResponse>> ListLessons(
+            Guid studentId,
+            Guid schoolYearId,
+            Guid subjectId,
+            [FromQuery] PagedListQuery query,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(query.ToTypedQuery<StudentLessonListQuery>(x =>
+            {
+                x.StudentId = studentId;
+                x.SchoolYearId = schoolYearId;
+                x.SubjectId = subjectId;
             }), cancellationToken);
         }
     }

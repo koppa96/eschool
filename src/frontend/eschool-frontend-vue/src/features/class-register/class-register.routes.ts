@@ -300,7 +300,7 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
           )
       },
       {
-        path: ':subjectId',
+        path: ':studentId/:schoolYearId/:subjectId',
         component: LayoutComponent,
         meta: {
           resolveName: async (route: RouteLocationNormalizedLoaded) => {
@@ -312,8 +312,31 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
             }
 
             return 'Tantárgy részletei'
+          },
+          disabled: true
+        },
+        children: [
+          {
+            path: 'grades',
+            component: () =>
+              import(
+                /* webpackChunkName: "class-register" */ './views/student/StudentGradesView.vue'
+              ),
+            meta: {
+              name: 'Jegyek'
+            }
+          },
+          {
+            path: 'lessons',
+            component: () =>
+              import(
+                /* webpackChunkName: "class-register" */ './views/student/StudentLessonsView.vue'
+              ),
+            meta: {
+              name: 'Órák'
+            }
           }
-        }
+        ]
       }
     ]
   }
