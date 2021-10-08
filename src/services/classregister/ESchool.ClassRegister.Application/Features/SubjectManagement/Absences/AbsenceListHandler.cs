@@ -24,6 +24,13 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Absences
             this.identityService = identityService;
         }
 
+        protected override IQueryable<Absence> Filter(IQueryable<Absence> entities, AbsenceListQuery query)
+        {
+            return entities.Where(x => x.StudentId == query.StudentId &&
+                                       x.Lesson.ClassSchoolYearSubject.ClassSchoolYear.SchoolYearId ==
+                                       query.SchoolYearId);
+        }
+
         protected override IOrderedQueryable<Absence> Order(IQueryable<Absence> entities, AbsenceListQuery query)
         {
             return entities.OrderByDescending(x => x.Lesson.StartsAt);

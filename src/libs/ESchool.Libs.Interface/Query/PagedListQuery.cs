@@ -16,7 +16,7 @@ namespace ESchool.Libs.Interface.Query
             PageSize = DefaultPageSize;
         }
 
-        public TQuery ToTypedQuery<TQuery>(Action<TQuery> initialize)
+        public TQuery ToTypedQuery<TQuery>(Action<TQuery> initialize = null)
             where TQuery : PagedListQuery, new()
         {
             var query = new TQuery
@@ -24,7 +24,7 @@ namespace ESchool.Libs.Interface.Query
                 PageIndex = PageIndex,
                 PageSize = PageSize
             };
-            initialize(query);
+            initialize?.Invoke(query);
             return query;
         }
     }
