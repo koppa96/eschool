@@ -8,10 +8,12 @@ using ESchool.Libs.Interface.Query;
 using ESchool.Libs.Interface.Response;
 using ESchool.Libs.Interface.Response.Common;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.ClassRegister.Api.Controllers
 {
+    [Authorize(PolicyNames.Administrator)]
     [Route("api/parents")]
     public class ParentsController : ESchoolControllerBase
     {

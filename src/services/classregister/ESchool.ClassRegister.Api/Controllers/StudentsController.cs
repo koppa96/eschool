@@ -31,6 +31,14 @@ namespace ESchool.ClassRegister.Api.Controllers
             this.mediator = mediator;
         }
 
+        [HttpGet]
+        [Authorize(PolicyNames.Administrator)]
+        public Task<PagedListResponse<UserRoleListResponse>> ListStudents([FromQuery] StudentListQuery query,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(query, cancellationToken);
+        }
+
         [HttpGet("unassigned")]
         [Authorize(PolicyNames.Administrator)]
         public Task<PagedListResponse<UserRoleListResponse>> ListUnassignedStudents(

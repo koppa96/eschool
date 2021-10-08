@@ -45,6 +45,15 @@
       >
         <q-item-section>Iskolám felhasználói</q-item-section>
       </q-item>
+      <q-item
+        v-if="isAdministrator"
+        v-ripple
+        :inset-level="1"
+        clickable
+        to="/parents"
+      >
+        <q-item-section>Szülők</q-item-section>
+      </q-item>
     </q-expansion-item>
 
     <q-expansion-item v-if="isAdministrator" icon="edit" label="Adminisztráció">

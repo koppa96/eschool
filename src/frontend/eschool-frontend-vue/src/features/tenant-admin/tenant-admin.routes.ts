@@ -59,5 +59,13 @@ export const tenantAdminRoutes: RouteRecordRaw[] = [
     meta: {
       name: 'Iskolám'
     }
+  },
+  {
+    path: '/parents',
+    component: () =>
+      import(/* webpackChunkName: "tenant-admin" */ './views/ParentsView.vue'),
+    meta: {
+      name: 'Szülők'
+    }
   }
 ]
