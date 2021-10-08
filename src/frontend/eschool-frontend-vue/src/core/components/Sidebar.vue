@@ -4,135 +4,102 @@
       <q-item-section avatar>
         <q-icon name="home" />
       </q-item-section>
-      <q-item-section>Kezdőlap</q-item-section>
-    </q-item>
-    <q-item v-ripple clickable to="/messages">
-      <q-item-section avatar>
-        <q-icon name="email" />
-      </q-item-section>
-      <q-item-section>Üzeneteim</q-item-section>
+      <q-item-section style="font-weight: 800;">Kezdőlap</q-item-section>
     </q-item>
 
-    <q-expansion-item
+    <SidebarItemGroup icon="email" label="Üzeneteim">
+      <SidebarItemGroupItem to="/incoming-messages">
+        Bejövő
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem to="/sent-messages">
+        Kimenő
+      </SidebarItemGroupItem>
+    </SidebarItemGroup>
+
+    <SidebarItemGroup
       v-if="isGlobalAdmin || isAdministrator"
       icon="admin_panel_settings"
       label="Rendszeradminisztráció"
     >
-      <q-item
-        v-if="isGlobalAdmin"
-        v-ripple
-        :inset-level="1"
-        clickable
-        to="/tenants"
-      >
-        <q-item-section>Iskolák</q-item-section>
-      </q-item>
-      <q-item
-        v-if="isGlobalAdmin"
-        v-ripple
-        :inset-level="1"
-        clickable
-        to="/users"
-      >
-        <q-item-section>Felhasználók</q-item-section>
-      </q-item>
-      <q-item
-        v-if="isAdministrator"
-        v-ripple
-        :inset-level="1"
-        clickable
-        to="/my-tenant"
-      >
-        <q-item-section>Iskolám felhasználói</q-item-section>
-      </q-item>
-      <q-item
-        v-if="isAdministrator"
-        v-ripple
-        :inset-level="1"
-        clickable
-        to="/parents"
-      >
-        <q-item-section>Szülők</q-item-section>
-      </q-item>
-    </q-expansion-item>
+      <SidebarItemGroupItem v-if="isGlobalAdmin" to="/tenants">
+        Iskolák
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem v-if="isGlobalAdmin" to="/users">
+        Felhasználók
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem v-if="isAdministrator" to="/my-tenant">
+        Iskolám felhasználói
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem v-if="isAdministrator" to="/parents">
+        Szülők
+      </SidebarItemGroupItem>
+    </SidebarItemGroup>
 
-    <q-expansion-item v-if="isAdministrator" icon="edit" label="Adminisztráció">
-      <q-item v-ripple :inset-level="1" clickable to="/subjects">
-        <q-item-section>Tantárgyak</q-item-section>
-      </q-item>
-      <q-item v-ripple :inset-level="1" clickable to="/classes">
-        <q-item-section>Osztályok</q-item-section>
-      </q-item>
-      <q-item v-ripple :inset-level="1" clickable to="/class-types">
-        <q-item-section>Tagozatok</q-item-section>
-      </q-item>
-      <q-item v-ripple :inset-level="1" clickable to="/school-years">
-        <q-item-section>Tanévek</q-item-section>
-      </q-item>
-      <q-item v-ripple :inset-level="1" clickable to="/classrooms">
-        <q-item-section>Termek</q-item-section>
-      </q-item>
-      <q-item v-ripple :inset-level="1" clickable to="/grade-kinds">
-        <q-item-section>Jegytípusok</q-item-section>
-      </q-item>
-    </q-expansion-item>
+    <SidebarItemGroup v-if="isAdministrator" icon="edit" label="Adminisztráció">
+      <SidebarItemGroupItem to="/subjects">
+        Tantárgyak
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem to="/classes">
+        Osztályok
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem to="/class-types">
+        Tagozatok
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem to="/school-years">
+        Tanévek
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem to="/classrooms">
+        Termek
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem to="/grade-kinds">
+        Jegytípusok
+      </SidebarItemGroupItem>
+    </SidebarItemGroup>
 
-    <q-expansion-item
+    <SidebarItemGroup
       v-if="isStudent || isParent || isTeacher"
       icon="description"
       label="Osztálynapló"
     >
-      <q-item v-if="isStudent" v-ripple :inset-level="1" clickable>
-        <q-item-section>Órák</q-item-section>
-      </q-item>
-      <q-item
-        v-if="isStudent || isParent"
-        v-ripple
-        :inset-level="1"
-        clickable
-        to="/student/subjects"
-      >
-        <q-item-section>Tantárgyak</q-item-section>
-      </q-item>
-      <q-item
-        v-if="isStudent || isParent"
-        v-ripple
-        :inset-level="1"
-        clickable
-        to="/student/absences"
-      >
-        <q-item-section>Hiányzások</q-item-section>
-      </q-item>
-      <q-item v-if="isTeacher" v-ripple :inset-level="1" clickable to="/groups">
-        <q-item-section>Csoportok</q-item-section>
-      </q-item>
-    </q-expansion-item>
+      <SidebarItemGroupItem v-if="isStudent">
+        Órák
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem v-if="isStudent || isParent" to="/student/subjects">
+        Tantárgyak
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem v-if="isStudent || isParent" to="/student/absences">
+        Hiányzások
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem v-if="isTeacher" to="/groups">
+        Csoportok
+      </SidebarItemGroupItem>
+    </SidebarItemGroup>
 
-    <q-expansion-item
+    <SidebarItemGroup
       v-if="isTeacher || isStudent"
       icon="home"
       label="Házi feladatok"
     >
-      <q-item v-if="isStudent" v-ripple :inset-level="1" clickable>
-        <q-item-section>Házi feladatok</q-item-section>
-      </q-item>
-      <q-item v-if="isTeacher" v-ripple :inset-level="1" clickable>
-        <q-item-section>Csoportok</q-item-section>
-      </q-item>
-    </q-expansion-item>
+      <SidebarItemGroupItem v-if="isStudent">
+        Házi feladatok
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem v-if="isTeacher">
+        Csoportok
+      </SidebarItemGroupItem>
+    </SidebarItemGroup>
 
-    <q-expansion-item
+    <SidebarItemGroup
       v-if="isTeacher || isStudent"
       icon="quiz"
       label="Dolgozatok"
     >
-      <q-item v-if="isStudent" v-ripple :inset-level="1" clickable>
-        <q-item-section>Dolgozatok</q-item-section>
-      </q-item>
-      <q-item v-if="isTeacher" v-ripple :inset-level="1" clickable>
-        <q-item-section>Csoportok</q-item-section>
-      </q-item>
-    </q-expansion-item>
+      <SidebarItemGroupItem v-if="isStudent">
+        Dolgozatok
+      </SidebarItemGroupItem>
+      <SidebarItemGroupItem v-if="isTeacher">
+        Csoportok
+      </SidebarItemGroupItem>
+    </SidebarItemGroup>
   </q-list>
 </template>
 
@@ -146,6 +113,8 @@ import {
   TenantRoleType
 } from '@/shared/generated-clients/identity-provider'
 import { filterNotNull } from '@/core/utils/rxjs-operators'
+import SidebarItemGroup from '@/core/components/SidebarItemGroup.vue'
+import SidebarItemGroupItem from '@/core/components/SidebarItemGroupItem.vue'
 
 const unmounted = useObservableLifecycle(onUnmounted)
 const authService = useAuthService()

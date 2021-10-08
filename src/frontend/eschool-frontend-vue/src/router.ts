@@ -3,7 +3,8 @@ import LayoutView from '@/core/views/LayoutView.vue'
 import Home from '@/views/Home.vue'
 import LoginRedirect from '@/core/auth/components/LoginRedirect.vue'
 import LogoutRedirect from '@/core/auth/components/LogoutRedirect.vue'
-import MessagesView from '@/core/views/MessagesView.vue'
+import IncomingMessageListView from '@/core/views/IncomingMessageListView.vue'
+import SentMessageListView from '@/core/views/SentMessageListView.vue'
 import { tenantAdminRoutes } from '@/features/tenant-admin/tenant-admin.routes'
 import { classRegisterRoutes } from '@/features/class-register/class-register.routes'
 
@@ -28,8 +29,12 @@ const routes: RouteRecordRaw[] = [
         component: LogoutRedirect
       },
       {
-        path: 'messages',
-        component: MessagesView
+        path: 'incoming-messages',
+        component: IncomingMessageListView
+      },
+      {
+        path: 'sent-messages',
+        component: SentMessageListView
       },
       ...tenantAdminRoutes,
       ...classRegisterRoutes
