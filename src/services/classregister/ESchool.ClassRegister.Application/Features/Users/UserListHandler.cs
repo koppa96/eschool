@@ -5,6 +5,7 @@ using AutoMapper;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.Users;
 using ESchool.ClassRegister.Domain.Entities.Users.Abstractions;
+using ESchool.ClassRegister.Interface.Features.Users;
 using ESchool.Libs.Application.Cqrs.Handlers;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Interface.Query;
@@ -16,15 +17,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
     {
         public string SearchText { get; set; }
     }
-
-    public class ClassRegisterUserListResponse
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        
-        public List<TenantRoleType> Roles { get; set; }
-    }
-
+    
     public class UserListHandler : PagedListHandler<UserListQuery, ClassRegisterUser, ClassRegisterUserListResponse>
     {
         public UserListHandler(ClassRegisterContext context)

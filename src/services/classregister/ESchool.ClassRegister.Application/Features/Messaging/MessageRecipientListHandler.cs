@@ -49,6 +49,7 @@ namespace ESchool.ClassRegister.Application.Features.Messaging
                     Name = x.Name,
                     Type = RecipientDto.RecipientType.Group
                 }))
+                    .Where(x => string.IsNullOrEmpty(request.SearchText) || x.Name.ToLower().Contains(request.SearchText))
                     .OrderBy(x => x.Name)
                     .Skip(request.PageIndex * request.PageSize)
                     .Take(request.PageSize)

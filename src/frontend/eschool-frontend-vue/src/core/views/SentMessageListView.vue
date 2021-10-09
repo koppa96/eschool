@@ -21,27 +21,27 @@
               dense
               round
               flat
-              :icon="props.expand ? 'expand_less' : 'expand_more'"
-              @click.stop="onExpandClicked(props)"
-            >
-              <q-tooltip>Részletek</q-tooltip>
-            </q-btn>
-            <q-btn
-              dense
-              round
-              flat
               icon="delete"
               color="negative"
               @click.stop="onExpandClicked(props)"
             >
               <q-tooltip>Törlés</q-tooltip>
             </q-btn>
+            <q-btn
+              dense
+              round
+              flat
+              :icon="props.expand ? 'expand_less' : 'expand_more'"
+              @click.stop="onExpandClicked(props)"
+            >
+              <q-tooltip>Részletek</q-tooltip>
+            </q-btn>
           </q-td>
         </q-tr>
         <template v-if="props.expand">
           <q-tr>
             <q-td colspan="100%">
-              <pre class="message-content">{{ props.row.details.text }}</pre>
+              <pre class="message-content">{{ props.row.details?.text }}</pre>
             </q-td>
           </q-tr>
         </template>

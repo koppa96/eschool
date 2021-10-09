@@ -3,6 +3,7 @@ using System.Linq;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.Messaging;
 using ESchool.ClassRegister.Interface.Features.Messaging;
+using ESchool.ClassRegister.Interface.Features.Users;
 using ESchool.Libs.Application.Cqrs.Handlers;
 using ESchool.Libs.Domain.Services;
 using ESchool.Libs.Interface.Response.Common;
@@ -29,7 +30,7 @@ namespace ESchool.ClassRegister.Application.Features.Messaging
             return entities.Select(x => new MessageListResponse
             {
                 Id = x.Id,
-                Sender = new UserRoleListResponse
+                Sender = new ClassRegisterUserListResponse
                 {
                     Id = x.SenderClassRegisterUser.Id,
                     Name = x.SenderClassRegisterUser.Name
@@ -42,7 +43,7 @@ namespace ESchool.ClassRegister.Application.Features.Messaging
 
         protected override IOrderedQueryable<Message> Order(IQueryable<Message> entities, IncomingMessageListQuery query)
         {
-            return entities.OrderBy(x => x.SentAt);
+            return entities.OrderByDescending(x => x.SentAt);
         }
     }
 }

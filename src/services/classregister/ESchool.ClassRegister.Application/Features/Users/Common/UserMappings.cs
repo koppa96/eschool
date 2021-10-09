@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using ESchool.ClassRegister.Domain.Entities.Users;
 using ESchool.ClassRegister.Domain.Entities.Users.Abstractions;
 using ESchool.ClassRegister.Interface.Features.Users;
@@ -37,6 +38,18 @@ namespace ESchool.ClassRegister.Application.Features.Users.Common
                     Name = student.User.Name,
                     UserId = student.UserId
                 });
+
+            CreateMap<ClassRegisterUser, ClassRegisterUserListResponse>()
+                .ForMember(x => x.Roles, o => o.MapFrom(user =>
+                    user.UserRoles.Select(userRole => userRole is Administrator
+                        ? TenantRoleType.Administrator
+                        : userRole is Teacher
+                            ? TenantRoleType.Teacher
+                            : userRole is Student
+                                ? TenantRoleType.Student
+                                : userRole is Parent
+                                    ? TenantRoleType.Parent
+                                    : default).ToList()));
         }
     }
 }

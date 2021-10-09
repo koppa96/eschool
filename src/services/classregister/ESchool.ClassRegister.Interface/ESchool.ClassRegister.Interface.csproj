@@ -9,6 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\libs\ESchool.Libs.Domain\ESchool.Libs.Domain.csproj" />
       <ProjectReference Include="..\..\..\libs\ESchool.Libs.Interface\ESchool.Libs.Interface.csproj" />
       <ProjectReference Include="..\ESchool.ClassRegister.SharedDomain\ESchool.ClassRegister.SharedDomain.csproj" />
     </ItemGroup>

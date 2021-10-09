@@ -30,11 +30,15 @@ namespace ESchool.ClassRegister.Application.Features.Messaging
             var message = await context.Messages.Include(x => x.SenderClassRegisterUser)
                 .Include(x => x.ReceiverUserMessages)
                     .ThenInclude(x => x.ClassRegisterUser)
-                .SingleAsync(x => x.Id == request.Id);
+                .SingleAsync(x => x.Id == request.Id, cancellationToken);
 
             var currentUserId = identityService.GetCurrentUserId();
-            var receiverUserMessage = message.ReceiverUserMessages.Single(x => x.UserId == currentUserId);
-            receiverUserMessage.IsRead = true;
+            
+            var receiverUserMessage = message.ReceiverUserMessages.SingleOrDefault(x => x.UserId == currentUserId);
+            if (receiverUserMessage != null)
+            {
+                receiverUserMessage.IsRead = true;
+            }
             
             await context.SaveChangesAsync(cancellationToken);
             return mapper.Map<MessageDetailsResponse>(message);

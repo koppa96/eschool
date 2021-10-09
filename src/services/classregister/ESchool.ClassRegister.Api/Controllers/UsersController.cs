@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Users;
+using ESchool.ClassRegister.Interface.Features.Users;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Interface.Response;
 using MediatR;
@@ -21,11 +22,10 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<PagedListResponse<ClassRegisterUserListResponse>> ListUsers([FromQuery] UserListQuery query,
+        public Task<PagedListResponse<ClassRegisterUserListResponse>> ListUsers([FromQuery] UserListQuery query,
             CancellationToken cancellationToken)
         {
-            var response = await mediator.Send(query, cancellationToken);
-            return response;
+            return mediator.Send(query, cancellationToken);
         }
     }
 }

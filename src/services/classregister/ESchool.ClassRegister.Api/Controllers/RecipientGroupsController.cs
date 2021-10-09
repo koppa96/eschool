@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Messaging;
 using ESchool.ClassRegister.Application.Features.Users;
+using ESchool.ClassRegister.Interface.Features.Users;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Interface.Response;
 using MediatR;

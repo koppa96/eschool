@@ -9109,7 +9109,7 @@ export class MessageListResponse implements IMessageListResponse {
     subject!: string | undefined;
     sentAt!: Date;
     isRead!: boolean;
-    sender!: UserRoleListResponse | undefined;
+    sender!: ClassRegisterUserListResponse | undefined;
 
     constructor(data?: IMessageListResponse) {
         if (data) {
@@ -9126,7 +9126,7 @@ export class MessageListResponse implements IMessageListResponse {
             this.subject = _data["subject"];
             this.sentAt = _data["sentAt"] ? new Date(_data["sentAt"].toString()) : <any>undefined;
             this.isRead = _data["isRead"];
-            this.sender = _data["sender"] ? UserRoleListResponse.fromJS(_data["sender"]) : <any>undefined;
+            this.sender = _data["sender"] ? ClassRegisterUserListResponse.fromJS(_data["sender"]) : <any>undefined;
         }
     }
 
@@ -9153,7 +9153,66 @@ export interface IMessageListResponse {
     subject: string | undefined;
     sentAt: Date;
     isRead: boolean;
-    sender: UserRoleListResponse | undefined;
+    sender: ClassRegisterUserListResponse | undefined;
+}
+
+export class ClassRegisterUserListResponse implements IClassRegisterUserListResponse {
+    id!: string;
+    name!: string | undefined;
+    roles!: TenantRoleType[] | undefined;
+
+    constructor(data?: IClassRegisterUserListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ClassRegisterUserListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClassRegisterUserListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IClassRegisterUserListResponse {
+    id: string;
+    name: string | undefined;
+    roles: TenantRoleType[] | undefined;
+}
+
+export enum TenantRoleType {
+    Administrator = "Administrator",
+    Teacher = "Teacher",
+    Student = "Student",
+    Parent = "Parent",
 }
 
 export class PagedListResponseOfRecipientDto implements IPagedListResponseOfRecipientDto {
@@ -9266,8 +9325,8 @@ export class MessageDetailsResponse implements IMessageDetailsResponse {
     subject!: string | undefined;
     text!: string | undefined;
     sentAt!: Date;
-    sender!: UserRoleListResponse | undefined;
-    recipients!: UserRoleListResponse[] | undefined;
+    sender!: ClassRegisterUserListResponse | undefined;
+    recipients!: ClassRegisterUserListResponse[] | undefined;
 
     constructor(data?: IMessageDetailsResponse) {
         if (data) {
@@ -9284,11 +9343,11 @@ export class MessageDetailsResponse implements IMessageDetailsResponse {
             this.subject = _data["subject"];
             this.text = _data["text"];
             this.sentAt = _data["sentAt"] ? new Date(_data["sentAt"].toString()) : <any>undefined;
-            this.sender = _data["sender"] ? UserRoleListResponse.fromJS(_data["sender"]) : <any>undefined;
+            this.sender = _data["sender"] ? ClassRegisterUserListResponse.fromJS(_data["sender"]) : <any>undefined;
             if (Array.isArray(_data["recipients"])) {
                 this.recipients = [] as any;
                 for (let item of _data["recipients"])
-                    this.recipients!.push(UserRoleListResponse.fromJS(item));
+                    this.recipients!.push(ClassRegisterUserListResponse.fromJS(item));
             }
         }
     }
@@ -9321,8 +9380,8 @@ export interface IMessageDetailsResponse {
     subject: string | undefined;
     text: string | undefined;
     sentAt: Date;
-    sender: UserRoleListResponse | undefined;
-    recipients: UserRoleListResponse[] | undefined;
+    sender: ClassRegisterUserListResponse | undefined;
+    recipients: ClassRegisterUserListResponse[] | undefined;
 }
 
 export class MessageSendCommand implements IMessageSendCommand {
@@ -9507,65 +9566,6 @@ export class RecipientGroupCreateCommand implements IRecipientGroupCreateCommand
 
 export interface IRecipientGroupCreateCommand {
     name: string | undefined;
-}
-
-export class ClassRegisterUserListResponse implements IClassRegisterUserListResponse {
-    id!: string;
-    name!: string | undefined;
-    roles!: TenantRoleType[] | undefined;
-
-    constructor(data?: IClassRegisterUserListResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            if (Array.isArray(_data["roles"])) {
-                this.roles = [] as any;
-                for (let item of _data["roles"])
-                    this.roles!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): ClassRegisterUserListResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new ClassRegisterUserListResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        if (Array.isArray(this.roles)) {
-            data["roles"] = [];
-            for (let item of this.roles)
-                data["roles"].push(item);
-        }
-        return data; 
-    }
-}
-
-export interface IClassRegisterUserListResponse {
-    id: string;
-    name: string | undefined;
-    roles: TenantRoleType[] | undefined;
-}
-
-export enum TenantRoleType {
-    Administrator = "Administrator",
-    Teacher = "Teacher",
-    Student = "Student",
-    Parent = "Parent",
 }
 
 export class PagedListResponseOfSchoolYearListResponse implements IPagedListResponseOfSchoolYearListResponse {

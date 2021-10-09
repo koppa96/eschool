@@ -55,7 +55,7 @@
         <template v-if="props.expand">
           <q-tr>
             <q-td colspan="100%">
-              <pre class="message-content">{{ props.row.details.text }}</pre>
+              <pre class="message-content">{{ props.row.details?.text }}</pre>
             </q-td>
           </q-tr>
         </template>

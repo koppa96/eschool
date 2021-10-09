@@ -13,7 +13,7 @@ namespace ESchool.ClassRegister.Interface.Features.Messaging
         public string Text { get; set; }
         public DateTime SentAt { get; set; }
 
-        public UserRoleListResponse Sender { get; set; }
-        public List<UserRoleListResponse> Recipients { get; set; }
+        public ClassRegisterUserListResponse Sender { get; set; }
+        public List<ClassRegisterUserListResponse> Recipients { get; set; }
     }
 }

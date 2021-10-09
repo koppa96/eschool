@@ -3,7 +3,7 @@ import { InjectionKey } from 'vue'
 import { coreModule } from '@/core/store/store'
 import { State } from '@/store/state'
 
-export const key: InjectionKey<Store<State>> = Symbol('Store key')
+export const key: InjectionKey<Store<State>> = Symbol()
 
 export const store = createStore({
   modules: {

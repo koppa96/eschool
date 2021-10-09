@@ -8,6 +8,9 @@
     </q-item>
 
     <SidebarItemGroup icon="email" label="Üzeneteim">
+      <SidebarItemGroupItem to="/new-message">
+        Új üzenet
+      </SidebarItemGroupItem>
       <SidebarItemGroupItem to="/incoming-messages">
         Bejövő
       </SidebarItemGroupItem>
