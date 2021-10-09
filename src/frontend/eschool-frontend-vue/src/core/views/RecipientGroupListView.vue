@@ -35,6 +35,16 @@
               dense
               round
               flat
+              color="negative"
+              icon="delete"
+              @click.stop="deleteGroup(props.row)"
+            >
+              <q-tooltip>Részletek</q-tooltip>
+            </q-btn>
+            <q-btn
+              dense
+              round
+              flat
               :icon="props.expand ? 'expand_less' : 'expand_more'"
               @click.stop="onExpandClicked(props)"
             >
@@ -78,6 +88,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { async } from 'rxjs'
 import RecipientGroupCreateDialog from '../components/RecipientGroupCreateDialog.vue'
 import RecipientGroupMemberAddDialog from '../components/RecipientGroupMemberAddDialog.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
@@ -177,6 +188,19 @@ async function removeMember(
     await deletion(async () => {
       await client.removeMember(group.id, member.id)
       group.members = await client.listRecipientGroupMembers(group.id)
+    })()
+  }
+}
+
+async function deleteGroup(group: RecipientGroupWithMembers): Promise<void> {
+  const result = await confirm(
+    `Biztosan törölni szeretné a(z) ${group.name} címzett csoportot?`
+  )
+
+  if (result) {
+    await deletion(async () => {
+      await client.deleteRecipientGroup(group.id)
+      await request({ pagination: pagination.value })
     })()
   }
 }

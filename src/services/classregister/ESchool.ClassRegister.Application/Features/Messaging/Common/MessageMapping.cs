@@ -15,6 +15,8 @@ namespace ESchool.ClassRegister.Application.Features.Messaging.Common
             CreateMap<Message, MessageDetailsResponse>()
                 .ForMember(x => x.Sender, o => o.MapFrom(x => x.SenderClassRegisterUser))
                 .ForMember(x => x.Recipients, o => o.MapFrom(x => x.ReceiverUserMessages.Select(r => r.ClassRegisterUser)));
+
+            CreateMap<RecipientGroup, RecipientGroupListResponse>();
         }
     }
 }

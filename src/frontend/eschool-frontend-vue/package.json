@@ -20,7 +20,8 @@
     "quasar": "^2.0.0",
     "rxjs": "^7.3.0",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0-0"
+    "vue-router": "^4.0.0-0",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@antfu/eslint-config-vue": "^0.7.0",

@@ -37,6 +37,15 @@ namespace ESchool.ClassRegister.Api.Controllers
             return mediator.Send(command, cancellationToken);
         }
 
+        [HttpDelete("{recipientGroupId}")]
+        public Task DeleteRecipientGroup(Guid recipientGroupId, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new RecipientGroupDeleteCommand
+            {
+                Id = recipientGroupId
+            }, cancellationToken);
+        }
+
         [HttpGet("{recipientGroupId}/members")]
         public Task<List<ClassRegisterUserListResponse>> ListRecipientGroupMembers(Guid recipientGroupId,
             CancellationToken cancellationToken)
@@ -56,7 +65,7 @@ namespace ESchool.ClassRegister.Api.Controllers
                 MemberId = userId
             }, cancellationToken);
         }
-        
+
         [HttpDelete("{recipientGroupId}/members/{userId}")]
         public Task RemoveMember(Guid recipientGroupId, Guid userId, CancellationToken cancellationToken)
         {
