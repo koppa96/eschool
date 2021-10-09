@@ -67,8 +67,8 @@
       icon="description"
       label="Osztálynapló"
     >
-      <SidebarItemGroupItem v-if="isStudent">
-        Órák
+      <SidebarItemGroupItem v-if="isStudent" to="/student/timetable">
+        Órarend
       </SidebarItemGroupItem>
       <SidebarItemGroupItem v-if="isStudent || isParent" to="/student/subjects">
         Tantárgyak

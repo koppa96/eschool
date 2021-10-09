@@ -13,7 +13,7 @@
   >
     <template #top-right>
       <slot name="top-right">
-        <q-btn color="primary" icon="add" @click="emit('add')">
+        <q-btn v-if="canAdd" color="primary" icon="add" @click="emit('add')">
           {{ addButtonText }}
         </q-btn>
       </slot>

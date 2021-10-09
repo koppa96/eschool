@@ -349,5 +349,15 @@ export const classRegisterRoutes: RouteRecordRaw[] = [
     meta: {
       name: 'Hiányzások'
     }
+  },
+  {
+    path: 'student/timetable',
+    component: () =>
+      import(
+        /* webpackChunkName: "class-register" */ './views/student/StudentTimetableView.vue'
+      ),
+    meta: {
+      name: 'Órarend'
+    }
   }
 ]

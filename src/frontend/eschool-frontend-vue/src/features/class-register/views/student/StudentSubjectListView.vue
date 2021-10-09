@@ -15,7 +15,7 @@
         <StudentSchoolYearPicker
           :model-value="schoolYearId"
           :student-id="studentId"
-          class="vw-20"
+          class="q-ml-sm vw-20"
           select-first
           @update:modelValue="loadSubjects($event)"
         />
