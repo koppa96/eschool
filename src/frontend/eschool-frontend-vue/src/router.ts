@@ -5,6 +5,7 @@ import LoginRedirect from '@/core/auth/components/LoginRedirect.vue'
 import LogoutRedirect from '@/core/auth/components/LogoutRedirect.vue'
 import IncomingMessageListView from '@/core/views/IncomingMessageListView.vue'
 import SentMessageListView from '@/core/views/SentMessageListView.vue'
+import RecipientGroupListView from '@/core/views/RecipientGroupListView.vue'
 import { tenantAdminRoutes } from '@/features/tenant-admin/tenant-admin.routes'
 import { classRegisterRoutes } from '@/features/class-register/class-register.routes'
 
@@ -35,6 +36,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'sent-messages',
         component: SentMessageListView
+      },
+      {
+        path: 'recipient-groups',
+        component: RecipientGroupListView
       },
       ...tenantAdminRoutes,
       ...classRegisterRoutes

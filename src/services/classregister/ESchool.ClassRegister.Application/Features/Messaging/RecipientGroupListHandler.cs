@@ -4,6 +4,7 @@ using AutoMapper;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.Messaging;
 using ESchool.Libs.Application.Cqrs.Handlers;
+using ESchool.Libs.Domain.Services;
 using ESchool.Libs.Interface.Query;
 
 namespace ESchool.ClassRegister.Application.Features.Messaging
@@ -21,16 +22,20 @@ namespace ESchool.ClassRegister.Application.Features.Messaging
 
     public class RecipientGroupListHandler : AutoMapperPagedListHandler<RecipientGroupListQuery, RecipientGroup, RecipientGroupListResponse>
     {
-        public RecipientGroupListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider)
+        private readonly IIdentityService identityService;
+
+        public RecipientGroupListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider, IIdentityService identityService)
             : base(context, configurationProvider)
         {
+            this.identityService = identityService;
         }
 
         protected override IQueryable<RecipientGroup> Filter(IQueryable<RecipientGroup> entities, RecipientGroupListQuery query)
         {
+            var currentUserId = identityService.GetCurrentUserId();
             return !string.IsNullOrEmpty(query.SearchText)
-                ? entities.Where(x => x.Name.ToLower().Contains(query.SearchText.ToLower()))
-                : entities;
+                ? entities.Where(x => x.Name.ToLower().Contains(query.SearchText.ToLower()) && x.UserId == currentUserId)
+                : entities.Where(x => x.UserId == currentUserId);
         }
 
         protected override IOrderedQueryable<RecipientGroup> Order(IQueryable<RecipientGroup> entities, RecipientGroupListQuery query)

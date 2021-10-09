@@ -7,6 +7,8 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ESchool.ClassRegister.Application.Features.Users;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Domain.Entities.Users;
+using ESchool.Libs.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,12 +30,25 @@ namespace ESchool.ClassRegister.Application.Features.Messaging
             this.configurationProvider = configurationProvider;
         }
         
-        public Task<List<ClassRegisterUserListResponse>> Handle(RecipientGroupMemberListQuery request, CancellationToken cancellationToken)
+        public async Task<List<ClassRegisterUserListResponse>> Handle(RecipientGroupMemberListQuery request, CancellationToken cancellationToken)
         {
-            return context.RecipientGroupMembers.Where(x => x.RecipientGroupId == request.Id)
-                .Select(x => x.Member)
-                .ProjectTo<ClassRegisterUserListResponse>(configurationProvider)
+            var members = await context.RecipientGroupMembers.Where(x => x.RecipientGroupId == request.Id)
+                .Select(x => new ClassRegisterUserListResponse
+                {
+                    Id = x.MemberId,
+                    Name = x.Member.Name,
+                    Roles = x.Member.UserRoles.Select(x => x is Administrator
+                        ? TenantRoleType.Administrator
+                        : x is Teacher
+                            ? TenantRoleType.Teacher
+                            : x is Student
+                                ? TenantRoleType.Student
+                                : x is Parent
+                                    ? TenantRoleType.Parent
+                                    : default).ToList()
+                })
                 .ToListAsync(cancellationToken);
+            return members;
         }
     }
 }

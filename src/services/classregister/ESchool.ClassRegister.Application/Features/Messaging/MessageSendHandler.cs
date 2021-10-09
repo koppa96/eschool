@@ -41,7 +41,7 @@ namespace ESchool.ClassRegister.Application.Features.Messaging
         
         public async Task<MessageDetailsResponse> Handle(MessageSendCommand request, CancellationToken cancellationToken)
         {
-            var groupIds = request.Recipients.Where(x => x.Type == MessageSendCommand.Recipient.RecipientType.Group)
+            var groupIds = request.Recipients.Where(x => x.Type == RecipientDto.RecipientType.Group)
                 .Select(x => x.Id)
                 .ToList();
 
@@ -56,7 +56,7 @@ namespace ESchool.ClassRegister.Application.Features.Messaging
                 SenderUserId = identityService.GetCurrentUserId(),
                 SentAt = DateTime.Now,
                 ReceiverUserMessages = request.Recipients
-                    .Where(x => x.Type == MessageSendCommand.Recipient.RecipientType.User)
+                    .Where(x => x.Type == RecipientDto.RecipientType.User)
                     .Select(x => x.Id)
                     .Concat(groupMembersIds)
                     .Distinct()

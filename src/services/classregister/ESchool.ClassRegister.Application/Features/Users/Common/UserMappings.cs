@@ -37,21 +37,6 @@ namespace ESchool.ClassRegister.Application.Features.Users.Common
                     Name = student.User.Name,
                     UserId = student.UserId
                 });
-
-            CreateMap<ClassRegisterUser, ClassRegisterUserListResponse>()
-                .ForMember(x => x.Roles, o => o.MapFrom(x => x.UserRoles));
-
-            CreateMap<Teacher, TenantRoleType>()
-                .ConstructUsing(_ => TenantRoleType.Teacher);
-
-            CreateMap<Student, TenantRoleType>()
-                .ConstructUsing(_ => TenantRoleType.Student);
-
-            CreateMap<Administrator, TenantRoleType>()
-                .ConstructUsing(_ => TenantRoleType.Administrator);
-
-            CreateMap<Parent, TenantRoleType>()
-                .ConstructUsing(_ => TenantRoleType.Parent);
         }
     }
 }

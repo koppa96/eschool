@@ -14,6 +14,9 @@
       <SidebarItemGroupItem to="/sent-messages">
         Kimenő
       </SidebarItemGroupItem>
+      <SidebarItemGroupItem to="/recipient-groups">
+        Címzett csoportok
+      </SidebarItemGroupItem>
     </SidebarItemGroup>
 
     <SidebarItemGroup

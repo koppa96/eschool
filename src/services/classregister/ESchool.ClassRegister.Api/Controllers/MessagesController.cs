@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.ClassRegister.Application.Features.Messaging;
 using ESchool.ClassRegister.Interface.Features.Messaging;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Interface.Response;
@@ -31,6 +32,13 @@ namespace ESchool.ClassRegister.Api.Controllers
         [HttpGet("sent")]
         public Task<PagedListResponse<MessageListResponse>> ListSentMessages(
             [FromQuery] SentMessageListQuery query, CancellationToken cancellationToken)
+        {
+            return mediator.Send(query, cancellationToken);
+        }
+
+        [HttpGet("recipients")]
+        public Task<PagedListResponse<RecipientDto>> ListRecipients([FromQuery] MessageRecipientListQuery query,
+            CancellationToken cancellationToken)
         {
             return mediator.Send(query, cancellationToken);
         }

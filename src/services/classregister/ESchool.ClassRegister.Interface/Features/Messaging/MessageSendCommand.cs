@@ -8,18 +8,19 @@ namespace ESchool.ClassRegister.Interface.Features.Messaging
     {
         public string Subject { get; set; }
         public string Text { get; set; }
-        public List<Recipient> Recipients { get; set; }
-        
-        public class Recipient
-        {
-            public Guid Id { get; set; }
-            public RecipientType Type { get; set; }
+        public List<RecipientDto> Recipients { get; set; }
+    }
+    
+    public class RecipientDto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public RecipientType Type { get; set; }
             
-            public enum RecipientType
-            {
-                User,
-                Group
-            }
+        public enum RecipientType
+        {
+            User,
+            Group
         }
     }
 }

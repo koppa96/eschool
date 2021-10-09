@@ -30,6 +30,13 @@ namespace ESchool.ClassRegister.Api.Controllers
             return mediator.Send(query, cancellationToken);
         }
 
+        [HttpPost]
+        public Task CreateRecipientGroup([FromBody] RecipientGroupCreateCommand command,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(command, cancellationToken);
+        }
+
         [HttpGet("{recipientGroupId}/members")]
         public Task<List<ClassRegisterUserListResponse>> ListRecipientGroupMembers(Guid recipientGroupId,
             CancellationToken cancellationToken)

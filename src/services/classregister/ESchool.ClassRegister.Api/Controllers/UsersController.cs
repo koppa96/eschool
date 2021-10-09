@@ -21,10 +21,11 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpGet]
-        public Task<PagedListResponse<ClassRegisterUserListResponse>> ListUsers([FromQuery] UserListQuery query,
+        public async Task<PagedListResponse<ClassRegisterUserListResponse>> ListUsers([FromQuery] UserListQuery query,
             CancellationToken cancellationToken)
         {
-            return mediator.Send(query, cancellationToken);
+            var response = await mediator.Send(query, cancellationToken);
+            return response;
         }
     }
 }
