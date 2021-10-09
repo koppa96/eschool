@@ -47,6 +47,8 @@ namespace ESchool.ClassRegister.Domain
         public DbSet<ClassRegisterUser> Users { get; set; }
         public DbSet<ClassSchoolYearSubjectTeacher> ClassSchoolYearSubjectTeachers { get; set; }
         public DbSet<StudentParent> StudentParents { get; set; }
+        public DbSet<RecipientGroup> RecipientGroups { get; set; }
+        public DbSet<RecipientGroupMember> RecipientGroupMembers { get; set; }
 
         public ClassRegisterContext(
             DbContextOptions<ClassRegisterContext> options,
