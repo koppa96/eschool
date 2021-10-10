@@ -3,15 +3,17 @@ using System;
 using ESchool.HomeAssignments.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ESchool.HomeAssignments.Domain.Migrations
 {
     [DbContext(typeof(HomeAssignmentsContext))]
-    partial class HomeAssignmentsContextModelSnapshot : ModelSnapshot
+    [Migration("20211010155400_ClassRegisterEntities")]
+    partial class ClassRegisterEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

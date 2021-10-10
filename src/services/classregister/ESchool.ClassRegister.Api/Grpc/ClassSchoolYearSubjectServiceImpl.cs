@@ -36,7 +36,7 @@ namespace ESchool.ClassRegister.Api.Grpc
                 },
                 Subject = new ClassRegisterEntityResponse
                 {
-                    Id = result.Subject.ToString(),
+                    Id = result.Subject.Id.ToString(),
                     Name = result.Subject.Name
                 },
                 SchoolYear = new ClassRegisterEntityResponse

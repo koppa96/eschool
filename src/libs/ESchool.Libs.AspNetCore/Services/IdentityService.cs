@@ -41,7 +41,16 @@ namespace ESchool.Libs.AspNetCore.Services
             if (httpContext != null)
             {
                 var claim = httpContext.User.Claims.SingleOrDefault(x => x.Type == Constants.ClaimTypes.TenantId);
-                return claim != null ? Guid.Parse(claim.Value) : null;
+                if (claim != null)
+                {
+                    return Guid.Parse(claim.Value);
+                }
+                
+                var header = httpContext.Request.Headers["X-Tenant-Id"].SingleOrDefault();
+                if (header != null)
+                {
+                    return Guid.Parse(header);
+                }
             }
 
             return messagingIdentityService.TenantId;
