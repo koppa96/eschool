@@ -39,6 +39,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassScho
                 ClassSchoolYearSubjectId = classSchoolYearSubject.Id
             }));
 
+            eventPublisher.Setup(context);
             await eventPublisher.PublishAsync(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
             {
                 ClassId = classSchoolYearSubject.ClassSchoolYear.ClassId,

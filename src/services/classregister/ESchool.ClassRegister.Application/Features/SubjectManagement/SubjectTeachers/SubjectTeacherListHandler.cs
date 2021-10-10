@@ -14,6 +14,11 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.SubjectTe
         {
         }
 
+        protected override IQueryable<SubjectTeacher> Filter(IQueryable<SubjectTeacher> entities, SubjectTeacherListQuery query)
+        {
+            return entities.Where(x => x.SubjectId == query.SubjectId);
+        }
+
         protected override IOrderedQueryable<SubjectTeacher> Order(IQueryable<SubjectTeacher> entities, SubjectTeacherListQuery query)
         {
             return entities.OrderBy(x => x.Teacher.User.Name);

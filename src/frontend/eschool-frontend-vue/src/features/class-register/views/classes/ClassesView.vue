@@ -135,7 +135,7 @@ async function createClass(): Promise<void> {
   const [classTypes, schoolYears] = await load(() =>
     Promise.all([
       classTypesClient.listClassTypes(50, 0),
-      schoolYearsClient.listSchoolYears(null, 50, 0)
+      schoolYearsClient.listSchoolYears(null, null, null, 50, 0)
     ])
   )
 
