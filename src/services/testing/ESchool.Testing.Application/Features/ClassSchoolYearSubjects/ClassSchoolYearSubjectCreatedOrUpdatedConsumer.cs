@@ -27,22 +27,25 @@ namespace ESchool.Testing.Application.Features.ClassSchoolYearSubjects
             var dbContext = lazyDbContext.Value;
             var classSchoolYearSubjectDetails = await client.GetDetailsAsync(new ClassSchoolYearSubjectDetailsRequest
             {
-                Id = context.Message.Id.ToString()
+                ClassId = context.Message.ClassId.ToString(),
+                SubjectId = context.Message.SubjectId.ToString(),
+                SchoolYearId = context.Message.SchoolYearId.ToString()
             });
 
             var classSchoolYearSubject = await dbContext.ClassSchoolYearSubjects
                 .Include(x => x.ClassSchoolYearSubjectStudents)
                 .Include(x => x.ClassSchoolYearSubjectTeachers)
-                .SingleOrDefaultAsync(x => x.Id == context.Message.Id);
+                .SingleOrDefaultAsync(x => x.Class.Id == context.Message.ClassId &&
+                                           x.SchoolYear.Id == context.Message.SchoolYearId &&
+                                           x.Subject.Id == context.Message.SubjectId);
 
             if (classSchoolYearSubject == null)
             {
                 classSchoolYearSubject = new ClassSchoolYearSubject
                 {
-                    Id = context.Message.Id,
-                    ClassId = Guid.Parse(classSchoolYearSubjectDetails.ClassId),
-                    SubjectId = Guid.Parse(classSchoolYearSubjectDetails.SubjectId),
-                    SchoolYearId = Guid.Parse(classSchoolYearSubjectDetails.SchoolYearId)
+                    Class = ResponseToEntity(classSchoolYearSubjectDetails.Class),
+                    Subject = ResponseToEntity(classSchoolYearSubjectDetails.Subject),
+                    SchoolYear = ResponseToEntity(classSchoolYearSubjectDetails.SchoolYear)
                 };
                 dbContext.ClassSchoolYearSubjects.Add(classSchoolYearSubject);
             }
@@ -64,6 +67,15 @@ namespace ESchool.Testing.Application.Features.ClassSchoolYearSubjects
                 }));
 
             await dbContext.SaveChangesAsync();
+        }
+        
+        private ClassRegisterEntity ResponseToEntity(ClassRegisterEntityResponse response)
+        {
+            return new ClassRegisterEntity
+            {
+                Id = Guid.Parse(response.Id),
+                Name = response.Name
+            };
         }
     }
 }

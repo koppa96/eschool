@@ -54,6 +54,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
                 }));
             }
             
+            publisher.Setup(context);
             await publisher.PublishAsync(new TenantUserCreatedOrEditedEvent
             {
                 UserId = user.Id,

@@ -27,6 +27,7 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
             {
                 context.Tenants.Remove(tenant);
                 
+                publisher.Setup(context);
                 await publisher.PublishAsync(new TenantDeletedEvent
                 {
                     TenantId = tenant.Id

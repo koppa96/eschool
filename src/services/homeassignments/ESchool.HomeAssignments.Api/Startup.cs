@@ -86,6 +86,8 @@ namespace ESchool.HomeAssignments.Api
                     {
                         endpoint.ConfigureConsumers(context);
                     });
+                    
+                    configurator.UseCustomFilters(context);
                 });
             });
             services.AddMassTransitHostedService();
@@ -143,12 +145,7 @@ namespace ESchool.HomeAssignments.Api
             services.AddTransient<ISolutionFileHandlerService, LocalSolutionFileHandlerService>();
             
             services.AddAutoMapper(Assembly.Load("ESchool.HomeAssignments.Application"));
-
-            services.AddGrpcClient<UserService.UserServiceClient>(config =>
-            {
-                config.Address = new Uri(Configuration.GetValue<string>("ClassRegisterUri"));
-            });
-
+            
             services.AddGrpcClient<ClassSchoolYearSubjectService.ClassSchoolYearSubjectServiceClient>(config =>
             {
                 config.Address = new Uri(Configuration.GetValue<string>("ClassRegisterUri"));

@@ -25,6 +25,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassScho
         public async Task<Unit> Handle(ClassSchoolYearSubjectEditCommand request, CancellationToken cancellationToken)
         {
             var classSchoolYearSubject = await context.ClassSchoolYearSubjects
+                .Include(x => x.ClassSchoolYear)
                 .Include(x => x.ClassSchoolYearSubjectTeachers)
                 .SingleAsync(x =>
                     x.ClassSchoolYear.ClassId == request.ClassId &&
@@ -40,7 +41,9 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassScho
 
             await eventPublisher.PublishAsync(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
             {
-                Id = classSchoolYearSubject.Id
+                ClassId = classSchoolYearSubject.ClassSchoolYear.ClassId,
+                SubjectId = classSchoolYearSubject.SubjectId,
+                SchoolYearId = classSchoolYearSubject.ClassSchoolYear.SchoolYearId
             }, cancellationToken);
             
             await context.SaveChangesAsync(cancellationToken);

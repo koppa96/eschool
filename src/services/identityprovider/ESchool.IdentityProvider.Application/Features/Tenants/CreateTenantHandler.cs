@@ -30,6 +30,7 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
             var tenant = mapper.Map<Tenant>(request);
             context.Tenants.Add(tenant);
             
+            publisher.Setup(context);
             await publisher.PublishAsync(new TenantCreatedOrUpdatedEvent
             {
                 TenantId = tenant.Id,

@@ -47,6 +47,7 @@ namespace ESchool.IdentityProvider.Application.Features.Users
 
             foreach (var @event in events)
             {
+                eventPublisher.Setup(context);
                 await eventPublisher.PublishAsync(@event, cancellationToken);
             }
 

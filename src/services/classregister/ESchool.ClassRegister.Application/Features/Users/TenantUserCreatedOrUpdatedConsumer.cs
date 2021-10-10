@@ -44,6 +44,7 @@ namespace ESchool.ClassRegister.Application.Features.Users
             
             // Global admins can also create users => No tenant Id will be set in the Identity Service.
             await using var dbContext = tenantDbContextFactory.CreateContext(tenant);
+            publisher.Setup(dbContext);
             
             var tenantUserTypes = typeof(ClassRegisterUserRole).Assembly
                 .GetTypes()
@@ -100,7 +101,11 @@ namespace ESchool.ClassRegister.Application.Features.Users
                     dbContext.UserRoles.Add(userRole);
                     if (mapper.TryMap<TenantUserRoleCreatedEvent>(userRole, out var @event))
                     {
-                        await publisher.PublishAsync(@event);
+                        await publisher.PublishAsync(@event, context =>
+                        {
+                            context.Headers.Add("TenantId", tenant.Id.ToString());
+                            return Task.CompletedTask;
+                        });
                     }
                 }
                 else
@@ -109,7 +114,11 @@ namespace ESchool.ClassRegister.Application.Features.Users
                     existingUserRole.IsDeleted = false;
                     if (mapper.TryMap<TenantUserRoleCreatedEvent>(existingUserRole, out var @event))
                     {
-                        await publisher.PublishAsync(@event);
+                        await publisher.PublishAsync(@event, context =>
+                        {
+                            context.Headers.Add("TenantId", tenant.Id.ToString());
+                            return Task.CompletedTask;
+                        });
                     }
                 }
             }

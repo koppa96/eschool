@@ -12,5 +12,6 @@ namespace ESchool.ClassRegister.Interface.Features.SubjectManagement.ClassSchool
         public ClassListResponse Class { get; set; }
         public SubjectListResponse Subject { get; set; }
         public List<UserRoleListResponse> Teachers { get; set; }
+        public List<UserRoleListResponse> Students { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Grpc;
@@ -13,12 +14,10 @@ namespace ESchool.HomeAssignments.Application.Features.Users
     public class StudentCreatedConsumer : IConsumer<StudentCreatedEvent>
     {
         private readonly Lazy<HomeAssignmentsContext> lazyDbContext;
-        private readonly UserService.UserServiceClient client;
 
-        public StudentCreatedConsumer(Lazy<HomeAssignmentsContext> lazyDbContext, UserService.UserServiceClient client)
+        public StudentCreatedConsumer(Lazy<HomeAssignmentsContext> lazyDbContext)
         {
             this.lazyDbContext = lazyDbContext;
-            this.client = client;
         }
 
         public async Task Consume(ConsumeContext<StudentCreatedEvent> context)
@@ -32,7 +31,8 @@ namespace ESchool.HomeAssignments.Application.Features.Users
                 user = new HomeAssignmentsUser
                 {
                     Id = context.Message.UserId,
-                    Name = context.Message.Name
+                    Name = context.Message.Name,
+                    UserRoles = new List<HomeAssignmentsUserRole>()
                 };
                 dbContext.Users.Add(user);
             }

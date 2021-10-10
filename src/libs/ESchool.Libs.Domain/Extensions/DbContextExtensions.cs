@@ -48,7 +48,7 @@ namespace ESchool.Libs.Domain.Extensions
             var entries = dbContext.ChangeTracker.Entries<ICreationAudited<TUser, TUserRole>>();
 
             var user = await dbContext.Set<TUser>()
-                .FindOrThrowAsync(currentUserId, cancellationToken);
+                .FindAsync(new object[] { currentUserId }, cancellationToken);
             
             foreach (var entry in entries)
             {
@@ -68,7 +68,7 @@ namespace ESchool.Libs.Domain.Extensions
             var entries = dbContext.ChangeTracker.Entries<IModificationAudited<TUser, TUserRole>>();
 
             var user = await dbContext.Set<TUser>()
-                .FindOrThrowAsync(currentUserId, cancellationToken);
+                .FindAsync(new object[] { currentUserId }, cancellationToken);
             
             foreach (var entry in entries)
             {

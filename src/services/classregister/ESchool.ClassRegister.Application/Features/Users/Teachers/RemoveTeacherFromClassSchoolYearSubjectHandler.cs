@@ -27,6 +27,7 @@ namespace ESchool.ClassRegister.Application.Features.Users.Teachers
             CancellationToken cancellationToken)
         {
             var classSchoolYearSubject = await context.ClassSchoolYearSubjects
+                .Include(x => x.ClassSchoolYear)
                 .Include(x => x.ClassSchoolYearSubjectTeachers)
                 .SingleAsync(x =>
                     x.ClassSchoolYear.ClassId == request.ClassId &&
@@ -40,9 +41,12 @@ namespace ESchool.ClassRegister.Application.Features.Users.Teachers
             {
                 context.ClassSchoolYearSubjectTeachers.Remove(classSchoolYearSubjectTeacher);
                 
+                eventPublisher.Setup(context);
                 await eventPublisher.PublishAsync(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
                 {
-                    Id = classSchoolYearSubject.Id
+                    ClassId = classSchoolYearSubject.ClassSchoolYear.ClassId,
+                    SchoolYearId = classSchoolYearSubject.ClassSchoolYear.SchoolYearId,
+                    SubjectId = classSchoolYearSubject.SubjectId
                 }, cancellationToken);
                 await context.SaveChangesAsync(cancellationToken);
             }

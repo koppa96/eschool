@@ -80,6 +80,8 @@ namespace ESchool.Testing.Api
                         rabbitConfig.Password(rabbitMqConfig.Password);
                     });
                     configurator.ReceiveEndpoint("testing", endpoint => { endpoint.ConfigureConsumers(context); });
+                    
+                    configurator.UseCustomFilters(context);
                 });
             });
             services.AddMassTransitHostedService();

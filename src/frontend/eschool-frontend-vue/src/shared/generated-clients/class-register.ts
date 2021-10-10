@@ -10654,6 +10654,7 @@ export class ClassSchoolYearSubjectDetailsResponse implements IClassSchoolYearSu
     class!: ClassListResponse | undefined;
     subject!: SubjectListResponse | undefined;
     teachers!: UserRoleListResponse[] | undefined;
+    students!: UserRoleListResponse[] | undefined;
 
     constructor(data?: IClassSchoolYearSubjectDetailsResponse) {
         if (data) {
@@ -10673,6 +10674,11 @@ export class ClassSchoolYearSubjectDetailsResponse implements IClassSchoolYearSu
                 this.teachers = [] as any;
                 for (let item of _data["teachers"])
                     this.teachers!.push(UserRoleListResponse.fromJS(item));
+            }
+            if (Array.isArray(_data["students"])) {
+                this.students = [] as any;
+                for (let item of _data["students"])
+                    this.students!.push(UserRoleListResponse.fromJS(item));
             }
         }
     }
@@ -10694,6 +10700,11 @@ export class ClassSchoolYearSubjectDetailsResponse implements IClassSchoolYearSu
             for (let item of this.teachers)
                 data["teachers"].push(item.toJSON());
         }
+        if (Array.isArray(this.students)) {
+            data["students"] = [];
+            for (let item of this.students)
+                data["students"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -10703,6 +10714,7 @@ export interface IClassSchoolYearSubjectDetailsResponse {
     class: ClassListResponse | undefined;
     subject: SubjectListResponse | undefined;
     teachers: UserRoleListResponse[] | undefined;
+    students: UserRoleListResponse[] | undefined;
 }
 
 export class ClassSchoolYearSubjectGradeCreateDto implements IClassSchoolYearSubjectGradeCreateDto {

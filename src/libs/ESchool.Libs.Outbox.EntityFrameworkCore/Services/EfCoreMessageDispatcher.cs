@@ -47,11 +47,11 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
 
             if (messageIds.Count > 0)
             {
-                await DispatchMessagesAsync(messageIds, cancellationToken);
+                await TryDispatchMessagesAsync(messageIds, cancellationToken);
             }
         }
 
-        public async Task DispatchMessagesAsync(IEnumerable<Guid> messageIds,
+        public async Task TryDispatchMessagesAsync(IEnumerable<Guid> messageIds,
             CancellationToken cancellationToken = default)
         {
             var ids = messageIds.ToList();

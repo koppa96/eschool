@@ -38,11 +38,14 @@ namespace ESchool.ClassRegister.Application.Features.Users.Students
             
             student.Class = @class;
             
+            eventPublisher.Setup(context);
             foreach (var classSchoolYearSubject in @class.ClassSchoolYears.SelectMany(x => x.ClassSchoolYearSubjects))
             {
                 await eventPublisher.PublishAsync(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
                 {
-                    Id = classSchoolYearSubject.Id
+                    ClassId = classSchoolYearSubject.ClassSchoolYear.ClassId,
+                    SubjectId = classSchoolYearSubject.SubjectId,
+                    SchoolYearId = classSchoolYearSubject.ClassSchoolYear.SchoolYearId
                 }, cancellationToken);
             }
             

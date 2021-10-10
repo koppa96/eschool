@@ -14,7 +14,8 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassScho
                 .ForMember(x => x.Class, o => o.MapFrom(x => x.ClassSchoolYear.Class))
                 .ForMember(x => x.SchoolYear, o => o.MapFrom(x => x.ClassSchoolYear.SchoolYear))
                 .ForMember(x => x.Teachers,
-                    o => o.MapFrom(x => x.ClassSchoolYearSubjectTeachers.Select(t => t.Teacher)));
+                    o => o.MapFrom(x => x.ClassSchoolYearSubjectTeachers.Select(t => t.Teacher)))
+                .ForMember(x => x.Students, o => o.MapFrom(x => x.ClassSchoolYear.Class.Students));
         }
     }
 }

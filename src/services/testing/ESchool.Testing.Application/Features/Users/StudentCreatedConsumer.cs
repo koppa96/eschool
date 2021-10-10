@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ESchool.Testing.Domain;
 using ESchool.Testing.Domain.Entities.ClassRegisterData;
@@ -30,7 +31,8 @@ namespace ESchool.Testing.Application.Features.Users
                 user = new TestingUser
                 {
                     Id = context.Message.UserId,
-                    Name = context.Message.Name
+                    Name = context.Message.Name,
+                    UserRoles = new List<TestingUserRole>()
                 };
                 dbContext.Users.Add(user);
             }

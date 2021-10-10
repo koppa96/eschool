@@ -25,9 +25,9 @@ namespace ESchool.Testing.Application.Features.Tests
         protected override IQueryable<Test> Filter(IQueryable<Test> entities, TestListAsTeacherQuery query)
         {
             var currentUserId = identityService.GetCurrentUserId();
-            return entities.Where(x => x.ClassSchoolYearSubject.ClassId == query.ClassId &&
-                                       x.ClassSchoolYearSubject.SubjectId == query.SubjectId &&
-                                       x.ClassSchoolYearSubject.SchoolYearId == query.SchoolYearId &&
+            return entities.Where(x => x.ClassSchoolYearSubject.Class.Id == query.ClassId &&
+                                       x.ClassSchoolYearSubject.Subject.Id == query.SubjectId &&
+                                       x.ClassSchoolYearSubject.SchoolYear.Id == query.SchoolYearId &&
                                        x.ClassSchoolYearSubject.ClassSchoolYearSubjectTeachers.Any(t =>
                                            t.Teacher.UserId == currentUserId));
         }

@@ -36,6 +36,7 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
             if (tenantUser != null)
             {
                 context.TenantUsers.Remove(tenantUser);
+                publisher.Setup(context);
                 await publisher.PublishAsync(new TenantUserDeletedEvent
                 {
                     UserId = tenantUser.UserId,

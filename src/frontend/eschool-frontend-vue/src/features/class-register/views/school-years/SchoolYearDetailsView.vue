@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-card class="absolute-full q-ma-lg flex column">
+    <q-card class="absolute-full q-ma-lg flex column no-wrap">
       <DetailsHeader
         class="q-pa-md"
         :name="`${schoolYear.displayName} tanév`"
@@ -110,5 +110,6 @@ loadData()
 <style scoped>
 .fill-card {
   flex-grow: 1;
+  min-height: 1px;
 }
 </style>

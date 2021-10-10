@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Entities;
@@ -11,12 +12,19 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
     public class EfCoreEventPublisher : IEventPublisher
     {
         private readonly IPublishFilterRunner publishFilterRunner;
-        private readonly IOutboxDbContext outboxDbContext;
+        private IOutboxDbContext outboxDbContext;
 
-        public EfCoreEventPublisher(IPublishFilterRunner publishFilterRunner, IOutboxDbContext outboxDbContext)
+        public EfCoreEventPublisher(IPublishFilterRunner publishFilterRunner)
         {
             this.publishFilterRunner = publishFilterRunner;
-            this.outboxDbContext = outboxDbContext;
+        }
+
+        public void Setup(params object[] @params)
+        {
+            var context = @params.OfType<IOutboxDbContext>()
+                .LastOrDefault();
+
+            outboxDbContext = context;
         }
 
         public Task PublishAsync(object message, CancellationToken cancellationToken = default)

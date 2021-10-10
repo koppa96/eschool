@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-card class="absolute-full q-ma-lg flex column">
+    <q-card class="absolute-full q-ma-lg flex column no-wrap">
       <TenantDetailsHeader
         class="q-pa-md"
         :name="tenant.name"
@@ -102,6 +102,7 @@ loadData()
 
 <style scoped>
 .fill-card {
-  flex-grow: 1;
+  flex: 1 1 auto;
+  min-height: 1px;
 }
 </style>
