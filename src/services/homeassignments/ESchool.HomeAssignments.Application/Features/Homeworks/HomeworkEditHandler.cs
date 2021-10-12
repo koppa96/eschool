@@ -30,9 +30,11 @@ namespace ESchool.HomeAssignments.Application.Features.Homeworks
             homework.Title = request.InnerCommand.Title;
             homework.Description = request.InnerCommand.Description;
             homework.Optional = request.InnerCommand.Optional;
-            homework.Deadline = homework.Deadline <= request.InnerCommand.Deadline
-                ? request.InnerCommand.Deadline
-                : throw new InvalidOperationException("A határidő nem módosítható az eredetinél későbbi időpontra.");
+            
+            var localDate = request.InnerCommand.Deadline.ToLocalTime();
+            homework.Deadline = homework.Deadline <= localDate
+                ? localDate
+                : throw new InvalidOperationException("A határidő nem módosítható az eredetinél korábbi időpontra.");
 
             await context.SaveChangesAsync(cancellationToken);
             return mapper.Map<HomeworkDetailsResponse>(homework);

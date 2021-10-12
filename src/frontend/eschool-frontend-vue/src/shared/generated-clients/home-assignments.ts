@@ -470,6 +470,348 @@ export class FilesClient {
     }
 }
 
+export class HomeAssignmentsClassSubjectsClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    listClassSubjects(schoolYearId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfClassSubjectListResponse> {
+        let url_ = this.baseUrl + "/api/school-years/{schoolYearId}/class-subjects?";
+        if (schoolYearId === undefined || schoolYearId === null)
+            throw new Error("The parameter 'schoolYearId' must be defined.");
+        url_ = url_.replace("{schoolYearId}", encodeURIComponent("" + schoolYearId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processListClassSubjects(_response);
+        });
+    }
+
+    protected processListClassSubjects(response: AxiosResponse): Promise<PagedListResponseOfClassSubjectListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PagedListResponseOfClassSubjectListResponse.fromJS(resultData200);
+            return result200;
+        } else if (status === 400) {
+            const _responseText = response.data;
+            let result400: any = null;
+            let resultData400  = _responseText;
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 403) {
+            const _responseText = response.data;
+            let result403: any = null;
+            let resultData403  = _responseText;
+            result403 = ProblemDetails.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PagedListResponseOfClassSubjectListResponse>(<any>null);
+    }
+}
+
+export class HomeAssignmentsSchoolYearsClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    listSchoolYearsOfStudent(  cancelToken?: CancelToken | undefined): Promise<ClassRegisterEntityResponse[]> {
+        let url_ = this.baseUrl + "/api/school-years/student";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processListSchoolYearsOfStudent(_response);
+        });
+    }
+
+    protected processListSchoolYearsOfStudent(response: AxiosResponse): Promise<ClassRegisterEntityResponse[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ClassRegisterEntityResponse.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+        } else if (status === 400) {
+            const _responseText = response.data;
+            let result400: any = null;
+            let resultData400  = _responseText;
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 403) {
+            const _responseText = response.data;
+            let result403: any = null;
+            let resultData403  = _responseText;
+            result403 = ProblemDetails.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ClassRegisterEntityResponse[]>(<any>null);
+    }
+
+    listSchoolYearsOfTeacher(  cancelToken?: CancelToken | undefined): Promise<ClassRegisterEntityResponse[]> {
+        let url_ = this.baseUrl + "/api/school-years/teacher";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processListSchoolYearsOfTeacher(_response);
+        });
+    }
+
+    protected processListSchoolYearsOfTeacher(response: AxiosResponse): Promise<ClassRegisterEntityResponse[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ClassRegisterEntityResponse.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+        } else if (status === 400) {
+            const _responseText = response.data;
+            let result400: any = null;
+            let resultData400  = _responseText;
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 403) {
+            const _responseText = response.data;
+            let result403: any = null;
+            let resultData403  = _responseText;
+            result403 = ProblemDetails.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ClassRegisterEntityResponse[]>(<any>null);
+    }
+
+    listSubjects(schoolYearId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfClassRegisterItemResponse> {
+        let url_ = this.baseUrl + "/api/school-years/{schoolYearId}/subjects?";
+        if (schoolYearId === undefined || schoolYearId === null)
+            throw new Error("The parameter 'schoolYearId' must be defined.");
+        url_ = url_.replace("{schoolYearId}", encodeURIComponent("" + schoolYearId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processListSubjects(_response);
+        });
+    }
+
+    protected processListSubjects(response: AxiosResponse): Promise<PagedListResponseOfClassRegisterItemResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PagedListResponseOfClassRegisterItemResponse.fromJS(resultData200);
+            return result200;
+        } else if (status === 400) {
+            const _responseText = response.data;
+            let result400: any = null;
+            let resultData400  = _responseText;
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 403) {
+            const _responseText = response.data;
+            let result403: any = null;
+            let resultData403  = _responseText;
+            result403 = ProblemDetails.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PagedListResponseOfClassRegisterItemResponse>(<any>null);
+    }
+}
+
 export class HomeworksClient {
     private instance: AxiosInstance;
     private baseUrl: string;
@@ -1660,6 +2002,99 @@ export class SolutionsClient {
     }
 }
 
+export class LessonHomeworksClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getHomeworksForLesson(lessonId: string, pageSize: number | undefined, pageIndex: number | undefined , cancelToken?: CancelToken | undefined): Promise<PagedListResponseOfTeacherHomeworkListResponse> {
+        let url_ = this.baseUrl + "/api/lessons/{lessonId}/homeworks?";
+        if (lessonId === undefined || lessonId === null)
+            throw new Error("The parameter 'lessonId' must be defined.");
+        url_ = url_.replace("{lessonId}", encodeURIComponent("" + lessonId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetHomeworksForLesson(_response);
+        });
+    }
+
+    protected processGetHomeworksForLesson(response: AxiosResponse): Promise<PagedListResponseOfTeacherHomeworkListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PagedListResponseOfTeacherHomeworkListResponse.fromJS(resultData200);
+            return result200;
+        } else if (status === 400) {
+            const _responseText = response.data;
+            let result400: any = null;
+            let resultData400  = _responseText;
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 403) {
+            const _responseText = response.data;
+            let result403: any = null;
+            let resultData403  = _responseText;
+            result403 = ProblemDetails.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PagedListResponseOfTeacherHomeworkListResponse>(<any>null);
+    }
+}
+
 export class UserHomeworksClient {
     private instance: AxiosInstance;
     private baseUrl: string;
@@ -1852,11 +2287,22 @@ export class UserHomeworksClient {
     }
 }
 
+/** A machine-readable format for specifying errors in HTTP API responses based on https://tools.ietf.org/html/rfc7807. */
 export class ProblemDetails implements IProblemDetails {
+    /** A URI reference [RFC3986] that identifies the problem type. This specification encourages that, when
+dereferenced, it provide human-readable documentation for the problem type
+(e.g., using HTML [W3C.REC-html5-20141028]).  When this member is not present, its value is assumed to be
+"about:blank". */
     type!: string | undefined;
+    /** A short, human-readable summary of the problem type.It SHOULD NOT change from occurrence to occurrence
+of the problem, except for purposes of localization(e.g., using proactive content negotiation;
+see[RFC7231], Section 3.4). */
     title!: string | undefined;
+    /** The HTTP status code([RFC7231], Section 6) generated by the origin server for this occurrence of the problem. */
     status!: number | undefined;
+    /** A human-readable explanation specific to this occurrence of the problem. */
     detail!: string | undefined;
+    /** A URI reference that identifies the specific occurrence of the problem.It may or may not yield further information if dereferenced. */
     instance!: string | undefined;
 
     constructor(data?: IProblemDetails) {
@@ -1896,11 +2342,22 @@ export class ProblemDetails implements IProblemDetails {
     }
 }
 
+/** A machine-readable format for specifying errors in HTTP API responses based on https://tools.ietf.org/html/rfc7807. */
 export interface IProblemDetails {
+    /** A URI reference [RFC3986] that identifies the problem type. This specification encourages that, when
+dereferenced, it provide human-readable documentation for the problem type
+(e.g., using HTML [W3C.REC-html5-20141028]).  When this member is not present, its value is assumed to be
+"about:blank". */
     type: string | undefined;
+    /** A short, human-readable summary of the problem type.It SHOULD NOT change from occurrence to occurrence
+of the problem, except for purposes of localization(e.g., using proactive content negotiation;
+see[RFC7231], Section 3.4). */
     title: string | undefined;
+    /** The HTTP status code([RFC7231], Section 6) generated by the origin server for this occurrence of the problem. */
     status: number | undefined;
+    /** A human-readable explanation specific to this occurrence of the problem. */
     detail: string | undefined;
+    /** A URI reference that identifies the specific occurrence of the problem.It may or may not yield further information if dereferenced. */
     instance: string | undefined;
 }
 
@@ -2057,6 +2514,238 @@ export interface IUserRoleListResponse {
     name: string | undefined;
 }
 
+export class PagedListResponseOfClassSubjectListResponse implements IPagedListResponseOfClassSubjectListResponse {
+    pageSize!: number;
+    pageIndex!: number;
+    totalCount!: number;
+    items!: ClassSubjectListResponse[] | undefined;
+
+    constructor(data?: IPagedListResponseOfClassSubjectListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageSize = _data["pageSize"];
+            this.pageIndex = _data["pageIndex"];
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(ClassSubjectListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedListResponseOfClassSubjectListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedListResponseOfClassSubjectListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageSize"] = this.pageSize;
+        data["pageIndex"] = this.pageIndex;
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedListResponseOfClassSubjectListResponse {
+    pageSize: number;
+    pageIndex: number;
+    totalCount: number;
+    items: ClassSubjectListResponse[] | undefined;
+}
+
+export class ClassSubjectListResponse implements IClassSubjectListResponse {
+    class!: ClassRegisterItemResponse | undefined;
+    subject!: ClassRegisterItemResponse | undefined;
+
+    constructor(data?: IClassSubjectListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.class = _data["class"] ? ClassRegisterItemResponse.fromJS(_data["class"]) : <any>undefined;
+            this.subject = _data["subject"] ? ClassRegisterItemResponse.fromJS(_data["subject"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ClassSubjectListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClassSubjectListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["class"] = this.class ? this.class.toJSON() : <any>undefined;
+        data["subject"] = this.subject ? this.subject.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IClassSubjectListResponse {
+    class: ClassRegisterItemResponse | undefined;
+    subject: ClassRegisterItemResponse | undefined;
+}
+
+export class ClassRegisterItemResponse implements IClassRegisterItemResponse {
+    id!: string;
+    name!: string | undefined;
+
+    constructor(data?: IClassRegisterItemResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): ClassRegisterItemResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClassRegisterItemResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface IClassRegisterItemResponse {
+    id: string;
+    name: string | undefined;
+}
+
+export class ClassRegisterEntityResponse implements IClassRegisterEntityResponse {
+    id!: string | undefined;
+    name!: string | undefined;
+
+    constructor(data?: IClassRegisterEntityResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): ClassRegisterEntityResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClassRegisterEntityResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface IClassRegisterEntityResponse {
+    id: string | undefined;
+    name: string | undefined;
+}
+
+export class PagedListResponseOfClassRegisterItemResponse implements IPagedListResponseOfClassRegisterItemResponse {
+    pageSize!: number;
+    pageIndex!: number;
+    totalCount!: number;
+    items!: ClassRegisterItemResponse[] | undefined;
+
+    constructor(data?: IPagedListResponseOfClassRegisterItemResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageSize = _data["pageSize"];
+            this.pageIndex = _data["pageIndex"];
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(ClassRegisterItemResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedListResponseOfClassRegisterItemResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedListResponseOfClassRegisterItemResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageSize"] = this.pageSize;
+        data["pageIndex"] = this.pageIndex;
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedListResponseOfClassRegisterItemResponse {
+    pageSize: number;
+    pageIndex: number;
+    totalCount: number;
+    items: ClassRegisterItemResponse[] | undefined;
+}
+
 export class HomeworkDetailsResponse implements IHomeworkDetailsResponse {
     id!: string;
     title!: string | undefined;
@@ -2065,9 +2754,9 @@ export class HomeworkDetailsResponse implements IHomeworkDetailsResponse {
     optional!: boolean;
     lesson!: LessonListResponse | undefined;
     createdAt!: Date;
-    createdBy!: UserRoleListResponse | undefined;
+    createdBy!: UserListResponse | undefined;
     lastModifiedAt!: Date | undefined;
-    lastModifiedBy!: UserRoleListResponse | undefined;
+    lastModifiedBy!: UserListResponse | undefined;
 
     constructor(data?: IHomeworkDetailsResponse) {
         if (data) {
@@ -2087,9 +2776,9 @@ export class HomeworkDetailsResponse implements IHomeworkDetailsResponse {
             this.optional = _data["optional"];
             this.lesson = _data["lesson"] ? LessonListResponse.fromJS(_data["lesson"]) : <any>undefined;
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.createdBy = _data["createdBy"] ? UserRoleListResponse.fromJS(_data["createdBy"]) : <any>undefined;
+            this.createdBy = _data["createdBy"] ? UserListResponse.fromJS(_data["createdBy"]) : <any>undefined;
             this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"] ? UserRoleListResponse.fromJS(_data["lastModifiedBy"]) : <any>undefined;
+            this.lastModifiedBy = _data["lastModifiedBy"] ? UserListResponse.fromJS(_data["lastModifiedBy"]) : <any>undefined;
         }
     }
 
@@ -2124,9 +2813,9 @@ export interface IHomeworkDetailsResponse {
     optional: boolean;
     lesson: LessonListResponse | undefined;
     createdAt: Date;
-    createdBy: UserRoleListResponse | undefined;
+    createdBy: UserListResponse | undefined;
     lastModifiedAt: Date | undefined;
-    lastModifiedBy: UserRoleListResponse | undefined;
+    lastModifiedBy: UserListResponse | undefined;
 }
 
 export class LessonListResponse implements ILessonListResponse {
@@ -2167,6 +2856,46 @@ export class LessonListResponse implements ILessonListResponse {
 export interface ILessonListResponse {
     id: string;
     title: string | undefined;
+}
+
+export class UserListResponse implements IUserListResponse {
+    id!: string;
+    name!: string | undefined;
+
+    constructor(data?: IUserListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): UserListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface IUserListResponse {
+    id: string;
+    name: string | undefined;
 }
 
 export class HomeworkCreateCommand implements IHomeworkCreateCommand {
@@ -2267,6 +2996,118 @@ export interface IHomeworkEditCommand {
     description: string | undefined;
     optional: boolean;
     deadline: Date;
+}
+
+export class PagedListResponseOfTeacherHomeworkListResponse implements IPagedListResponseOfTeacherHomeworkListResponse {
+    pageSize!: number;
+    pageIndex!: number;
+    totalCount!: number;
+    items!: TeacherHomeworkListResponse[] | undefined;
+
+    constructor(data?: IPagedListResponseOfTeacherHomeworkListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageSize = _data["pageSize"];
+            this.pageIndex = _data["pageIndex"];
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(TeacherHomeworkListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedListResponseOfTeacherHomeworkListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedListResponseOfTeacherHomeworkListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageSize"] = this.pageSize;
+        data["pageIndex"] = this.pageIndex;
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedListResponseOfTeacherHomeworkListResponse {
+    pageSize: number;
+    pageIndex: number;
+    totalCount: number;
+    items: TeacherHomeworkListResponse[] | undefined;
+}
+
+export class TeacherHomeworkListResponse implements ITeacherHomeworkListResponse {
+    id!: string;
+    title!: string | undefined;
+    deadline!: Date;
+    optional!: boolean;
+    submissions!: number;
+    reviews!: number;
+
+    constructor(data?: ITeacherHomeworkListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.deadline = _data["deadline"] ? new Date(_data["deadline"].toString()) : <any>undefined;
+            this.optional = _data["optional"];
+            this.submissions = _data["submissions"];
+            this.reviews = _data["reviews"];
+        }
+    }
+
+    static fromJS(data: any): TeacherHomeworkListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new TeacherHomeworkListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
+        data["optional"] = this.optional;
+        data["submissions"] = this.submissions;
+        data["reviews"] = this.reviews;
+        return data; 
+    }
+}
+
+export interface ITeacherHomeworkListResponse {
+    id: string;
+    title: string | undefined;
+    deadline: Date;
+    optional: boolean;
+    submissions: number;
+    reviews: number;
 }
 
 export class PagedListResponseOfHomeworkSolutionListResponse implements IPagedListResponseOfHomeworkSolutionListResponse {
@@ -2519,118 +3360,6 @@ export interface IStudentHomeworkListResponse {
     deadline: Date;
     submitted: boolean;
     optional: boolean;
-}
-
-export class PagedListResponseOfTeacherHomeworkListResponse implements IPagedListResponseOfTeacherHomeworkListResponse {
-    pageSize!: number;
-    pageIndex!: number;
-    totalCount!: number;
-    items!: TeacherHomeworkListResponse[] | undefined;
-
-    constructor(data?: IPagedListResponseOfTeacherHomeworkListResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pageSize = _data["pageSize"];
-            this.pageIndex = _data["pageIndex"];
-            this.totalCount = _data["totalCount"];
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items!.push(TeacherHomeworkListResponse.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): PagedListResponseOfTeacherHomeworkListResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedListResponseOfTeacherHomeworkListResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pageSize"] = this.pageSize;
-        data["pageIndex"] = this.pageIndex;
-        data["totalCount"] = this.totalCount;
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
-        return data; 
-    }
-}
-
-export interface IPagedListResponseOfTeacherHomeworkListResponse {
-    pageSize: number;
-    pageIndex: number;
-    totalCount: number;
-    items: TeacherHomeworkListResponse[] | undefined;
-}
-
-export class TeacherHomeworkListResponse implements ITeacherHomeworkListResponse {
-    id!: string;
-    title!: string | undefined;
-    deadline!: Date;
-    optional!: boolean;
-    submissions!: number;
-    reviews!: number;
-
-    constructor(data?: ITeacherHomeworkListResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.title = _data["title"];
-            this.deadline = _data["deadline"] ? new Date(_data["deadline"].toString()) : <any>undefined;
-            this.optional = _data["optional"];
-            this.submissions = _data["submissions"];
-            this.reviews = _data["reviews"];
-        }
-    }
-
-    static fromJS(data: any): TeacherHomeworkListResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new TeacherHomeworkListResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["title"] = this.title;
-        data["deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
-        data["optional"] = this.optional;
-        data["submissions"] = this.submissions;
-        data["reviews"] = this.reviews;
-        return data; 
-    }
-}
-
-export interface ITeacherHomeworkListResponse {
-    id: string;
-    title: string | undefined;
-    deadline: Date;
-    optional: boolean;
-    submissions: number;
-    reviews: number;
 }
 
 export interface FileParameter {

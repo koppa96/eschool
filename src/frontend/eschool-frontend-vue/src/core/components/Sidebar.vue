@@ -86,10 +86,13 @@
       icon="home"
       label="Házi feladatok"
     >
-      <SidebarItemGroupItem v-if="isStudent">
+      <SidebarItemGroupItem
+        v-if="isStudent"
+        to="/student/home-assignment-groups"
+      >
         Házi feladatok
       </SidebarItemGroupItem>
-      <SidebarItemGroupItem v-if="isTeacher">
+      <SidebarItemGroupItem v-if="isTeacher" to="/home-assignment-groups">
         Csoportok
       </SidebarItemGroupItem>
     </SidebarItemGroup>

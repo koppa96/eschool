@@ -9,6 +9,7 @@ import RecipientGroupListView from '@/core/views/RecipientGroupListView.vue'
 import NewMessageView from '@/core/views/NewMessageView.vue'
 import { tenantAdminRoutes } from '@/features/tenant-admin/tenant-admin.routes'
 import { classRegisterRoutes } from '@/features/class-register/class-register.routes'
+import { homeAssignmentsRoutes } from '@/features/home-assignments/home-assignments.routes'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -47,7 +48,8 @@ const routes: RouteRecordRaw[] = [
         component: NewMessageView
       },
       ...tenantAdminRoutes,
-      ...classRegisterRoutes
+      ...classRegisterRoutes,
+      ...homeAssignmentsRoutes
     ]
   }
 ]

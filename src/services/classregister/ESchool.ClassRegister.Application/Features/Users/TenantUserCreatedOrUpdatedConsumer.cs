@@ -80,7 +80,11 @@ namespace ESchool.ClassRegister.Application.Features.Users
                     dbContext.UserRoles.Remove(userBase);
                     if (mapper.TryMap<TenantUserRoleDeletedEvent>(userBase, out var @event))
                     {
-                        await publisher.PublishAsync(@event);
+                        await publisher.PublishAsync(@event, context =>
+                        {
+                            context.Headers.Add("TenantId", tenant.Id.ToString());
+                            return Task.CompletedTask;
+                        });
                     }
                 }
             }

@@ -14,20 +14,30 @@
         <pre class="q-px-md description">{{ lesson.description }}</pre>
         <DetailsGrid class="q-pa-md" :model-value="detailsGridData" />
       </q-expansion-item>
-      <LessonAbsenceList
-        :lesson-id="lessonId"
-        :class-id="classId"
-        :school-year-id="schoolYearId"
-        :subject-id="subjectId"
-        class="fill-card"
-      />
+      <q-tabs v-model="tab" inline-label align="left" active-color="primary">
+        <q-tab name="absences" icon="alarm_off" label="Hiányzások" />
+        <q-tab name="homeworks" icon="home" label="Házi feladatok" />
+      </q-tabs>
+      <q-tab-panels v-model="tab" animated class="fill-card">
+        <q-tab-panel name="absences" class="q-pa-none">
+          <LessonAbsenceList
+            class="h-100"
+            :lesson-id="lessonId"
+            :class-id="classId"
+            :school-year-id="schoolYearId"
+            :subject-id="subjectId"
+          />
+        </q-tab-panel>
+        <q-tab-panel name="homeworks" class="q-pa-none">
+          <LessonHomeAssignmentList class="h-100" :lesson-id="lessonId" />
+        </q-tab-panel>
+      </q-tab-panels>
     </q-card>
   </q-page>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { isString } from 'lodash-es'
 import { useRoute } from 'vue-router'
 import { useQuasar } from 'quasar'
 import LessonCreateEditDialog from '../../../components/LessonCreateEditDialog.vue'
@@ -47,6 +57,7 @@ import {
   yesOrNo
 } from '@/core/utils/display-helpers'
 import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'
+import LessonHomeAssignmentList from '@/features/home-assignments/components/LessonHomeAssignmentList.vue'
 
 interface Params {
   classId: string
@@ -62,6 +73,7 @@ const { lessonId, subjectId, classId, schoolYearId } = resolveParams()
 const { dialog } = useQuasar()
 const { save } = useSaveAndDeleteNotifications()
 const title = computed(() => lesson.value.title ?? 'Óra részletei')
+const tab = ref('absences')
 
 const detailsGridData = computed<DetailsGridItem[]>(() => {
   return [
@@ -130,5 +142,9 @@ loadData()
   margin-top: 0;
   margin-bottom: 0;
   font-family: Poppins, 'Roboto', 'Arial', 'sans-serif';
+}
+
+.h-100 {
+  height: 100%;
 }
 </style>

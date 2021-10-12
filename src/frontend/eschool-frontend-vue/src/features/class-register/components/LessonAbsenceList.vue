@@ -7,6 +7,7 @@
     :refresh$="refreshSubject"
     :editable="false"
     :has-details="false"
+    flat
     @add="createAbsence()"
     @delete="deleteAbsence($event)"
   />

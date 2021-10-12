@@ -6,8 +6,10 @@ using AutoMapper;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
+using ESchool.ClassRegister.Interface.IntegrationEvents.Lessons;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Interface.Commands;
+using ESchool.Libs.Outbox.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,11 +19,13 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
     {
         private readonly ClassRegisterContext context;
         private readonly IMapper mapper;
+        private readonly IEventPublisher eventPublisher;
 
-        public LessonEditHandler(ClassRegisterContext context, IMapper mapper)
+        public LessonEditHandler(ClassRegisterContext context, IMapper mapper, IEventPublisher eventPublisher)
         {
             this.context = context;
             this.mapper = mapper;
+            this.eventPublisher = eventPublisher;
         }
         
         public async Task<LessonDetailsResponse> Handle(EditCommand<LessonEditCommand, LessonDetailsResponse> request,
@@ -56,7 +60,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
 
             if (request.InnerCommand.ClassroomId != lesson.ClassroomId)
             {
-                var classRoom = await context.Classrooms.FindOrThrowAsync(request.InnerCommand.ClassroomId);
+                var classRoom = await context.Classrooms.FindOrThrowAsync(request.InnerCommand.ClassroomId, cancellationToken);
                 lesson.Classroom = classRoom;
             }
 
@@ -65,6 +69,16 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
             lesson.Description = request.InnerCommand.Description;
             lesson.StartsAt = request.InnerCommand.StartsAt;
             lesson.EndsAt = request.InnerCommand.EndsAt;
+            
+            eventPublisher.Setup(context);
+            await eventPublisher.PublishAsync(new LessonCreatedOrUpdatedEvent
+            {
+                LessonId = lesson.Id,
+                Title = lesson.Title ?? $"{lesson.StartsAt} - {lesson.EndsAt}",
+                ClassId = lesson.ClassSchoolYearSubject.ClassSchoolYear.ClassId,
+                SubjectId = lesson.ClassSchoolYearSubject.SubjectId,
+                SchoolYearId = lesson.ClassSchoolYearSubject.ClassSchoolYear.SchoolYearId
+            }, cancellationToken);
 
             await context.SaveChangesAsync(cancellationToken);
             return mapper.Map<LessonDetailsResponse>(lesson);

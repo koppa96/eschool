@@ -14,10 +14,10 @@ namespace ESchool.HomeAssignments.Interface.Features.Homeworks
         public LessonListResponse Lesson { get; set; }
 
         public DateTime CreatedAt { get; set; }
-        public UserRoleListResponse CreatedBy { get; set; }
+        public UserListResponse CreatedBy { get; set; }
 
         public DateTime? LastModifiedAt { get; set; }
-        public UserRoleListResponse LastModifiedBy { get; set; }
+        public UserListResponse LastModifiedBy { get; set; }
         
         public class LessonListResponse
         {

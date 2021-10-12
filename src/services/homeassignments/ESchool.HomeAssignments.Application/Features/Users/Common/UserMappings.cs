@@ -11,6 +11,8 @@ namespace ESchool.HomeAssignments.Application.Features.Users.Common
         {
             CreateMap<HomeAssignmentsUserRole, UserRoleListResponse>()
                 .ForMember(x => x.Name, o => o.MapFrom(x => x.User.Name));
+
+            CreateMap<HomeAssignmentsUser, UserListResponse>();
         }
     }
 }
