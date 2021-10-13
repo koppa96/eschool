@@ -8,9 +8,9 @@
       :data-access="fetchData"
       :refresh$="refreshSubject"
       :can-add="false"
-      @edit="editHomework($event)"
-      @delete="deleteHomework($event)"
-      @viewDetails="navigateToSubmissions($event)"
+      :editable="false"
+      :deletable="false"
+      @viewDetails="navigateToDetails($event)"
     />
   </q-page>
 </template>
@@ -18,6 +18,7 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
 import { useRoute, useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
 import HomeAssignmentCreateEditDialog from '../../components/HomeAssignmentCreateEditDialog.vue'
 import DataTable from '@/shared/components/DataTable.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
@@ -25,6 +26,7 @@ import { dateTimeToString, yesOrNo } from '@/core/utils/display-helpers'
 import {
   HomeworkEditCommand,
   HomeworksClient,
+  StudentHomeworkListResponse,
   TeacherHomeworkListResponse,
   UserHomeworksClient
 } from '@/shared/generated-clients/home-assignments'
@@ -34,8 +36,9 @@ import { createClient } from '@/shared/api'
 import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'
 import { useLoader } from '@/core/utils/loading.utils'
 import { useConfirmDialog } from '@/core/utils/dialogs'
+import { SubjectDetailsResponse } from '@/shared/generated-clients/class-register'
 
-const columns: QTableColumn<TeacherHomeworkListResponse>[] = [
+const columns: QTableColumn<StudentHomeworkListResponse>[] = [
   {
     name: 'name',
     label: 'Feladat neve',
@@ -56,15 +59,15 @@ const columns: QTableColumn<TeacherHomeworkListResponse>[] = [
   },
   {
     name: 'submissions',
-    label: 'Beadások száma',
+    label: 'Beadva',
     align: 'left',
-    field: row => row.submissions
+    field: row => yesOrNo(row.submitted)
   },
   {
     name: 'reviews',
     label: 'Kijavítva',
     align: 'left',
-    field: row => row.submissions
+    field: row => yesOrNo(row.reviewed)
   }
 ]
 const router = useRouter()
@@ -75,8 +78,9 @@ const { save, deletion } = useSaveAndDeleteNotifications()
 const { dialog } = useQuasar()
 const refreshSubject = useAutocompletingSubject()
 const userHomeworksClient = createClient(UserHomeworksClient)
-const homeworksClient = createClient(HomeworksClient)
 const { classId, schoolYearId, subjectId } = resolveParams()
+const subject = ref<SubjectDetailsResponse | null>(null)
+const title = computed(() => subject.value?.name ?? 'Tantárgy házi feladatai')
 
 function resolveParams(): {
   classId: string
@@ -86,44 +90,12 @@ function resolveParams(): {
   return route.params as any
 }
 
-async function editHomework(
-  homework: TeacherHomeworkListResponse
-): Promise<void> {
-  const details = await load(() => homeworksClient.getHomework(homework.id))
-
-  dialog({
-    component: HomeAssignmentCreateEditDialog,
-    componentProps: {
-      homeworkToEdit: details
-    }
-  }).onOk(
-    save(async (data: HomeworkEditCommand) => {
-      await homeworksClient.editHomework(homework.id, data)
-      refreshSubject.next()
-    })
-  )
-}
-
-async function deleteHomework(
-  homework: TeacherHomeworkListResponse
-): Promise<void> {
-  const result = await confirm('Biztosan törölni szeretné a házi feladatot?')
-
-  if (result) {
-    await deletion(async () => {
-      await homeworksClient.deleteHomework(homework.id)
-      refreshSubject.next()
-    })()
-  }
-}
-
 function fetchData(
   pageSize: number,
   pageIndex: number
 ): Promise<PagedListResponse> {
-  return userHomeworksClient.listTeacherHomeworks(
+  return userHomeworksClient.listStudentHomeworks(
     schoolYearId,
-    classId,
     subjectId,
     pageIndex,
     pageSize,
@@ -131,7 +103,7 @@ function fetchData(
   )
 }
 
-function navigateToSubmissions(homework: TeacherHomeworkListResponse): void {
-  router.push(`homeworks/${homework.id}/submissions`)
+function navigateToDetails(homework: StudentHomeworkListResponse): void {
+  router.push(`homeworks/${homework.id}`)
 }
 </script>

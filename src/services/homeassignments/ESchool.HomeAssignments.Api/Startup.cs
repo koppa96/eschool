@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using ESchool.ClassRegister.Grpc;
 using ESchool.HomeAssignments.Api.Infrastructure;
+using ESchool.HomeAssignments.Api.Infrastructure.Configuration;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Services;
 using ESchool.IdentityProvider.Interface.DefaultHandlers.Extensions;
@@ -42,6 +43,9 @@ namespace ESchool.HomeAssignments.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<LocalSolutionFileHandlerConfig>(
+                Configuration.GetSection("LocalSolutionFileHandlerConfig"));
+            
             services.AddMemoryCache();
             services.AddDbContext<HomeAssignmentsContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));

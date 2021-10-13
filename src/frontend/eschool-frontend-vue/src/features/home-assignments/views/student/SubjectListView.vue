@@ -29,10 +29,7 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import DataTable from '@/shared/components/DataTable.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
-import {
-  StudentsClient,
-  SubjectListResponse
-} from '@/shared/generated-clients/class-register'
+import { SubjectListResponse } from '@/shared/generated-clients/class-register'
 import { useAutocompletingSubject } from '@/core/utils/observable-lifecycle.util'
 import { PagedListResponse } from '@/shared/model/paged-list-response'
 import { createClient } from '@/shared/api'
@@ -81,7 +78,7 @@ function fetchData(
 
 function navigateToHomeworks(subject: SubjectListResponse): void {
   router.push(
-    `/student/subjects/${studentId.value}/${schoolYearId.value}/${subject.id}/lessons`
+    `/student/home-assignment-groups/${studentId.value}/${schoolYearId.value}/${subject.id}/homeworks`
   )
 }
 </script>

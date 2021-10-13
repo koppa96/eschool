@@ -64,10 +64,29 @@ export const homeAssignmentsRoutes: RouteRecordRaw[] = [
           },
           {
             path: ':homeworkId/submissions',
-            component: () =>
-              import(
-                /* webpackChunkName: "home-assignments" */ './views/teacher/HomeAssignmentSubmissionsView.vue'
-              )
+            component: LayoutComponent,
+            meta: {
+              name: 'Megoldások'
+            },
+            children: [
+              {
+                path: '',
+                component: () =>
+                  import(
+                    /* webpackChunkName: "home-assignments" */ './views/teacher/HomeAssignmentSubmissionsView.vue'
+                  )
+              },
+              {
+                path: ':solutionId',
+                component: () =>
+                  import(
+                    /* webpackChunkName: "home-assignments" */ './views/teacher/SubmissionView.vue'
+                  ),
+                meta: {
+                  name: 'Megoldás részletei'
+                }
+              }
+            ]
           }
         ]
       }
@@ -86,6 +105,47 @@ export const homeAssignmentsRoutes: RouteRecordRaw[] = [
           import(
             /* webpackChunkName: "home-assignments" */ './views/student/SubjectListView.vue'
           )
+      },
+      {
+        path: ':schoolYearId/:classId/:subjectId/homeworks',
+        component: LayoutComponent,
+        meta: {
+          resolveName: async (route: RouteLocationNormalizedLoaded) => {
+            const subjectsClient = createClient(SubjectsClient)
+
+            if (isString(route.params.subjectId)) {
+              try {
+                const { name } = await subjectsClient.getSubject(
+                  route.params.subjectId
+                )
+                return name
+              } catch (e) {
+                return 'Tantárgy házi feladatai'
+              }
+            }
+
+            return 'Tantárgy házi feladatai'
+          }
+        },
+        children: [
+          {
+            path: '',
+            component: () =>
+              import(
+                /* webpackChunkName: "home-assignments" */ './views/student/SubjectHomeworksView.vue'
+              )
+          },
+          {
+            path: ':homeworkId',
+            component: () =>
+              import(
+                /* webpackChunkName: "home-assignments" */ './views/student/StudentHomeworkDetailsView.vue'
+              ),
+            meta: {
+              name: 'Házi feladat részletei'
+            }
+          }
+        ]
       }
     ]
   }

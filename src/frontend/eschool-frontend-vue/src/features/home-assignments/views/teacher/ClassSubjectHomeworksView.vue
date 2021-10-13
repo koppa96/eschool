@@ -64,7 +64,7 @@ const columns: QTableColumn<TeacherHomeworkListResponse>[] = [
     name: 'reviews',
     label: 'Kijavítva',
     align: 'left',
-    field: row => row.submissions
+    field: row => row.reviews
   }
 ]
 const router = useRouter()

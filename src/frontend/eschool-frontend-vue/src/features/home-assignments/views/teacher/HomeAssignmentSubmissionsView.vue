@@ -9,13 +9,14 @@
       :can-add="false"
       :editable="false"
       :deletable="false"
+      @viewDetails="navigateToSolution($event)"
     />
   </q-page>
 </template>
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import DataTable from '@/shared/components/DataTable.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
 import { dateTimeToString, yesOrNo } from '@/core/utils/display-helpers'
@@ -51,6 +52,7 @@ const columns: QTableColumn<HomeworkSolutionListResponse>[] = [
     field: row => yesOrNo(row.reviewed)
   }
 ]
+const router = useRouter()
 const route = useRoute()
 const confirm = useConfirmDialog()
 const load = useLoader()
@@ -70,5 +72,9 @@ function fetchData(
   pageIndex: number
 ): Promise<PagedListResponse> {
   return solutionsClient.listSolutions(homeworkId, pageIndex, pageSize)
+}
+
+function navigateToSolution(solution: HomeworkSolutionListResponse): void {
+  router.push(`submissions/${solution.id}`)
 }
 </script>

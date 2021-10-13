@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ESchool.HomeAssignments.Application.Features.HomeworkSolutions;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Files;
 using ESchool.HomeAssignments.Interface.Features.HomeworkReviews;
 using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
@@ -39,6 +40,16 @@ namespace ESchool.HomeAssignments.Api.Controllers
             }, cancellationToken);
         }
 
+        [Authorize(PolicyNames.Student)]
+        [HttpGet("mine")]
+        public Task<HomeworkSolutionResponse> GetMySolution(Guid homeworkId, CancellationToken cancellationToken)
+        {
+            return mediator.Send(new StudentHomeworkSolutionGetQuery
+            {
+                HomeworkId = homeworkId
+            }, cancellationToken);
+        }
+
         [Authorize(PolicyNames.TeacherOrStudent)]
         [HttpGet("{solutionId}")]
         public Task<HomeworkSolutionResponse> GetSolution(Guid solutionId, CancellationToken cancellationToken)
@@ -60,11 +71,11 @@ namespace ESchool.HomeAssignments.Api.Controllers
         }
 
         [Authorize(PolicyNames.Teacher)]
-        [HttpPost("{solutionId}/review")]
-        public Task<HomeworkReviewResponse> CreateReview(Guid solutionId,
-            [FromBody] HomeworkReviewCreateCommand.Body body, CancellationToken cancellationToken)
+        [HttpPut("{solutionId}/review")]
+        public Task<HomeworkReviewResponse> CreateOrEditReview(Guid solutionId,
+            [FromBody] HomeworkReviewCreateEditCommand.Body body, CancellationToken cancellationToken)
         {
-            return mediator.Send(new HomeworkReviewCreateCommand
+            return mediator.Send(new HomeworkReviewCreateEditCommand
             {
                 HomeworkSolutionId = solutionId,
                 RequestBody = body

@@ -1379,6 +1379,154 @@ export class SolutionsClient {
         return Promise.resolve<PagedListResponseOfHomeworkSolutionListResponse>(<any>null);
     }
 
+    getMySolution(homeworkId: string , cancelToken?: CancelToken | undefined): Promise<HomeworkSolutionResponse> {
+        let url_ = this.baseUrl + "/api/homeworks/{homeworkId}/solutions/mine";
+        if (homeworkId === undefined || homeworkId === null)
+            throw new Error("The parameter 'homeworkId' must be defined.");
+        url_ = url_.replace("{homeworkId}", encodeURIComponent("" + homeworkId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetMySolution(_response);
+        });
+    }
+
+    protected processGetMySolution(response: AxiosResponse): Promise<HomeworkSolutionResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = HomeworkSolutionResponse.fromJS(resultData200);
+            return result200;
+        } else if (status === 400) {
+            const _responseText = response.data;
+            let result400: any = null;
+            let resultData400  = _responseText;
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 403) {
+            const _responseText = response.data;
+            let result403: any = null;
+            let resultData403  = _responseText;
+            result403 = ProblemDetails.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<HomeworkSolutionResponse>(<any>null);
+    }
+
+    getMySolution2(homeworkId: string , cancelToken?: CancelToken | undefined): Promise<HomeworkSolutionResponse> {
+        let url_ = this.baseUrl + "/api/solutions/mine";
+        if (homeworkId === undefined || homeworkId === null)
+            throw new Error("The parameter 'homeworkId' must be defined.");
+        url_ = url_.replace("{homeworkId}", encodeURIComponent("" + homeworkId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetMySolution2(_response);
+        });
+    }
+
+    protected processGetMySolution2(response: AxiosResponse): Promise<HomeworkSolutionResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = HomeworkSolutionResponse.fromJS(resultData200);
+            return result200;
+        } else if (status === 400) {
+            const _responseText = response.data;
+            let result400: any = null;
+            let resultData400  = _responseText;
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 403) {
+            const _responseText = response.data;
+            let result403: any = null;
+            let resultData403  = _responseText;
+            result403 = ProblemDetails.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<HomeworkSolutionResponse>(<any>null);
+    }
+
     getSolution(solutionId: string, homeworkId: string , cancelToken?: CancelToken | undefined): Promise<HomeworkSolutionResponse> {
         let url_ = this.baseUrl + "/api/homeworks/{homeworkId}/solutions/{solutionId}";
         if (solutionId === undefined || solutionId === null)
@@ -1681,7 +1829,7 @@ export class SolutionsClient {
         return Promise.resolve<HomeworkSolutionResponse>(<any>null);
     }
 
-    createReview(solutionId: string, homeworkId: string, body: Body , cancelToken?: CancelToken | undefined): Promise<HomeworkReviewResponse> {
+    createOrEditReview(solutionId: string, homeworkId: string, body: Body , cancelToken?: CancelToken | undefined): Promise<HomeworkReviewResponse> {
         let url_ = this.baseUrl + "/api/homeworks/{homeworkId}/solutions/{solutionId}/review";
         if (solutionId === undefined || solutionId === null)
             throw new Error("The parameter 'solutionId' must be defined.");
@@ -1695,7 +1843,7 @@ export class SolutionsClient {
 
         let options_ = <AxiosRequestConfig>{
             data: content_,
-            method: "POST",
+            method: "PUT",
             url: url_,
             headers: {
                 "Content-Type": "application/json",
@@ -1711,11 +1859,11 @@ export class SolutionsClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCreateReview(_response);
+            return this.processCreateOrEditReview(_response);
         });
     }
 
-    protected processCreateReview(response: AxiosResponse): Promise<HomeworkReviewResponse> {
+    protected processCreateOrEditReview(response: AxiosResponse): Promise<HomeworkReviewResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1762,7 +1910,7 @@ export class SolutionsClient {
         return Promise.resolve<HomeworkReviewResponse>(<any>null);
     }
 
-    createReview2(solutionId: string, body: Body , cancelToken?: CancelToken | undefined): Promise<HomeworkReviewResponse> {
+    createOrEditReview2(solutionId: string, body: Body , cancelToken?: CancelToken | undefined): Promise<HomeworkReviewResponse> {
         let url_ = this.baseUrl + "/api/solutions/{solutionId}/review";
         if (solutionId === undefined || solutionId === null)
             throw new Error("The parameter 'solutionId' must be defined.");
@@ -1773,7 +1921,7 @@ export class SolutionsClient {
 
         let options_ = <AxiosRequestConfig>{
             data: content_,
-            method: "POST",
+            method: "PUT",
             url: url_,
             headers: {
                 "Content-Type": "application/json",
@@ -1789,11 +1937,11 @@ export class SolutionsClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCreateReview2(_response);
+            return this.processCreateOrEditReview2(_response);
         });
     }
 
-    protected processCreateReview2(response: AxiosResponse): Promise<HomeworkReviewResponse> {
+    protected processCreateOrEditReview2(response: AxiosResponse): Promise<HomeworkReviewResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2366,6 +2514,7 @@ export class HomeworkSolutionResponse implements IHomeworkSolutionResponse {
     turnInDate!: Date | undefined;
     review!: HomeworkReviewResponse | undefined;
     student!: UserRoleListResponse | undefined;
+    files!: FileResponse[] | undefined;
 
     constructor(data?: IHomeworkSolutionResponse) {
         if (data) {
@@ -2382,6 +2531,11 @@ export class HomeworkSolutionResponse implements IHomeworkSolutionResponse {
             this.turnInDate = _data["turnInDate"] ? new Date(_data["turnInDate"].toString()) : <any>undefined;
             this.review = _data["review"] ? HomeworkReviewResponse.fromJS(_data["review"]) : <any>undefined;
             this.student = _data["student"] ? UserRoleListResponse.fromJS(_data["student"]) : <any>undefined;
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files!.push(FileResponse.fromJS(item));
+            }
         }
     }
 
@@ -2398,6 +2552,11 @@ export class HomeworkSolutionResponse implements IHomeworkSolutionResponse {
         data["turnInDate"] = this.turnInDate ? this.turnInDate.toISOString() : <any>undefined;
         data["review"] = this.review ? this.review.toJSON() : <any>undefined;
         data["student"] = this.student ? this.student.toJSON() : <any>undefined;
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -2407,6 +2566,7 @@ export interface IHomeworkSolutionResponse {
     turnInDate: Date | undefined;
     review: HomeworkReviewResponse | undefined;
     student: UserRoleListResponse | undefined;
+    files: FileResponse[] | undefined;
 }
 
 export class HomeworkReviewResponse implements IHomeworkReviewResponse {
@@ -2414,9 +2574,9 @@ export class HomeworkReviewResponse implements IHomeworkReviewResponse {
     comment!: string | undefined;
     outcome!: HomeworkReviewOutcome;
     createdAt!: Date;
-    createdBy!: UserRoleListResponse | undefined;
+    createdBy!: UserListResponse | undefined;
     lastModifiedAt!: Date | undefined;
-    lastModifiedBy!: UserRoleListResponse | undefined;
+    lastModifiedBy!: UserListResponse | undefined;
 
     constructor(data?: IHomeworkReviewResponse) {
         if (data) {
@@ -2433,9 +2593,9 @@ export class HomeworkReviewResponse implements IHomeworkReviewResponse {
             this.comment = _data["comment"];
             this.outcome = _data["outcome"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.createdBy = _data["createdBy"] ? UserRoleListResponse.fromJS(_data["createdBy"]) : <any>undefined;
+            this.createdBy = _data["createdBy"] ? UserListResponse.fromJS(_data["createdBy"]) : <any>undefined;
             this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"] ? UserRoleListResponse.fromJS(_data["lastModifiedBy"]) : <any>undefined;
+            this.lastModifiedBy = _data["lastModifiedBy"] ? UserListResponse.fromJS(_data["lastModifiedBy"]) : <any>undefined;
         }
     }
 
@@ -2464,14 +2624,54 @@ export interface IHomeworkReviewResponse {
     comment: string | undefined;
     outcome: HomeworkReviewOutcome;
     createdAt: Date;
-    createdBy: UserRoleListResponse | undefined;
+    createdBy: UserListResponse | undefined;
     lastModifiedAt: Date | undefined;
-    lastModifiedBy: UserRoleListResponse | undefined;
+    lastModifiedBy: UserListResponse | undefined;
 }
 
 export enum HomeworkReviewOutcome {
     Accepted = "Accepted",
     Rejected = "Rejected",
+}
+
+export class UserListResponse implements IUserListResponse {
+    id!: string;
+    name!: string | undefined;
+
+    constructor(data?: IUserListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): UserListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface IUserListResponse {
+    id: string;
+    name: string | undefined;
 }
 
 export class UserRoleListResponse implements IUserRoleListResponse {
@@ -2512,6 +2712,46 @@ export class UserRoleListResponse implements IUserRoleListResponse {
 export interface IUserRoleListResponse {
     id: string;
     name: string | undefined;
+}
+
+export class FileResponse implements IFileResponse {
+    id!: string;
+    fileName!: string | undefined;
+
+    constructor(data?: IFileResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.fileName = _data["fileName"];
+        }
+    }
+
+    static fromJS(data: any): FileResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new FileResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["fileName"] = this.fileName;
+        return data; 
+    }
+}
+
+export interface IFileResponse {
+    id: string;
+    fileName: string | undefined;
 }
 
 export class PagedListResponseOfClassSubjectListResponse implements IPagedListResponseOfClassSubjectListResponse {
@@ -2856,46 +3096,6 @@ export class LessonListResponse implements ILessonListResponse {
 export interface ILessonListResponse {
     id: string;
     title: string | undefined;
-}
-
-export class UserListResponse implements IUserListResponse {
-    id!: string;
-    name!: string | undefined;
-
-    constructor(data?: IUserListResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-        }
-    }
-
-    static fromJS(data: any): UserListResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserListResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        return data; 
-    }
-}
-
-export interface IUserListResponse {
-    id: string;
-    name: string | undefined;
 }
 
 export class HomeworkCreateCommand implements IHomeworkCreateCommand {
@@ -3315,6 +3515,7 @@ export class StudentHomeworkListResponse implements IStudentHomeworkListResponse
     title!: string | undefined;
     deadline!: Date;
     submitted!: boolean;
+    reviewed!: boolean;
     optional!: boolean;
 
     constructor(data?: IStudentHomeworkListResponse) {
@@ -3332,6 +3533,7 @@ export class StudentHomeworkListResponse implements IStudentHomeworkListResponse
             this.title = _data["title"];
             this.deadline = _data["deadline"] ? new Date(_data["deadline"].toString()) : <any>undefined;
             this.submitted = _data["submitted"];
+            this.reviewed = _data["reviewed"];
             this.optional = _data["optional"];
         }
     }
@@ -3349,6 +3551,7 @@ export class StudentHomeworkListResponse implements IStudentHomeworkListResponse
         data["title"] = this.title;
         data["deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
         data["submitted"] = this.submitted;
+        data["reviewed"] = this.reviewed;
         data["optional"] = this.optional;
         return data; 
     }
@@ -3359,6 +3562,7 @@ export interface IStudentHomeworkListResponse {
     title: string | undefined;
     deadline: Date;
     submitted: boolean;
+    reviewed: boolean;
     optional: boolean;
 }
 

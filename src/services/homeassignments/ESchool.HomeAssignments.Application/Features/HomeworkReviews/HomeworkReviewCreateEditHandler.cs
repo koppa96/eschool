@@ -12,22 +12,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.HomeworkReviews
 {
-    public class HomeworkReviewCreateHandler : IRequestHandler<HomeworkReviewCreateCommand, HomeworkReviewResponse>
+    public class HomeworkReviewCreateEditHandler : IRequestHandler<HomeworkReviewCreateEditCommand, HomeworkReviewResponse>
     {
         private readonly HomeAssignmentsContext context;
         private readonly IIdentityService identityService;
         private readonly IMapper mapper;
 
-        public HomeworkReviewCreateHandler(HomeAssignmentsContext context, IIdentityService identityService, IMapper mapper)
+        public HomeworkReviewCreateEditHandler(HomeAssignmentsContext context, IIdentityService identityService, IMapper mapper)
         {
             this.context = context;
             this.identityService = identityService;
             this.mapper = mapper;
         }
         
-        public async Task<HomeworkReviewResponse> Handle(HomeworkReviewCreateCommand request, CancellationToken cancellationToken)
+        public async Task<HomeworkReviewResponse> Handle(HomeworkReviewCreateEditCommand request, CancellationToken cancellationToken)
         {
             var solution = await context.HomeworkSolutions.Include(x => x.HomeworkReview)
+                .Include(x => x.HomeworkReview)
                 .Include(x => x.Homework)
                     .ThenInclude(x => x.Lesson)
                         .ThenInclude(x => x.ClassSchoolYearSubject)
@@ -45,16 +46,18 @@ namespace ESchool.HomeAssignments.Application.Features.HomeworkReviews
                     "Csak a tárgyat tanító tanár véleményezheti a tárgyhoz tartozó házi feladat megoldásokat.");
             }
 
-            var review = new HomeworkReview
+            if (solution.HomeworkReview == null)
             {
-                Comment = request.RequestBody.Comment,
-                Outcome = request.RequestBody.Outcome,
-                HomeworkSolution = solution
-            };
+                var review = new HomeworkReview();
+                solution.HomeworkReview = review;
+                context.HomeworkReviews.Add(review);
+            }
 
-            context.HomeworkReviews.Add(review);
+            solution.HomeworkReview.Outcome = request.RequestBody.Outcome;
+            solution.HomeworkReview.Comment = request.RequestBody.Comment;
+            
             await context.SaveChangesAsync(cancellationToken);
-            return mapper.Map<HomeworkReviewResponse>(review);
+            return mapper.Map<HomeworkReviewResponse>(solution.HomeworkReview);
         }
     }
 }

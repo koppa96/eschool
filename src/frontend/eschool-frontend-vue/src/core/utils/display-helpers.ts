@@ -6,6 +6,7 @@ import {
   IClassListResponse,
   SchoolYearStatus
 } from '@/shared/generated-clients/class-register'
+import { HomeworkReviewOutcome } from '@/shared/generated-clients/home-assignments'
 
 export function dateToString(date: any): string {
   const _date = new Date(date)
@@ -100,6 +101,17 @@ export function gradeValue(value: GradeValue): string {
       return 'Elégséges'
     case GradeValue.Fail:
       return 'Elégtelen'
+    default:
+      return 'Ismeretlen'
+  }
+}
+
+export function homeworkReviewOutcome(value: HomeworkReviewOutcome): string {
+  switch (value) {
+    case HomeworkReviewOutcome.Accepted:
+      return 'Elfogadva'
+    case HomeworkReviewOutcome.Rejected:
+      return 'Elutasítva'
     default:
       return 'Ismeretlen'
   }

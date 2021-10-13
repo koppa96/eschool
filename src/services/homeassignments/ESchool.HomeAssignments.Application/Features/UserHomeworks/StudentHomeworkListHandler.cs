@@ -34,7 +34,8 @@ namespace ESchool.HomeAssignments.Application.Features.UserHomeworks
                 Title = x.Title,
                 Deadline = x.Deadline,
                 Optional = x.Optional,
-                Submitted = x.Solutions.Any(s => s.Student.UserId == currentUserId)
+                Submitted = x.Solutions.Any(s => s.Student.UserId == currentUserId && s.TurnInDate != null),
+                Reviewed = x.Solutions.Any(s => s.Student.UserId == currentUserId && s.HomeworkReview != null)
             });
         }
 

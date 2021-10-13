@@ -4,7 +4,7 @@ using MediatR;
 
 namespace ESchool.HomeAssignments.Interface.Features.HomeworkReviews
 {
-    public class HomeworkReviewCreateCommand : IRequest<HomeworkReviewResponse>
+    public class HomeworkReviewCreateEditCommand : IRequest<HomeworkReviewResponse>
     {
         public Guid HomeworkSolutionId { get; set; }
         public Body RequestBody { get; set; }

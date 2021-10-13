@@ -8,6 +8,7 @@ namespace ESchool.HomeAssignments.Interface.Features.UserHomeworks
         public string Title { get; set; }
         public DateTime Deadline { get; set; }
         public bool Submitted { get; set; }
+        public bool Reviewed { get; set; }
         public bool Optional { get; set; }
     }
 }

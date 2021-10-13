@@ -69,6 +69,12 @@ export function createClient<TClient>(
   return new clientType(baseUrl, axios)
 }
 
+export function getBaseUrlFor<TClient>(
+  clientType: ClientConstructor<TClient>
+): string | undefined {
+  return getLookupTable().get(clientType)
+}
+
 export function setUpAxiosInterceptors(): void {
   axios.interceptors.request.use(config => {
     const authService = useAuthService()
