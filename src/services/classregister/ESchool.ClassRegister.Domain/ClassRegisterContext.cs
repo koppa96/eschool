@@ -1,11 +1,8 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Transactions;
 using ESchool.ClassRegister.Domain.Entities;
 using ESchool.ClassRegister.Domain.Entities.Grading;
-using ESchool.ClassRegister.Domain.Entities.Messaging;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.ClassRegister.Domain.Entities.Users;
 using ESchool.ClassRegister.Domain.Entities.Users.Abstractions;
@@ -13,8 +10,6 @@ using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Domain.Interfaces;
 using ESchool.Libs.Domain.MultiTenancy.Entities;
 using ESchool.Libs.Outbox.EntityFrameworkCore;
-using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
-using ESchool.Libs.Outbox.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -33,8 +28,6 @@ namespace ESchool.ClassRegister.Domain
         public DbSet<ClassSchoolYear> ClassSchoolYears { get; set; }
         public DbSet<Grade> Grades { get; set; }
         public DbSet<GradeKind> GradeKinds { get; set; }
-        public DbSet<Message> Messages { get; set; }
-        public DbSet<UserMessage> UserMessages { get; set; }
         public DbSet<Absence> Absences { get; set; }
         public DbSet<ClassSchoolYearSubject> ClassSchoolYearSubjects { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
@@ -47,8 +40,6 @@ namespace ESchool.ClassRegister.Domain
         public DbSet<ClassRegisterUser> Users { get; set; }
         public DbSet<ClassSchoolYearSubjectTeacher> ClassSchoolYearSubjectTeachers { get; set; }
         public DbSet<StudentParent> StudentParents { get; set; }
-        public DbSet<RecipientGroup> RecipientGroups { get; set; }
-        public DbSet<RecipientGroupMember> RecipientGroupMembers { get; set; }
 
         public ClassRegisterContext(
             DbContextOptions<ClassRegisterContext> options,

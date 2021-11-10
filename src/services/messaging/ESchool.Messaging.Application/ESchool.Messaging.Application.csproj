@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\libs\ESchool.Libs.Application\ESchool.Libs.Application.csproj" />
+      <ProjectReference Include="..\..\identityprovider\ESchool.IdentityProvider.Interface\ESchool.IdentityProvider.Interface.csproj" />
+      <ProjectReference Include="..\ESchool.Messaging.Domain\ESchool.Messaging.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentValidation" Version="9.3.0" />
+    </ItemGroup>
+
+</Project>
