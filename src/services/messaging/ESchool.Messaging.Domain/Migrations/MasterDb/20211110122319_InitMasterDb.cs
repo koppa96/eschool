@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ESchool.Messaging.Domain.Migrations.MasterDb
 {
-    public partial class Init : Migration
+    public partial class InitMasterDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

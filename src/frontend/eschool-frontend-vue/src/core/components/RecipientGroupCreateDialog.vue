@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar'
 import { ref } from 'vue'
-import { RecipientGroupCreateCommand } from '@/shared/generated-clients/class-register'
+import { RecipientGroupCreateCommand } from '@/shared/generated-clients/messaging'
 import { Rules } from '@/shared/model/rules'
 import { required } from '@/core/utils/validation-functions'
 

@@ -56,7 +56,7 @@ import {
   MessageSendCommand,
   ProblemDetails,
   RecipientDto
-} from '@/shared/generated-clients/class-register'
+} from '@/shared/generated-clients/messaging'
 import { createClient } from '@/shared/api'
 import { useNotifications } from '@/core/utils/notifications'
 import { Rules } from '@/shared/model/rules'

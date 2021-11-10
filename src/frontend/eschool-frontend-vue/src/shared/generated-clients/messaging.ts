@@ -262,7 +262,7 @@ export class MessagesClient {
         let url_ = this.baseUrl + "/api/messages";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(command);
+        const content_ = command;
 
         let options_ = <AxiosRequestConfig>{
             data: content_,
@@ -503,7 +503,7 @@ export class RecipientGroupsClient {
         let url_ = this.baseUrl + "/api/recipient-groups";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(command);
+        const content_ = command;
 
         let options_ = <AxiosRequestConfig>{
             data: content_,

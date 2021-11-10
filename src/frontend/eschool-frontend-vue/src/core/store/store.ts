@@ -2,7 +2,7 @@ import { Module } from 'vuex'
 import {
   IMessageSendCommand,
   RecipientDto
-} from '@/shared/generated-clients/class-register'
+} from '@/shared/generated-clients/messaging'
 import { State } from '@/store/state'
 
 export interface CoreState {

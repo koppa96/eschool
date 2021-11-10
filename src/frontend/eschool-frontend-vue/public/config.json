@@ -3,12 +3,13 @@
     "classRegister": "https://localhost:5101",
     "homeAssignments": "https://localhost:5201",
     "identityProvider": "https://localhost:5301",
-    "testing": "https://localhost:5401"
+    "testing": "https://localhost:5401",
+    "messaging": "https://localhost:5801"
   },
   "clientConfig": {
     "clientId": "test",
     "responseType": "code",
-    "scope": "openid profile user_role testingapi.readwrite classregisterapi.readwrite homeassignmentsapi.readwrite identityproviderapi.readwrite",
+    "scope": "openid profile user_role testingapi.readwrite classregisterapi.readwrite homeassignmentsapi.readwrite identityproviderapi.readwrite messagingapi.readwrite",
     "postLoginRedirectUri": "http://localhost:8080/login-redirect",
     "postLogoutRedirectUri": "http://localhost:8080/logout-redirect",
     "silentRefreshRedirectUri": "http://localhost:8080/silent-refresh.html"

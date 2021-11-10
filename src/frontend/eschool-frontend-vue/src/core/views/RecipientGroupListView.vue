@@ -88,16 +88,15 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { async } from 'rxjs'
 import RecipientGroupCreateDialog from '../components/RecipientGroupCreateDialog.vue'
 import RecipientGroupMemberAddDialog from '../components/RecipientGroupMemberAddDialog.vue'
 import { QTableColumn } from '@/shared/model/q-table-column.model'
 import {
-  ClassRegisterUserListResponse,
+  MessagingUserListResponse,
   RecipientGroupCreateCommand,
   RecipientGroupListResponse,
   RecipientGroupsClient
-} from '@/shared/generated-clients/class-register'
+} from '@/shared/generated-clients/messaging'
 import { createClient } from '@/shared/api'
 import { QPagination } from '@/shared/model/q-pagination.model'
 import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'
@@ -106,7 +105,7 @@ import { getTenantRoleDisplayName } from '@/core/auth/model/role-display-names'
 import { TenantRoleType } from '@/shared/generated-clients/identity-provider'
 
 type RecipientGroupWithMembers = RecipientGroupListResponse & {
-  members?: ClassRegisterUserListResponse[]
+  members?: MessagingUserListResponse[]
 }
 
 interface Props {
@@ -178,7 +177,7 @@ function addMember(group: RecipientGroupWithMembers): void {
 
 async function removeMember(
   group: RecipientGroupWithMembers,
-  member: ClassRegisterUserListResponse
+  member: MessagingUserListResponse
 ): Promise<void> {
   const result = await confirm(
     `Biztosan törölni szeretné ${group.name} tagjai közül ${member.name}-t?`

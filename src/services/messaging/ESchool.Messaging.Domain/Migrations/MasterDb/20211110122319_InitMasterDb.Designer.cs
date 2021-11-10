@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ESchool.Messaging.Domain.Migrations.MasterDb
 {
     [DbContext(typeof(MasterDbContext))]
-    [Migration("20211110120929_Init")]
-    partial class Init
+    [Migration("20211110122319_InitMasterDb")]
+    partial class InitMasterDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

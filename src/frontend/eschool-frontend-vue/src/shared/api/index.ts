@@ -3,6 +3,7 @@ import * as homeAssignmentsClients from '@/shared/generated-clients/home-assignm
 import * as classRegisterClients from '@/shared/generated-clients/class-register'
 import * as identityProviderClients from '@/shared/generated-clients/identity-provider'
 import * as testingClients from '@/shared/generated-clients/testing'
+import * as messagingClients from '@/shared/generated-clients/messaging'
 import { AppConfiguration } from '@/core/config'
 import 'linq-extensions'
 import { useAuthService } from '@/core/auth'
@@ -41,6 +42,12 @@ const lookupTableDefinition = Object.values(homeAssignmentsClients)
     Object.values(testingClients).select<LookupTableEntry>(constructor => ({
       constructor,
       baseUrl: AppConfiguration.value.baseUrl.testing
+    }))
+  )
+  .appendMany(
+    Object.values(messagingClients).select<LookupTableEntry>(constructor => ({
+      constructor,
+      baseUrl: AppConfiguration.value.baseUrl.messaging
     }))
   )
 

@@ -72,7 +72,7 @@ import {
   MessageDetailsResponse,
   MessageListResponse,
   MessagesClient
-} from '@/shared/generated-clients/class-register'
+} from '@/shared/generated-clients/messaging'
 import { createClient } from '@/shared/api'
 import { QPagination } from '@/shared/model/q-pagination.model'
 import { useSaveAndDeleteNotifications } from '@/core/utils/save.utils'

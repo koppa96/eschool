@@ -5,6 +5,7 @@ export interface BaseUrlConfig {
   homeAssignments: string
   identityProvider: string
   testing: string
+  messaging: string
 }
 
 export interface AppConfigurationValue {

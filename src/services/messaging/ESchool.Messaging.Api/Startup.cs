@@ -128,7 +128,7 @@ namespace ESchool.Messaging.Api
                         rabbitConfig.Username(rabbitMqConfig.Username);
                         rabbitConfig.Password(rabbitMqConfig.Password);
                     });
-                    configurator.ReceiveEndpoint("class-register", endpoint =>
+                    configurator.ReceiveEndpoint("messaging", endpoint =>
                     {
                         endpoint.ConfigureConsumers(context);
                     });
