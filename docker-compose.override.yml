@@ -102,6 +102,26 @@ services:
     depends_on:
       - eschool.postgres
 
+  eschool.messaging.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=eschool.postgres;Database=MessagingDb;User Id=postgres;Password=Password123;
+      - ConnectionStrings__MasterDbConnection=Server=eschool.postgres;Database=Messaging_MasterDb;User Id=postgres;Password=Password123;
+      - ConnectionStrings__ConnectionStringTemplate=Server=eschool.postgres;Database=Messaging_{0};User Id=postgres;Password=Password123;
+      - Authentication__Authority=http://eschool.identityprovider
+      - Authentication__Audience=messaging-api
+      - Authentication__IdentityProviderUri=https://localhost:5301
+    ports:
+      - "5800:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    networks:
+      - eschool_network
+    depends_on:
+      - eschool.postgres
+
   eschool.postgres:
     ports:
       - "5500:5432"

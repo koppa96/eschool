@@ -33,6 +33,12 @@ services:
     build:
       context: .
       dockerfile: src/services/testing/ESchool.Testing.Api/Dockerfile
+      
+  eschool.messaging.api:
+    image: ${DOCKER_REGISTRY-}eschoolmessagingapi
+    build:
+      context: .
+      dockerfile: src/services/messaging/ESchool.Messaging.Api/Dockerfile
 
   eschool.postgres:
     container_name: eschool.postgres
