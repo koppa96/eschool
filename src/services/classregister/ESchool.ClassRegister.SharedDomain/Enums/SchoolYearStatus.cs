@@ -1,4 +1,4 @@
-﻿namespace ESchool.ClassRegister.Interface.Features.SchoolYears
+﻿namespace ESchool.ClassRegister.SharedDomain.Enums
 {
     public enum SchoolYearStatus
     {

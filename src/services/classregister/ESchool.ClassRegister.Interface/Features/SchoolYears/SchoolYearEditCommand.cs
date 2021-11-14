@@ -1,4 +1,5 @@
 using System;
+using ESchool.ClassRegister.SharedDomain.Enums;
 
 namespace ESchool.ClassRegister.Interface.Features.SchoolYears
 {

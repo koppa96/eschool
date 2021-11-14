@@ -1,8 +1,7 @@
 ﻿using ESchool.Libs.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
-using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
-using ESchool.ClassRegister.Interface.Features.SchoolYears;
+using ESchool.ClassRegister.SharedDomain.Enums;
 
 namespace ESchool.ClassRegister.Domain.Entities
 {

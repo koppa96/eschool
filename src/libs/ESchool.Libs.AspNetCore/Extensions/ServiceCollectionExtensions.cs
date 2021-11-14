@@ -146,7 +146,7 @@ namespace ESchool.Libs.AspNetCore.Extensions
 
                 return tenantId == null
                     ? null
-                    : memoryCache.GetOrCreate(tenantId.Value, entry => masterDbContext.Tenants.Find(tenantId.Value));
+                    : memoryCache.GetOrCreate(tenantId.Value, _ => masterDbContext.Tenants.Find(tenantId.Value));
             });
 
             services.AddScoped<ITenantDbContextFactory<TContext>, TFactory>();
