@@ -6,17 +6,15 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ESchool.ClassRegister.Grpc;
 using ESchool.HomeAssignments.Domain;
+using ESchool.HomeAssignments.Interface.Features;
+using ESchool.HomeAssignments.Interface.Features.ClassSchoolYearSubjects;
 using ESchool.Libs.Domain.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.ClassSchoolYearSubjects
 {
-    public class TeacherSchoolYearListQuery : IRequest<List<ClassRegisterEntityResponse>>
-    {
-    }
-    
-    public class TeacherSchoolYearListHandler : IRequestHandler<TeacherSchoolYearListQuery, List<ClassRegisterEntityResponse>>
+    public class TeacherSchoolYearListHandler : IRequestHandler<TeacherSchoolYearListQuery, List<ClassRegisterItemResponse>>
     {
         private readonly HomeAssignmentsContext context;
         private readonly IIdentityService identityService;
@@ -31,7 +29,7 @@ namespace ESchool.HomeAssignments.Application.Features.ClassSchoolYearSubjects
             this.configurationProvider = configurationProvider;
         }
         
-        public Task<List<ClassRegisterEntityResponse>> Handle(TeacherSchoolYearListQuery request, CancellationToken cancellationToken)
+        public Task<List<ClassRegisterItemResponse>> Handle(TeacherSchoolYearListQuery request, CancellationToken cancellationToken)
         {
             var currentUserId = identityService.GetCurrentUserId();
             
@@ -40,7 +38,7 @@ namespace ESchool.HomeAssignments.Application.Features.ClassSchoolYearSubjects
                 .Select(x => x.SchoolYear)
                 .Distinct()
                 .OrderBy(x => x.Name)
-                .ProjectTo<ClassRegisterEntityResponse>(configurationProvider)
+                .ProjectTo<ClassRegisterItemResponse>(configurationProvider)
                 .ToListAsync(cancellationToken);
         }
     }

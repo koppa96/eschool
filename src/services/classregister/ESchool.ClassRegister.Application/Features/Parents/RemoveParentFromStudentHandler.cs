@@ -1,18 +1,12 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.Parents;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Parents
 {
-    public class RemoveParentFromStudentCommand : IRequest
-    {
-        public Guid ParentId { get; set; }
-        public Guid StudentId { get; set; }
-    }
-    
     public class RemoveParentFromStudentHandler : IRequestHandler<RemoveParentFromStudentCommand>
     {
         private readonly ClassRegisterContext context;

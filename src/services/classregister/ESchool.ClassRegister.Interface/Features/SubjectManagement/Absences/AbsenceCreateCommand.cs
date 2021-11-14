@@ -1,7 +1,7 @@
 using System;
 using MediatR;
 
-namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Absences
+namespace ESchool.ClassRegister.Interface.Features.SubjectManagement.Absences
 {
     public class AbsenceCreateCommand : IRequest
     {

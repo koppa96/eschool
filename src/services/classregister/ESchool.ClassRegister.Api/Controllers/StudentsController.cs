@@ -7,6 +7,8 @@ using ESchool.ClassRegister.Application.Features.SubjectManagement.Absences;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons;
 using ESchool.ClassRegister.Interface.Features.Grading.Grades;
 using ESchool.ClassRegister.Interface.Features.SchoolYears;
+using ESchool.ClassRegister.Interface.Features.Students;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Absences;
 using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
 using ESchool.ClassRegister.Interface.Features.Subjects;
 using ESchool.ClassRegister.Interface.Features.Users;

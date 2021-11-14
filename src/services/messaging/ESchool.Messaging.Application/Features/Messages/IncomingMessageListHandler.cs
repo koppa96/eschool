@@ -2,17 +2,13 @@
 using System.Linq;
 using ESchool.Libs.Application.Cqrs.Handlers;
 using ESchool.Libs.Domain.Services;
-using ESchool.Libs.Interface.Query;
 using ESchool.Libs.Interface.Response.Common;
 using ESchool.Messaging.Domain;
 using ESchool.Messaging.Domain.Entities;
+using ESchool.Messaging.Interface.Messages;
 
 namespace ESchool.Messaging.Application.Features.Messages
 {
-    public class IncomingMessageListQuery : PagedListQuery<MessageListResponse>
-    {
-    }
-    
     public class IncomingMessageListHandler : PagedListHandler<IncomingMessageListQuery, Message, MessageListResponse>
     {
         private readonly Guid currentUserId;

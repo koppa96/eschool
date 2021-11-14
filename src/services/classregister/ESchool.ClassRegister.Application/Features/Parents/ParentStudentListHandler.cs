@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.Parents;
 using ESchool.Libs.Interface.Response.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Parents
 {
-    public class ParentStudentListQuery : IRequest<List<UserRoleListResponse>>
-    {
-        public Guid ParentId { get; set; }
-    }
-
     public class ParentStudentListHandler : IRequestHandler<ParentStudentListQuery, List<UserRoleListResponse>>
     {
         private readonly ClassRegisterContext context;

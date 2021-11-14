@@ -1,26 +1,14 @@
-using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Services;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions.Files;
 using ESchool.Libs.Domain.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Files
 {
-    public class FileGetQuery : IRequest<FileGetResponse>
-    {
-        public Guid FileId { get; set; }
-    }
-
-    public class FileGetResponse
-    {
-        public string Name { get; set; }
-        public Stream Stream { get; set; }
-    }
-    
     public class FileGetHandler : IRequestHandler<FileGetQuery, FileGetResponse>
     {
         private readonly ISolutionFileHandlerService solutionFileHandlerService;

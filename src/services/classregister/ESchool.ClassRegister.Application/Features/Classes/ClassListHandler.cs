@@ -4,15 +4,9 @@ using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
 using ESchool.ClassRegister.Interface.Features.Classes;
 using ESchool.Libs.Application.Cqrs.Handlers;
-using ESchool.Libs.Interface.Query;
 
 namespace ESchool.ClassRegister.Application.Features.Classes
 {
-    public class ClassListQuery : PagedListQuery<ClassListResponse>
-    {
-        public bool IncludeFinishedClasses { get; set; }
-    }
-    
     public class ClassListHandler : AutoMapperPagedListHandler<ClassListQuery, Class, ClassListResponse>
     {
         public ClassListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)

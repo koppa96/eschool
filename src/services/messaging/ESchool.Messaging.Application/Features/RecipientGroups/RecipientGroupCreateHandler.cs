@@ -3,15 +3,11 @@ using System.Threading.Tasks;
 using ESchool.Libs.Domain.Services;
 using ESchool.Messaging.Domain;
 using ESchool.Messaging.Domain.Entities;
+using ESchool.Messaging.Interface.RecipientGroups;
 using MediatR;
 
 namespace ESchool.Messaging.Application.Features.RecipientGroups
 {
-    public class RecipientGroupCreateCommand : IRequest
-    {
-        public string Name { get; set; }
-    }
-    
     public class RecipientGroupCreateHandler : IRequestHandler<RecipientGroupCreateCommand>
     {
         private readonly MessagingContext context;

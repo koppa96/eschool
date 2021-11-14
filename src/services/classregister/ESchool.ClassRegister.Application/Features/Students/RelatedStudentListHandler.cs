@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.Users;
+using ESchool.ClassRegister.Interface.Features.Students;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
 using ESchool.Libs.Interface.Response.Common;
@@ -13,10 +14,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Students
 {
-    public class RelatedStudentListQuery : IRequest<List<UserRoleListResponse>>
-    {
-    }
-    
     public class RelatedStudentListHandler : IRequestHandler<RelatedStudentListQuery, List<UserRoleListResponse>>
     {
         private readonly ClassRegisterContext context;

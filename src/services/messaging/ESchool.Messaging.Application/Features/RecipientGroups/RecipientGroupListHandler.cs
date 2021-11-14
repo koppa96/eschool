@@ -1,25 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using ESchool.Libs.Application.Cqrs.Handlers;
 using ESchool.Libs.Domain.Services;
-using ESchool.Libs.Interface.Query;
 using ESchool.Messaging.Domain;
 using ESchool.Messaging.Domain.Entities;
+using ESchool.Messaging.Interface.RecipientGroups;
 
 namespace ESchool.Messaging.Application.Features.RecipientGroups
 {
-    public class RecipientGroupListQuery : PagedListQuery<RecipientGroupListResponse>
-    {
-        public string SearchText { get; set; }
-    }
-
-    public class RecipientGroupListResponse
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-    }
-
     public class RecipientGroupListHandler : AutoMapperPagedListHandler<RecipientGroupListQuery, RecipientGroup, RecipientGroupListResponse>
     {
         private readonly IIdentityService identityService;

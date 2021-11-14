@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Absences;
 using ESchool.Libs.Application.Cqrs.Authorization;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;

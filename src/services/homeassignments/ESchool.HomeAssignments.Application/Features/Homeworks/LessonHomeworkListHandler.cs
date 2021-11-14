@@ -1,18 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Entities;
+using ESchool.HomeAssignments.Interface.Features.Homeworks;
 using ESchool.HomeAssignments.Interface.Features.UserHomeworks;
 using ESchool.Libs.Application.Cqrs.Handlers;
-using ESchool.Libs.Interface.Query;
 
 namespace ESchool.HomeAssignments.Application.Features.Homeworks
 {
-    public class LessonHomeworkListQuery : PagedListQuery<TeacherHomeworkListResponse>
-    {
-        public Guid LessonId { get; set; }
-    }
-    
     public class LessonHomeworkListHandler : PagedListHandler<LessonHomeworkListQuery, Homework, TeacherHomeworkListResponse>
     {
 

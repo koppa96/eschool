@@ -1,51 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.Libs.Domain.Services;
-using ESchool.Libs.Interface.Response.Common;
 using ESchool.Messaging.Domain;
 using ESchool.Messaging.Domain.Entities;
+using ESchool.Messaging.Interface.Messages;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Messaging.Application.Features.Messages
 {
-    public class MessageSendCommand : IRequest<MessageDetailsResponse>
-    {
-        public string Subject { get; set; }
-        public string Text { get; set; }
-        public List<RecipientDto> Recipients { get; set; }
-    }
-    
-    public class RecipientDto
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public RecipientType Type { get; set; }
-            
-        public enum RecipientType
-        {
-            User,
-            Group
-        }
-    }
-    
-    public class MessageDetailsResponse
-    {
-        public Guid Id { get; set; }
-
-        public string Subject { get; set; }
-        public string Text { get; set; }
-        public DateTime SentAt { get; set; }
-
-        public UserListResponse Sender { get; set; }
-        public List<UserListResponse> Recipients { get; set; }
-    }
-    
     public class MessageSendValidator : AbstractValidator<MessageSendCommand>
     {
         public MessageSendValidator()

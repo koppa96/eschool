@@ -1,20 +1,15 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.Libs.Domain.Services;
 using ESchool.Messaging.Domain;
+using ESchool.Messaging.Interface.Messages;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Messaging.Application.Features.Messages
 {
-    public class MessageGetQuery : IRequest<MessageDetailsResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class MessageGetHandler : IRequestHandler<MessageGetQuery, MessageDetailsResponse>
     {
         private readonly MessagingContext context;

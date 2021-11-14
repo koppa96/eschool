@@ -1,6 +1,6 @@
 using ESchool.ClassRegister.SharedDomain.Enums;
 
-namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Absences
+namespace ESchool.ClassRegister.Interface.Features.SubjectManagement.Absences
 {
     public class AbsenceStateSetCommand
     {

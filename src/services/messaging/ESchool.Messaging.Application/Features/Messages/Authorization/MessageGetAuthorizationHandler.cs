@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ESchool.Libs.Application.Cqrs.Authorization;
 using ESchool.Libs.Domain.Services;
 using ESchool.Messaging.Domain;
+using ESchool.Messaging.Interface.Messages;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Messaging.Application.Features.Messages.Authorization

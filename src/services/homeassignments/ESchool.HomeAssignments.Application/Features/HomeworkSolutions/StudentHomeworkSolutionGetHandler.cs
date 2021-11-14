@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,11 +11,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions
 {
-    public class StudentHomeworkSolutionGetQuery : IRequest<HomeworkSolutionResponse>
-    {
-        public Guid HomeworkId { get; set; }
-    }
-    
     public class StudentHomeworkSolutionGetHandler : IRequestHandler<StudentHomeworkSolutionGetQuery, HomeworkSolutionResponse>
     {
         private readonly HomeAssignmentsContext context;

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.ClassSubjects;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.ClassSubjects;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Interface.Query;
 using ESchool.Libs.Interface.Response;

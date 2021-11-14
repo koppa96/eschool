@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Absences;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Interface.Commands;

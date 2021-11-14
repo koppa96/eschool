@@ -1,30 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using ESchool.Libs.Application.Cqrs.Handlers;
 using ESchool.Libs.Domain.Services;
-using ESchool.Libs.Interface.Query;
-using ESchool.Libs.Interface.Response.Common;
 using ESchool.Messaging.Domain;
 using ESchool.Messaging.Domain.Entities;
+using ESchool.Messaging.Interface.Messages;
 
 namespace ESchool.Messaging.Application.Features.Messages
 {
-    public class SentMessageListQuery : PagedListQuery<MessageListResponse>
-    {
-        
-    }
-    
-    public class MessageListResponse
-    {
-        public Guid Id { get; set; }
-        public string Subject { get; set; }
-        public DateTime SentAt { get; set; }
-        public bool IsRead { get; set; }
-        
-        public UserListResponse Sender { get; set; }
-    }
-    
     public class SentMessageListHandler : AutoMapperPagedListHandler<SentMessageListQuery, Message, MessageListResponse>
     {
         private readonly IIdentityService identityService;

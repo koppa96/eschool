@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Parents;
+using ESchool.ClassRegister.Interface.Features.Parents;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Interface.Query;
 using ESchool.Libs.Interface.Response;

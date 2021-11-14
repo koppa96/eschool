@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ESchool.ClassRegister.Grpc;
 using ESchool.HomeAssignments.Application.Features.ClassSchoolYearSubjects;
 using ESchool.HomeAssignments.Interface.Features;
+using ESchool.HomeAssignments.Interface.Features.ClassSchoolYearSubjects;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Interface.Query;
 using ESchool.Libs.Interface.Response;
@@ -26,14 +27,14 @@ namespace ESchool.HomeAssignments.Api.Controllers
 
         [Authorize(PolicyNames.Student)]
         [HttpGet("student")]
-        public Task<List<ClassRegisterEntityResponse>> ListSchoolYearsOfStudent(CancellationToken cancellationToken)
+        public Task<List<ClassRegisterItemResponse>> ListSchoolYearsOfStudent(CancellationToken cancellationToken)
         {
             return mediator.Send(new StudentSchoolYearListQuery(), cancellationToken);
         }
 
         [Authorize(PolicyNames.Teacher)]
         [HttpGet("teacher")]
-        public Task<List<ClassRegisterEntityResponse>> ListSchoolYearsOfTeacher(CancellationToken cancellationToken)
+        public Task<List<ClassRegisterItemResponse>> ListSchoolYearsOfTeacher(CancellationToken cancellationToken)
         {
             return mediator.Send(new TeacherSchoolYearListQuery(), cancellationToken);
         }

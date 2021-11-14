@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.HomeAssignments.Application.Features.ClassSchoolYearSubjects;
+using ESchool.HomeAssignments.Interface.Features.ClassSchoolYearSubjects;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Interface.Query;
 using ESchool.Libs.Interface.Response;

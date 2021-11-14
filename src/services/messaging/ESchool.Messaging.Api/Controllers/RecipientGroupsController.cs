@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Interface.Response;
 using ESchool.Messaging.Application.Features.RecipientGroups;
+using ESchool.Messaging.Interface.RecipientGroups;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

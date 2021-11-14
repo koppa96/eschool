@@ -1,18 +1,12 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Messaging.Domain;
+using ESchool.Messaging.Interface.RecipientGroups;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Messaging.Application.Features.RecipientGroups
 {
-    public class RecipientGroupMemberRemoveCommand : IRequest
-    {
-        public Guid GroupId { get; set; }
-        public Guid MemberId { get; set; }
-    }
-    
     public class RecipientGroupMemberRemoveHandler : IRequestHandler<RecipientGroupMemberRemoveCommand>
     {
         private readonly MessagingContext context;

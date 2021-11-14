@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Absences;
 using ESchool.Libs.Application.Cqrs.Handlers;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.ClassRegister.Domain;
@@ -9,11 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Classes
 {
-    public class ClassFinishCommand : IRequest<ClassDetailsResponse>
-    {
-        public Guid ClassId { get; set; }
-    }
-
     public class ClassFinishHandler : IRequestHandler<ClassFinishCommand, ClassDetailsResponse>
     {
         private readonly ClassRegisterContext context;

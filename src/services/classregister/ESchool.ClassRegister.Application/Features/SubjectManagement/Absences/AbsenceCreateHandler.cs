@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Absences;
 using ESchool.ClassRegister.SharedDomain.Enums;
 using ESchool.Libs.Domain.Enums;
 using MediatR;

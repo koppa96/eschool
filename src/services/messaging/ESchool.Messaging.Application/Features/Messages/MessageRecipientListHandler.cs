@@ -3,19 +3,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Libs.Domain.Services;
-using ESchool.Libs.Interface.Query;
 using ESchool.Libs.Interface.Response;
 using ESchool.Messaging.Domain;
+using ESchool.Messaging.Interface.Messages;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Messaging.Application.Features.Messages
 {
-    public class MessageRecipientListQuery : PagedListQuery<RecipientDto>
-    {
-        public string SearchText { get; set; }
-    }
-
     public class MessageRecipientListHandler : IRequestHandler<MessageRecipientListQuery, PagedListResponse<RecipientDto>>
     {
         private readonly MessagingContext context;

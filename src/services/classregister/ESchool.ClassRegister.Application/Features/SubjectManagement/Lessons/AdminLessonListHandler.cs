@@ -1,22 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
 using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
 using ESchool.Libs.Application.Cqrs.Handlers;
-using ESchool.Libs.Interface.Query;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
 {
-    public class AdminLessonListQuery : PagedListQuery<LessonListResponse>
-    {
-        public Guid ClassId { get; set; }
-        public Guid SchoolYearId { get; set; }
-        public Guid SubjectId { get; set; }
-    }
-    
     public class AdminLessonListHandler : AutoMapperPagedListHandler<AdminLessonListQuery, Lesson, LessonListResponse>
     {
         public AdminLessonListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)

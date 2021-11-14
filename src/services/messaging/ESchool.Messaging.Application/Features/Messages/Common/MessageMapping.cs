@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
 using ESchool.Messaging.Domain.Entities;
+using ESchool.Messaging.Interface.Messages;
 
 namespace ESchool.Messaging.Application.Features.Messages.Common
 {

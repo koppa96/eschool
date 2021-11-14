@@ -94,6 +94,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.Messaging.Applicati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.Messaging.Api", "src\services\messaging\ESchool.Messaging.Api\ESchool.Messaging.Api.csproj", "{3AE9D8C4-7E6C-467E-8CAF-72EC53F0351C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESchool.Messaging.Interface", "src\services\messaging\ESchool.Messaging.Interface\ESchool.Messaging.Interface.csproj", "{6A9E98AE-1625-40C3-9CCC-A9931BD500A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -228,6 +230,10 @@ Global
 		{3AE9D8C4-7E6C-467E-8CAF-72EC53F0351C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AE9D8C4-7E6C-467E-8CAF-72EC53F0351C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AE9D8C4-7E6C-467E-8CAF-72EC53F0351C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A9E98AE-1625-40C3-9CCC-A9931BD500A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A9E98AE-1625-40C3-9CCC-A9931BD500A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A9E98AE-1625-40C3-9CCC-A9931BD500A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A9E98AE-1625-40C3-9CCC-A9931BD500A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -272,6 +278,7 @@ Global
 		{5E34A014-0356-489F-BE63-8A906B98AEE0} = {BEF4C1E5-8698-41DC-9670-927437BDCA00}
 		{8083FD81-8EAA-43B9-BBC4-59441B866C9C} = {BEF4C1E5-8698-41DC-9670-927437BDCA00}
 		{3AE9D8C4-7E6C-467E-8CAF-72EC53F0351C} = {BEF4C1E5-8698-41DC-9670-927437BDCA00}
+		{6A9E98AE-1625-40C3-9CCC-A9931BD500A4} = {BEF4C1E5-8698-41DC-9670-927437BDCA00}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D5D13E06-9FD1-44A0-A672-81531FDB9F6F}
