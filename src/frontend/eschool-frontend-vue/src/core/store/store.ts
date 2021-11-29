@@ -1,4 +1,4 @@
-import { Module } from 'vuex'
+import { ActionContext, Module } from 'vuex'
 import {
   IMessageSendCommand,
   RecipientDto
@@ -26,6 +26,13 @@ export const coreModule: Module<CoreState, State> = {
     },
     setRecipients(state: CoreState, recipients: RecipientDto[]): void {
       state.newMessage.recipients = recipients
+    }
+  },
+  actions: {
+    clear(context: ActionContext<CoreState, State>) {
+      context.commit('setText', undefined)
+      context.commit('setSubject', undefined)
+      context.commit('setRecipients', undefined)
     }
   }
 }

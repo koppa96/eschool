@@ -68,7 +68,7 @@ import { noValidation, required } from '@/core/utils/validation-functions'
 import { createClient } from '@/shared/api'
 
 const props = defineProps<{
-  lessonToEdit: LessonDetailsResponse
+  lessonToEdit?: LessonDetailsResponse
 }>()
 
 const emit = defineEmits(useDialogPluginComponent.emits)

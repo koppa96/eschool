@@ -5,10 +5,12 @@
   <title>Silent Refresh</title>
 </head>
 <body>
-<h1>Kugi :)</h1>
 <script>
-    const event = new CustomEvent('silent-refresh-callback', { detail: window.location.href });
-    (window.opener || window.parent).document.dispatchEvent(event)
+  const event = new CustomEvent(
+    'silent-refresh-callback',
+    { detail: window.location.href }
+  );
+  (window.opener || window.parent).document.dispatchEvent(event)
 </script>
 </body>
 </html>

@@ -228,23 +228,25 @@ export class AuthService {
       iframe.src = url
 
       return new Promise<boolean>((resolve, reject) => {
-        setTimeout(() => {
-          reject(new Error('Silent renew timed out'))
-          this.codePair = null
-        }, SILENT_RENEW_TIMEOUT)
-
         const eventListener = async (event: Event): Promise<void> => {
           try {
             await this.silentRefreshCallback((event as CustomEvent).detail)
             resolve(true)
+          } catch (err) {
+            reject(err)
+          } finally {
             document.removeEventListener(
               'silent-refresh-callback',
               eventListener
             )
-          } catch (err) {
-            reject(err)
           }
         }
+
+        setTimeout(() => {
+          this.codePair = null
+          document.removeEventListener('silent-refresh-callback', eventListener)
+          reject(new Error('Silent renew timed out'))
+        }, SILENT_RENEW_TIMEOUT)
 
         document.addEventListener('silent-refresh-callback', eventListener)
       })
