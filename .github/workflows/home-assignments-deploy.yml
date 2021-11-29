@@ -1,6 +1,7 @@
 name: Build Home Assignments and Deploy to AKS
 
 on:
+  workflow_dispatch:
   push:
     branches:
       [ master ]
