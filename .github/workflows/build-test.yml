@@ -1,6 +1,7 @@
 name: PR Build and Run Tests
 
 on:
+  workflow_dispatch:
   pull_request:
     branches: [ master ]
 
