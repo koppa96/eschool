@@ -1,39 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using AutoMapper;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
+using ESchool.ClassRegister.Interface.Features.SchoolYears;
 using ESchool.Libs.Application.Cqrs.Handlers;
-using ESchool.Libs.Application.Cqrs.Query;
-using ESchool.Libs.Application.Cqrs.Response;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using ESchool.Libs.Application.Extensions;
 
 namespace ESchool.ClassRegister.Application.Features.SchoolYears
 {
-    public class SchoolYearListQuery : PagedListQuery<SchoolYearListResponse>
-    {
-    }
-
-    public class SchoolYearListResponse
-    {
-        public Guid Id { get; set; }
-        public string DisplayName { get; set; }
-    }
-    
     public class SchoolYearListHandler : AutoMapperPagedListHandler<SchoolYearListQuery, SchoolYear, SchoolYearListResponse>
     {
         public SchoolYearListHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)
         {
         }
-        
-        protected override IOrderedQueryable<SchoolYear> Order(IQueryable<SchoolYear> entities)
+
+        protected override IQueryable<SchoolYear> Filter(IQueryable<SchoolYear> entities, SchoolYearListQuery query)
         {
-            return entities.OrderBy(x => x.DisplayName);
+            if (!string.IsNullOrEmpty(query.Name))
+            {
+                return entities.Where(x => x.DisplayName.ToLower().Contains(query.Name.ToLower()));
+            }
+
+            if (query.Statuses?.Any() == true)
+            {
+                return entities.Where(x => query.Statuses.Contains(x.Status));
+            }
+
+            return entities;
+        }
+
+        protected override IOrderedQueryable<SchoolYear> Order(IQueryable<SchoolYear> entities, SchoolYearListQuery query)
+        {
+            return query.Orderings?.Any() != true
+                ? entities.OrderByDescending(x => x.StartsAt)
+                : entities.OrderBy(query);
         }
     }
 }

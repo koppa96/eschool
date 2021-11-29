@@ -1,9 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Domain.Interfaces;
+using ESchool.Libs.Interface.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,13 +23,14 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
         {
             return entities;
         }
-
+        
         public async Task<Unit> Handle(TCommand request, CancellationToken cancellationToken)
         {
             var dbSet = context.Set<TEntity>();
             var entity = await Include(dbSet).SingleAsync(x => x.Id == request.Id, cancellationToken);
             if (entity != null)
             {
+                await ThrowIfCannotDeleteAsync(entity);
                 dbSet.Remove(entity);
                 await context.SaveChangesAsync(cancellationToken);
             }

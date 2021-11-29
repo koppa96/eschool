@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.ClassSchoolYearSubjects;
 using ESchool.ClassRegister.Interface.IntegrationEvents.ClassSchoolYearSubjects;
 using ESchool.Libs.Outbox.Services;
 using MediatR;
@@ -12,14 +11,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassSchoolYearSubjects
 {
-    public class ClassSchoolYearSubjectEditCommand : IRequest
-    {
-        public Guid ClassId { get; set; }
-        public Guid SubjectId { get; set; }
-        public Guid SchoolYearId { get; set; }
-        public List<Guid> TeacherIds { get; set; }
-    }
-
     public class ClassSchoolYearSubjectEditHandler : IRequestHandler<ClassSchoolYearSubjectEditCommand>
     {
         private readonly ClassRegisterContext context;
@@ -34,6 +25,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassScho
         public async Task<Unit> Handle(ClassSchoolYearSubjectEditCommand request, CancellationToken cancellationToken)
         {
             var classSchoolYearSubject = await context.ClassSchoolYearSubjects
+                .Include(x => x.ClassSchoolYear)
                 .Include(x => x.ClassSchoolYearSubjectTeachers)
                 .SingleAsync(x =>
                     x.ClassSchoolYear.ClassId == request.ClassId &&
@@ -47,9 +39,12 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassScho
                 ClassSchoolYearSubjectId = classSchoolYearSubject.Id
             }));
 
+            eventPublisher.Setup(context);
             await eventPublisher.PublishAsync(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
             {
-                Id = classSchoolYearSubject.Id
+                ClassId = classSchoolYearSubject.ClassSchoolYear.ClassId,
+                SubjectId = classSchoolYearSubject.SubjectId,
+                SchoolYearId = classSchoolYearSubject.ClassSchoolYear.SchoolYearId
             }, cancellationToken);
             
             await context.SaveChangesAsync(cancellationToken);

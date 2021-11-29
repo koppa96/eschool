@@ -3,17 +3,13 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common;
 using ESchool.ClassRegister.Domain;
-using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
+using ESchool.Libs.Interface.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
 {
-    public class LessonCancellationSetCommand
-    {
-        public bool Canceled { get; set; }
-    }
-    
     public class LessonCancellationSetHandler : IRequestHandler<EditCommand<LessonCancellationSetCommand, LessonDetailsResponse>, LessonDetailsResponse>
     {
         private readonly ClassRegisterContext context;

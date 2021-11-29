@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text.Json.Polymorph.Attributes;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,17 +7,12 @@ using ESchool.Libs.Domain.Services;
 using ESchool.Testing.Application.Features.TaskAnswers.Common;
 using ESchool.Testing.Domain;
 using ESchool.Testing.Domain.Entities.Answers;
+using ESchool.Testing.Interface.Features.TaskAnswers.CreateEdit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Testing.Application.Features.TaskAnswers.CreateEdit
 {
-    [JsonBaseClass(DiscriminatorName = "taskType")]
-    public abstract class TaskAnswerCreateEditCommand : IRequest<TaskAnswerResponse>
-    {
-        public Guid TaskId { get; set; }
-    }
-
     public abstract class TaskAnswerCreateEditHandler<TRequest> : IRequestHandler<TRequest, TaskAnswerResponse>
         where TRequest : TaskAnswerCreateEditCommand
     {

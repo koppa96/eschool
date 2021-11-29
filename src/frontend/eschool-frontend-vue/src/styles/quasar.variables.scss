@@ -1,0 +1,24 @@
+// It's highly recommended to change the default colors
+// to match your app's branding.
+
+$primary   : #4a148c;
+$secondary : #7c43bd;
+$accent    : #03dac5;
+
+$dark      : #1D1D1D;
+
+$positive  : #00c853;
+$negative  : #f44336;
+$info      : #ba68c8;
+$warning   : #ffa000;
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+  url('../assets/fonts/poppins-v15-latin-ext-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+  url('../assets/fonts/poppins-v15-latin-ext-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+$typography-font-family: 'Poppins';

@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
-using ESchool.Testing.Application.Features.TestTasks.Common.Details;
-using ESchool.Testing.Application.Features.TestTasks.Common.Editor;
 using ESchool.Testing.Application.Features.TestTasks.Create;
 using ESchool.Testing.Domain.Entities.Tasks;
 using ESchool.Testing.Domain.Entities.Tasks.FreeText;
 using ESchool.Testing.Domain.Entities.Tasks.MultipleChoice;
 using ESchool.Testing.Domain.Entities.Tasks.TrueOrFalse;
+using ESchool.Testing.Interface.Features.TestTasks.CreateEdit;
+using ESchool.Testing.Interface.Features.TestTasks.Details;
+using ESchool.Testing.Interface.Features.TestTasks.Editor;
 
 namespace ESchool.Testing.Application.Features.TestTasks.Common
 {

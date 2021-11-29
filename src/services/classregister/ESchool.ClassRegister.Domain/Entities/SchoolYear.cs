@@ -1,7 +1,7 @@
 ﻿using ESchool.Libs.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
-using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.SharedDomain.Enums;
 
 namespace ESchool.ClassRegister.Domain.Entities
 {
@@ -14,6 +14,7 @@ namespace ESchool.ClassRegister.Domain.Entities
         public DateTime StartsAt { get; set; }
         public DateTime EndOfFirstHalf { get; set; }
         public DateTime EndsAt { get; set; }
+        public SchoolYearStatus Status { get; set; }
 
         public virtual ICollection<ClassSchoolYear> ClassSchoolYears { get; set; }
     }

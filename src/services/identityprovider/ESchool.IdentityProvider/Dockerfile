@@ -13,6 +13,7 @@ COPY ["src/libs/ESchool.Libs.Outbox/ESchool.Libs.Outbox.csproj", "src/libs/EScho
 COPY ["src/libs/ESchool.Libs.AspNetCore/ESchool.Libs.AspNetCore.csproj", "src/libs/ESchool.Libs.AspNetCore/"]
 COPY ["src/libs/ESchool.Libs.Application/ESchool.Libs.Application.csproj", "src/libs/ESchool.Libs.Application/"]
 COPY ["src/libs/ESchool.Libs.Domain/ESchool.Libs.Domain.csproj", "src/libs/ESchool.Libs.Domain/"]
+COPY ["src/libs/ESchool.Libs.Interface/ESchool.Libs.Interface.csproj", "src/libs/ESchool.Libs.Interface/"]
 COPY ["src/services/identityprovider/ESchool.IdentityProvider.Application/ESchool.IdentityProvider.Application.csproj", "src/services/identityprovider/ESchool.IdentityProvider.Application/"]
 COPY ["src/services/identityprovider/ESchool.IdentityProvider.Domain/ESchool.IdentityProvider.Domain.csproj", "src/services/identityprovider/ESchool.IdentityProvider.Domain/"]
 COPY ["src/libs/ESchool.Libs.Outbox.EntityFrameworkCore/ESchool.Libs.Outbox.EntityFrameworkCore.csproj", "src/libs/ESchool.Libs.Outbox.EntityFrameworkCore/"]

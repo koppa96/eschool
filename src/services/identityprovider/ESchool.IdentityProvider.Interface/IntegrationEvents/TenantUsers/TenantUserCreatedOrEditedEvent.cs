@@ -6,6 +6,7 @@ namespace ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers
 {
     public class TenantUserCreatedOrEditedEvent
     {
+        public string Name { get; set; }
         public string Email { get; set; }
         public Guid TenantId { get; set; }
         public Guid UserId { get; set; }

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.ClassTypes;
-using ESchool.ClassRegister.Application.Features.ClassTypes.Common;
-using ESchool.Libs.Application.Cqrs.Commands;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.ClassRegister.Interface.Features.ClassTypes;
 using ESchool.Libs.AspNetCore;
-using ESchool.Libs.Domain.Enums;
+using ESchool.Libs.Interface.Commands;
+using ESchool.Libs.Interface.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace ESchool.ClassRegister.Api.Controllers
 {
     [Authorize(PolicyNames.Administrator)]
-    [ApiController]
     [Route("api/class-types")]
-    public class ClassTypesController : ControllerBase
+    public class ClassTypesController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 

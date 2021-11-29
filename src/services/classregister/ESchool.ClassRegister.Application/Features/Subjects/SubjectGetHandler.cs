@@ -1,44 +1,29 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.Subjects.Common;
-using ESchool.ClassRegister.Application.Features.Users.Common;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.Subjects;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Subjects
 {
-    public class SubjectGetQuery : IRequest<SubjectDetailsResponse>
-    {
-        public Guid Id { get; set; }        
-    }
-    
     public class SubjectGetHandler : IRequestHandler<SubjectGetQuery, SubjectDetailsResponse>
     {
         private readonly ClassRegisterContext context;
+        private readonly IConfigurationProvider configurationProvider;
 
-        public SubjectGetHandler(ClassRegisterContext context)
+        public SubjectGetHandler(ClassRegisterContext context, IConfigurationProvider configurationProvider)
         {
             this.context = context;
+            this.configurationProvider = configurationProvider;
         }
         
-        public async Task<SubjectDetailsResponse> Handle(SubjectGetQuery request, CancellationToken cancellationToken)
+        public Task<SubjectDetailsResponse> Handle(SubjectGetQuery request, CancellationToken cancellationToken)
         {
-            var subject = await context.Subjects.Include(x => x.SubjectTeachers)
-                    .ThenInclude(x => x.Teacher)
+            return context.Subjects.ProjectTo<SubjectDetailsResponse>(configurationProvider)
                 .SingleAsync(x => x.Id == request.Id, cancellationToken);
-            return new SubjectDetailsResponse
-            {
-                Id = subject.Id,
-                Name = subject.Name,
-                Teachers = subject.SubjectTeachers.Select(x => new UserRoleListResponse
-                {
-                    Id = x.TeacherId,
-                    Name = x.Teacher.User.Name
-                }).ToList()
-            };
         }
     }
 }

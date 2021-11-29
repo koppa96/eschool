@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.IdentityProvider.Application.Features.TenantUsers.Common;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
+using ESchool.IdentityProvider.Interface.Features.TenantUsers;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.TenantUsers;
-using ESchool.Libs.Application.Cqrs.Commands;
-using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
+using ESchool.Libs.Interface.Commands;
 using ESchool.Libs.Outbox.Services;
 using MassTransit;
 using MediatR;
@@ -17,11 +15,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.IdentityProvider.Application.Features.TenantUsers
 {
-    public class TenantUserEditCommand
-    {
-        public IEnumerable<TenantRoleType> TenantRoleTypes { get; set; }
-    }
-
     public class TenantUserEditHandler : IRequestHandler<EditCommand<TenantUserEditCommand, TenantUserDetailsResponse>,
         TenantUserDetailsResponse>
     {
@@ -57,10 +50,12 @@ namespace ESchool.IdentityProvider.Application.Features.TenantUsers
                 TenantRole = x
             }));
             
+            publisher.Setup(context);
             await publisher.PublishAsync(new TenantUserCreatedOrEditedEvent
             {
                 UserId = tenantUser.UserId,
                 TenantId = tenantId,
+                Name = tenantUser.User.Name,
                 Email = tenantUser.User.Email,
                 TenantRoles = tenantUser.TenantUserRoles.Select(x => x.TenantRole)
                     .ToList()

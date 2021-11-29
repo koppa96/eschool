@@ -15,6 +15,10 @@ namespace ESchool.Testing.Domain.EntityConfiguration
             builder.HasMany(x => x.ClassSchoolYearSubjectStudents)
                 .WithOne(x => x.ClassSchoolYearSubject)
                 .HasForeignKey(x => x.ClassSchoolYearSubjectId);
+
+            builder.OwnsOne(x => x.Class);
+            builder.OwnsOne(x => x.SchoolYear);
+            builder.OwnsOne(x => x.Subject);
         }
     }
 }

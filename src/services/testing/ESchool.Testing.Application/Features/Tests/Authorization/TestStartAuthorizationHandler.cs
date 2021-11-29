@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ESchool.Libs.Application.Cqrs.Authorization;
 using ESchool.Libs.Domain.Services;
 using ESchool.Testing.Domain;
+using ESchool.Testing.Interface.Features.Tests;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Testing.Application.Features.Tests.Authorization

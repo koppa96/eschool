@@ -1,14 +1,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.HomeAssignments.Application.Features.HomeworkReviews;
-using ESchool.HomeAssignments.Application.Features.HomeworkReviews.Common;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions;
-using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common;
 using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Files;
-using ESchool.Libs.Application.Cqrs.Query;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.HomeAssignments.Interface.Features.HomeworkReviews;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions.Files;
 using ESchool.Libs.AspNetCore;
+using ESchool.Libs.Interface.Query;
+using ESchool.Libs.Interface.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,8 +18,7 @@ namespace ESchool.HomeAssignments.Api.Controllers
 {
     [Route("api/homeworks/{homeworkId}/solutions")]
     [Route("api/solutions")]
-    [ApiController]
-    public class SolutionsController : ControllerBase
+    public class SolutionsController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 
@@ -42,10 +41,10 @@ namespace ESchool.HomeAssignments.Api.Controllers
         }
 
         [Authorize(PolicyNames.Student)]
-        [HttpPost]
-        public Task<HomeworkSolutionResponse> CreateSolution(Guid homeworkId, CancellationToken cancellationToken)
+        [HttpGet("mine")]
+        public Task<HomeworkSolutionResponse> GetMySolution(Guid homeworkId, CancellationToken cancellationToken)
         {
-            return mediator.Send(new HomeworkSolutionCreateCommand
+            return mediator.Send(new StudentHomeworkSolutionGetQuery
             {
                 HomeworkId = homeworkId
             }, cancellationToken);
@@ -72,11 +71,11 @@ namespace ESchool.HomeAssignments.Api.Controllers
         }
 
         [Authorize(PolicyNames.Teacher)]
-        [HttpPost("{solutionId}/review")]
-        public Task<HomeworkReviewResponse> CreateReview(Guid solutionId,
-            [FromBody] HomeworkReviewCreateCommand.Body body, CancellationToken cancellationToken)
+        [HttpPut("{solutionId}/review")]
+        public Task<HomeworkReviewResponse> CreateOrEditReview(Guid solutionId,
+            [FromBody] HomeworkReviewCreateEditCommand.Body body, CancellationToken cancellationToken)
         {
-            return mediator.Send(new HomeworkReviewCreateCommand
+            return mediator.Send(new HomeworkReviewCreateEditCommand
             {
                 HomeworkSolutionId = solutionId,
                 RequestBody = body

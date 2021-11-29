@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Grpc;
 using ESchool.ClassRegister.Interface.IntegrationEvents.Lessons;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Entities.ClassRegisterData;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.Lessons
 {
@@ -24,10 +24,15 @@ namespace ESchool.HomeAssignments.Application.Features.Lessons
             var lesson = await dbContext.Lessons.FindAsync(context.Message.LessonId);
             if (lesson == null)
             {
+                var classSchoolYearSubject = await dbContext.ClassSchoolYearSubjects.SingleAsync(x =>
+                    x.Class.Id == context.Message.ClassId &&
+                    x.SchoolYear.Id == context.Message.SchoolYearId &&
+                    x.Subject.Id == context.Message.SubjectId);
+                
                 lesson = new Lesson
                 {
                     Id = context.Message.LessonId,
-                    ClassSchoolYearSubjectId = context.Message.ClassSchoolYearSubjectId
+                    ClassSchoolYearSubject = classSchoolYearSubject
                 };
                 dbContext.Lessons.Add(lesson);
             }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ESchool.Testing.Domain.Entities;
+using ESchool.Testing.Interface.Features.Tests;
 
 namespace ESchool.Testing.Application.Features.Tests.Common
 {

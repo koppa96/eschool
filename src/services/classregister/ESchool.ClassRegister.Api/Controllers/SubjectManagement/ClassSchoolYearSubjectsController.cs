@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.SubjectManagement.ClassSchoolYearSubjects;
-using ESchool.ClassRegister.Application.Features.Subjects;
-using ESchool.Libs.Application.Cqrs.Query;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.ClassSchoolYearSubjects;
+using ESchool.ClassRegister.Interface.Features.Subjects;
 using ESchool.Libs.AspNetCore;
+using ESchool.Libs.Interface.Query;
+using ESchool.Libs.Interface.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
 {
     [Authorize(PolicyNames.Administrator)]
-    [ApiController]
     [Route("api/school-years/{schoolYearId}/classes/{classId}/subjects")]
-    public class ClassSchoolYearSubjectsController : ControllerBase
+    public class ClassSchoolYearSubjectsController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 
@@ -28,7 +27,6 @@ namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
         [HttpGet]
         public Task<PagedListResponse<SubjectListResponse>> ListClassSchoolYearSubjects(Guid schoolYearId,
             Guid classId,
-            Guid subjectId,
             [FromQuery] int pageIndex,
             [FromQuery] int pageSize,
             CancellationToken cancellationToken)
@@ -38,9 +36,22 @@ namespace ESchool.ClassRegister.Api.Controllers.SubjectManagement
             {
                 SchoolYearId = schoolYearId,
                 ClassId = classId,
-                SubjectId = subjectId,
                 PageIndex = pageIndex,
                 PageSize = pageSize == 0 ? PagedListQuery.DefaultPageSize : pageSize
+            }, cancellationToken);
+        }
+
+        [HttpGet("{subjectId}")]
+        public Task<ClassSchoolYearSubjectDetailsResponse> GetDetails(Guid schoolYearId,
+            Guid classId,
+            Guid subjectId,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(new ClassSchoolYearSubjectQuery
+            {
+                ClassId = classId,
+                SubjectId = subjectId,
+                SchoolYearId = schoolYearId
             }, cancellationToken);
         }
 

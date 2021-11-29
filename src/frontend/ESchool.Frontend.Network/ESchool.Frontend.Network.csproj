@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Flurl.Http" Version="3.2.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+      <PackageReference Include="System.Reactive.Linq" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\libs\ESchool.Libs.Interface\ESchool.Libs.Interface.csproj" />
+      <ProjectReference Include="..\..\services\classregister\ESchool.ClassRegister.Interface\ESchool.ClassRegister.Interface.csproj" />
+      <ProjectReference Include="..\..\services\homeassignments\ESchool.HomeAssignments.Interface\ESchool.HomeAssignments.Interface.csproj" />
+      <ProjectReference Include="..\..\services\identityprovider\ESchool.IdentityProvider.Interface\ESchool.IdentityProvider.Interface.csproj" />
+      <ProjectReference Include="..\..\services\testing\ESchool.Testing.Interface\ESchool.Testing.Interface.csproj" />
+    </ItemGroup>
+
+</Project>

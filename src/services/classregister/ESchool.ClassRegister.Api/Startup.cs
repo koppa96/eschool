@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using ESchool.ClassRegister.Api.Grpc;
 using ESchool.ClassRegister.Domain;
 using ESchool.IdentityProvider.Interface.DefaultHandlers.Extensions;
 using ESchool.Libs.AspNetCore.Configuration;
@@ -19,6 +22,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NJsonSchema.Generation;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
@@ -56,7 +60,13 @@ namespace ESchool.ClassRegister.Api
                 config.AddPublishFilter<AuthDataSetterPublishFilter>();
             });
             
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false));
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                });
+            
             services.AddGrpc();
 
             services.AddMediatR(Assembly.Load("ESchool.ClassRegister.Application"))
@@ -134,18 +144,23 @@ namespace ESchool.ClassRegister.Api
 
             services.AddCommonServices();
             services.AddMultitenancy<ClassRegisterContext>();
+            
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy => policy.WithOrigins(Configuration.GetSection("AllowedCorsOrigins").Get<string[]>())
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandlerMiddleware();
             app.UseMiddleware<RequestLoggerMiddleware>();
-            
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            
+
+            app.UseCors();
             app.UseOpenApi();
             app.UseSwaggerUi3(config =>
             {
@@ -166,6 +181,7 @@ namespace ESchool.ClassRegister.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGrpcService<ClassSchoolYearSubjectServiceImpl>();
             });
         }
     }

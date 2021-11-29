@@ -1,0 +1,49 @@
+{
+  "name": "eschool-frontend-vue",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint src -c .eslintrc",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.0.0",
+    "axios": "^0.21.3",
+    "core-js": "^3.6.5",
+    "date-fns": "^2.24.0",
+    "linq-extensions": "^1.0.4",
+    "lodash-es": "^4.17.21",
+    "pkce": "^1.0.0-beta2",
+    "quasar": "^2.0.0",
+    "rxjs": "^7.3.0",
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0-0",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config-vue": "^0.7.0",
+    "@babel/core": "^7.15.5",
+    "@storybook/addon-actions": "^6.3.8",
+    "@storybook/addon-essentials": "^6.3.8",
+    "@storybook/addon-links": "^6.3.8",
+    "@storybook/vue3": "^6.3.8",
+    "@types/lodash-es": "^4.17.5",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "babel-loader": "^8.2.2",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "postcss-rtl": "^1.2.3",
+    "sass": "1.32.12",
+    "sass-loader": "^10.1.0",
+    "typescript": "^4.4.2",
+    "vue-cli-plugin-quasar": "~4.0.2",
+    "vue-loader": "^16.5.0"
+  }
+}

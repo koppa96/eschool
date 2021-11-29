@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.IdentityProvider.Application.Features.TenantUsers;
-using ESchool.IdentityProvider.Application.Features.Users.Common;
-using ESchool.Libs.Application.Cqrs.Query;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.IdentityProvider.Interface.Features.TenantUsers;
+using ESchool.IdentityProvider.Interface.Features.Users;
+using ESchool.Libs.AspNetCore;
 using ESchool.Libs.Domain.Enums;
+using ESchool.Libs.Interface.Query;
+using ESchool.Libs.Interface.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.IdentityProvider.Controllers
 {
-    [Authorize(nameof(GlobalRoleType.TenantAdministrator))]
+    [Authorize(PolicyNames.AdministratorOrTenantAdministrator)]
     [Route("api/tenants/{tenantId}/users")]
-    [ApiController]
-    public class TenantUserController : ControllerBase
+    public class TenantUserController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 
@@ -26,7 +26,7 @@ namespace ESchool.IdentityProvider.Controllers
         }
         
         [HttpGet]
-        public Task<PagedListResponse<UserListResponse>> GetTenantUsers(Guid tenantId, [FromQuery] int pageSize, [FromQuery] int pageIndex, CancellationToken cancellationToken)
+        public Task<PagedListResponse<TenantUserListResponse>> GetTenantUsers(Guid tenantId, [FromQuery] int pageSize, [FromQuery] int pageIndex, CancellationToken cancellationToken)
         {
             return mediator.Send(new TenantUserListQuery
             {
@@ -36,16 +36,17 @@ namespace ESchool.IdentityProvider.Controllers
             }, cancellationToken);
         }
 
-        [HttpPost("{userId}")]
-        public Task CreateTenantUser(Guid tenantId, Guid userId, [FromBody] List<TenantRoleType> tenantRoleTypes, CancellationToken cancellationToken)
+        [HttpPut("{userId}")]
+        public Task CreateOrUpdateTenantUser(Guid tenantId, Guid userId, [FromBody] List<TenantRoleType> tenantRoleTypes, CancellationToken cancellationToken)
         {
-            return mediator.Send(new TenantUserCreateByIdCommand
+            return mediator.Send(new TenantUserCreateOrUpdateByIdCommand
             {
                 TenantId = tenantId,
                 UserId = userId,
                 TenantRoleTypes = tenantRoleTypes
             }, cancellationToken);
         }
+        
 
         [HttpDelete("{userId}")]
         public Task DeleteTenantUser(Guid tenantId, Guid userId, CancellationToken cancellationToken)

@@ -6,15 +6,12 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ESchool.ClassRegister.Application.Features.Grading.GradeKinds.Common;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.Grading.GradeKinds;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Grading.GradeKinds
 {
-    public class GradeKindListQuery : IRequest<List<GradeKindResponse>>
-    {
-    }
-
     public class GradeKindListHandler : IRequestHandler<GradeKindListQuery, List<GradeKindResponse>>
     {
         private readonly ClassRegisterContext context;

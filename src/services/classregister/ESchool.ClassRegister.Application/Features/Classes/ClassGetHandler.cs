@@ -1,21 +1,15 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using ESchool.ClassRegister.Application.Features.Classes.Common;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.Classes;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Classes
 {
-    public class ClassGetQuery : IRequest<ClassDetailsResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class ClassGetHandler : IRequestHandler<ClassGetQuery, ClassDetailsResponse>
     {
         private readonly ClassRegisterContext context;

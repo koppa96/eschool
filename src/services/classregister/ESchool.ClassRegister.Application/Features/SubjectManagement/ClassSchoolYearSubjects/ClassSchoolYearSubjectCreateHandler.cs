@@ -1,30 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.ClassSchoolYearSubjects;
+using ESchool.ClassRegister.Interface.IntegrationEvents.ClassSchoolYearSubjects;
+using ESchool.Libs.Outbox.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassSchoolYearSubjects
 {
-    public class ClassSchoolYearSubjectCreateCommand : IRequest
-    {
-        public Guid ClassId { get; set; }
-        public Guid SubjectId { get; set; }
-        public Guid SchoolYearId { get; set; }
-        public List<Guid> TeacherIds { get; set; }
-    }
-    
     public class ClassSchoolYearSubjectCreateHandler : IRequestHandler<ClassSchoolYearSubjectCreateCommand>
     {
         private readonly ClassRegisterContext context;
+        private readonly IEventPublisher eventPublisher;
 
-        public ClassSchoolYearSubjectCreateHandler(ClassRegisterContext context)
+        public ClassSchoolYearSubjectCreateHandler(ClassRegisterContext context, IEventPublisher eventPublisher)
         {
             this.context = context;
+            this.eventPublisher = eventPublisher;
         }
         
         public async Task<Unit> Handle(ClassSchoolYearSubjectCreateCommand request, CancellationToken cancellationToken)
@@ -48,7 +44,15 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassScho
                     TeacherId = x
                 }).ToList()
             });
-
+            
+            eventPublisher.Setup(context);
+            await eventPublisher.PublishAsync(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
+            {
+                ClassId = classSchoolYear.ClassId,
+                SchoolYearId = classSchoolYear.SchoolYearId,
+                SubjectId = request.SubjectId
+            }, cancellationToken);
+            
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

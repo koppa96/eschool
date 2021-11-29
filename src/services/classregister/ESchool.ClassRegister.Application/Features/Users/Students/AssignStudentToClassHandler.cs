@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.Users.Students;
 using ESchool.ClassRegister.Interface.IntegrationEvents.ClassSchoolYearSubjects;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Outbox.Services;
@@ -12,12 +13,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Users.Students
 {
-    public class AssignStudentToClassCommand : IRequest
-    {
-        public Guid StudentId { get; set; }
-        public Guid ClassId { get; set; }
-    }
-    
     public class AssignStudentToClassHandler : IRequestHandler<AssignStudentToClassCommand>
     {
         private readonly ClassRegisterContext context;
@@ -43,11 +38,14 @@ namespace ESchool.ClassRegister.Application.Features.Users.Students
             
             student.Class = @class;
             
+            eventPublisher.Setup(context);
             foreach (var classSchoolYearSubject in @class.ClassSchoolYears.SelectMany(x => x.ClassSchoolYearSubjects))
             {
                 await eventPublisher.PublishAsync(new ClassSchoolYearSubjectCreatedOrUpdatedEvent
                 {
-                    Id = classSchoolYearSubject.Id
+                    ClassId = classSchoolYearSubject.ClassSchoolYear.ClassId,
+                    SubjectId = classSchoolYearSubject.SubjectId,
+                    SchoolYearId = classSchoolYearSubject.ClassSchoolYear.SchoolYearId
                 }, cancellationToken);
             }
             

@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ESchool.Libs.Domain\ESchool.Libs.Domain.csproj" />
+      <ProjectReference Include="..\ESchool.Libs.Interface\ESchool.Libs.Interface.csproj" />
     </ItemGroup>
 
 </Project>

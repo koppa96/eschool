@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
 using ESchool.Libs.Application.Cqrs.Authorization;
-using ESchool.Libs.Application.Cqrs.Commands;
 using ESchool.Libs.Domain.Enums;
 using ESchool.Libs.Domain.Services;
+using ESchool.Libs.Interface.Commands;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Authorization

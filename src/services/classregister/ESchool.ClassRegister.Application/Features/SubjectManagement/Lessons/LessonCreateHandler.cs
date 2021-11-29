@@ -3,35 +3,18 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
+using ESchool.ClassRegister.Interface.IntegrationEvents.Lessons;
 using ESchool.Libs.Domain.Extensions;
+using ESchool.Libs.Outbox.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
 {
-    public class LessonCreateCommand : IRequest<LessonDetailsResponse>
-    {
-        public LessonCreateCommandBody Body { get; set; }
-        public Guid SchoolYearId { get; set; }
-        public Guid ClassId { get; set; }
-        public Guid SubjectId { get; set; }
-        
-
-        public class LessonCreateCommandBody
-        {
-            public string Title { get; set; }
-            public string Description { get; set; }
-
-            public DateTime StartsAt { get; set; }
-            public DateTime EndsAt { get; set; }
-            public Guid ClassroomId { get; set; }
-        }
-    }
-
     public class LessonCreateValidator : AbstractValidator<LessonCreateCommand>
     {
         public LessonCreateValidator()
@@ -46,11 +29,13 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
     {
         private readonly ClassRegisterContext context;
         private readonly IMapper mapper;
+        private readonly IEventPublisher eventPublisher;
 
-        public LessonCreateHandler(ClassRegisterContext context, IMapper mapper)
+        public LessonCreateHandler(ClassRegisterContext context, IMapper mapper, IEventPublisher eventPublisher)
         {
             this.context = context;
             this.mapper = mapper;
+            this.eventPublisher = eventPublisher;
         }
         
         public async Task<LessonDetailsResponse> Handle(LessonCreateCommand request, CancellationToken cancellationToken)
@@ -88,6 +73,17 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
             };
 
             context.Lessons.Add(lesson);
+            
+            eventPublisher.Setup(context);
+            await eventPublisher.PublishAsync(new LessonCreatedOrUpdatedEvent
+            {
+                LessonId = lesson.Id,
+                Title = lesson.Title ?? $"{lesson.StartsAt} - {lesson.EndsAt}",
+                ClassId = request.ClassId,
+                SubjectId = request.SubjectId,
+                SchoolYearId = request.SchoolYearId
+            }, cancellationToken);
+
             await context.SaveChangesAsync(cancellationToken);
             return mapper.Map<LessonDetailsResponse>(lesson);
         }

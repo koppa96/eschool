@@ -7,6 +7,8 @@ namespace ESchool.IdentityProvider.Domain.Entities.Users
 {
     public class User : IdentityUser<Guid>
     {
+        public string Name { get; set; }
+        
         public GlobalRoleType GlobalRole { get; set; }
         public virtual ICollection<TenantUser> TenantUsers { get; set; }
 

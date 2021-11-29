@@ -2,6 +2,7 @@
 using ESchool.IdentityProvider.Application.Features.Tenants;
 using ESchool.IdentityProvider.Application.Features.Tenants.Common;
 using ESchool.IdentityProvider.Domain.Entities;
+using ESchool.IdentityProvider.Interface.Features.Tenants;
 
 namespace ESchool.IdentityProvider.Application.Mappings
 {

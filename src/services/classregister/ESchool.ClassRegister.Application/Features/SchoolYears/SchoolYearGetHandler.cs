@@ -1,19 +1,14 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.ClassRegister.Application.Features.SchoolYears.Common;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.SchoolYears;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SchoolYears
 {
-    public class SchoolYearGetQuery : IRequest<SchoolYearDetailsResponse>
-    {
-        public Guid Id { get; set; }
-    }
-
     public class SchoolYearGetHandler : IRequestHandler<SchoolYearGetQuery, SchoolYearDetailsResponse>
     {
         private readonly ClassRegisterContext context;

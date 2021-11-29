@@ -28,7 +28,9 @@ namespace ESchool.Libs.AspNetCore.Middlewares
             }
             catch (Exception e)
             {
-                if (e is InvalidOperationException)
+                logger.LogError(e, "Unhandled exception caught");
+                
+                if (e is InvalidOperationException or ArgumentException)
                 {
                     context.Response.StatusCode = 400;
                     await WriteJsonAsync(context.Response, new ProblemDetails
@@ -38,8 +40,26 @@ namespace ESchool.Libs.AspNetCore.Middlewares
                         Detail = e.Message
                     });
                 }
-
-                // TODO: Implement exception handling, create unique exception types
+                else if (e is UnauthorizedAccessException)
+                {
+                    context.Response.StatusCode = 403;
+                    await WriteJsonAsync(context.Response, new ProblemDetails
+                    {
+                        Title = "Forbidden",
+                        Status = 403,
+                        Detail = e.Message
+                    });
+                }
+                else
+                {
+                    context.Response.StatusCode = 500;
+                    await WriteJsonAsync(context.Response, new ProblemDetails
+                    {
+                        Title = "Internal Server Error",
+                        Status = 500,
+                        Detail = e.Message
+                    });
+                }
             }
         }
 

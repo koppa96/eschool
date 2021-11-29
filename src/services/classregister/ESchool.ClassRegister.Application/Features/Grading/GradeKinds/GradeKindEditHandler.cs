@@ -3,18 +3,13 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.ClassRegister.Application.Features.Grading.GradeKinds.Common;
 using ESchool.ClassRegister.Domain;
-using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.ClassRegister.Interface.Features.Grading.GradeKinds;
 using ESchool.Libs.Domain.Extensions;
+using ESchool.Libs.Interface.Commands;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.Grading.GradeKinds
 {
-    public class GradeKindEditCommand
-    {
-        public string Name { get; set; }
-        public double AverageMultiplier { get; set; }
-    }
-    
     public class GradeKindEditHandler : IRequestHandler<EditCommand<GradeKindEditCommand, GradeKindResponse>, GradeKindResponse>
     {
         private readonly ClassRegisterContext context;

@@ -161,55 +161,6 @@ namespace ESchool.ClassRegister.Domain.Migrations
                     b.ToTable("GradeKinds");
                 });
 
-            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Messaging.Message", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("SenderUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("SentAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Subject")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SenderUserId");
-
-                    b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Messaging.UserMessage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MessageId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserMessages");
-                });
-
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.SchoolYear", b =>
                 {
                     b.Property<Guid>("Id")
@@ -227,6 +178,9 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
                     b.Property<DateTime>("StartsAt")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -439,7 +393,7 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentParent");
+                    b.ToTable("StudentParents");
                 });
 
             modelBuilder.Entity("ESchool.Libs.Outbox.EntityFrameworkCore.Entities.OutboxEntry", b =>
@@ -586,32 +540,6 @@ namespace ESchool.ClassRegister.Domain.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Messaging.Message", b =>
-                {
-                    b.HasOne("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUser", "SenderClassRegisterUser")
-                        .WithMany("SentMessages")
-                        .HasForeignKey("SenderUserId");
-
-                    b.Navigation("SenderClassRegisterUser");
-                });
-
-            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Messaging.UserMessage", b =>
-                {
-                    b.HasOne("ESchool.ClassRegister.Domain.Entities.Messaging.Message", "Message")
-                        .WithMany("ReceiverUserMessages")
-                        .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUser", "ClassRegisterUser")
-                        .WithMany("ReceivedMessages")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("ClassRegisterUser");
-
-                    b.Navigation("Message");
-                });
-
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.SubjectManagement.Absence", b =>
                 {
                     b.HasOne("ESchool.ClassRegister.Domain.Entities.SubjectManagement.Lesson", "Lesson")
@@ -640,7 +568,7 @@ namespace ESchool.ClassRegister.Domain.Migrations
                         .IsRequired();
 
                     b.HasOne("ESchool.ClassRegister.Domain.Entities.Subject", "Subject")
-                        .WithMany()
+                        .WithMany("ClassSchoolYearSubjects")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -770,11 +698,6 @@ namespace ESchool.ClassRegister.Domain.Migrations
                     b.Navigation("Lessons");
                 });
 
-            modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Messaging.Message", b =>
-                {
-                    b.Navigation("ReceiverUserMessages");
-                });
-
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.SchoolYear", b =>
                 {
                     b.Navigation("ClassSchoolYears");
@@ -782,6 +705,8 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Subject", b =>
                 {
+                    b.Navigation("ClassSchoolYearSubjects");
+
                     b.Navigation("SubjectTeachers");
                 });
 
@@ -801,10 +726,6 @@ namespace ESchool.ClassRegister.Domain.Migrations
 
             modelBuilder.Entity("ESchool.ClassRegister.Domain.Entities.Users.Abstractions.ClassRegisterUser", b =>
                 {
-                    b.Navigation("ReceivedMessages");
-
-                    b.Navigation("SentMessages");
-
                     b.Navigation("UserRoles");
                 });
 

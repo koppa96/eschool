@@ -2,18 +2,13 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.Classrooms.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
+using ESchool.ClassRegister.Interface.Features.Classrooms;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.Classrooms
 {
-    public class ClassroomCreateCommand : IRequest<ClassroomDetailsResponse>
-    {
-        public string Name { get; set; }
-    }
-
     public class ClassroomCreateHandler : IRequestHandler<ClassroomCreateCommand, ClassroomDetailsResponse>
     {
         private readonly ClassRegisterContext context;

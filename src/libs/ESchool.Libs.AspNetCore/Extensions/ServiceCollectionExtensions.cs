@@ -27,7 +27,7 @@ namespace ESchool.Libs.AspNetCore.Extensions
         {
             services.AddHttpContextAccessor();
             services.AddTransient<IIdentityService, IdentityService>();
-            services.AddTransient<MessagingIdentityService>();
+            services.AddScoped<MessagingIdentityService>();
 
             return services;
         }
@@ -62,10 +62,18 @@ namespace ESchool.Libs.AspNetCore.Extensions
                 options.AddTenantUserPolicy(TenantRoleType.Parent);
                 options.AddTenantUserPolicy(TenantRoleType.Teacher);
                 options.AddTenantUserPolicy(TenantRoleType.Student);
+                
+                options.AddPolicy(PolicyNames.AdministratorOrTenantAdministrator, policy =>
+                    policy.RequireAuthenticatedUser()
+                        .RequireAssertion(context =>
+                            context.User.HasClaim(
+                                Constants.ClaimTypes.GlobalRole, GlobalRoleType.TenantAdministrator.ToString()) ||
+                            context.User.HasClaim(
+                                Constants.ClaimTypes.TenantRoles, TenantRoleType.Administrator.ToString()))
+                        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
 
                 options.AddPolicy(PolicyNames.AnyRole, policy => policy.RequireAuthenticatedUser()
-                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireClaim(Constants.ClaimTypes.TenantId));
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
 
                 options.AddPolicy(PolicyNames.TeacherOrAdministrator, policy => policy.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
@@ -79,6 +87,13 @@ namespace ESchool.Libs.AspNetCore.Extensions
                     .RequireClaim(Constants.ClaimTypes.TenantId)
                     .RequireAssertion(context =>
                         context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Teacher.ToString()) ||
+                        context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Student.ToString())));
+                
+                options.AddPolicy(PolicyNames.StudentOrParent, policy => policy.RequireAuthenticatedUser()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireClaim(Constants.ClaimTypes.TenantId)
+                    .RequireAssertion(context =>
+                        context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Parent.ToString()) ||
                         context.User.HasClaim(Constants.ClaimTypes.TenantRoles, TenantRoleType.Student.ToString())));
 
                 options.AddPolicy("Default", policy => policy.RequireAuthenticatedUser()
@@ -131,7 +146,7 @@ namespace ESchool.Libs.AspNetCore.Extensions
 
                 return tenantId == null
                     ? null
-                    : memoryCache.GetOrCreate(tenantId.Value, entry => masterDbContext.Tenants.Find(tenantId.Value));
+                    : memoryCache.GetOrCreate(tenantId.Value, _ => masterDbContext.Tenants.Find(tenantId.Value));
             });
 
             services.AddScoped<ITenantDbContextFactory<TContext>, TFactory>();

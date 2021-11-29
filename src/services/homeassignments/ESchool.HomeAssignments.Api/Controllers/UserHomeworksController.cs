@@ -1,19 +1,18 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.HomeAssignments.Application.Features.Homeworks;
-using ESchool.HomeAssignments.Application.Features.UserHomeworks;
-using ESchool.Libs.Application.Cqrs.Query;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.HomeAssignments.Interface.Features.UserHomeworks;
 using ESchool.Libs.AspNetCore;
+using ESchool.Libs.Interface.Query;
+using ESchool.Libs.Interface.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.HomeAssignments.Api.Controllers
 {
-    [ApiController]
-    public class UserHomeworksController : ControllerBase
+    [Route("api/school-years/{schoolYearId}")]
+    public class UserHomeworksController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 
@@ -23,7 +22,7 @@ namespace ESchool.HomeAssignments.Api.Controllers
         }
 
         [Authorize(PolicyNames.Student)]
-        [HttpGet("api/student/school-years/{schoolYearId}/subjects/{subjectId}/homeworks")]
+        [HttpGet("subjects/{subjectId}/homeworks")]
         public Task<PagedListResponse<StudentHomeworkListResponse>> ListStudentHomeworks(
             Guid schoolYearId,
             Guid subjectId,
@@ -43,7 +42,7 @@ namespace ESchool.HomeAssignments.Api.Controllers
         }
 
         [Authorize(PolicyNames.Teacher)]
-        [HttpGet("api/teacher/school-years/{schoolYearId}/classes/{classId}/subjects/{subjectId}/homeworks")]
+        [HttpGet("classes/{classId}/subjects/{subjectId}/homeworks")]
         public Task<PagedListResponse<TeacherHomeworkListResponse>> ListTeacherHomeworks(
             Guid schoolYearId,
             Guid classId,

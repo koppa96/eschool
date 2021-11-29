@@ -9,16 +9,12 @@ using ESchool.Testing.Application.Features.TestAnswers.Common;
 using ESchool.Testing.Domain;
 using ESchool.Testing.Domain.Entities;
 using ESchool.Testing.Domain.Entities.Answers;
+using ESchool.Testing.Interface.Features.TestAnswers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Testing.Application.Features.TestAnswers
 {
-    public class TestAnswerCreateCommand : IRequest<TestAnswerDetailsResponse>
-    {
-        public Guid TestId { get; set; }
-    }
-    
     public class TestAnswerCreateHandler : IRequestHandler<TestAnswerCreateCommand, TestAnswerDetailsResponse>
     {
         private readonly TestingContext context;

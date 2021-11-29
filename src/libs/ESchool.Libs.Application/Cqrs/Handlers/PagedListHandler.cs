@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.Libs.Application.Cqrs.Query;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.Libs.Interface.Query;
+using ESchool.Libs.Interface.Response;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,7 +32,7 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
 
         protected abstract IQueryable<TResponse> Map(IQueryable<TEntity> entities, TQuery query);
 
-        protected abstract IOrderedQueryable<TEntity> Order(IQueryable<TEntity> entities);
+        protected abstract IOrderedQueryable<TEntity> Order(IQueryable<TEntity> entities, TQuery query);
 
         public async Task<PagedListResponse<TResponse>> Handle(TQuery request, CancellationToken cancellationToken)
         {
@@ -44,7 +42,7 @@ namespace ESchool.Libs.Application.Cqrs.Handlers
             var responses = new List<TResponse>();
             if (totalCount > request.PageIndex * request.PageSize)
             {
-                responses = await Map(Order(Filter(Include(dbSet), request))
+                responses = await Map(Order(Filter(Include(dbSet), request), request)
                         .Skip(request.PageIndex * request.PageSize)
                     .Take(request.PageSize), request)
                     .ToListAsync(cancellationToken);

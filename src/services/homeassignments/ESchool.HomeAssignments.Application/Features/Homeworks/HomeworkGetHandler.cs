@@ -1,21 +1,15 @@
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using ESchool.HomeAssignments.Application.Features.Homeworks.Common;
 using ESchool.HomeAssignments.Domain;
+using ESchool.HomeAssignments.Interface.Features.Homeworks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.Homeworks
 {
-    public class HomeworkGetQuery : IRequest<HomeworkDetailsResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class HomeworkGetHandler : IRequestHandler<HomeworkGetQuery, HomeworkDetailsResponse>
     {
         private readonly HomeAssignmentsContext context;

@@ -3,18 +3,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.ClassSchoolYears;
 using ESchool.Libs.Domain.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.ClassSchoolYears
 {
-    public class ClassSchoolYearDeleteCommand : IRequest
-    {
-        public Guid ClassId { get; set; }
-        public Guid SchoolYearId { get; set; }
-    }
-    
     public class ClassSchoolYearDeleteHandler : IRequestHandler<ClassSchoolYearDeleteCommand>
     {
         private readonly ClassRegisterContext context;

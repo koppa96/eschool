@@ -5,18 +5,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.ClassRegister.Application.Features.Classes.Common;
 using ESchool.ClassRegister.Domain;
-using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.ClassRegister.Interface.Features.Classes;
 using ESchool.Libs.Domain.Extensions;
+using ESchool.Libs.Interface.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Classes
 {
-    public class ClassEditCommand
-    {
-        public Guid HeadTeacherId { get; set; }
-    }
-    
     public class ClassEditHandler : IRequestHandler<EditCommand<ClassEditCommand, ClassDetailsResponse>, ClassDetailsResponse>
     {
         private readonly ClassRegisterContext context;

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
@@ -27,6 +29,7 @@ using ESchool.Libs.AspNetCore.Middlewares;
 using ESchool.Libs.Outbox;
 using ESchool.Libs.Outbox.AspNetCore.Extensions;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
+using NJsonSchema.Generation;
 
 namespace ESchool.IdentityProvider
 {
@@ -79,7 +82,13 @@ namespace ESchool.IdentityProvider
 
             services.AddAutoMapper(Assembly.Load("ESchool.IdentityProvider.Application"));
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false));
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                });
+            
             services.AddRazorPages();
 
             services.AddMediatR(Assembly.Load("ESchool.IdentityProvider.Application"));
@@ -139,18 +148,23 @@ namespace ESchool.IdentityProvider
             });
 
             services.AddCommonServices();
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy => policy.WithOrigins(Configuration.GetSection("AllowedCorsOrigins").Get<string[]>())
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandlerMiddleware();
             app.UseMiddleware<RequestLoggerMiddleware>();
-            
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
 
+            app.UseCors();
             app.UseOpenApi();
             app.UseSwaggerUi3(config =>
             {

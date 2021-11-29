@@ -1,19 +1,13 @@
-﻿using AutoMapper;
-using ESchool.IdentityProvider.Application.Features.Tenants.Common;
-using ESchool.IdentityProvider.Domain;
-using MediatR;
-using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
+using ESchool.IdentityProvider.Domain;
+using ESchool.IdentityProvider.Interface.Features.Tenants;
 using ESchool.Libs.Domain.Extensions;
+using MediatR;
 
 namespace ESchool.IdentityProvider.Application.Features.Tenants
 {
-    public class GetTenantQuery : IRequest<TenantDetailsResponse>
-    {
-        public Guid TenantId { get; set; }
-    }
-
     public class GetTenantHandler : IRequestHandler<GetTenantQuery, TenantDetailsResponse>
     {
         private readonly IdentityProviderContext context;

@@ -11,12 +11,10 @@ namespace ESchool.HomeAssignments.Application.Features.Users
     public class UserModifiedConsumer : IConsumer<UserModifiedEvent>
     {
         private readonly Lazy<HomeAssignmentsContext> lazyDbContext;
-        private readonly UserService.UserServiceClient client;
 
-        public UserModifiedConsumer(Lazy<HomeAssignmentsContext> lazyDbContext, UserService.UserServiceClient client)
+        public UserModifiedConsumer(Lazy<HomeAssignmentsContext> lazyDbContext)
         {
             this.lazyDbContext = lazyDbContext;
-            this.client = client;
         }
         
         public async Task Consume(ConsumeContext<UserModifiedEvent> context)

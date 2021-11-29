@@ -60,14 +60,6 @@ namespace ESchool.ClassRegister.Domain.EntityConfiguration
 
         public void Configure(EntityTypeBuilder<ClassRegisterUser> builder)
         {
-            builder.HasMany(x => x.ReceivedMessages)
-                .WithOne(x => x.ClassRegisterUser)
-                .HasForeignKey(x => x.UserId);
-
-            builder.HasMany(x => x.SentMessages)
-                .WithOne(x => x.SenderClassRegisterUser)
-                .HasForeignKey(x => x.SenderUserId);
-
             builder.HasMany(x => x.UserRoles)
                 .WithOne(x => x.User)
                 .HasForeignKey(x => x.UserId);

@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.ClassRegister.Application.Features.Classes.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
+using ESchool.ClassRegister.Interface.Features.Classes;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Classes
 {
-    public class ClassCreateCommand : IRequest<ClassDetailsResponse>
-    {
-        public Guid ClassTypeId { get; set; }
-        public Guid HeadTeacherId { get; set; }
-        public Guid StartingSchoolYearId { get; set; }
-    }
-
     public class ClassCreateHandler : IRequestHandler<ClassCreateCommand, ClassDetailsResponse>
     {
         private readonly ClassRegisterContext context;

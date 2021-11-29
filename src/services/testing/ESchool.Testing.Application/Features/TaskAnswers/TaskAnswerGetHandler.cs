@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ESchool.Libs.Domain.Extensions;
@@ -10,12 +9,7 @@ using MediatR;
 
 namespace ESchool.Testing.Application.Features.TaskAnswers
 {
-    public class TaskAnswerGetCommand : IRequest<TaskAnswerResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
-    public class TaskAnswerGetHandler : IRequestHandler<TaskAnswerGetCommand, TaskAnswerResponse>
+    public class TaskAnswerGetHandler : IRequestHandler<TaskAnswerGetQuery, TaskAnswerResponse>
     {
         private readonly TestingContext context;
         private readonly IMapper mapper;
@@ -27,7 +21,7 @@ namespace ESchool.Testing.Application.Features.TaskAnswers
             this.mapper = mapper;
         }
         
-        public async Task<TaskAnswerResponse> Handle(TaskAnswerGetCommand request, CancellationToken cancellationToken)
+        public async Task<TaskAnswerResponse> Handle(TaskAnswerGetQuery request, CancellationToken cancellationToken)
         {
             var answer = await context.TaskAnswers.FindOrThrowAsync(request.Id, cancellationToken);
             return mapper.Map<TaskAnswer, TaskAnswerResponse>(answer);

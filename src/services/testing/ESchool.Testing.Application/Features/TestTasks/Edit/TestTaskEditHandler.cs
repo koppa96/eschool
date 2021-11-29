@@ -2,11 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.Libs.Application.Cqrs.Commands;
-using ESchool.Testing.Application.Features.TestTasks.Common.Editor;
-using ESchool.Testing.Application.Features.TestTasks.Create;
+using ESchool.Libs.Interface.Commands;
 using ESchool.Testing.Domain;
 using ESchool.Testing.Domain.Entities.Tasks;
+using ESchool.Testing.Interface.Features.TestTasks.CreateEdit;
+using ESchool.Testing.Interface.Features.TestTasks.Editor;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,7 +32,7 @@ namespace ESchool.Testing.Application.Features.TestTasks.Edit
 
             if (task.Test.StartedAt != null)
             {
-                throw new InvalidOperationException("A feladatok nem szerkeszthetők a dolgozat megkezése után.");
+                throw new InvalidOperationException("A feladatok nem szerkeszthetők a dolgozat megkezdése után.");
             }
 
             mapper.Map<TestTaskCreateEditCommand, TestTask>(request.InnerCommand, task);

@@ -1,32 +1,13 @@
 using System;
 using System.Linq;
-using AutoMapper;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Entities;
+using ESchool.HomeAssignments.Interface.Features.UserHomeworks;
 using ESchool.Libs.Application.Cqrs.Handlers;
-using ESchool.Libs.Application.Cqrs.Query;
 using ESchool.Libs.Domain.Services;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.UserHomeworks
 {
-    public class StudentHomeworkListQuery : PagedListQuery<StudentHomeworkListResponse>
-    {
-        public Guid SchoolYearId { get; set; }
-        public Guid SubjectId { get; set; }
-        public bool Expired { get; set; }
-    }
-
-    public class StudentHomeworkListResponse
-    {
-        public Guid Id { get; set; }
-        public string Title { get; set; }
-        public DateTime Deadline { get; set; }
-        public bool Submitted { get; set; }
-        public bool Optional { get; set; }
-    }
-    
     public class StudentHomeworkListHandler : PagedListHandler<StudentHomeworkListQuery, Homework, StudentHomeworkListResponse>
     {
         private readonly Guid currentUserId;
@@ -53,11 +34,12 @@ namespace ESchool.HomeAssignments.Application.Features.UserHomeworks
                 Title = x.Title,
                 Deadline = x.Deadline,
                 Optional = x.Optional,
-                Submitted = x.Solutions.Any(s => s.Student.UserId == currentUserId)
+                Submitted = x.Solutions.Any(s => s.Student.UserId == currentUserId && s.TurnInDate != null),
+                Reviewed = x.Solutions.Any(s => s.Student.UserId == currentUserId && s.HomeworkReview != null)
             });
         }
 
-        protected override IOrderedQueryable<Homework> Order(IQueryable<Homework> entities)
+        protected override IOrderedQueryable<Homework> Order(IQueryable<Homework> entities, StudentHomeworkListQuery query)
         {
             return entities.OrderByDescending(x => x.Deadline);
         }

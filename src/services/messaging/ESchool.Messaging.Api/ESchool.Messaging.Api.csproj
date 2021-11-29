@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\libs\ESchool.Libs.AspNetCore\ESchool.Libs.AspNetCore.csproj" />
+        <ProjectReference Include="..\..\..\libs\ESchool.Libs.Outbox.AspNetCore\ESchool.Libs.Outbox.AspNetCore.csproj" />
+        <ProjectReference Include="..\..\..\libs\ESchool.Libs.Outbox.EntityFrameworkCore\ESchool.Libs.Outbox.EntityFrameworkCore.csproj" />
+        <ProjectReference Include="..\..\identityprovider\ESchool.IdentityProvider.Interface.DefaultHandlers\ESchool.IdentityProvider.Interface.DefaultHandlers.csproj" />
+        <ProjectReference Include="..\ESchool.Messaging.Application\ESchool.Messaging.Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MassTransit.AspNetCore" Version="7.1.8" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.8" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="NSwag.AspNetCore" Version="13.13.2" />
+        <PackageReference Include="NSwag.MSBuild" Version="13.13.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Polly" Version="7.2.2" />
+    </ItemGroup>
+
+    <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == Debug">
+        <Exec Command="$(NSwagExe_Net50) run nswag.json" />
+    </Target>
+
+    <Target Name="ClientFix" AfterTargets="NSwag" Condition="'$(Configuration)' == Debug">
+        <Exec Command="dotnet $(ProjectDir)../../../../tools/ClientFixer.dll $(ProjectDir)../../../frontend/eschool-frontend-vue/src/shared/generated-clients/messaging.ts" />
+    </Target>
+
+</Project>

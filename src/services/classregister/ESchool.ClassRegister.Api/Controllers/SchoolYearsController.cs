@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.SchoolYears;
-using ESchool.ClassRegister.Application.Features.SchoolYears.Common;
-using ESchool.Libs.Application.Cqrs.Commands;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.ClassRegister.Interface.Features.SchoolYears;
 using ESchool.Libs.AspNetCore;
-using ESchool.Libs.Domain.Enums;
+using ESchool.Libs.Interface.Commands;
+using ESchool.Libs.Interface.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.ClassRegister.Api.Controllers
 {
-    [Authorize(PolicyNames.Administrator)]
-    [ApiController]
     [Route("api/school-years")]
-    public class SchoolYearsController : ControllerBase
+    public class SchoolYearsController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 
@@ -26,18 +22,21 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(PolicyNames.AnyRole)]
         public Task<PagedListResponse<SchoolYearListResponse>> ListSchoolYears([FromQuery] SchoolYearListQuery query, CancellationToken cancellationToken)
         {
             return mediator.Send(query, cancellationToken);
         }
 
         [HttpGet("{id}")]
+        [Authorize(PolicyNames.AnyRole)]
         public Task<SchoolYearDetailsResponse> GetSchoolYear(Guid id, CancellationToken cancellationToken)
         {
             return mediator.Send(new SchoolYearGetQuery { Id = id }, cancellationToken);
         }
 
         [HttpPost]
+        [Authorize(PolicyNames.Administrator)]
         public Task<SchoolYearDetailsResponse> CreateSchoolYear([FromBody] SchoolYearCreateCommand command,
             CancellationToken cancellationToken)
         {
@@ -45,6 +44,7 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(PolicyNames.Administrator)]
         public Task<SchoolYearDetailsResponse> EditSchoolYear(Guid id, [FromBody] SchoolYearEditCommand command,
             CancellationToken cancellationToken)
         {
@@ -56,6 +56,7 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(PolicyNames.Administrator)]
         public Task DeleteSchoolYear(Guid id, CancellationToken cancellationToken)
         {
             return mediator.Send(new SchoolYearDeleteCommand { Id = id }, cancellationToken);

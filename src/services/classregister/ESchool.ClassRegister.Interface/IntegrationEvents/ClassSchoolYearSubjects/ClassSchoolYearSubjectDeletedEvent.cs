@@ -4,6 +4,8 @@ namespace ESchool.ClassRegister.Interface.IntegrationEvents.ClassSchoolYearSubje
 {
     public class ClassSchoolYearSubjectDeletedEvent
     {
-        public Guid Id { get; set; }
+        public Guid ClassId { get; set; }
+        public Guid SchoolYearId { get; set; }
+        public Guid SubjectId { get; set; }
     }
 }

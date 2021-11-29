@@ -11,5 +11,6 @@ namespace ESchool.ClassRegister.Domain.Entities
         public string Name { get; set; }
         
         public virtual ICollection<SubjectTeacher> SubjectTeachers { get; set; }
+        public virtual ICollection<ClassSchoolYearSubject> ClassSchoolYearSubjects { get; set; }
     }
 }

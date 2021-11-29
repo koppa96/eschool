@@ -1,18 +1,12 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.Classrooms.Common;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.Classrooms;
 using ESchool.Libs.Domain.Extensions;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.Classrooms
 {
-    public class ClassroomGetQuery : IRequest<ClassroomDetailsResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class ClassroomGetHandler : IRequestHandler<ClassroomGetQuery, ClassroomDetailsResponse>
     {
         private readonly ClassRegisterContext context;

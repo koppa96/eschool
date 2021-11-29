@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.Classrooms.Common;
 using ESchool.ClassRegister.Domain;
-using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.ClassRegister.Interface.Features.Classrooms;
 using ESchool.Libs.Domain.Extensions;
+using ESchool.Libs.Interface.Commands;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.Classrooms
 {
-    public class ClassroomEditCommand
-    {
-        public string Name { get; set; }
-    }
-    
     public class ClassroomEditHandler : IRequestHandler<EditCommand<ClassroomEditCommand, ClassroomDetailsResponse>, ClassroomDetailsResponse>
     {
         private readonly ClassRegisterContext context;

@@ -1,19 +1,13 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.ClassRegister.Application.Features.ClassTypes.Common;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.ClassTypes;
 using ESchool.Libs.Domain.Extensions;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.ClassTypes
 {
-    public class ClassTypeGetQuery : IRequest<ClassTypeDetailsResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
     public class ClassTypeGetHandler : IRequestHandler<ClassTypeGetQuery, ClassTypeDetailsResponse>
     {
         private readonly ClassRegisterContext context;

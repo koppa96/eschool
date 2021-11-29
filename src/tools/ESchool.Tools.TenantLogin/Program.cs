@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using ESchool.IdentityProvider.Application.Features.Users.Common;
+using ESchool.IdentityProvider.Interface.Features.Users;
 using Flurl.Http;
 using IdentityModel.Client;
 using IdentityModel.OidcClient;

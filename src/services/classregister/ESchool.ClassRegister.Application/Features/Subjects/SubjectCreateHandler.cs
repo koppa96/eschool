@@ -3,15 +3,11 @@ using System.Threading.Tasks;
 using ESchool.ClassRegister.Application.Features.Subjects.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
+using ESchool.ClassRegister.Interface.Features.Subjects;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.Subjects
 {
-    public class SubjectCreateCommand : IRequest<SubjectDetailsResponse>
-    {
-        public string Name { get; set; }
-    }
-    
     public class SubjectCreateHandler : IRequestHandler<SubjectCreateCommand, SubjectDetailsResponse>
     {
         private readonly ClassRegisterContext context;

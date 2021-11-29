@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,18 +6,11 @@ using ESchool.ClassRegister.Application.Features.Classes.Common;
 using ESchool.ClassRegister.Application.Features.SchoolYears.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
+using ESchool.ClassRegister.Interface.Features.SchoolYears;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.SchoolYears
 {
-    public class SchoolYearCreateCommand : IRequest<SchoolYearDetailsResponse>
-    {
-        public string DisplayName { get; set; }
-        public DateTime StartsAt { get; set; }
-        public DateTime EndOfFirstHalf { get; set; }
-        public DateTime EndsAt { get; set; }
-    }
-    
     public class SchoolYearCreateHandler : IRequestHandler<SchoolYearCreateCommand, SchoolYearDetailsResponse>
     {
         private readonly ClassRegisterContext context;

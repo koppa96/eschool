@@ -2,24 +2,26 @@ syntax = "proto3";
 
 option csharp_namespace = "ESchool.ClassRegister.Grpc";
 
-service UserService {
-  rpc GetStudentOfClass(StudentsOfClassRequest) returns (UserListResponse);
-  rpc GetTeachersOfClassSchoolYearSubject(TeachersOfClassSchoolYearSubjectRequest) returns (UserListResponse);
-}
-
 service ClassSchoolYearSubjectService {
   rpc GetDetails(ClassSchoolYearSubjectDetailsRequest) returns (ClassSchoolYearSubjectDetailsResponse);
 }
 
 message ClassSchoolYearSubjectDetailsRequest {
+  string schoolYearId = 1;
+  string classId = 2;
+  string subjectId = 3;
+}
+
+message ClassRegisterEntityResponse {
   string id = 1;
+  string name = 2;
 }
 
 message ClassSchoolYearSubjectDetailsResponse {
   string id = 1;
-  string schoolYearId = 2;
-  string classId = 3;
-  string subjectId = 4;
+  ClassRegisterEntityResponse schoolYear = 2;
+  ClassRegisterEntityResponse class = 3;
+  ClassRegisterEntityResponse subject = 4;
   repeated string studentIds = 5;
   repeated string teacherIds = 6;
 }
@@ -30,8 +32,4 @@ message StudentsOfClassRequest {
 
 message TeachersOfClassSchoolYearSubjectRequest {
   string classSchoolYearSubjectId = 1;
-}
-
-message UserListResponse {
-  repeated string userIds = 1;
 }

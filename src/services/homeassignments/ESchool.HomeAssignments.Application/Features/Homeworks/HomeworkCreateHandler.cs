@@ -3,11 +3,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.ClassRegister.Grpc;
-using ESchool.HomeAssignments.Application.Features.Homeworks.Common;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Entities;
-using ESchool.Libs.Domain.Extensions;
+using ESchool.HomeAssignments.Interface.Features.Homeworks;
 using ESchool.Libs.Domain.Services;
 using FluentValidation;
 using MediatR;
@@ -15,15 +13,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.HomeAssignments.Application.Features.Homeworks
 {
-    public class HomeworkCreateCommand : IRequest<HomeworkDetailsResponse>
-    {
-        public Guid LessonId { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public bool Optional { get; set; }
-        public DateTime Deadline { get; set; }
-    }
-
     public class HomeworkCreateValidator : AbstractValidator<HomeworkCreateCommand>
     {
         public HomeworkCreateValidator()

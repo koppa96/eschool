@@ -3,16 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities;
-using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.ClassRegister.Interface.Features.Classes;
 using ESchool.Libs.Application.Cqrs.Handlers;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.Classes
 {
-    public class ClassDeleteCommand : DeleteCommand
-    {
-    }
-    
     public class ClassDeleteHandler : DeleteHandler<ClassDeleteCommand, Class>
     {
         public ClassDeleteHandler(ClassRegisterContext context) : base(context)

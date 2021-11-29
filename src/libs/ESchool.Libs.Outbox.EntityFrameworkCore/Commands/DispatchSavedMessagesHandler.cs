@@ -16,7 +16,7 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Commands
         
         public async Task<Unit> Handle(DispatchSavedMessagesCommand request, CancellationToken cancellationToken)
         {
-            await messageDispatcher.DispatchMessagesAsync(request.MessageIds, cancellationToken);
+            await messageDispatcher.TryDispatchMessagesAsync(request.MessageIds, cancellationToken);
             return Unit.Value;
         }
     }

@@ -1,0 +1,38 @@
+.material-icons {
+    font-family: "Material Icons Outlined", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+.vw-25 {
+    width: 25vw !important;
+}
+
+.vw-50 {
+    width: 50vw !important;
+}
+
+.vw-20 {
+    width: 20vw !important;
+}
+
+.full-page-table {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+    transition: width 0.8s;
+}
+
+*::-webkit-scrollbar-button {
+    display: none;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: darkgray;
+    border-radius: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}

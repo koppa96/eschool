@@ -1,20 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using ESchool.ClassRegister.Application.Features.Subjects;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.SubjectManagement;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.ClassSchoolYearSubjects;
+using ESchool.ClassRegister.Interface.Features.Subjects;
 using ESchool.Libs.Application.Cqrs.Handlers;
-using ESchool.Libs.Application.Cqrs.Query;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassSchoolYearSubjects
 {
-    public class ClassSchoolYearSubjectListQuery : PagedListQuery<SubjectListResponse>
-    {
-        public Guid ClassId { get; set; }
-        public Guid SchoolYearId { get; set; }
-        public Guid SubjectId { get; set; }
-    }
-
     public class ClassSchoolYearSubjectListHandler : PagedListHandler<ClassSchoolYearSubjectListQuery, ClassSchoolYearSubject, SubjectListResponse>
     {
         public ClassSchoolYearSubjectListHandler(ClassRegisterContext context) : base(context)
@@ -23,8 +16,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassScho
 
         protected override IQueryable<ClassSchoolYearSubject> Filter(IQueryable<ClassSchoolYearSubject> entities, ClassSchoolYearSubjectListQuery query)
         {
-            return entities.Where(x => x.SubjectId == query.SubjectId &&
-                                       x.ClassSchoolYear.ClassId == query.ClassId &&
+            return entities.Where(x => x.ClassSchoolYear.ClassId == query.ClassId &&
                                        x.ClassSchoolYear.SchoolYearId == query.SchoolYearId);
         }
 
@@ -37,7 +29,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.ClassScho
             });
         }
 
-        protected override IOrderedQueryable<ClassSchoolYearSubject> Order(IQueryable<ClassSchoolYearSubject> entities)
+        protected override IOrderedQueryable<ClassSchoolYearSubject> Order(IQueryable<ClassSchoolYearSubject> entities, ClassSchoolYearSubjectListQuery query)
         {
             return entities.OrderBy(x => x.Subject.Name);
         }

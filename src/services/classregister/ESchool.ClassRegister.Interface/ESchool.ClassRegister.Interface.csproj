@@ -4,4 +4,14 @@
         <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="9.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\libs\ESchool.Libs.Domain\ESchool.Libs.Domain.csproj" />
+      <ProjectReference Include="..\..\..\libs\ESchool.Libs.Interface\ESchool.Libs.Interface.csproj" />
+      <ProjectReference Include="..\ESchool.ClassRegister.SharedDomain\ESchool.ClassRegister.SharedDomain.csproj" />
+    </ItemGroup>
+
 </Project>

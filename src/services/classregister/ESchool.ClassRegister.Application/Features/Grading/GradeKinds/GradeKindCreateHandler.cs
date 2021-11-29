@@ -4,16 +4,11 @@ using AutoMapper;
 using ESchool.ClassRegister.Application.Features.Grading.GradeKinds.Common;
 using ESchool.ClassRegister.Domain;
 using ESchool.ClassRegister.Domain.Entities.Grading;
+using ESchool.ClassRegister.Interface.Features.Grading.GradeKinds;
 using MediatR;
 
 namespace ESchool.ClassRegister.Application.Features.Grading.GradeKinds
 {
-    public class GradeKindCreateCommand : IRequest<GradeKindResponse>
-    {
-        public string Name { get; set; }
-        public double AverageMultiplier { get; set; }
-    }
-    
     public class GradeKindCreateHandler : IRequestHandler<GradeKindCreateCommand, GradeKindResponse>
     {
         private readonly ClassRegisterContext context;

@@ -1,9 +1,9 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.Users.Common;
-using ESchool.ClassRegister.Application.Features.Users.Teachers;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.ClassRegister.Interface.Features.Users.Teachers;
 using ESchool.Libs.AspNetCore;
+using ESchool.Libs.Interface.Response.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +12,7 @@ namespace ESchool.ClassRegister.Api.Controllers
 {
     [Authorize(PolicyNames.Administrator)]
     [Route("api/teachers")]
-    [ApiController]
-    public class TeachersController : ControllerBase
+    public class TeachersController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 
@@ -23,7 +22,7 @@ namespace ESchool.ClassRegister.Api.Controllers
         }
 
         [HttpGet]
-        public Task<PagedListResponse<UserRoleListResponse>> ListTeachers([FromQuery] TeacherListQuery query, CancellationToken cancellationToken)
+        public Task<List<UserRoleListResponse>> ListTeachers([FromQuery] TeacherListQuery query, CancellationToken cancellationToken)
         {
             return mediator.Send(query, cancellationToken);
         }

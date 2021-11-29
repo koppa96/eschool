@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,19 +7,14 @@ using ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Common;
 using ESchool.HomeAssignments.Domain;
 using ESchool.HomeAssignments.Domain.Entities;
 using ESchool.HomeAssignments.Domain.Services;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions;
+using ESchool.HomeAssignments.Interface.Features.HomeworkSolutions.Files;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using File = ESchool.HomeAssignments.Domain.Entities.File;
 
 namespace ESchool.HomeAssignments.Application.Features.HomeworkSolutions.Files
 {
-    public class FileCreateCommand : IRequest<HomeworkSolutionResponse>
-    {
-        public Guid SolutionId { get; set; }
-        public string FileName { get; set; }
-        public Stream FileStream { get; set; }
-    }
-    
     public class FileCreateHandler : IRequestHandler<FileCreateCommand, HomeworkSolutionResponse>
     {
         private readonly HomeAssignmentsContext context;

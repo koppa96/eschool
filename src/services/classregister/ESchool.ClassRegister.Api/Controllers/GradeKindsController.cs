@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.Grading.GradeKinds;
-using ESchool.ClassRegister.Application.Features.Grading.GradeKinds.Common;
-using ESchool.Libs.Application.Cqrs.Commands;
+using ESchool.ClassRegister.Interface.Features.Grading.GradeKinds;
 using ESchool.Libs.AspNetCore;
+using ESchool.Libs.Interface.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.ClassRegister.Api.Controllers
 {
-    [Authorize(PolicyNames.Administrator)]
-    [ApiController]
     [Route("api/grade-kinds")]
-    public class GradeKindsController : ControllerBase
+    public class GradeKindsController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 
@@ -24,12 +21,14 @@ namespace ESchool.ClassRegister.Api.Controllers
             this.mediator = mediator;
         }
 
+        [Authorize(PolicyNames.AnyRole)]
         [HttpGet]
         public Task<List<GradeKindResponse>> ListGradeKinds(CancellationToken cancellationToken)
         {
             return mediator.Send(new GradeKindListQuery(), cancellationToken);
         }
 
+        [Authorize(PolicyNames.Administrator)]
         [HttpPost]
         public Task<GradeKindResponse> CreateGradeKind(
             [FromBody] GradeKindCreateCommand command,
@@ -38,6 +37,7 @@ namespace ESchool.ClassRegister.Api.Controllers
             return mediator.Send(command, cancellationToken);
         }
 
+        [Authorize(PolicyNames.Administrator)]
         [HttpPut("{gradeKindId}")]
         public Task<GradeKindResponse> EditGradeKind(
             Guid gradeKindId,
@@ -51,6 +51,7 @@ namespace ESchool.ClassRegister.Api.Controllers
             }, cancellationToken);
         }
 
+        [Authorize(PolicyNames.Administrator)]
         [HttpDelete("{gradeKindId}")]
         public Task DeleteGradeKind(Guid gradeKindId, CancellationToken cancellationToken)
         {

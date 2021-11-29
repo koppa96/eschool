@@ -2,29 +2,43 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ESchool.ClassRegister.Application.Features.Grading.Grades;
+using ESchool.ClassRegister.Application.Features.Students;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Absences;
-using ESchool.ClassRegister.Application.Features.Users.Common;
-using ESchool.ClassRegister.Application.Features.Users.Students;
-using ESchool.ClassRegister.Grpc;
-using ESchool.Libs.Application.Cqrs.Query;
-using ESchool.Libs.Application.Cqrs.Response;
+using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons;
+using ESchool.ClassRegister.Interface.Features.Grading.Grades;
+using ESchool.ClassRegister.Interface.Features.SchoolYears;
+using ESchool.ClassRegister.Interface.Features.Students;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Absences;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
+using ESchool.ClassRegister.Interface.Features.Subjects;
+using ESchool.ClassRegister.Interface.Features.Users;
+using ESchool.ClassRegister.Interface.Features.Users.Students;
 using ESchool.Libs.AspNetCore;
+using ESchool.Libs.Interface.Query;
+using ESchool.Libs.Interface.Response;
+using ESchool.Libs.Interface.Response.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.ClassRegister.Api.Controllers
 {
-    [ApiController]
     [Route("api/students")]
-    public class StudentsController : ControllerBase
+    public class StudentsController : ESchoolControllerBase
     {
         private readonly IMediator mediator;
 
         public StudentsController(IMediator mediator)
         {
             this.mediator = mediator;
+        }
+
+        [HttpGet]
+        [Authorize(PolicyNames.Administrator)]
+        public Task<PagedListResponse<UserRoleListResponse>> ListStudents([FromQuery] StudentListQuery query,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(query, cancellationToken);
         }
 
         [HttpGet("unassigned")]
@@ -43,11 +57,6 @@ namespace ESchool.ClassRegister.Api.Controllers
             [FromQuery] int pageSize,
             CancellationToken cancellationToken)
         {
-            if (schoolYearId == default)
-            {
-                throw new ArgumentOutOfRangeException(nameof(schoolYearId), "A tanév megadása kötelező!");
-            }
-
             return mediator.Send(new AbsenceListQuery
             {
                 StudentId = studentId,
@@ -57,22 +66,68 @@ namespace ESchool.ClassRegister.Api.Controllers
             }, cancellationToken);
         }
 
-        [HttpGet("{studentId}/grades")]
-        public Task<List<GradeListByStudentResponse>> ListGrades(
-            Guid studentId,
-            [FromQuery] Guid schoolYearId,
+        [HttpGet("related")]
+        [Authorize(PolicyNames.StudentOrParent)]
+        public Task<List<UserRoleListResponse>> GetRelatedStudents(CancellationToken cancellationToken)
+        {
+            return mediator.Send(new RelatedStudentListQuery(), cancellationToken);
+        }
+
+        [HttpGet("{studentId}/school-years")]
+        [Authorize(PolicyNames.StudentOrParent)]
+        public Task<List<SchoolYearListResponse>> GetStudentSchoolYears(Guid studentId,
             CancellationToken cancellationToken)
         {
-            if (schoolYearId == default)
+            return mediator.Send(new StudentSchoolYearListQuery
             {
-                throw new ArgumentOutOfRangeException(nameof(schoolYearId), "A tanév megadása kötelező.");
-            }
-            
-            return mediator.Send(new GradeListByStudentQuery
-            {
-                StudentId = studentId,
-                SchoolYearId = schoolYearId
+                StudentId = studentId
             }, cancellationToken);
+        }
+
+        [HttpGet("{studentId}/school-years/{schoolYearId}/subjects")]
+        [Authorize(PolicyNames.StudentOrParent)]
+        public Task<PagedListResponse<SubjectListResponse>> GetStudentSubjectsInSchoolYear(Guid studentId,
+            Guid schoolYearId, [FromQuery] PagedListQuery query, CancellationToken cancellationToken)
+        {
+            return mediator.Send(query.ToTypedQuery<StudentSubjectListQuery>(x =>
+            {
+                x.StudentId = studentId;
+                x.SchoolYearId = schoolYearId;
+            }), cancellationToken);
+        }
+
+        [HttpGet("{studentId}/school-years/{schoolYearId}/subjects/{subjectId}/grades")]
+        [Authorize(PolicyNames.StudentOrParent)]
+        public Task<PagedListResponse<GradeListResponse>> ListGrades(
+            Guid studentId,
+            Guid schoolYearId,
+            Guid subjectId,
+            [FromQuery] PagedListQuery query,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(query.ToTypedQuery<GradeListByStudentQuery>(x =>
+            {
+                x.StudentId = studentId;
+                x.SchoolYearId = schoolYearId;
+                x.SubjectId = subjectId;
+            }), cancellationToken);
+        }
+
+        [HttpGet("{studentId}/school-years/{schoolYearId}/subjects/{subjectId}/lessons")]
+        [Authorize(PolicyNames.StudentOrParent)]
+        public Task<PagedListResponse<LessonListResponse>> ListLessons(
+            Guid studentId,
+            Guid schoolYearId,
+            Guid subjectId,
+            [FromQuery] PagedListQuery query,
+            CancellationToken cancellationToken)
+        {
+            return mediator.Send(query.ToTypedQuery<StudentLessonListQuery>(x =>
+            {
+                x.StudentId = studentId;
+                x.SchoolYearId = schoolYearId;
+                x.SubjectId = subjectId;
+            }), cancellationToken);
         }
     }
 }

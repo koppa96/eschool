@@ -1,20 +1,14 @@
-﻿using ESchool.IdentityProvider.Domain;
-using MediatR;
-using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using ESchool.IdentityProvider.Domain;
+using ESchool.IdentityProvider.Interface.Features.Tenants;
 using ESchool.IdentityProvider.Interface.IntegrationEvents.Tenants;
 using ESchool.Libs.Domain.Extensions;
 using ESchool.Libs.Outbox.Services;
-using MassTransit;
+using MediatR;
 
 namespace ESchool.IdentityProvider.Application.Features.Tenants
 {
-    public class DeleteTenantCommand : IRequest
-    {
-        public Guid TenantId { get; set; }
-    }
-
     public class DeleteTenantHandler : IRequestHandler<DeleteTenantCommand>
     {
         private readonly IdentityProviderContext context;
@@ -33,6 +27,7 @@ namespace ESchool.IdentityProvider.Application.Features.Tenants
             {
                 context.Tenants.Remove(tenant);
                 
+                publisher.Setup(context);
                 await publisher.PublishAsync(new TenantDeletedEvent
                 {
                     TenantId = tenant.Id

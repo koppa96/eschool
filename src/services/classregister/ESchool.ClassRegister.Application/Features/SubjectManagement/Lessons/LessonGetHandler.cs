@@ -1,22 +1,17 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons.Common;
 using ESchool.ClassRegister.Domain;
+using ESchool.ClassRegister.Interface.Features.SubjectManagement.Lessons;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
 {
-    public class LessonGetCommand : IRequest<LessonDetailsResponse>
-    {
-        public Guid Id { get; set; }
-    }
-    
-    public class LessonGetHandler : IRequestHandler<LessonGetCommand, LessonDetailsResponse>
+    public class LessonGetHandler : IRequestHandler<LessonGetQuery, LessonDetailsResponse>
     {
         private readonly ClassRegisterContext context;
         private readonly IConfigurationProvider configurationProvider;
@@ -28,7 +23,7 @@ namespace ESchool.ClassRegister.Application.Features.SubjectManagement.Lessons
             this.configurationProvider = configurationProvider;
         }
         
-        public Task<LessonDetailsResponse> Handle(LessonGetCommand request, CancellationToken cancellationToken)
+        public Task<LessonDetailsResponse> Handle(LessonGetQuery request, CancellationToken cancellationToken)
         {
             return context.Lessons.Where(x => x.Id == request.Id)
                 .ProjectTo<LessonDetailsResponse>(configurationProvider)

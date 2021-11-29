@@ -87,15 +87,6 @@ namespace ESchool.Testing.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ClassId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SchoolYearId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SubjectId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
                     b.ToTable("ClassSchoolYearSubjects");
@@ -414,6 +405,72 @@ namespace ESchool.Testing.Domain.Migrations
                         .IsRequired();
 
                     b.Navigation("TestAnswer");
+                });
+
+            modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassSchoolYearSubject", b =>
+                {
+                    b.OwnsOne("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassRegisterEntity", "Class", b1 =>
+                        {
+                            b1.Property<Guid>("ClassSchoolYearSubjectId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Name")
+                                .HasColumnType("text");
+
+                            b1.HasKey("ClassSchoolYearSubjectId");
+
+                            b1.ToTable("ClassSchoolYearSubjects");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ClassSchoolYearSubjectId");
+                        });
+
+                    b.OwnsOne("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassRegisterEntity", "SchoolYear", b1 =>
+                        {
+                            b1.Property<Guid>("ClassSchoolYearSubjectId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Name")
+                                .HasColumnType("text");
+
+                            b1.HasKey("ClassSchoolYearSubjectId");
+
+                            b1.ToTable("ClassSchoolYearSubjects");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ClassSchoolYearSubjectId");
+                        });
+
+                    b.OwnsOne("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassRegisterEntity", "Subject", b1 =>
+                        {
+                            b1.Property<Guid>("ClassSchoolYearSubjectId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Name")
+                                .HasColumnType("text");
+
+                            b1.HasKey("ClassSchoolYearSubjectId");
+
+                            b1.ToTable("ClassSchoolYearSubjects");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ClassSchoolYearSubjectId");
+                        });
+
+                    b.Navigation("Class");
+
+                    b.Navigation("SchoolYear");
+
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("ESchool.Testing.Domain.Entities.ClassRegisterData.ClassSchoolYearSubjectStudent", b =>

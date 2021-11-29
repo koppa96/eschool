@@ -15,7 +15,7 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
 {
     public class EfCoreMultiTenantMessageDispatcher<TContext> : IMessageDispatcher
         where TContext : DbContext, IOutboxDbContext
-        {
+    {
         private readonly IServiceProvider serviceProvider;
         private readonly ITenantDbContextFactory<TContext> tenantOutboxDbContextFactory;
         private readonly MasterDbContext masterDbContext;
@@ -28,7 +28,7 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
             this.tenantOutboxDbContextFactory = tenantOutboxDbContextFactory;
             this.masterDbContext = masterDbContext;
         }
-        
+
         public async Task DispatchAllAsync(CancellationToken cancellationToken = default)
         {
             // Ez a metódus a bg service által kerül meghívásra, tenant nem elérhető
@@ -47,20 +47,25 @@ namespace ESchool.Libs.Outbox.EntityFrameworkCore.Services
             }
         }
 
-        public async Task DispatchMessagesAsync(IEnumerable<Guid> messageIds, CancellationToken cancellationToken = default)
+        public async Task TryDispatchMessagesAsync(IEnumerable<Guid> messageIds,
+            CancellationToken cancellationToken = default)
         {
-            // Ez a metódus a middleware vagy a MT filter által kerül meghívásra, van tenantunk
-            // => Dispatcheljük az adott azonosítójú üzeneteket a tenantból
-            var tenant = serviceProvider.GetRequiredService<Tenant>();
-            await using var context = tenantOutboxDbContextFactory.CreateContext(tenant);
-            
-            var dispatcher = new EfCoreMessageDispatcher<TContext>(
-                context,
-                serviceProvider.GetRequiredService<IOptions<OutboxConfiguration>>(),
-                serviceProvider.GetRequiredService<IPublishEndpoint>(),
-                serviceProvider.GetRequiredService<ILogger<EfCoreMessageDispatcher<TContext>>>());
+            // Ez a metódus a middleware vagy a MT filter által kerül meghívásra, nem biztos, hogy van tenantunk
+            // => Ha van, akkor dispatcheljük az adott azonosítójú üzeneteket a tenantból
+            // => Ha nincs akkor kivárjuk hogy a background job mindent dispatcheljen
+            var tenant = serviceProvider.GetService<Tenant>();
+            if (tenant != null)
+            {
+                await using var context = tenantOutboxDbContextFactory.CreateContext(tenant);
 
-            await dispatcher.DispatchMessagesAsync(messageIds, cancellationToken);
+                var dispatcher = new EfCoreMessageDispatcher<TContext>(
+                    context,
+                    serviceProvider.GetRequiredService<IOptions<OutboxConfiguration>>(),
+                    serviceProvider.GetRequiredService<IPublishEndpoint>(),
+                    serviceProvider.GetRequiredService<ILogger<EfCoreMessageDispatcher<TContext>>>());
+
+                await dispatcher.TryDispatchMessagesAsync(messageIds, cancellationToken);
+            }
         }
     }
 }
