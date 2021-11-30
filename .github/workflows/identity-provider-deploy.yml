@@ -1,4 +1,4 @@
-name: Build images and deploy to AKS
+name: Build Identity Provider image and deploy to AKS
 
 on:
   workflow_dispatch:
@@ -36,7 +36,7 @@ jobs:
           -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:latest
     
     - name: Push IdentityProvider image
-      run: docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
+      run: docker image push --all-tags ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}
 
     - name: Set AKS Context
       uses: azure/aks-set-context@v1
