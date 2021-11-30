@@ -30,6 +30,7 @@ using ESchool.Libs.AspNetCore.Middlewares;
 using ESchool.Libs.Outbox;
 using ESchool.Libs.Outbox.AspNetCore.Extensions;
 using ESchool.Libs.Outbox.EntityFrameworkCore.Extensions;
+using Microsoft.AspNetCore.HttpOverrides;
 using NJsonSchema.Generation;
 
 namespace ESchool.IdentityProvider
@@ -46,6 +47,12 @@ namespace ESchool.IdentityProvider
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+            });
+            
             services.Configure<DummyPasswordConfiguration>(Configuration.GetSection("DummyPasswords"));
             
             services.AddDbContext<IdentityProviderContext>(options =>
@@ -167,6 +174,8 @@ namespace ESchool.IdentityProvider
             app.UseExceptionHandlerMiddleware();
             app.UseMiddleware<RequestLoggerMiddleware>();
 
+            app.UseForwardedHeaders();
+            
             app.UseCors();
             
             app.UseStaticFiles();
