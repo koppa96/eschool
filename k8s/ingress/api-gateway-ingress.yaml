@@ -16,38 +16,10 @@ spec:
   - host: api.eschool.kmlabz.com
     http:
       paths:
-      - path: /class-register(/|$)(.*)
+      - path: /
         pathType: Prefix
         backend:
           service:
-            name: classregister
-            port:
-              number: 80
-      - path: /home-assignments(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: homeassignments
-            port:
-              number: 80
-      - path: /identity-provider(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: identityprovider
-            port:
-              number: 80
-      - path: /testing(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: testing
-            port:
-              number: 80
-      - path: /messaging(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: messaging
+            name: apigateway
             port:
               number: 80
