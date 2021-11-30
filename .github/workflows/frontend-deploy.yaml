@@ -1,0 +1,52 @@
+name: Build Frontend and Deploy to AKS
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      [ master ]
+    paths:
+      - "src/frontend/**"
+
+env:
+  REGISTRY_NAME: eschool
+  CLUSTER_NAME: eschool
+  CLUSTER_RESOURCE_GROUP: eschool
+  APP_NAME: frontend
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@main
+    
+    - name: Log into Container registry
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }} 
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+        
+    - name: Build Frontend image
+      run: |
+        docker build ./src/frontend/eschool-frontend-vue -f ./src/frontend/eschool-frontend-vue/Dockerfile \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }} \
+          -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:latest
+    - name: Push Frontend image
+      run: docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
+        
+    - name: Set AKS Context
+      uses: azure/aks-set-context@v1
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        cluster-name: ${{ env.CLUSTER_NAME }}
+        resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
+
+    - name: Deploy Services to AKS
+      uses: azure/k8s-deploy@v1
+      with:
+        manifests: |
+          k8s/frontend/frontend.yaml
+        images: |
+          ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
