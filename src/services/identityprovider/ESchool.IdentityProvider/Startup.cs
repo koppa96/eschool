@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using AutoMapper;
+using ESchool.IdentityProvider.Application.Configuration;
 using ESchool.IdentityProvider.Domain;
 using ESchool.IdentityProvider.Domain.Entities.Users;
 using ESchool.IdentityProvider.Infrastructure;
@@ -45,6 +46,8 @@ namespace ESchool.IdentityProvider
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<DummyPasswordConfiguration>(Configuration.GetSection("DummyPasswords"));
+            
             services.AddDbContext<IdentityProviderContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 

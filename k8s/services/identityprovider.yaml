@@ -19,10 +19,18 @@ spec:
         ports:
         - containerPort: 80
         env:
-          - name: IdentityServer__Clients__RedirectUris__0
+          - name: DummyPasswords__GenerateDummyPassword
+            value: true
+          - name: DummyPasswords__DummyPassword
+            value: Asdf1234.
+          - name: IdentityServer__Clients__0__RedirectUris__0
             value: https://eschool.kmlabz.com/login-redirect
-          - name: IdentityServer__Clients__RedirectUris__1
-            value: http://localhost:8080/silent-refresh.html
+          - name: IdentityServer__Clients__0__RedirectUris__1
+            value: https://eschool.kmlabz.com/silent-refresh.html
+          - name: IdentityServer__Clients__0__AllowedCorsOrigins__0
+            value: https://eschool.kmlabz.com
+          - name: IdentityServer__Clients__0__PostLogoutRedirectUris__0
+            value: https://eschool.kmlabz.com/logout-redirect
           - name: RabbitMQ__Host
             value: amqp://rabbitmq
           - name: RabbitMQ__Username
