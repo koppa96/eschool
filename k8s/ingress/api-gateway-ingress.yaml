@@ -44,3 +44,10 @@ spec:
             name: testing
             port:
               number: 80
+      - path: /messaging(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: messaging
+            port:
+              number: 80

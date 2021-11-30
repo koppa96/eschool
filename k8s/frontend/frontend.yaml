@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+data:
+  config.json: |
+    {
+      "baseUrl": {
+        "classRegister": "https://api.eschool.kmlabz.com/class-register",
+        "homeAssignments": "https://api.eschool.kmlabz.com/home-assignments",
+        "identityProvider": "https://api.eschool.kmlabz.com/identity-provider",
+        "testing": "https://api.eschool.kmlabz.com/testing",
+        "messaging": "https://api.eschool.kmlabz.com/messaging"
+      },
+      "clientConfig": {
+        "clientId": "test",
+        "responseType": "code",
+        "scope": "openid profile user_role testingapi.readwrite classregisterapi.readwrite homeassignmentsapi.readwrite identityproviderapi.readwrite messagingapi.readwrite",
+        "postLoginRedirectUri": "https://eschool.kmlabz.com/login-redirect",
+        "postLogoutRedirectUri": "https://eschool.kmlabz.com/logout-redirect",
+        "silentRefreshRedirectUri": "https://eschool.kmlabz.com/silent-refresh.html"
+      },
+      "serverConfig": {
+        "authorizeUrl": "https://idp.eschool.kmlabz.com/connect/authorize",
+        "tokenUrl": "https://idp.eschool.kmlabz.com/connect/token",
+        "endSessionUrl": "https://idp.eschool.kmlabz.com/connect/endsession"
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: eschool.azurecr.io/frontend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: /usr/share/nginx/html/config.json
+            name: frontend-config-volume
+            subPath: config.json
+      volumes:
+        - name: frontend-config-volume
+          configMap:
+            name: frontend-config     
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
