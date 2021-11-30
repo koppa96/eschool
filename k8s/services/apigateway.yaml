@@ -11,11 +11,23 @@ data:
           "DownstreamScheme": "http",
           "DownstreamHostAndPorts": [
             {
+              "Host": "messaging",
+              "Port": 80
+            }
+          ],
+          "UpstreamPathTemplate": "/messaging/{everything}",
+          "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
+        },
+        {
+          "DownstreamPathTemplate": "/api/{everything}",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
               "Host": "classregister",
               "Port": 80
             }
           ],
-          "UpstreamPathTemplate": "/api/class-register/{everything}",
+          "UpstreamPathTemplate": "/class-register/{everything}",
           "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
         },
         {
@@ -39,7 +51,7 @@ data:
               "Port": 80
             }
           ],
-          "UpstreamPathTemplate": "/api/home-assignments/{everything}",
+          "UpstreamPathTemplate": "/home-assignments/{everything}",
           "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
         },
         {
@@ -63,7 +75,7 @@ data:
               "Port": 80
             }
           ],
-          "UpstreamPathTemplate": "/api/identity-provider/{everything}",
+          "UpstreamPathTemplate": "/identity-provider/{everything}",
           "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
         },
         {
@@ -87,7 +99,7 @@ data:
               "Port": 80
             }
           ],
-          "UpstreamPathTemplate": "/api/testing/{everything}",
+          "UpstreamPathTemplate": "/testing/{everything}",
           "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
         },
         {
@@ -128,6 +140,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+        env:
+          - name: AllowedCorsOrigins__0
+            value: https://eschool.kmlabz.com
         volumeMounts:
           - mountPath: /app/ocelot.json
             name: config-volume
