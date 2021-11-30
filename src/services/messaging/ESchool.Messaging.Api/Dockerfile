@@ -1,14 +1,14 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["src/services/messaging/ESchool.Messaging.Api/ESchool.Messaging.Api.csproj", "ESchool.Messaging.Api/"]
+COPY ["src/services/messaging/ESchool.Messaging.Api/ESchool.Messaging.Api.csproj", "src/services/messaging/ESchool.Messaging.Api/"]
 RUN dotnet restore "src/services/messaging/ESchool.Messaging.Api/ESchool.Messaging.Api.csproj"
 COPY . .
-WORKDIR "/src/ESchool.Messaging.Api"
+WORKDIR "/src/src/services/messaging/ESchool.Messaging.Api"
 RUN dotnet build "ESchool.Messaging.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
