@@ -47,8 +47,8 @@
   </q-dialog>
 </template>
 
-<script setup lang="ts">
-import { onMounted, ref } from 'vue'
+<script lang="ts">
+import { onMounted, PropType, ref } from 'vue'
 import { useDialogPluginComponent } from 'quasar'
 import {
   CreateTenantCommand,
@@ -62,41 +62,57 @@ import {
 } from '@/core/utils/validation-functions'
 import { Rules } from '@/shared/model/rules'
 
-const props = defineProps<{
-  tenantToEdit?: TenantDetailsResponse
-}>()
+export default {
+  props: {
+    tenantToEdit: {
+      type: Object as PropType<TenantDetailsResponse>,
+      required: false,
+      default: () => null
+    }
+  },
+  emits: [...useDialogPluginComponent.emits],
+  setup(props: { tenantToEdit: TenantDetailsResponse }) {
+    const {
+      dialogRef,
+      onDialogHide,
+      onDialogOK,
+      onDialogCancel
+    } = useDialogPluginComponent()
 
-const emit = defineEmits(useDialogPluginComponent.emits)
+    const operation = ref('rögzítése')
+    const data = ref<CreateTenantCommand | EditTenantCommand>(
+      new CreateTenantCommand()
+    )
 
-const {
-  dialogRef,
-  onDialogHide,
-  onDialogOK,
-  onDialogCancel
-} = useDialogPluginComponent()
+    const rules: Rules<CreateTenantCommand | EditTenantCommand> = {
+      name: [required],
+      address: [required],
+      officialEmailAddress: [required, emailAddress],
+      omIdentifier: [required, omIdentifier],
+      headMaster: [required]
+    }
 
-const operation = ref('rögzítése')
-const data = ref<CreateTenantCommand | EditTenantCommand>(
-  new CreateTenantCommand()
-)
-
-const rules: Rules<CreateTenantCommand | EditTenantCommand> = {
-  name: [required],
-  address: [required],
-  officialEmailAddress: [required, emailAddress],
-  omIdentifier: [required, omIdentifier],
-  headMaster: [required]
-}
-
-onMounted(() => {
-  if (props.tenantToEdit) {
-    operation.value = 'szerkesztése'
-    data.value = new EditTenantCommand({
-      ...props.tenantToEdit
+    onMounted(() => {
+      if (props.tenantToEdit) {
+        operation.value = 'szerkesztése'
+        data.value = new EditTenantCommand({
+          ...props.tenantToEdit
+        })
+      } else {
+        operation.value = 'rögzítése'
+        data.value = new CreateTenantCommand()
+      }
     })
-  } else {
-    operation.value = 'rögzítése'
-    data.value = new CreateTenantCommand()
+
+    return {
+      dialogRef,
+      onDialogOK,
+      onDialogHide,
+      onDialogCancel,
+      operation,
+      data,
+      rules
+    }
   }
-})
+}
 </script>
