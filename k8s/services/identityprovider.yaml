@@ -19,6 +19,10 @@ spec:
         ports:
         - containerPort: 80
         env:
+          - name: IdentityServer__Clients__RedirectUris__0
+            value: https://eschool.kmlabz.com/login-redirect
+          - name: IdentityServer__Clients__RedirectUris__1
+            value: http://localhost:8080/silent-refresh.html
           - name: RabbitMQ__Host
             value: amqp://rabbitmq
           - name: RabbitMQ__Username
