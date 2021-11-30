@@ -15,7 +15,7 @@ data:
               "Port": 80
             }
           ],
-          "UpstreamPathTemplate": "/messaging/{everything}",
+          "UpstreamPathTemplate": "/messaging/api/{everything}",
           "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
         },
         {
@@ -27,7 +27,7 @@ data:
               "Port": 80
             }
           ],
-          "UpstreamPathTemplate": "/class-register/{everything}",
+          "UpstreamPathTemplate": "/class-register/api/{everything}",
           "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
         },
         {
@@ -51,7 +51,7 @@ data:
               "Port": 80
             }
           ],
-          "UpstreamPathTemplate": "/home-assignments/{everything}",
+          "UpstreamPathTemplate": "/home-assignments/api/{everything}",
           "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
         },
         {
@@ -75,7 +75,7 @@ data:
               "Port": 80
             }
           ],
-          "UpstreamPathTemplate": "/identity-provider/{everything}",
+          "UpstreamPathTemplate": "/identity-provider/api/{everything}",
           "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
         },
         {
@@ -99,7 +99,7 @@ data:
               "Port": 80
             }
           ],
-          "UpstreamPathTemplate": "/testing/{everything}",
+          "UpstreamPathTemplate": "/testing/api/{everything}",
           "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
         },
         {
