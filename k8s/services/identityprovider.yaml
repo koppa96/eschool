@@ -20,7 +20,7 @@ spec:
         - containerPort: 80
         env:
           - name: DummyPasswords__GenerateDummyPassword
-            value: true
+            value: "true"
           - name: DummyPasswords__DummyPassword
             value: Asdf1234.
           - name: IdentityServer__Clients__0__RedirectUris__0
