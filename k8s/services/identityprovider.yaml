@@ -19,6 +19,10 @@ spec:
         ports:
         - containerPort: 80
         env:
+          - name: DummyPasswords__GenerateDummyPassword
+            value: true
+          - name: DummyPasswords__DummyPassword
+            value: Asdf1234.
           - name: IdentityServer__Clients__0__RedirectUris__0
             value: https://eschool.kmlabz.com/login-redirect
           - name: IdentityServer__Clients__0__RedirectUris__1
