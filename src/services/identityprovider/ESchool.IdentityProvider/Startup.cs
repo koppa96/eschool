@@ -165,6 +165,9 @@ namespace ESchool.IdentityProvider
             app.UseMiddleware<RequestLoggerMiddleware>();
 
             app.UseCors();
+            
+            app.UseStaticFiles();
+            
             app.UseOpenApi();
             app.UseSwaggerUi3(config =>
             {
