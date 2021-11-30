@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messaging
+spec:
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: messaging
+  template:
+    metadata:
+      labels:
+        app: messaging
+    spec:
+      containers:
+      - name: messaging
+        image: eschool.azurecr.io/messaging:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+          - name: RabbitMQ__Host
+            value: amqp://rabbitmq
+          - name: RabbitMQ__Username
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmqcredentials
+                key: USERNAME
+          - name: RabbitMQ__Password
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmqcredentials
+                key: PASSWORD
+          - name: Authentication__Authority
+            value: http://identityprovider
+          - name: Authentication__Audience
+            value: identityprovider-api
+          - name: Authentication__IdentityProviderUri
+            value: https://idp.eschool.kmlabz.com
+          - name: ConnectionStrings__DefaultConnection
+            valueFrom:
+              secretKeyRef:
+                name: messagingconnectionstrings
+                key: CONNECTION_STRING
+          - name: ConnectionStrings__MasterDbConnection
+            valueFrom:
+              secretKeyRef:
+                name: messagingconnectionstrings
+                key: MASTERDB_CONNECTION_STRING
+          - name: ConnectionStrings__ConnectionStringTemplate
+            valueFrom:
+              secretKeyRef:
+                name: messagingconnectionstrings
+                key: CONNECTION_STRING_TEMPLATE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: messaging
+spec:
+  selector:
+    app: messaging
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
