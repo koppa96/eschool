@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   eschool.apigateway:
@@ -16,7 +16,7 @@ services:
       - ./cert:/app/cert
     networks:
       - eschool_network
-  
+
   eschool.classregister.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -92,6 +92,7 @@ services:
       - Authentication__Authority=http://eschool.identityprovider
       - Authentication__Audience=testing-api
       - Authentication__IdentityProviderUri=https://localhost:5301
+      - RabbitMQ__Host=amqp://eschool.rabbitmq
     ports:
       - "5400:80"
     volumes:
@@ -112,6 +113,7 @@ services:
       - Authentication__Authority=http://eschool.identityprovider
       - Authentication__Audience=messaging-api
       - Authentication__IdentityProviderUri=https://localhost:5301
+      - RabbitMQ__Host=amqp://eschool.rabbitmq
     ports:
       - "5800:80"
     volumes:
@@ -140,7 +142,6 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - eschool_network
-
 
 networks:
   eschool_network:
