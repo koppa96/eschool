@@ -1,0 +1,187 @@
+version: "3.4"
+
+services:
+  eschool.apigateway:
+    image: ${DOCKER_REGISTRY-}eschoolapigateway
+    build:
+      context: .
+      dockerfile: src/services/apigateway/ESchool.ApiGateway/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+443;http://+:80
+      - KESTREL__Certificates__Default__Path=/app/cert/idp.pfx
+      - KESTREL__Certificates__Default__Password=Password123
+    ports:
+      - "5000:80"
+      - "5001:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ./cert:/app/cert
+    networks:
+      - eschool_network
+
+  eschool.classregister.api:
+    image: ${DOCKER_REGISTRY-}eschoolclassregisterapi
+    build:
+      context: .
+      dockerfile: src/services/classregister/ESchool.ClassRegister.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=eschool.postgres;Database=ClassRegisterDb;User Id=postgres;Password=Password123;
+      - ConnectionStrings__MasterDbConnection=Server=eschool.postgres;Database=ClassRegister_MasterDb;User Id=postgres;Password=Password123;
+      - ConnectionStrings__ConnectionStringTemplate=Server=eschool.postgres;Database=ClassRegisterDb_{0};User Id=postgres;Password=Password123;
+      - RabbitMQ__Host=amqp://eschool.rabbitmq
+      - Authentication__Authority=http://eschool.identityprovider
+      - Authentication__Audience=classregister-api
+      - Authentication__IdentityProviderUri=https://localhost:5301
+    ports:
+      - "5100:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    networks:
+      - eschool_network
+    depends_on:
+      - eschool.postgres
+
+  eschool.homeassignments.api:
+    image: ${DOCKER_REGISTRY-}eschoolhomeassignmentsapi
+    build:
+      context: .
+      dockerfile: src/services/homeassignments/ESchool.HomeAssignments.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=eschool.postgres;Database=HomeAssignmentsDb;User Id=postgres;Password=Password123;
+      - ConnectionStrings__MasterDbConnection=Server=eschool.postgres;Database=HomeAssignments_MasterDb;User Id=postgres;Password=Password123;
+      - ConnectionStrings__ConnectionStringTemplate=Server=eschool.postgres;Database=HomeAssignments_{0};User Id=postgres;Password=Password123;
+      - RabbitMQ__Host=amqp://eschool.rabbitmq
+      - Authentication__Authority=http://eschool.identityprovider
+      - Authentication__Audience=homeassignments-api
+      - Authentication__IdentityProviderUri=https://localhost:5301
+    ports:
+      - "5200:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    networks:
+      - eschool_network
+    depends_on:
+      - eschool.postgres
+
+  eschool.identityprovider:
+    image: ${DOCKER_REGISTRY-}eschoolidentityprovider
+    build:
+      context: .
+      dockerfile: src/services/identityprovider/ESchool.IdentityProvider/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ConnectionStrings__DefaultConnection=Server=eschool.postgres;Database=IdentityProviderDb;User Id=postgres;Password=Password123;
+      - KESTREL__Certificates__Default__Path=/app/cert/idp.pfx
+      - KESTREL__Certificates__Default__Password=Password123
+      - RabbitMQ__Host=amqp://eschool.rabbitmq
+      - Authentication__Authority=http://eschool.identityprovider
+      - Authentication__Audience=identityprovider-api
+      - Authentication__IdentityProviderUri=https://localhost:5301
+    ports:
+      - "5300:80"
+      - "5301:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ./cert:/app/cert
+    networks:
+      - eschool_network
+    depends_on:
+      - eschool.postgres
+
+  eschool.testing.api:
+    image: ${DOCKER_REGISTRY-}eschooltestingapi
+    build:
+      context: .
+      dockerfile: src/services/testing/ESchool.Testing.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=eschool.postgres;Database=TestingDb;User Id=postgres;Password=Password123;
+      - ConnectionStrings__MasterDbConnection=Server=eschool.postgres;Database=Testing_MasterDb;User Id=postgres;Password=Password123;
+      - ConnectionStrings__ConnectionStringTemplate=Server=eschool.postgres;Database=Testing_{0};User Id=postgres;Password=Password123;
+      - Authentication__Authority=http://eschool.identityprovider
+      - Authentication__Audience=testing-api
+      - Authentication__IdentityProviderUri=https://localhost:5301
+      - RabbitMQ__Host=amqp://eschool.rabbitmq
+    ports:
+      - "5400:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    networks:
+      - eschool_network
+    depends_on:
+      - eschool.postgres
+
+  eschool.messaging.api:
+    image: ${DOCKER_REGISTRY-}eschoolmessagingapi
+    build:
+      context: .
+      dockerfile: src/services/messaging/ESchool.Messaging.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=eschool.postgres;Database=MessagingDb;User Id=postgres;Password=Password123;
+      - ConnectionStrings__MasterDbConnection=Server=eschool.postgres;Database=Messaging_MasterDb;User Id=postgres;Password=Password123;
+      - ConnectionStrings__ConnectionStringTemplate=Server=eschool.postgres;Database=Messaging_{0};User Id=postgres;Password=Password123;
+      - Authentication__Authority=http://eschool.identityprovider
+      - Authentication__Audience=messaging-api
+      - Authentication__IdentityProviderUri=https://localhost:5301
+      - RabbitMQ__Host=amqp://eschool.rabbitmq
+    ports:
+      - "5800:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    networks:
+      - eschool_network
+    depends_on:
+      - eschool.postgres
+
+  eschool.postgres:
+    container_name: eschool.postgres
+    image: postgres:13
+    ports:
+      - "5500:5432"
+    environment:
+      - POSTGRES_PASSWORD=Password123
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - eschool_network
+
+  eschool.rabbitmq:
+    container_name: eschool.rabbitmq
+    image: rabbitmq:3.8.9-management
+    ports:
+      - "5600:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - eschool_network
+
+  eschool.frontend:
+    container_name: eschool.frontend
+    image: ${DOCKER_REGISTRY-}eschoolfrontend
+    build:
+      context: src/frontend/eschool-frontend-vue
+    ports:
+      - "8080:80"
+
+networks:
+  eschool_network:
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
